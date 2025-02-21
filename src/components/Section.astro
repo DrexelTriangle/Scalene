@@ -1,0 +1,25 @@
+---
+import PhotoArticle from "./PhotoArticle.astro";
+const {section} = Astro.props;
+const response = await fetch('http://localhost:4321/api/' + section + '/?limit=1');
+const data = await response.json();
+const articles = data;
+---
+<style>
+    h3 {
+        color: black;
+        font-family: "Playfair Display", serif;
+        font-size: 42px;
+        text-decoration: none;
+    }
+</style>
+
+
+<!-- Data fetched at build can be rendered in HTML -->
+<section>
+    <h1> {section} </h1>
+    {articles.map(article => (
+        <PhotoArticle title={article.title} text={article.text}/>
+    ))}
+</section>
+

@@ -1,0 +1,10 @@
+---
+import {getTheExcerpt} from '../utils/data.js';
+const {title, text} = Astro.props;
+---
+
+<article>
+    <img src="images/placeholder.jpg"/>
+    <h3>{title}</h3>
+    <div>{getTheExcerpt(text, 40)}</div>
+</article>
