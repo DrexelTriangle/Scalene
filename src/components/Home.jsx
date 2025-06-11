@@ -11,16 +11,19 @@ import TopArticle from './TopArticles.jsx';
 import List from './List.jsx';
 import ArticleSectionGroup from './ArticleSectionGroup.jsx';
 import NavigationBar from './NavigationBar.jsx';
+import Article from './Article.jsx';
 
 const Home = () => {  
   return (
     <>
-      <Header/>
+      <Article/>
+      {/* <Header/>
       <NavigationBar pageNames={["Comics"]}/>
       <TopArticle/>
       <List isRow={true} showSection={true} showImage={true} articleList={["SPORTS", "OPINION", "NEWS", "COMICS"]}/>
       <ArticleSectionGroup sectionName={"OPINION"} type={1}></ArticleSectionGroup>
       <ArticleSectionGroup sectionName={"ENTERTAINMENT"} type={2}></ArticleSectionGroup>
+       */}
       {/*
       <Donate/>
       <About/>
