@@ -13,7 +13,7 @@ function SingleComment({timeStr, user, content}) {
     useEffect(() => {
         const interval = setInterval(() => {
             setNow(new Date());
-        },10000);
+        },15000);
         return () => clearInterval(interval);
     }, []);
 
@@ -149,9 +149,6 @@ const CommentSection = () => {
                 }
                 .single-comment {
                     margin: 2rem 0;
-                    // padding: 1rem;
-                    // border: 1px solid #ccc;
-                    // border-radius: 1rem;
                 }
                 .user {
                     font-weight: 700;

@@ -16,14 +16,14 @@ import Article from './Article.jsx';
 const Home = () => {  
   return (
     <>
-      <Article/>
-      {/* <Header/>
+      {/* <Article/> */}
+      <Header/>
       <NavigationBar pageNames={["Comics"]}/>
       <TopArticle/>
       <List isRow={true} showSection={true} showImage={true} articleList={["SPORTS", "OPINION", "NEWS", "COMICS"]}/>
       <ArticleSectionGroup sectionName={"OPINION"} type={1}></ArticleSectionGroup>
       <ArticleSectionGroup sectionName={"ENTERTAINMENT"} type={2}></ArticleSectionGroup>
-       */}
+      
       {/*
       <Donate/>
       <About/>
