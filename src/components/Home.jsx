@@ -20,7 +20,21 @@ const Home = () => {
       <TopArticle/>
       <List isRow={true} showSection={true} showImage={true} articleList={["SPORTS", "OPINION", "NEWS", "COMICS"]}/>
       <ArticleSectionGroup sectionName={"OPINION"} type={1}></ArticleSectionGroup>
-      <ArticleSectionGroup sectionName={"ENTERTAINMENT"} type={2}></ArticleSectionGroup>
+
+        <div>
+            <hr className='border-blue-700'/>
+              ENTERTAINMENT
+            <div className="grid grid-cols-12 gap-1 m-1 divide-x divide-blue-700">
+                <div className="col-span-8">
+                  <div className="grid grid-cols-8 divide-x divide-grey">
+                    <ArticleSectionGroup sectionName={"ENTERTAINMENT"} type={2}></ArticleSectionGroup>
+                  </div>
+                </div>
+                <div className="col-span-4">
+                </div>
+            </div>
+        </div>
+
       {/*
       <Donate/>
       <About/>

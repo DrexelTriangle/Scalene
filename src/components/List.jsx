@@ -1,9 +1,9 @@
 const List = ({showSection, showImage, showDescription, articleList, isRow}) => {
     var articleListComponent = []
 
-    articleList.map((index) =>
+    articleList.map((articleName) =>
     {
-        const sectionName = showSection ? `${index}` : ``
+        const sectionName = showSection ? `${articleName.toUpperCase()}` : ``
         const image = showImage ? <img src="src\assets\drexel-campus-bridge.jpg" alt="Image goes here"/> : <></>
         const description = showDescription ? `This is a beautifully written description. It's non-existent, just like Drexel's financial management.` : ``
 
