@@ -11,10 +11,12 @@ import TopArticle from './TopArticles.jsx';
 import List from './List.jsx';
 import ArticleSectionGroup from './ArticleSectionGroup.jsx';
 import NavigationBar from './NavigationBar.jsx';
+import Article from './Article.jsx';
 
 const Home = () => {  
   return (
     <>
+      {/* <Article/> */}
       <Header/>
       <NavigationBar pageNames={["Comics"]}/>
       <TopArticle/>
