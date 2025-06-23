@@ -27,7 +27,7 @@ const LeftSectionGroup = ({ sectionName, type, isReverse, list1, list2 }) => {
                 <div className="col-span-4">
                     <List showImage={true} showDescription={true} articleList={["0"]} />
                 </div>
-                <div className="col-span-4">
+                <div className={`col-span-${isReverse ? "4" : "3"}`}>
                     {sideList}
                 </div>
             </>
@@ -35,13 +35,16 @@ const LeftSectionGroup = ({ sectionName, type, isReverse, list1, list2 }) => {
     }
 
 
+    // I still haven't figured out to make this thing responsive lol, I think the issue is it's nested inside a col-span-8
     return (
-        <>
-        {sectionName.toUpperCase()}
-        <div className="grid grid-cols-8 divide-x divide-grey">
-            {sectionGroup}
+        <div>
+            <div className="font-roboto-slab font-semibold px-2">
+                {sectionName.toUpperCase()}
+            </div>
+            <div className="grid grid-cols-8 divide-x divide-grey">
+                {sectionGroup}
+            </div>
         </div>
-        </>
     )
 }
 

@@ -4,44 +4,46 @@ const List = ({showSection, showImage, showDescription, articleList, isRow}) => 
     articleList.map((articleName) =>
     {
         const sectionName = showSection ? `${articleName.toUpperCase()}` : ``
-        const image = showImage ? <img src="src\assets\drexel-campus-bridge.jpg" alt="Image goes here"/> : <></>
+        const image = showImage ? <img className="aspect-4/3 object-cover" src="src\assets\drexel-campus-bridge.jpg" alt="Image goes here"/> : <></>
         const description = showDescription ? `This is a beautifully written description. It's non-existent, just like Drexel's financial management.` : ``
+        const title = randomListName()
 
         articleListComponent.push(
         <>
         <div className="p-2">
             {image}  
-            <div className='secondary-color-two'>
+            <div className='secondary-color-two font-roboto-slab text-sm mt-1 font-semibold'>
                 {sectionName}
             </div>
-            <div className="">A Long Title that Means Nothing</div>
-            <div className="text-sm">Author | Date</div>
-            {description}
+            <div className={`font-playfair ${articleList.length == 1 ? "text-3xl" : "text-xl"}`}> {title}
+</div>
+            <div className="text-xs font-roboto-slab my-1">Author | Date</div>
+            <p className="">{description}</p>
         </div>
         </>
             )
     }
     )
 
-    if (isRow){
         return(
             <>
-            <div className="grid grid-cols-1 md:grid-cols-4 divide-x divide-gray">
+            <div className={`${isRow ? "grid grid-cols-1 md:grid-cols-4 divide-x" : "divide-y divide-gray divide-solid"} divide-gray`}>
                 {articleListComponent}
             </div>
             </>
         )
-    }
-
-    return(
-        <>
-        <div className="divide-y divide-gray divide-solid">
-            {articleListComponent}
-        </div>
-        </>
-    )
 }
 
 export default List
 
+function randomListName() {
+    var names = [
+        "Raise your spirits at the new Fine Wine", 
+        "Students weigh in on DA Krasner’s likely third term",
+        "Neurology meets theology with Dr. Ozdemir",
+        "The Love Triangle: Making our stories up as we go"
 
+    ] 
+    const randomName = names[Math.floor(Math.random() * names.length)]
+    return randomName
+}

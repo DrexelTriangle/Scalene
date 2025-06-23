@@ -16,9 +16,11 @@ const FullWidthGroup = ({ sectionName, type }) => {
         );
         return (
         <div>
-            <hr className='border-blue-700'/>
-            {sectionName}
-            <div className="grid grid-cols-12 gap-1 m-1 divide-x divide-grey">
+            <hr className='mx-2 border-blue-700'/>
+            <div className="font-roboto-slab font-semibold px-2">
+                {sectionName.toUpperCase()}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-1 m-1 divide-x divide-grey">
                 {articleGroup}
             </div>
         </div>
