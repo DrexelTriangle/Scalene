@@ -1,4 +1,4 @@
-import List from "./src/components/List"
+import List from "./List"
 
 const LeftSectionGroup = ({ sectionName, type, isReverse, list1, list2 }) => {
     // The Lists are supposed to be passed in later as arguments

@@ -12,24 +12,24 @@ import List from './List.jsx';
 import ArticleSectionGroup from './FullWidthGroup.jsx';
 import NavigationBar from './NavigationBar.jsx';
 import Article from './Article.jsx';
-import MostRead from '../../MostRead.jsx';
+import MostRead from './MostRead.jsx';
 import WeeklyPoll from '../../WeeklyPoll.jsx';
-import LeftSectionGroup from '../../LeftSectionGroup.jsx';
-import BottomLeftGroup from '../../BottomLeftGroup.jsx';
-import BottomRightGroup from '../../BottomRightGroup.jsx';
+import LeftSectionGroup from './LeftSectionGroup.jsx';
+import BottomLeftGroup from './BottomLeftGroup.jsx';
+import BottomRightGroup from './BottomRightGroup.jsx';
 
 const Home = () => {  
   return (
     <>
       {/* <Article/> */}
       <Header/>
-      <NavigationBar pageNames={["Comics"]}/>
+      {/* <NavigationBar pageNames={["Comics"]}/> */}
       <TopArticle/>
       <List isRow={true} showSection={true} showImage={true} articleList={["SPORTS", "OPINION", "NEWS", "COMICS"]}/>
       <ArticleSectionGroup sectionName={"OPINION"} type={1}></ArticleSectionGroup>
         <div>
             <hr className='border-blue-700'/>
-            <div className="grid grid-cols-12 gap-1 m-1 divide-x divide-blue-700">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-1 m-1 divide-x divide-blue-700">
                 <BottomLeftGroup components={
                   [
                   <LeftSectionGroup sectionName={"entertainment"} type={"5-3"} isReverse={true}/>,
@@ -41,7 +41,7 @@ const Home = () => {
 
                 <BottomRightGroup components={[
                   <MostRead articleList={[1, 2, 3, 4, 5]}/>,
-                  <WeeklyPoll question={"Scrumptious"} answers={["meow", "meow"]}/>
+                  /*<WeeklyPoll question={"Scrumptious"} answers={["meow", "meow"]}/>*/
                 ]}/>
             </div>
         </div>
