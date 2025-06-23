@@ -1,3 +1,4 @@
+import NavigationBar from "./NavigationBar";
 
 const weather = await fetch("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Philadelphia?unitGroup=metric&include=current&key=R75ZL8UTXNSKG8GBYRH82DJE4&contentType=json", {
     method: "GET"
@@ -18,7 +19,7 @@ const Header = () => {
 
     return (
     <>
-      <div className="header-section flex justify-around text-left"> 
+      <div className="flex justify-around text-left my-7"> 
         {/* Left of image */}
         <div className='basis-4/16 justify-self-end'>
           <div>
@@ -42,7 +43,9 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <hr/>
+      
+      <NavigationBar pageNames={["News","Opinion", "Arts & Entertainment", "Sports", "Comics", "Newsletter"]}></NavigationBar>
+      <hr className="border-blue-700 border -mx-[60px]"></hr>
     </>)
 }
 export default Header
