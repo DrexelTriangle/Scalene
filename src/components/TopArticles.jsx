@@ -3,7 +3,7 @@ import List from './List.jsx';
 // The top article row of the front page
 const TopArticle = () => {
     return(
-        <div className="grid grid-cols-12 my-1 divide-x divide-grey">
+        <div className="grid grid-cols-1 md:grid-cols-12 my-1 md:divide-x divide-grey">
             <div className="col-span-3">
             <List showImage={true} articleList={["SPORTS", "OPINION"]}/>
             </div>

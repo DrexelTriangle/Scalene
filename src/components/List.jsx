@@ -26,7 +26,7 @@ const List = ({showSection, showImage, showDescription, articleList, isRow}) => 
     if (isRow){
         return(
             <>
-            <div className="grid grid-cols-4 divide-x divide-gray">
+            <div className="grid grid-cols-1 md:grid-cols-4 divide-x divide-gray">
                 {articleListComponent}
             </div>
             </>

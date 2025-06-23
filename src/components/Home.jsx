@@ -9,9 +9,14 @@ import FindATriangle from './FindATriangle.jsx';
 import ContactTheTriangle from './ContactTheTriangle.jsx';
 import TopArticle from './TopArticles.jsx';
 import List from './List.jsx';
-import ArticleSectionGroup from './ArticleSectionGroup.jsx';
+import ArticleSectionGroup from './FullWidthGroup.jsx';
 import NavigationBar from './NavigationBar.jsx';
 import Article from './Article.jsx';
+import MostRead from '../../MostRead.jsx';
+import WeeklyPoll from '../../WeeklyPoll.jsx';
+import LeftSectionGroup from '../../LeftSectionGroup.jsx';
+import BottomLeftGroup from '../../BottomLeftGroup.jsx';
+import BottomRightGroup from '../../BottomRightGroup.jsx';
 
 const Home = () => {  
   return (
@@ -22,18 +27,22 @@ const Home = () => {
       <TopArticle/>
       <List isRow={true} showSection={true} showImage={true} articleList={["SPORTS", "OPINION", "NEWS", "COMICS"]}/>
       <ArticleSectionGroup sectionName={"OPINION"} type={1}></ArticleSectionGroup>
-
         <div>
             <hr className='border-blue-700'/>
-              ENTERTAINMENT
             <div className="grid grid-cols-12 gap-1 m-1 divide-x divide-blue-700">
-                <div className="col-span-8">
-                  <div className="grid grid-cols-8 divide-x divide-grey">
-                    <ArticleSectionGroup sectionName={"ENTERTAINMENT"} type={2}></ArticleSectionGroup>
-                  </div>
-                </div>
-                <div className="col-span-4">
-                </div>
+                <BottomLeftGroup components={
+                  [
+                  <LeftSectionGroup sectionName={"entertainment"} type={"5-3"} isReverse={true}/>,
+                  <LeftSectionGroup sectionName={"comics"} type={"5-3"}/>,
+                  <LeftSectionGroup sectionName={"sports"} type={"4-4"} isReverse={true}/>,
+                  <LeftSectionGroup sectionName={"puzzles"} type={"4-4"}/>
+                ]
+                  }/>
+
+                <BottomRightGroup components={[
+                  <MostRead articleList={[1, 2, 3, 4, 5]}/>,
+                  <WeeklyPoll question={"Scrumptious"} answers={["meow", "meow"]}/>
+                ]}/>
             </div>
         </div>
 
