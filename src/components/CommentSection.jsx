@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+/* import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsUp as faThumbsUpSolid } from '@fortawesome/free-solid-svg-icons'
 import { faThumbsUp as faThumbsUpRegular } from '@fortawesome/free-regular-svg-icons'
 import { faThumbsDown as faThumbsDownSolid } from '@fortawesome/free-solid-svg-icons'
 import { faThumbsDown as faThumbsDownRegular } from '@fortawesome/free-regular-svg-icons'
-import { FiShare2 } from 'react-icons/fi'
+import { FiShare2 } from 'react-icons/fi' */
 
 function SingleComment({timeStr, user, content}) {
     const comment_time = new Date(timeStr);
