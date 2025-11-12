@@ -1,26 +1,10 @@
 import type { APIRoute } from 'astro';
 import { callProcedure } from "../../utils/db";
-
-
-// // Needed to compile dynamic routing
-export async function getStaticPaths() {
-  //TODO: Change this to pull from the Database
-  const sections = ["sports", "news", "opinions"];
-  return sections.map((section) => ({
-    params: { section },
-  }));
-}
-
-export const GET: APIRoute = async ({ params, url }) => {
+export const GET: APIRoute = async ({ params }) => {
 
   const section = params.section; // Create a URL object from the request
-
-  // Get search parameters
-  console.log(url);
-  const limit = parseInt(url.searchParams.get("limit") || "1", 10);
-  const offset = parseInt(url.searchParams.get("offset") || "0", 10);
-
-  console.log(section, limit, offset);
+  const limit = params.limit || 6;
+  const offset = params.offset || 0;
   try {
     const articles = await callProcedure("get_articles_by_section", [section, limit, offset]);
 
