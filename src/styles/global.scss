@@ -2,8 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root{
+  --color-blue: #2563EB;
+}
+
 body {
-  margin: 0px 60px;
   font-family: "Crimson Text", serif;
   font-size: 18px;
 }
@@ -13,7 +16,7 @@ body {
   padding-bottom: 15px;
 }
 
-.primary-color{color: #10316b};
+.primary-color{color: #2563EB};
 .secondary-color-one{color: #ffe867};
 .secondary-color-two{color:  #377fd9};
 .secondary-color-three{color:  #00006c};

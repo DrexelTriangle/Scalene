@@ -5,14 +5,15 @@ const NavigationBar = ({pageNames}) => {
             <button>{pageName}</button>
         )
         pageButtons.push(
-            <div className="font-roboto-slab font-semibold text-sm md:text-lg">
+            <a>
             {pageButton}
-            </div>
+            </a>
         )
     })
-    return (<div className="flex justify-around my-1 md:mx-[10rem]">
+    return (
+    <nav className="flex justify-center w-[100%] font-roboto-slab font-semibold text-base gap-[5%] py-[10px]">
         {pageButtons}
-        </div>);
+    </nav>);
 }
 
 export default NavigationBar 
