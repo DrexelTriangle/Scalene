@@ -56,6 +56,9 @@ const Home = () => {
       <FindATriangle/>
       <ContactTheTriangle/>
       */}
+      
+      <Donate/>
+
     </>
   )
 };
