@@ -57,7 +57,6 @@ const Home = () => {
       <ContactTheTriangle/>
       */}
       
-      <Donate/>
 
     </>
   )
