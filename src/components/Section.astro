@@ -2,15 +2,21 @@
 import PhotoArticle from "./PhotoArticle.astro";
 import { GET } from '../pages/api/[section].ts'
 
-const {section} = Astro.props
-let response = await GET({ params: { section } })
+const {section, limit, offset} = Astro.props
+let response = await GET({ params: { section, limit, offset } })
 const articles = await response.json()
 ---
 <style>
-    h3 {
+    @import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&family=Roboto+Slab:wght@100..900&display=swap');
+    section{
+        border-top: 1px solid blue;
+    }
+    h1 {
         color: black;
-        font-family: "Playfair Display", serif;
-        font-size: 42px;
+        font-family: "Roboto Slab", serif;
+        font-size: 18px;
+        font-weight: 800;
+        text-transform: uppercase;
         text-decoration: none;
     }
 </style>
@@ -20,7 +26,7 @@ const articles = await response.json()
 <section>
     <h1> {section} </h1>
     {articles.map(article => (
-        <PhotoArticle title={article.title} text={article.text}/>
+        <PhotoArticle title={article.title} text={article.excerpt}/>
     ))}
 </section>
 

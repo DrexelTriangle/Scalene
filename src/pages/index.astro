@@ -1,13 +1,11 @@
 ---
 // src/pages/index.astro
-import Welcome from '../components/Welcome.astro';
-import FrontSectionLayout from '../layouts/FrontSectionLayout.astro';
-import App from '../components/App';
-import Section from '../components/Section.astro';
 import Header from '../components/Header.jsx';
+import Section from '../components/Section.astro';
 ---
-<Header></Header>
-<!-- <FrontSectionLayout>
-	<Section section="news"/>
-</FrontSectionLayout> -->
+
+<Section section="news" limit="2", offset="0"/>
+<hr/>
+<Section section="sports" limit="2", offset="0"/>
+
 
