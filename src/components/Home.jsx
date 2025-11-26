@@ -59,6 +59,7 @@ const Home = () => {
       
       <Donate/>
       <Classifieds/>
+      <About/>
     </>
   )
 };
