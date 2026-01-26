@@ -1,0 +1,16 @@
+---
+    import PhotoArticle from "./PhotoArticle.astro";
+    const { articles } = Astro.props;
+---
+<div class="mb-[24px]">
+    <h1 class="font-roboto-slab uppercase font-extrabold"> Columns </h1>
+    <div class="flex flex-col">
+        {articles.map(article => (
+            <PhotoArticle title={article.title} 
+            category={article.categories_list}
+            author={article.authors}
+            date={article.date}
+            slug={article.categories_list[0].slug+"/"+article.slug}/>
+        ))}
+    </div>
+</div>

@@ -1,11 +1,37 @@
 ---
-// src/pages/index.astro
-import Header from '../components/Header.jsx';
-import Section from '../components/Section.astro';
+export const prerender = true;
+
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Section from '../components/Sections/Section.astro';
+import Header from '../components/Header.astro';
+import Column from '../components/Columns.astro';
+import Social from '../components/Social.astro';
+import Poll from '../components/Polls.astro';
+import '../styles/global.css';
+import { getHomepageArticles } from '../utils/db';
+
+const posts = await getHomepageArticles();
+
 ---
 
-<Section section="news" limit="2", offset="0"/>
-<hr/>
-<Section section="sports" limit="2", offset="0"/>
+<BaseLayout title="The Triangle">
+    <Header home/>
+    <Section section="news" articles={posts.news?.slice(0, 9)} style="3-6-3"/>
+    <Section section="news" articles={posts.news?.slice(9)} style="row"/>
+    <Section section="opinion" articles={posts.opinion} includeName style="3-5-4"/>
+    <div class="grid grid-cols-[1fr] sm:grid-cols-[8fr_4fr] mt-2 xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] mb-[8px] divide-x divide-triangleBlue border-t-[1px] border-solid border-triangleBlue pt-[5px] ">
+        <div id="main-left">
+            <Section section="sports" articles={posts.sports} includeName style="3-5"/>
+            <Section section="entertainment" articles={posts.entertainment} includeName style="6-6"/>
+            <Section section="comics" articles={posts.comics} includeName style="5-3"/>
+        </div>
+        <div id="main-right" class="hidden sm:block [&>*:not(:first-child)]:border-t-[1px] [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-triangleBlue">
+            <Column articles={posts.columns}/>
+            <Poll />
+            <Social />
+        </div>
+    </div>
+</BaseLayout>
+
 
 

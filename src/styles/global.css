@@ -1,4 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap');
+@import "@fortawesome/fontawesome-free/css/all.min.css";
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root{
+  --color-blue: #2563EB;
+  --color-gray: #E5E7EB;
+}
+
+body {
+  font-family: "Crimson Text", serif;
+  font-size: 18px;
+}
+
+.header-section {
+  border-bottom: 1.5px solid #000; 
+  padding-bottom: 15px;
+}
+
+.scrollstickyleft{
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 16px;
+}
+
+.scrollstickyright{
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 16px;
+}
+
+#main-left {
+  padding-right: 5px;
+  margin-top: -5px;
+}
+
+#main-right {
+  padding-left: 12px;
+}
+
+#main-left section:first-child {
+  border-top: 0px;
+  margin-top: 0px;
+}
+
+#article figure img{
+  width: 100%;
+  aspect-ratio: 1.75;
+  object-fit:cover;
+}
+
+#article figure{
+  max-width: 100% !important;
+}
+
+#article figure figcaption{
+  @apply font-roboto-slab font-light italic text-[14px]
+}
+
+#article p {
+  @apply font-crimson my-[16px] text-[18px];
+}
+
+#article p a {
+  font-weight: 500;
+  text-decoration: underline;
+  color: #00006c;
+}
+
+#article strong {
+  @apply font-roboto-slab
+}
+
+.staff-row{
+	display: flex; 
+	gap: 12px;
+	margin-bottom: 20px;
+	flex-wrap: wrap;
+	justify-content: start;
+}
+
+
+.staff-card {
+	display: flex; 
+	flex-direction: column; 
+	width: calc(20% - 20px);
+	text-align: center; 
+	gap: 5px;
+	font-family: sans-serif; 
+	border-radius: 5px; 
+	padding: 5px 5px 10px;
+	font-size: 14px
+}
+.staff-card b {
+  @apply text-triangleBlue
+}
+.staff-row-small .staff-card {
+	width: calc(12% - 15px);
+	font-size: 14px;
+}
+.staff-row-small .staff-card b{
+	font-weight: normal;
+	font-size: 12px;
+	font-style: italic;
+}
+
+.staff-card img {
+	width: 100%;
+	aspect-ratio:1;
+	object-fit:cover;
+  background-image: url("/proxy/wp-content/uploads/2025/04/default-profile-picture1-1.jpg");
+}
+
+#constitution h2 {
+  font-weight: bold;
+  font-size: 24px;
+  margin-top: 8px;
+}
+
+#constitution h3 {
+  font-size: 18px;
+  margin-top: 8px;
+  text-decoration: underline;
+}
+#constituion ol li {
+  list-style: decimal;
+}
+
+.hiddenSearch{
+  width: 0px; 
+  padding: 0px; 
+  border: 0px
+}
+
+.primary-color{color: #2563EB};
+.secondary-color-one{color: #ffe867};
+.secondary-color-two{color:  #377fd9};
+.secondary-color-three{color:  #00006c};
+.accent-color-one{color:  #fef5ac};
+.accent-color-two{color: #83cbfb};
+.accent-color-three{color:  #00003c};
+.neutral-color-one{color:  #f2f7ff};
+.neutral-color-two{color:  #5f6f94};
+
+
+
 

@@ -1,0 +1,23 @@
+---
+import '../styles/global.css';
+export const prerender = true;
+---
+<div id="side-nav" style="width: 0px" class="transition-width duration-[400ms] right-0 absolute top-[calc(100%+1px)] z-[99] h-[100vh] bg-white px-[8px] font-roboto-slab border-triangleGray">
+    <nav id="main-nav" style="display:none" class="text-nowrap flex flex-col gap-y-[24px] font-bold text-[18px] py-[12px]">
+        <a class="hover:underline" href="/news"> News </a>
+        <a class="hover:underline" href="/opinion"> Opinion </a>
+        <a class="hover:underline" href="/sports"> Sports </a>
+        <a class="hover:underline" href="/entertainment"> Entertainment </a>
+        <a class="hover:underline" href="/comics"> Comics </a>
+        <a class="hover:underline" href="/donate"> Donate </a>
+    </nav>
+    <hr/>
+    <nav id="sub-nav" style="display:none" class="text-nowrap flex flex-col gap-y-[24px] text-[16px] py-[12px]">
+        <a class="hover:underline" href="/about"> About </a>
+        <a class="hover:underline" href="/contact"> Contact </a>
+        <a class="hover:underline" href="/join"> Join </a>
+        <a class="hover:underline" href="/staff"> Staff </a>
+        <a class="hover:underline" href="/find"> Find-A-Triangle </a>
+        <a class="hover:underline" href="/photo"> Photo Gallery </a>
+    </nav>
+</div>

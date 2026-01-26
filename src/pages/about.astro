@@ -1,0 +1,41 @@
+---
+export const prerender = true;
+import Header from '../components/Header.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import '../styles/global.css';
+---
+<BaseLayout title="About - The Triangle">
+    <Header/>
+    <section class="max-w-[1200px] mx-auto">
+        <h1 class="font-playfair text-[42px] mb-[16px]"> About Us </h1>
+        <div>
+            The Triangle is Drexel University's student-run editorially and financially independent newspaper. Publishing every other 
+            Friday during the normal school year and monthly during the summer term, The Triangle has continually been Drexel 
+            students' source for campus news and voice for opinions.
+        </div>
+        <h2 class="font-playfair text-[28px] mb-[16px] mt-[16px]"> Our History </h2>
+        <div>
+            The Triangle first appeared on campus in February 1926 under the direction of inaugural Editor-in-Chief Thomas T. Mather ('27) 
+            and with blessing and partial funding from then-President Kenneth G. Matheson and Drexel Institute's Board of Trustees. Since then, 
+            The Triangle has been staffed by prominent members of the Drexel community, like former President and Myers Hall namesake Harold 
+            Myers (Business Manager, '38), as well as celebrities including Chuck Barris (Columnist, '53), John Gruber (Editor-in-Chief, '90) 
+            and Albert Boscov (Sports Writer, '48).
+            <br/><br/>
+            In its most prosperous years, The Triangle has been nationally recognized with several Mark of Excellence awards from the Society of 
+            Professional Journalists in Editorial Writing, General Column Writing, and Sports Column Writing. The Triangle is also an accredited
+            member of the Associated Collegiate Press and has won two National Pacemaker Awards.
+            <br/><br/>
+            With Drexel being the first university to require incoming students to have computers, The Triangle's first online edition appeared 
+            in the mid-1990s and was instantly available to all students. Originally hosted on a staff member's computer, thetriangle.org became 
+            a portal for Drexel students to not only read the newspaper in a convenient online format, but to connect with one another in the age 
+            before social media.
+            <br/><br/>
+            Today's website offers all the content you'd find in our print edition, but also includes interactive art-directed features, podcasts, 
+            videos, archives, and other content that doesn't fit in the traditional print medium.
+            <br/><br/>
+            Being independent from the University, all decisions regarding content and the paper's growth are made by the Editor-in-Chief and the 
+            Editorial Board. The Triangle is currently home to over 70 student staff members who work year-round to produce professional-quality 
+            content with the aim of keeping Drexel students informed on the topics of news, arts and entertainment, and sports.
+        </div>
+    </section>
+</BaseLayout>

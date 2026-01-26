@@ -1,0 +1,28 @@
+---
+import PhotoArticle from "../PhotoArticle.astro";
+const { articles } = Astro.props
+---
+<div class="grid grid-cols-[4fr_4fr] divide-x divide-triangleGray-400 ">
+    <!-- Column 1: 2 blocks -->
+    <div class="flex flex-col space-y-2 pr-[12px]">
+        {articles.slice(0, 1).map(article => (
+            <PhotoArticle title={article.title} 
+            image={article.featured_image}
+            author={article.authors}
+            date={article.date}
+            slug={article.categories_list[0].slug+"/"+article.slug}/>
+        ))}
+    </div>
+
+    <!-- Column 2: 1 block -->
+    <div class="flex flex-col space-y-2 px-[12px]">
+        {articles.slice(1, 5).map(article => (
+            <PhotoArticle title={article.title}
+            category={article.categories_list} 
+            author={article.authors}
+            date={article.date}
+            slug={article.categories_list[0].slug+"/"+article.slug}
+        />
+        ))}
+    </div>
+</div>

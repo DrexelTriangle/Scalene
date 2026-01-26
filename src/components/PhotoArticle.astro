@@ -1,9 +1,34 @@
 ---
-const {title, text} = Astro.props;
+import { normalizeText } from "../utils/data";
+const {title, excerpt, image, author, date, category, row, slug} = Astro.props;
+
+let imgSrc = image || "hi";
+if(Astro.props.image !== undefined) {
+    imgSrc = imgSrc.replace("https://www.thetriangle.org", "/proxy");
+}
+if(imgSrc == "hi"){
+    imgSrc = "/proxy/wp-content/uploads/2024/12/IMG_2493-2048x1365.jpg"
+}
+
+let authorListLinks = [];
+let authorList = author.forEach((author)=>{authorListLinks.push(`<a class='hover:underline' href='/authors/${author.id}'>${author.name}</a>`);})
+
+let d = new Date(date)
+const months = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+const date_string = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+
+authorList = authorListLinks.join(" and ") + " | " + date_string;
+
+export const prerender = true;
+
+const classes = row ? "mb-[16px] md:mb-[0px] flex-1 sm:px-[16px] first:pl-0 sm:last:pr-0" : "mb-[16px] md:mb-[0px] [.grid_&:not(:first-child)]:pt-[8px] pb-[8px] cursor-default [&:not(:last-child)]:border-b-[1px] border-solid border-triangleGray-400"
+const imgClass = row ? "aspect-[4/3] sm:w-[100%] sm:h-[200px] object-cover" : "aspect-[4/3] object-cover"
 ---
 
-<article>
-    <!-- <img src="images/placeholder.jpg"/> -->
-    <h2>{title}</h2>
-    <div>{text}</div>
+<article class={classes}>
+    {Object.hasOwn(Astro.props, 'image') && <img class={imgClass} loading="lazy" src={imgSrc} onerror="/images/placeholder.jpg" alt={title || 'Article image'} />}
+    {category && <h3 class="font-roboto-slab uppercase font-extrabold text-triangleBlue text-[10px] font-700"> {normalizeText(category[0].name)} </h3>}
+    <a href={"/"+slug}><h2 class="font-playfair text-[20px] leading-tight hover:underline">{normalizeText(title)}</h2><a>
+    <div id="byline" class="font-playfair text-[12px]" set:html={authorList}></div>
+    {excerpt && <div set:html={normalizeText(excerpt)} class="font-crimson"></div>}
 </article>

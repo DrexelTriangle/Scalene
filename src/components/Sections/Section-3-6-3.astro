@@ -1,0 +1,41 @@
+---
+import PhotoArticle from "../PhotoArticle.astro";
+const { articles } = Astro.props
+import SectionRow from "./Section-Row.astro"
+
+---
+<div class="grid grid-cols-[1fr] md:grid-cols-[3fr_6fr_3fr] md:divide-x md:divide-triangleGray-400 ">
+    <!-- Column 1: 2 blocks -->
+    <div class="flex flex-col space-y-2 md:pr-[12px] order-2 md:order-none">
+        {articles.slice(0, 2).map(article => (
+            <PhotoArticle title={article.title} 
+            image={article.featured_image}
+            author={article.authors}
+            date={article.date}
+            slug={article.categories_list[0].slug+"/"+article.slug}/>
+        ))}
+    </div>
+
+    <!-- Column 2: 1 block -->
+    <div class="flex flex-col space-y-2 md:px-[12px] order-1 md:order-none">
+        {articles.slice(2, 3).map(article => (
+            <PhotoArticle title={article.title} 
+            image={article.featured_image}
+            author={article.authors}
+            date={article.date}
+            excerpt={article.excerpt}
+            slug={article.categories_list[0].slug+"/"+article.slug}/>
+        ))}
+    </div>
+
+    <!-- Column 3: 5 blocks -->
+    <div class="flex flex-col md:pl-[12px] order-3 md:order-none">
+        {articles.slice(3, 9).map(article => (
+            <PhotoArticle title={article.title} 
+            category={article.categories_list}
+            author={article.authors}
+            date={article.date}
+            slug={article.categories_list[0].slug+"/"+article.slug}/>
+        ))}
+    </div>
+</div>

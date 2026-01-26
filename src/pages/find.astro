@@ -1,0 +1,38 @@
+---
+    export const prerender = true;
+    import Header from '../components/Header.astro';
+    import BaseLayout from "../layouts/BaseLayout.astro";
+    import '../styles/global.css';
+---
+<BaseLayout title="Find a Triangle - The Triangle">
+    <Header/>
+    <section class="max-w-[1200px] mx-auto">
+        <h1 class="font-playfair text-[42px] mb-[16px]"> Find a Triangle </h1>
+        <div class="grid grid-cols-[8fr_4fr] divide-x divide-triangleGray-400">
+            <img src="/images/stand_locations.png"/>
+            <div class="pl-[16px]"> 
+                <h3 class="font-roboto-slab font-bold text-[24px]"> Stand Locations </h3>
+                <ul class="font-roboto-slab list-disc pl-5 text-gray-800"> 
+                    <li> Residence Halls </li>
+                    <ul class="list-disc pl-5">
+                        <li> Race Hall </li>
+                        <li> North Hall </li>
+                        <li> Millenium Hall </li>
+                        <li> Kelly Hall </li>
+                        <li> Tower Hall </li>
+                        <li> Van Rensselaer Hall </li>
+                    </ul>
+                    <li> Residence Halls </li>
+                    <ul class="list-disc pl-5">
+                        <li> Race Hall </li>
+                        <li> North Hall </li>
+                        <li> Millenium Hall </li>
+                        <li> Kelly Hall </li>
+                        <li> Tower Hall </li>
+                        <li> Van Rensselaer Hall </li>
+                    </ul>
+                </ul>
+            </div>
+        </div>
+    </section>
+</BaseLayout>

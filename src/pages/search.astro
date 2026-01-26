@@ -1,0 +1,25 @@
+---
+export const prerender = false;
+import Header from '../components/Header.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Section from '../components/Sections/Section.astro';
+import '../styles/global.css';
+
+import { search } from '../utils/db';
+import { normalizeText } from "../utils/data";
+
+const s = Astro.url.searchParams.get('s');
+
+const posts = await search(s);
+
+if (!posts || posts.length == 0) {
+  return Astro.rewrite('/404');
+}
+---
+<BaseLayout title="Search Results - The Triangle">
+    <Header/>
+    <section class="max-w-[1200px] mx-auto">
+        <h1 class="font-playfair text-[42px] mb-[16px]"> Search Results for '{s}' </h1>
+        <Section articles={posts} style="list"/>
+    </section>
+</BaseLayout>

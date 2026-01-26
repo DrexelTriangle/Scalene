@@ -1,0 +1,19 @@
+---
+import PhotoArticleLong from "../PhotoArticleLong.astro"
+
+const { articles } = Astro.props
+
+
+---
+
+<div class="pt-3 mt-3 mb-8">
+    {articles.map(article => (
+        <PhotoArticleLong title={article.title} 
+            category={article.categories_list}
+            author={article.authors}
+            date={article.date}
+            excerpt={article.excerpt}
+            image={article.featured_image}
+            slug={article.categories_list[0].slug+"/"+article.slug}/>
+    ))}
+</div>
