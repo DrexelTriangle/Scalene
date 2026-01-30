@@ -53,6 +53,9 @@ body {
 
 #article figure img{
   width: 100%;
+}
+
+#article figure:has(+ p) img{
   aspect-ratio: 1.75;
   object-fit:cover;
 }
@@ -84,7 +87,7 @@ body {
 	gap: 12px;
 	margin-bottom: 20px;
 	flex-wrap: wrap;
-	justify-content: start;
+	justify-content: space-between;
 }
 
 
@@ -97,7 +100,8 @@ body {
 	font-family: sans-serif; 
 	border-radius: 5px; 
 	padding: 5px 5px 10px;
-	font-size: 14px
+	font-size: 14px;
+  justify-content: start;
 }
 .staff-card b {
   @apply text-triangleBlue
@@ -138,6 +142,157 @@ body {
   width: 0px; 
   padding: 0px; 
   border: 0px
+}
+
+.staff-row{
+	display: flex; 
+	gap: 12px;
+	margin-bottom: 20px;
+	flex-wrap: wrap;
+	justify-content: start;
+}
+
+.staff-card {
+	display: flex; 
+	flex-direction: column; 
+	width: calc(20% - 20px);
+	text-align: center; 
+	gap: 5px;
+	font-family: sans-serif; 
+	border-radius: 5px; 
+	padding: 5px 5px 10px;
+	font-size: 14px
+}
+.staff-row-small .staff-card {
+	width: calc(12% - 15px);
+	font-size: 14px;
+}
+.staff-row-small .staff-card b{
+	font-weight: normal;
+	font-size: 12px;
+	font-style: italic;
+}
+
+.staff-card img {
+	width: 100%;
+	aspect-ratio:1;
+	object-fit:cover;
+}
+
+.material-icons {vertical-align:-14%}
+.material-symbols-outlined {
+    font-size: 40px;
+}
+.team-container {
+	margin: auto;
+    width: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    color: #07294D !important;
+    gap: 30px;
+    font-family: Roboto Slab, Helvetica, Arial, sans-serif;
+    justify-content: center;
+}
+.apply-btn {
+    width: 100%;
+    padding: 15px 5px;
+    border: 2px solid #07294D;
+    border-radius: 5px;
+    text-align: center;
+    font-family: Roboto Slab, Helvetica, Arial, sans-serif;
+    font-size: 30px;
+    text-decoration: none;
+    color: #07294D;
+    transition: 400ms;
+    display: block;
+}
+.apply-btn:hover {
+    border: 2px solid #73BBEE;
+    transform: scale(1.01);
+}
+.team-option {
+    width: calc(25% - 45px);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    transition: 400ms;
+    text-wrap: wrap;
+    gap: 5px;
+	text-align: center;
+}
+.team-option:hover{
+    color: #73BBEE;
+    transform: scale(1.1);
+}
+.team-info {
+    width: 100%;
+}
+
+.countdown {
+	width: 100%;
+	font-family: Roboto Slab, Helvetica, Arial, sans-serif;
+	text-align: center;
+	padding: 5px;
+	background: #07294D;
+	color: white;
+}
+.countdown #title{
+	font-size: 32px;
+}
+.countdown #time {
+	font-size: 28px;
+}
+.countdown #time span {
+	text-align: center;
+	display: inline-flex;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+.countdown #time span i{
+	font-size: 12px;
+	width: 100%;
+}
+
+@media (max-width: 960px) {
+	.staff-row {
+		flex-wrap: wrap;
+		justify-content: center;
+		margin-bottom: 0px;
+	}
+  .staff-card {
+    width: calc(50% - 20px)
+  }
+	.staff-row-small .staff-card {
+		width: calc(33% - 20px);
+		font-size: 14px;
+	}
+}
+
+
+@media (max-width: 640px) {
+	.staff-row {
+		flex-wrap: wrap;
+		justify-content: center;
+		margin-bottom: 0px;
+	}
+  .staff-card {
+    width: calc(75%);
+		font-size: 14px
+  }
+	.staff-row-small .staff-card {
+		width: calc(50% - 20px);
+		font-size: 14px;
+	}
+	.team-container{
+		gap: 5px;
+	}
+	.team-option{
+    width: calc(50% - 40px);
+		font-size: 12px;
+}
 }
 
 .primary-color{color: #2563EB};

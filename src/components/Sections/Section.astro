@@ -28,7 +28,7 @@ export const prerender = true;
 
 ---
 
-<section class:list={["mt-2 xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] mb-[8px]",  includeName && "border-t-[1px] border-solid border-triangleBlue"]}>
+<section class:list={["mt-2 xl:max-w-[1200px] lg:max-w-[900px] xl:[:not(.main-side)>_&]:max-w-[1200px] lg:[:not(.main-side)>_&]:max-w-[900px] [:not(.main-side)>_&]:max-w-[90%] mx-[auto] mb-[8px]",  includeName && "border-t-[1px] border-solid border-triangleBlue"]}>
     {includeName && <h1 class="font-roboto-slab uppercase font-extrabold"> {section} </h1>}
     <Component articles={articles}/>
 </section>

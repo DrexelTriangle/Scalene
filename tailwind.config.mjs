@@ -12,6 +12,7 @@ export default {
 			colors: {
 				triangleBlue: '#2563EB',
 				triangleGray: '#E5E7EB',
+				triangleDark: '#1F2937',
 			}
 		},
 	},

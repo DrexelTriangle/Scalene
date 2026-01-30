@@ -2,20 +2,20 @@
 import '../styles/global.css';
 export const prerender = true;
 ---
-<div id="side-nav" style="width: 0px" class="transition-width duration-[400ms] right-0 absolute top-[calc(100%+1px)] z-[99] h-[100vh] bg-white px-[8px] font-roboto-slab border-triangleGray">
+<div id="side-nav" style="width: 0px; padding: 0px;" class="transition-width duration-[400ms] right-0 absolute top-[calc(100%+1px)] z-[99] h-[100vh] bg-white font-roboto-slab border-triangleGray">
     <nav id="main-nav" style="display:none" class="text-nowrap flex flex-col gap-y-[24px] font-bold text-[18px] py-[12px]">
         <a class="hover:underline" href="/news"> News </a>
         <a class="hover:underline" href="/opinion"> Opinion </a>
         <a class="hover:underline" href="/sports"> Sports </a>
         <a class="hover:underline" href="/entertainment"> Entertainment </a>
         <a class="hover:underline" href="/comics"> Comics </a>
-        <a class="hover:underline" href="/donate"> Donate </a>
+        <a class="hover:underline" target="_blank" rel="noopener noreferrer" href="https://alumni.drexel.edu/s/1683/form/16/form.aspx?sid=1683&gid=2&pgid=4355&content_id=4154"> Donate </a>
     </nav>
     <hr/>
     <nav id="sub-nav" style="display:none" class="text-nowrap flex flex-col gap-y-[24px] text-[16px] py-[12px]">
         <a class="hover:underline" href="/about"> About </a>
         <a class="hover:underline" href="/contact"> Contact </a>
-        <a class="hover:underline" href="/join"> Join </a>
+        <a class="hover:underline" href="https://docs.google.com/forms/d/e/1FAIpQLScra_6sUenvmpIuQ5FjmMyWO0a2sz9z36HkrqfnYQvJGH9BGQ/viewform" target="_blank" rel="noopener noreferrer"> Join The Triangle </a>
         <a class="hover:underline" href="/staff"> Staff </a>
         <a class="hover:underline" href="/find"> Find-A-Triangle </a>
         <a class="hover:underline" href="/photo"> Photo Gallery </a>

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "": "file:",
+    "@astrojs/node": "^9.5.2",
     "@astrojs/react": "^4.1.6",
     "@directus/sdk": "^18.0.3",
     "@fortawesome/fontawesome-free": "^7.1.0",

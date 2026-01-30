@@ -4,9 +4,9 @@ const { articles } = Astro.props
 import SectionRow from "./Section-Row.astro"
 
 ---
-<div class="grid grid-cols-[1fr] md:grid-cols-[3fr_6fr_3fr] md:divide-x md:divide-triangleGray-400 ">
+<div class="grid grid-cols-[1fr] md:grid-cols-[3fr_6fr] lg:grid-cols-[3fr_6fr_3fr] lg:divide-x lg:divide-triangleGray-400 ">
     <!-- Column 1: 2 blocks -->
-    <div class="flex flex-col space-y-2 md:pr-[12px] order-2 md:order-none">
+    <div class="flex flex-col space-y-2 lg:pr-[12px] order-2 md:order-none">
         {articles.slice(0, 2).map(article => (
             <PhotoArticle title={article.title} 
             image={article.featured_image}
@@ -29,7 +29,7 @@ import SectionRow from "./Section-Row.astro"
     </div>
 
     <!-- Column 3: 5 blocks -->
-    <div class="flex flex-col md:pl-[12px] order-3 md:order-none">
+    <div class="flex flex-col lg:pl-[12px] order-3 md:order-none md:col-span-2 lg:col-span-1">
         {articles.slice(3, 9).map(article => (
             <PhotoArticle title={article.title} 
             category={article.categories_list}
