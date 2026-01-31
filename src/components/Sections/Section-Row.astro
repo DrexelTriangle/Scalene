@@ -3,7 +3,7 @@ import PhotoArticle from "../PhotoArticle.astro";
 const { articles } = Astro.props
 ---
 
-<div class="grid grid-cols-1 sm:grid-cols-4 sm:divide-x sm:divide-triangleGray-400 pt-3 mt-3 mb-8 border-t-[1px] border-solid border-triangleGray-400">
+<div class="grid grid-cols-1 sm:grid-cols-4 sm:divide-x sm:divide-triangleGray-400 pt-3 mt-3 d:mb-8 border-t-[1px] border-solid border-triangleGray-400">
     {articles.map(article => (
         <PhotoArticle row title={article.title} 
         category={article.categories_list}
