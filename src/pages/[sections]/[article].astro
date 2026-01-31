@@ -27,8 +27,8 @@ authorList = authorListLinks.join(" and ") + " | " + date_string;
 <BaseLayout title={normalizeText(post.title) + " - The Triangle"}>
     <Header/>
     <article class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto]">
-        {post.categories_list && <span class="block font-roboto-slab uppercase font-extrabold text-triangleBlue text-[14px] italic font-700 mb-[-12px]"> {normalizeText(post.categories_list[0].name)} </span>}
-        <h1 class="font-playfair text-[42px] font-bold mt-[0px]">{normalizeText(post.title)}</h1>
+        {post.categories_list && <a href={"../"+post.categories_list[0].slug}><span class="block font-roboto-slab uppercase font-extrabold text-triangleBlue text-[14px] italic font-700"> {normalizeText(post.categories_list[0].name)} </span></a>}
+        <h1 class="font-playfair text-[42px] font-bold mt-[-12px]">{normalizeText(post.title)}</h1>
         <div set:html={authorList} class="text-[18px] mb-[16px] font-roboto-slab font-light"></div>
         <section id="article" set:html={post.content.replaceAll("https://www.thetriangle.org/wp-content", "/proxy/wp-content").replaceAll("https://www.thetriangle.org/", "/").replace(/srcset="[^"]*"/g, "")}>
 

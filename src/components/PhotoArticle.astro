@@ -27,7 +27,7 @@ const imgClass = row ? "aspect-[4/3] sm:w-[100%] sm:h-[200px] object-cover" : "a
 
 <article class={classes}>
     {Object.hasOwn(Astro.props, 'image') && <img class={imgClass} loading="lazy" src={imgSrc} onerror="/images/placeholder.jpg" alt={title || 'Article image'} />}
-    {category && <h3 class="font-roboto-slab uppercase font-extrabold text-triangleBlue text-[10px] font-700"> {normalizeText(category[0].name)} </h3>}
+    {category && <a href={category[0].slug}><h3 class="font-roboto-slab uppercase font-extrabold text-triangleBlue text-[10px] font-700"> {normalizeText(category[0].name)} </h3></a>}
     <a href={"/"+slug}><h2 class="font-playfair text-[20px] leading-tight hover:underline">{normalizeText(title)}</h2><a>
     <div id="byline" class="font-playfair text-[12px]" set:html={authorList}></div>
     {excerpt && <div set:html={normalizeText(excerpt)} class="font-crimson"></div>}

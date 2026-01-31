@@ -30,7 +30,7 @@
     <a class="hover:underline" href="/opinion"> Opinion </a>
     <a class="hover:underline" href="/sports"> Sports </a>
     <a class="hover:underline" href="/entertainment"> Entertainment </a>
-    <a class="hover:underline" href="/comics"> Comics </a>
+    <a class="hover:underline" href="/candp"> Comics </a>
     <a class="hover:underline" target="_blank" rel="noopener noreferrer" href="https://alumni.drexel.edu/s/1683/form/16/form.aspx?sid=1683&gid=2&pgid=4355&content_id=4154"> Donate </a>
   </nav>
   <SideMenu/>
@@ -50,7 +50,7 @@
       hamburger.classList.remove('fa-bars');
       hamburger.classList.add('fa-close');
       document.getElementById("side-nav").style.width = "200px";
-      document.getElementById("side-nav").style.borderStyle = "solid";
+      document.getElementById("side-nav").style.borderLeft = "1px solid #2563EB";
       document.getElementById("side-nav").style.padding = "0px 8px";
       
       document.getElementById("main-nav").style.display = "flex";
@@ -63,7 +63,7 @@
       setTimeout(() => {
         document.getElementById("main-nav").style.display = "none";
         document.getElementById("sub-nav").style.display = "none";
-        document.getElementById("side-nav").style.borderStyle = "none";
+        document.getElementById("side-nav").style.borderLeft = "none";
       }, 200);
     }
   });
