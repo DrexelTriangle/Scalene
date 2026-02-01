@@ -1,6 +1,6 @@
 
 export async function getHomepageArticles() {
-  const url = 'https://thetriangle.org/wp-json/triangle/v1/homepage';
+  const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/homepage';
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
@@ -12,7 +12,7 @@ export async function getHomepageArticles() {
 }
 
 export async function getSectionArticles(section) {
-  const url = 'https://thetriangle.org/wp-json/triangle/v1/section/'+section;
+  const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/section/'+section;
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
@@ -24,7 +24,7 @@ export async function getSectionArticles(section) {
 }
 
 export async function getAuthorArticles(author) {
-  const url = 'https://thetriangle.org/wp-json/triangle/v1/author/'+author;
+  const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/author/'+author;
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
@@ -36,7 +36,7 @@ export async function getAuthorArticles(author) {
 }
 
 export async function getArticle(article) {
-  const url = 'https://thetriangle.org/wp-json/triangle/v1/post/' + article;
+  const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/post/' + article;
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
@@ -48,7 +48,7 @@ export async function getArticle(article) {
 }
 
 export async function search(search) {
-  const url = 'https://thetriangle.org/wp-json/triangle/v1/search?q=' + search;
+  const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/search?q=' + search;
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
@@ -59,7 +59,7 @@ export async function search(search) {
   return res.json();
 }
 export async function gallery() {
-  const url = 'https://thetriangle.org/wp-json/triangle/v1/gallery';
+  const url = 'cms.https://thetriangle.org/wp-json/triangle/v1/gallery';
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
