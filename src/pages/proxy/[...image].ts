@@ -10,7 +10,6 @@ export const GET: APIRoute = async ({ params, request }) => {
       redirect: "follow",
       headers: {
         "User-Agent": "Mozilla/5.0",
-        "Referer": "https://cms.thetriangle.org/"
       },
     });
 
