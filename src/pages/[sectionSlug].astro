@@ -1,0 +1,41 @@
+---
+export const prerender = false; // Not needed in 'server' mode
+
+const { sectionSlug } = Astro.params;
+
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from '../components/Header.astro';
+import Section from '../components/Sections/Section.astro';
+import Social from '../components/Social.astro';
+import Poll from '../components/Polls.astro';
+import '../styles/global.css';
+import { getSectionArticles } from '../utils/db';
+import { normalizeText } from "../utils/data";
+
+const posts = await getSectionArticles(sectionSlug);
+
+if (!posts) {
+  return Astro.rewrite('/404');
+}
+const sectionName = normalizeText(posts.section.name)
+---
+<BaseLayout title={sectionName + " - The Triangle"}>
+    <Header/>
+    <h1 class="mt-2 xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-playfair text-[36px]">{sectionName}</h1>
+    <div class="hidden sm:flex xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-roboto-slab font-light text-[12px] gap-x-[16px] border-b-[1px] border-solid border-triangleGray pb-[4px]">
+        {posts.subsections?.sort(() => Math.random() - 0.5).slice(0, 8).map(subsection => (
+            <a href={"/" + subsection.slug} class="hover:underline"> {normalizeText(subsection.name)}</a>
+        ))}
+    </div>
+    <Section articles={posts.articles?.slice(0, 9)} style="5-3-4"/>
+    <Section articles={posts.articles?.slice(9, 13)} style="row"/>
+    {posts.articles?.length > 13 && <div class="grid grid-cols-[1fr] sm:grid-cols-[8fr_4fr] mt-2 xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] mb-[8px] divide-x divide-triangleBlue pt-[5px]">
+        <div id="main-left" class="main-side">
+            <Section section="" articles={posts.articles?.slice(13, 25)} includeName style="list"/>
+        </div>
+        <div id="main-right" class="hidden sm:block main-side [&>*:not(:first-child)]:border-t-[1px] [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-triangleBlue">
+            <Poll />
+            <Social />
+        </div>
+    </div>}
+</BaseLayout>

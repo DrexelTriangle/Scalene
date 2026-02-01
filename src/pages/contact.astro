@@ -1,0 +1,60 @@
+---
+export const prerender = true;
+
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Section from '../components/Sections/Section.astro';
+import Header from '../components/Header.astro';
+import Column from '../components/Columns.astro';
+import Social from '../components/Social.astro';
+import Poll from '../components/Polls.astro';
+import '../styles/global.css';
+---
+
+<BaseLayout title="Contact - The Triangle">
+    <Header/>
+    <h1 class="mt-2 xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-playfair text-[36px]">Contact Us</h1>
+    <div class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-crimson text-[16px] mb-[16px]">
+        Interested in advertising with The Triangle? Check out our <a href="/proxy/wp-content/uploads/2026/01/The-Triangle-Media-Kit.pdf" class="underline hover:text-triangleBlue">media kit</a>!<br/>
+        Have a business inquiry, an article idea, or breaking news to share? We'd love to hear from you! Please use our contact form to reach out, and we'll 
+        get back to you as soon as possible.
+    </div>
+    <form id="contact" class="flex flex-wrap xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] gap-[16px] text-[14px]">
+    <label class="font-libre w-[calc(50%-8px)]">
+        <span class="block w-[100%]">Name<b class="text-red-500">*</b></span>
+        <input name="name" required class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"/>
+    </label>
+    <label class="font-libre w-[calc(50%-8px)]">
+        <span class="block w-[100%]">Email<b class="text-red-500">*</b></span>
+        <input name="email" required class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"/></label>
+    <label class="font-libre w-[100%]">
+        <span class="block w-[100%]">Message<b class="text-red-500">*</b></span>
+        <textarea name="message" class="border-[1px] border-solid border-triangleBlue w-[100%] h-[280px] p-2 rounded-[10px]"></textarea>
+    </label>
+    <button type="submit" class="flex font-roboto-slab self-end bg-triangleBlue text-white p-3 w-[160px] justify-center rounded-[10px] hover:border-[1px] hover:border-solid hover:border-triangleBlue hover:bg-white hover:text-triangleBlue">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById("contact").addEventListener("submit", async (e) => {
+        e.preventDefault(); // stop page reload
+
+        const form = e.target;
+        const data = {
+            name: form.name.value,
+            email: form.email.value,
+            message: form.message.value
+        };
+        const res = await fetch("/api/slack", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        // if (res.ok) {
+        //     alert("Sent!");
+        //     form.reset();
+        // } else {
+        //     alert("Something broke");
+        // }
+        });
+    </script>
+</BaseLayout>

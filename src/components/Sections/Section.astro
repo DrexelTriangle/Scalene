@@ -1,0 +1,35 @@
+---
+import Section354 from './Section-3-5-4.astro'
+import Section35 from './Section-3-5.astro'
+import Section53 from './Section-5-3.astro'
+import Section66 from './Section-6-6.astro'
+import Section534 from './Section-5-3-4.astro'
+import Section363 from './Section-3-6-3.astro'
+import SectionRow from './Section-Row.astro'
+import SectionList from './Section-List.astro'
+
+
+const {section, articles, includeName, style} = Astro.props
+
+const styles = {
+    "3-5-4": Section354,
+    "5-3-4": Section534,
+    "3-6-3": Section363,
+    "3-5": Section35,
+    "5-3": Section53,
+    "6-6": Section66,
+    "row": SectionRow,
+    "list": SectionList,
+}
+
+const Component = styles[style] ?? Section354;
+
+export const prerender = true;
+
+---
+
+<section class:list={["md:mt-2 xl:max-w-[1200px] lg:max-w-[900px] xl:[:not(.main-side)>_&]:max-w-[1200px] lg:[:not(.main-side)>_&]:max-w-[900px] [:not(.main-side)>_&]:max-w-[90%] mx-[auto] mb-[8px]",  includeName && "border-t-[1px] border-solid border-triangleBlue"]}>
+    {includeName && <h1 class="font-roboto-slab uppercase font-extrabold"> {section} </h1>}
+    <Component articles={articles}/>
+</section>
+

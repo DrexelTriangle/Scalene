@@ -1,0 +1,33 @@
+---
+import { normalizeText } from "../utils/data";
+const {title, excerpt, image, author, date, slug} = Astro.props;
+
+let imgSrc = image || "hi";
+if(Astro.props.image !== undefined) {
+    imgSrc = imgSrc.replace("https://www.thetriangle.org", "/proxy");
+}
+if(imgSrc == "hi"){
+    imgSrc = "/proxy/wp-content/uploads/2024/12/IMG_2493-2048x1365.jpg"
+}
+
+let authorListLinks = [];
+let authorList = author.forEach((author)=>{authorListLinks.push(`<a class='hover:underline' href='/authors/${author.id}'>${author.name}</a>`);})
+
+let d = new Date(date)
+const months = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+const date_string = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+
+authorList = authorListLinks.join(" and ") + " | " + date_string;
+
+export const prerender = true;
+
+---
+
+<article class="grid grid-cols-[5fr_3fr] py-[8px] border-b-[1px] border-solid border-triangleGray-400">
+    <div class="px-[12px]">
+        <a href={"/"+slug}><h2 class="font-playfair text-[28px] leading-tight hover:underline mb-[8px]">{normalizeText(title)}</h2><a>
+        <div id="byline" class="font-roboto-slab text-[12px] mb-[8px]" set:html={authorList}></div>
+        {excerpt && <div class="text-[14px]" set:html={normalizeText(excerpt)}></div>}
+    </div>
+    {Object.hasOwn(Astro.props, 'image') && <img src={imgSrc} alt="article image" class="ml-[12px] bg-[url('/images/loading.jpg')] bg-cover w-[calc(100%-12px)] h-[169px] object-cover"/>}
+</article>

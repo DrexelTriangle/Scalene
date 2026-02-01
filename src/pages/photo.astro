@@ -1,0 +1,33 @@
+---
+
+// export const prerender = false;
+import Header from '../components/Header.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Section from '../components/Sections/Section.astro';
+import '../styles/global.css';
+
+import { gallery } from '../utils/db';
+import { normalizeText } from "../utils/data";
+
+const images = await gallery();
+---
+<BaseLayout title="Photo Gallery - The Triangle">
+  <Header />
+  <section>
+    <h1 class="my-2 xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-playfair text-[36px]">Photo Gallery </h1>
+    <div class="mx-auto xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] columns-2 sm:columns-3 md:columns-4 gap-4">
+      {images.map((img) => (
+        <img
+          src={img.url.replace("https://cms.thetriangle.org/", "/proxy/")}
+          alt=""
+          class="mb-4 w-full rounded-lg break-inside-avoid"
+          loading="lazy"
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+
+
+

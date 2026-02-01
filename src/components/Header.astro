@@ -1,0 +1,134 @@
+---
+  const {home} = Astro.props
+  import SideMenu from "./SideMenu.astro"
+---
+<header id="site-header" class="flex w-full relative p-[10px] justify-between items-center border-b-[1px] border-triangleGray border-solid">
+  <div class="inline-flex items-center gap-x-[10px]" id="header-left">
+    <i id="search" class="fa-solid fa-magnifying-glass text-[12px] cursor-pointer"></i>
+    <form action="/search" method="GET">
+        <input id="s" name="s" type="text" placeholder="Search" class="hiddenSearch font-roboto-slab text-[12px] w-[200px] border-solid border-triangleBlue border-[1px] px-2 py-1 rounded-[10px] transition-[width] duration-[400ms]"/>
+    </form>
+    <div id="temp" class="font-roboto-slab text-[12px] font-thin hidden sm:block"></div>
+  </div>
+  {!home && <a href="/" class="absolute left-[calc(50%-100px)] md:left-[calc(50%-120px)] lg:left-[calc(50%-133px)]"><img class="w-[200px] md:w-[240px] lg:w-[266px]" src="/proxy/wp-content/uploads/2026/01/thetriangle.png"/></a>}
+  <div id="header-right" class="inline-flex items-center gap-x-[10px] font-roboto-slab text-[12px] cursor-pointer" id="hamburgerog">
+    <nav class="hidden md:flex gap-x-[12px]">
+      <a class="hover:underline" href="/about"> About Us </a>
+      <a class="hover:underline" href="/contact"> Advertising </a>
+      <a class="hover:underline" target="_blank" rel="noopener noreferrer" href="https://alumni.drexel.edu/s/1683/form/16/form.aspx?sid=1683&gid=2&pgid=4355&content_id=4154"> Donate </a>
+      <a class="hover:underline" href="/contact"> Contact </a>
+    </nav>
+    <i id="hamburger" class="fa-solid fa-bars text-[16px]"></i>
+  </div>
+</header>
+{home && <div class="flex justify-center pt-[24px]">
+  <img id="logo" class="w-[90%] sm:w-[532px] h-[70px] mb-[24px] sm:mb-[0px] z-[99]" src="/old_logos/old_logo_14.svg"/>
+</div>}
+<div id="scrollnav" class="sm:py-[8px] sticky top-0 bg-white border-b-[1px] border-triangleBlue border-solid cursor-pointer mb-[24px] relative">
+  <nav class="hidden sm:flex justify-center gap-x-1 sm:gap-x-8 font-roboto-slab font-extrabold text-[16px] font-700">
+    <a class="hover:underline" href="/news"> News </a>
+    <a class="hover:underline" href="/opinion"> Opinion </a>
+    <a class="hover:underline" href="/sports"> Sports </a>
+    <a class="hover:underline" href="/entertainment"> Entertainment </a>
+    <a class="hover:underline" href="/candp"> Comics </a>
+    <a class="hover:underline" target="_blank" rel="noopener noreferrer" href="https://alumni.drexel.edu/s/1683/form/16/form.aspx?sid=1683&gid=2&pgid=4355&content_id=4154"> Donate </a>
+  </nav>
+  <SideMenu/>
+</div>
+
+<script>
+  let hl = document.getElementById("header-left")
+  let hr = document.getElementById("header-right")
+  let scrollnav = document.getElementById("scrollnav")
+  let search = document.getElementById("search");
+  let hamburger = document.getElementById("hamburger");
+  let sidenav = document.getElementById("side-nav");
+
+  // Toggle fa-bars and fa-close on hamburger click
+  hamburger?.addEventListener('click', () => {
+    if (hamburger.classList.contains('fa-bars')) {
+      hamburger.classList.remove('fa-bars');
+      hamburger.classList.add('fa-close');
+      document.getElementById("side-nav").style.width = "200px";
+      document.getElementById("side-nav").style.borderLeft = "1px solid #2563EB";
+      document.getElementById("side-nav").style.padding = "0px 8px";
+      
+      document.getElementById("main-nav").style.display = "flex";
+      document.getElementById("sub-nav").style.display = "flex";
+    } else {
+      hamburger.classList.remove('fa-close');
+      hamburger.classList.add('fa-bars');
+      document.getElementById("side-nav").style.width = "0px";
+      document.getElementById("side-nav").style.padding = "0px 0px";
+      setTimeout(() => {
+        document.getElementById("main-nav").style.display = "none";
+        document.getElementById("sub-nav").style.display = "none";
+        document.getElementById("side-nav").style.borderLeft = "none";
+      }, 200);
+    }
+  });
+
+  search?.addEventListener('click', () => {
+    document.getElementById("s").classList.toggle("hiddenSearch");
+  });
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 130) {
+      search?.classList.add("scrollstickyleft");
+      hamburger?.classList.add("scrollstickyright");
+      scrollnav?.prepend(search);
+      scrollnav?.append(hamburger);
+      if (window.matchMedia("(max-width: 639px)").matches) {
+        document.getElementById("scrollnav").style.paddingTop = "40px";
+      } 
+    } else {
+      search?.classList.remove("scrollstickyleft")
+      hamburger?.classList.remove("scrollstickyright");
+      hl?.prepend(search);
+      hr?.append(hamburger);
+      if (window.matchMedia("(max-width: 639px)").matches) {
+        document.getElementById("scrollnav").style.paddingTop = "0px";
+      } else {
+        document.getElementById("scrollnav").style.paddingTop = "8px";
+      }
+    }
+  });
+
+  
+		fetch("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Philadelphia?unitGroup=metric&include=current&key=R75ZL8UTXNSKG8GBYRH82DJE4&contentType=json", {
+      method: "GET"
+    })
+      .then(response => response.json())  // Parse the JSON from the response
+      .then(data => {
+      var temp = "Philadelphia: " + parseInt((data.currentConditions.temp * 9 / 5 + 32)) + "°F ";// + data.currentConditions.conditions;
+      document.getElementById('temp').innerHTML = temp;
+
+      })
+      .catch(err => {
+        console.error("Error fetching weather data:", err);
+      });
+      let idx = 0;
+      setInterval(() => {
+        idx++;
+        let old_logos = [
+        "/old_logos/old_logo_1.png",
+        "/old_logos/old_logo_2.png",
+        "/old_logos/old_logo_3.png",
+        "/old_logos/old_logo_4.png",
+        "/old_logos/old_logo_5.png",
+        "/old_logos/old_logo_6.png",
+        "/old_logos/old_logo_7.png",
+        "/old_logos/old_logo_8.png",
+        "/old_logos/old_logo_9.png",
+        "/old_logos/old_logo_10.png",
+        "/old_logos/old_logo_11.png",
+        "/old_logos/old_logo_12.png",
+        "/old_logos/old_logo_13.png",
+        "/old_logos/old_logo_14.svg",
+      ]
+      if(idx >=  old_logos.length){
+          idx = 0;
+        }
+      document.getElementById("logo")?.setAttribute("src", old_logos[idx]);
+      }, 1250)  
+</script>
