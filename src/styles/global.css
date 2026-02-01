@@ -294,32 +294,3 @@ body {
 		font-size: 12px;
 }
 }
-
-.primary-color{color: #2563EB};
-.secondary-color-one{color: #ffe867};
-.secondary-color-two{color:  #377fd9};
-.secondary-color-three{color:  #00006c};
-.accent-color-one{color:  #fef5ac};
-.accent-color-two{color: #83cbfb};
-.accent-color-three{color:  #00003c};
-.neutral-color-one{color:  #f2f7ff};
-.neutral-color-two{color:  #5f6f94};
-
-
-
-
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-body {
-  margin: 0px 60px;
-  font-family: "Crimson Text", serif;
-  font-size: 18px;
-}
-
-.header-section {
-  border-bottom: 1.5px solid #000; 
-  padding-bottom: 15px;
-}
