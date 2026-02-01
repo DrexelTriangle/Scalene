@@ -59,7 +59,7 @@ export async function search(search) {
   return res.json();
 }
 export async function gallery() {
-  const url = 'cms.https://thetriangle.org/wp-json/triangle/v1/gallery';
+  const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/gallery';
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },

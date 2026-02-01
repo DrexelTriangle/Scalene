@@ -30,7 +30,7 @@ authorList = authorListLinks.join(" and ") + " | " + date_string;
         {post.categories_list && <a href={"../"+post.categories_list[0].slug}><span class="block font-roboto-slab uppercase font-extrabold text-triangleBlue text-[14px] italic font-700"> {normalizeText(post.categories_list[0].name)} </span></a>}
         <h1 class="font-playfair text-[42px] font-bold mt-[-12px]">{normalizeText(post.title)}</h1>
         <div set:html={authorList} class="text-[18px] mb-[16px] font-roboto-slab font-light"></div>
-        <section id="article" set:html={post.content.replaceAll("https://www.thetriangle.org/wp-content", "/proxy/wp-content").replaceAll("https://www.thetriangle.org/", "/").replace(/srcset="[^"]*"/g, "")}>
+        <section id="article" set:html={post.content.replaceAll("https://cms.thetriangle.org/wp-content", "/proxy/wp-content").replaceAll("https://www.thetriangle.org/", "/").replace(/srcset="[^"]*"/g, "")}>
 
         </section>
         {post.content.includes('pm-embed-div') && (
