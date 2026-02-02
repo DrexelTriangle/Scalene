@@ -16,6 +16,11 @@ const posts = await getHomepageArticles();
 
 <BaseLayout title="The Triangle">
     <Header home/>
+
+    <a id="one-hundred" href="/one-hundred-years" class="flex px-[16px] justify-end items-end w-full mt-[-24px] mb-[24px] h-[200px] md:h-[300px] bg-center text-white text-wrap font-bold uppercase font-libre text-[32px] sm:text-[48px] lg:text-[48px] leading-[normal] relative">
+        <span class="z-[10] text-right">100 Years of The Triangle &#129074;</span>
+    </a>
+
     <Section section="news" articles={posts.news?.slice(0, 9)} style="3-6-3"/>
     <Section section="news" articles={posts.news?.slice(9)} style="row"/>
     <Section section="opinion" articles={posts.opinion} includeName style="3-5-4"/>

@@ -18,6 +18,22 @@ body {
   font-size: 18px;
 }
 
+#one-hundred{
+	background: url("/images/100YearBanner.png") no-repeat top center fixed;
+    background-size: cover;
+}
+
+#one-hundred::before{
+	content:'';
+	width:100%;
+	height: 100%;
+	background: linear-gradient(to top, #2563EB, rgba(0,0,0,0));;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 9;
+}
+
 .header-section {
   border-bottom: 1.5px solid #000; 
   padding-bottom: 15px;

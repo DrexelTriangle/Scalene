@@ -49,12 +49,11 @@ import '../styles/global.css';
             body: JSON.stringify(data)
         });
 
-        // if (res.ok) {
-        //     alert("Sent!");
-        //     form.reset();
-        // } else {
-        //     alert("Something broke");
-        // }
+        if (res.ok) {
+            window.location.replace("/submitted");
+        } else {
+            window.location.replace("/error");
+        }
         });
     </script>
 </BaseLayout>

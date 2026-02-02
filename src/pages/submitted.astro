@@ -1,0 +1,29 @@
+---
+export const prerender = false;
+import Header from '../components/Header.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Section from '../components/Sections/Section.astro';
+import '../styles/global.css';
+
+import { search } from '../utils/db';
+import { normalizeText } from "../utils/data";
+
+const s = Astro.url.searchParams.get('s');
+
+const posts = await search(s);
+
+if (!posts || posts.length == 0) {
+  return Astro.rewrite('/404');
+}
+---
+<BaseLayout title="Submitted!">
+    <Header/>
+    <section class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] h-[100vh] justify-center flex flex-wrap">
+        <div>
+            <h1 class="text-[36px] font-bold font-roboto-slab mb-2 mt-[48px]"> Submitted! </h1>
+            <div> Thank you for contacting The Triangle! Someone will reach out to you soon. If you do not hear back, 
+                feel free to email us at <a href="mailto:editor@thetriangle.org" class="text-[16px] underline font-roboto-slab hover:text-triangleBlue">editor@thetriangle.org</a> </div>
+            <a href="/" class="text-[16px] mt-4 underline font-roboto-slab hover:text-triangleBlue block"> Return to homepage. </a>
+        </div>
+    </section>
+</BaseLayout>
