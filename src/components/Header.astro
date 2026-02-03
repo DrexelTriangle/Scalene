@@ -1,6 +1,19 @@
 ---
   const {home} = Astro.props
   import SideMenu from "./SideMenu.astro"
+
+  const eventDate = new Date(); // Gets the current date/time
+  // const eventDate = new Date('2025-05-15T10:00:00'); // Or a specific date
+
+  const options = {
+      weekday: 'long', // Full name of the day of the week (e.g., "Monday")
+      year: 'numeric', // Full numeric year (e.g., "2024")
+      month: 'long',   // Full name of the month (e.g., "February")
+      day: 'numeric'   // Numeric day of the month (e.g., "2")
+  };
+
+  // Formats the date based on the user's browser locale (en-US by default)
+  const formattedDate = eventDate.toLocaleDateString(undefined, options);
 ---
 <header id="site-header" class="flex w-full relative p-[10px] justify-between items-center border-b-[1px] border-triangleGray border-solid">
   <div class="inline-flex items-center gap-x-[10px]" id="header-left">
@@ -21,9 +34,19 @@
     <i id="hamburger" class="fa-solid fa-bars text-[16px]"></i>
   </div>
 </header>
-{home && <div class="flex justify-center pt-[24px]">
+{home && 
+<div class="flex justify-between pt-[24px] font-roboto-slab text-[14px] xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-auto">
+  <div class="hidden lg:flex flex-col">
+    <span>{formattedDate}</span>
+    <a class="hover:underline font-extrabold" href="https://drexel.primo.exlibrisgroup.com/discovery/collectionDiscovery?vid=01DRXU_INST:01DRXU&inst=01DRXU_INST&collectionId=81448731180004721" target="_blank" rel="noopener noreferrer"> Print Archive </a>
+  </div>
   <img id="logo" class="w-[90%] sm:w-[532px] h-[70px] mb-[24px] sm:mb-[0px] z-[99]" src="/old_logos/old_logo_14.svg"/>
-</div>}
+  <div class="hidden lg:flex flex-col align-end items-end">
+    <span>Celebrating 100 Years!</span>
+    <a class="hover:underline font-extrabold" href="https://alumni.drexel.edu/s/1683/form/16/form.aspx?sid=1683&gid=2&pgid=4355&content_id=4154" target="_blank" rel="noopener noreferrer"> Support Local News </a>
+  </div>
+</div>
+}
 <div id="scrollnav" class="sm:py-[8px] sticky top-0 bg-white border-b-[1px] border-triangleBlue border-solid cursor-pointer mb-[24px] relative z-[99]">
   <nav class="hidden sm:flex justify-center gap-x-1 sm:gap-x-8 font-roboto-slab font-extrabold text-[16px] font-700">
     <a class="hover:underline" href="/news"> News </a>

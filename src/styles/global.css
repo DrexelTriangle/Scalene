@@ -81,11 +81,11 @@ body {
 }
 
 #article figure figcaption{
-  @apply font-roboto-slab font-light italic text-[14px]
+  @apply font-roboto-slab font-light italic text-[12px] md:text-[14px]
 }
 
 #article p {
-  @apply font-crimson my-[16px] text-[18px];
+  @apply font-crimson my-[16px] text-[14px] sm:text-[18px];
 }
 
 #article p a {
@@ -313,4 +313,9 @@ body {
 	background: url("/images/100YearBannerMobile.png") no-repeat top center;
     background-size: cover;
 }
+#article figure:has(+ p) img{
+  aspect-ratio: 1.5;
+  object-fit:cover;
+}
+
 }

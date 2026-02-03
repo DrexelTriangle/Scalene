@@ -4,7 +4,7 @@ const {title, excerpt, image, author, date, category, row, slug} = Astro.props;
 
 let imgSrc = image || "hi";
 if(Astro.props.image !== undefined) {
-    imgSrc = imgSrc.replace("https://www.thetriangle.org", "/proxy");
+    imgSrc = imgSrc.replace("https://www.thetriangle.org", "/proxy").replace("https://cms.thetriangle.org", "/proxy");
 }
 if(imgSrc == "hi"){
     imgSrc = "/proxy/wp-content/uploads/2024/12/IMG_2493-2048x1365.jpg"
@@ -13,11 +13,15 @@ if(imgSrc == "hi"){
 let authorListLinks = [];
 let authorList = author.forEach((author)=>{authorListLinks.push(`<a class='hover:underline' href='/authors/${author.id}'>${author.name}</a>`);})
 
+if(authorListLinks.length > 1){
+    authorListLinks[authorListLinks.length - 1] = " and " + authorListLinks[authorListLinks.length - 1];
+}
+
 let d = new Date(date)
 const months = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
 const date_string = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
 
-authorList = authorListLinks.join(" and ") + " | " + date_string;
+authorList = authorListLinks.length > 2 ? authorListLinks.join(", ") + " | " + date_string : authorListLinks.join("") + " | " + date_string;
 
 export const prerender = true;
 
