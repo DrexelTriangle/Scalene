@@ -309,4 +309,8 @@ body {
     width: calc(50% - 40px);
 		font-size: 12px;
 }
+#one-hundred{
+	background: url("/images/100YearBannerMobile.png") no-repeat top center;
+    background-size: cover;
+}
 }
