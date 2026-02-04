@@ -272,6 +272,17 @@ body {
 	width: 100%;
 }
 
+@media (max-width: 1280px) {
+	.staff-row {
+		flex-wrap: wrap;
+		justify-content: start;
+		margin-bottom: 0px;
+	}
+  .staff-card {
+    width: calc(25% - 20px)
+  }
+}
+
 @media (max-width: 960px) {
 	.staff-row {
 		flex-wrap: wrap;
