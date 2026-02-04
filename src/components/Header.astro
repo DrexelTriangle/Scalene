@@ -1,6 +1,9 @@
 ---
   const {home} = Astro.props
   import SideMenu from "./SideMenu.astro"
+  import Weather from "./Weather.astro"
+
+  Astro.response.headers.set('Cache-Control', 'public, max-age=3600');
 
   const eventDate = new Date(); // Gets the current date/time
   // const eventDate = new Date('2025-05-15T10:00:00'); // Or a specific date
@@ -21,7 +24,7 @@
     <form action="/search" method="GET">
         <input id="s" name="s" type="text" placeholder="Search" class="hiddenSearch font-roboto-slab text-[12px] w-[200px] border-solid border-triangleBlue border-[1px] px-2 py-1 rounded-[10px] transition-[width] duration-[400ms]"/>
     </form>
-    <div id="temp" class="font-roboto-slab text-[12px] font-thin hidden sm:block"></div>
+  <Weather server:defer>
   </div>
   {!home && <a href="/" class="absolute left-[calc(50%-100px)] md:left-[calc(50%-120px)] lg:left-[calc(50%-133px)]"><img class="w-[200px] md:w-[240px] lg:w-[266px]" src="/proxy/wp-content/uploads/2026/01/thetriangle.png"/></a>}
   <div id="header-right" class="inline-flex items-center gap-x-[10px] font-roboto-slab text-[12px] cursor-pointer" id="hamburgerog">
@@ -117,19 +120,6 @@
     }
   });
 
-  
-		fetch("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Philadelphia?unitGroup=metric&include=current&key=R75ZL8UTXNSKG8GBYRH82DJE4&contentType=json", {
-      method: "GET"
-    })
-      .then(response => response.json())  // Parse the JSON from the response
-      .then(data => {
-      var temp = "Philadelphia: " + parseInt((data.currentConditions.temp * 9 / 5 + 32)) + "°F ";// + data.currentConditions.conditions;
-      document.getElementById('temp').innerHTML = temp;
-
-      })
-      .catch(err => {
-        console.error("Error fetching weather data:", err);
-      });
       let idx = 0;
       setInterval(() => {
         idx++;
