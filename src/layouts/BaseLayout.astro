@@ -82,28 +82,36 @@ const { title } = Astro.props;
 
 
     <script>
-      var _paq = window._paq = window._paq || [];
+  // Initialize Matomo
+  var _paq = window._paq = window._paq || [];
+  _paq.push(['trackPageView']);      // first page load
+  _paq.push(['enableLinkTracking']); // track clicks automatically
+
+  (function() {
+    var u = "https://stats.thetriangle.org/"; // your Matomo server
+    _paq.push(['setTrackerUrl', u + 'matomo.php']);
+    _paq.push(['setSiteId', '1']); // keep same ID as WP or use new Site ID
+    var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+    g.async = true; g.src = u + 'matomo.js';
+    s.parentNode.insertBefore(g, s);
+  })();
+
+  // Track Astro client-side navigation
+  function trackPage() {
+    if (window._paq) {
+      _paq.push(['setCustomUrl', window.location.href]);
+      _paq.push(['setDocumentTitle', document.title]);
       _paq.push(['trackPageView']);
-      _paq.push(['enableLinkTracking']);
+    }
+  }
 
-      (function() {
-        var u = "https://stats.thetriangle.org/";
-        _paq.push(['setTrackerUrl', u + 'matomo.php']);
-        _paq.push(['setSiteId', '1']); // same site ID as WP
-        var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
-        g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
-      })();
-    </script>
+  // Track initial load
+  document.addEventListener('DOMContentLoaded', trackPage);
 
-    <script>
-      document.addEventListener("astro:page-load", () => {
-        if (window._paq) {
-          _paq.push(['setCustomUrl', window.location.href]);
-          _paq.push(['setDocumentTitle', document.title]);
-          _paq.push(['trackPageView']);
-        }
-      });
-    </script>
+  // Track SPA-like navigations
+  document.addEventListener('astro:page-load', trackPage);
+</script>
+
 
 
   </body>
