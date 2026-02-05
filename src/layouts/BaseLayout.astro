@@ -79,5 +79,32 @@ const { title } = Astro.props;
       <div class="text-center text-[12px]">&copy; 2026 The Triangle. All rights are reserved, except where otherwise noted.</div>
       <div class="text-center text-[12px]">The Triangle is an independent student organization and is not owned nor operated by Drexel University.</div>
     </footer>
+
+
+    <script>
+      var _paq = window._paq = window._paq || [];
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+
+      (function() {
+        var u = "https://thetriangle.org/";
+        _paq.push(['setTrackerUrl', u + 'matomo.php']);
+        _paq.push(['setSiteId', '1']); // same site ID as WP
+        var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+        g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
+      })();
+    </script>
+
+    <script>
+      document.addEventListener("astro:page-load", () => {
+        if (window._paq) {
+          _paq.push(['setCustomUrl', window.location.href]);
+          _paq.push(['setDocumentTitle', document.title]);
+          _paq.push(['trackPageView']);
+        }
+      });
+    </script>
+
+
   </body>
 </html>
