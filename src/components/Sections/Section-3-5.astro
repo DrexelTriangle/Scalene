@@ -26,3 +26,12 @@ const { articles } = Astro.props
         ))}
     </div>
 </div>
+<div class="flex flex-col space-y-2">
+    {articles.slice(3, 6).map(article => (
+        <PhotoArticle title={article.title} 
+        category={article.categories_list}
+        author={article.authors}
+        date={article.date}
+        slug={article.categories_list[0].slug+"/"+article.slug}/>
+    ))}
+</div>

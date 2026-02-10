@@ -7,11 +7,11 @@ import Header from '../components/Header.astro';
 import Column from '../components/Columns.astro';
 import Social from '../components/Social.astro';
 import Poll from '../components/Polls.astro';
+import MostRead from '../components/MostRead.astro';
 import '../styles/global.css';
 import { getHomepageArticles } from '../utils/db';
 
 const posts = await getHomepageArticles();
-
 ---
 
 <BaseLayout title="The Triangle">
@@ -28,9 +28,10 @@ const posts = await getHomepageArticles();
         <div id="main-left" class="main-side">
             <Section section="sports" articles={posts.sports} includeName style="3-5"/>
             <Section section="entertainment" articles={posts.entertainment} includeName style="6-6"/>
-            <Section section="comics" articles={posts.candp} includeName style="5-3"/>
+            <Section section="comics" slug="candp" articles={posts.candp} includeName style="5-3"/>
         </div>
         <div id="main-right" class="hidden sm:block [&>*:not(:first-child)]:border-t-[1px] [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-triangleBlue main-side">
+            <MostRead/>
             <Column articles={posts.columns}/>
             <Poll />
             <Social />

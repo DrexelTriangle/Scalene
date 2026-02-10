@@ -11,7 +11,7 @@ if(imgSrc == "hi"){
 }
 
 let authorListLinks = [];
-let authorList = author.forEach((author)=>{authorListLinks.push(`<a class='hover:underline' href='/authors/${author.id}'>${author.name}</a>`);})
+let authorList = author.forEach((author)=>{authorListLinks.push(`<a class='hover:underline' href='/authors/${author.slug}'>${author.name}</a>`);})
 
 if(authorListLinks.length > 1){
     authorListLinks[authorListLinks.length - 1] = " and " + authorListLinks[authorListLinks.length - 1];

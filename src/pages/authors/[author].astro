@@ -11,8 +11,11 @@ import Poll from '../../components/Polls.astro';
 import '../../styles/global.css';
 import { getAuthorArticles } from '../../utils/db';
 import { normalizeText } from "../../utils/data";
+import Archive from "../../components/Sections/Archive.astro";
 
-const authorData = await getAuthorArticles(author);
+let pageNum = 1;
+const authorData = await getAuthorArticles(author, pageNum);
+let hasMore = authorData.pagination.hasMore;
 
 if (!authorData) {
   return Astro.rewrite('/404');
@@ -28,6 +31,7 @@ const name = authorData?.author?.display_name
     {authorData?.articles?.length > 13 && <div class="grid grid-cols-[1fr] sm:grid-cols-[8fr_4fr] mt-2 xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] mb-[8px] divide-x divide-triangleBlue pt-[5px]">
         <div id="main-left" class="main-side">
             <Section section="" articles={authorData?.articles?.slice(13, 25)} includeName style="list"/>
+            <Archive pageNum={pageNum} hasMore={hasMore} sectionSlug={authorData?.author?.slug} url="https://cms.thetriangle.org/wp-json/triangle/v2/author/"/>
         </div>
         <div id="main-right" class="hidden sm:block main-side [&>*:not(:first-child)]:border-t-[1px] [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-triangleBlue">
             <Poll />

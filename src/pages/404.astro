@@ -7,11 +7,11 @@ import '../styles/global.css';
 
 <BaseLayout title="Page Not Found">
     <Header/>
-    <section class="max-w-[1200px] mx-[auto] h-[100vh] justify-center flex flex-wrap">
+    <section class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] h-[100vh] justify-center flex flex-wrap">
         <div>
             <h1 class="text-[36px] font-bold font-roboto-slab mb-2 mt-[48px]"> Sorry, we can't find what you're looking for. </h1>
             <form action="/search" method="GET">
-                <input id="s" name="s" type="text" placeholder="Search" class="border-solid border-[1px] border-triangleBlue px-2 py-1 rounded-[10px] w-[500px]"/>
+                <input id="s" name="s" type="text" placeholder="Search" class="border-solid border-[1px] border-triangleBlue px-2 py-1 rounded-[10px] w-[80%] md:w-[500px]"/>
                 <button class="bg-triangleBlue text-white rounded-[10px] px-3 py-1"> ➤ </button>
             </form>
             <a href="/" class="text-[16px] mt-4 underline font-roboto-slab hover:text-triangleBlue block"> Return to homepage. </a>

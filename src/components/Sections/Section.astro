@@ -9,7 +9,7 @@ import SectionRow from './Section-Row.astro'
 import SectionList from './Section-List.astro'
 
 
-const {section, articles, includeName, style} = Astro.props
+const {section, articles, includeName, style, slug} = Astro.props
 
 const styles = {
     "3-5-4": Section354,
@@ -29,7 +29,7 @@ export const prerender = true;
 ---
 
 <section class:list={["md:mt-2 xl:max-w-[1200px] lg:max-w-[900px] xl:[:not(.main-side)>_&]:max-w-[1200px] lg:[:not(.main-side)>_&]:max-w-[900px] [:not(.main-side)>_&]:max-w-[90%] mx-[auto] mb-[8px]",  includeName && "border-t-[1px] border-solid border-triangleBlue"]}>
-    {includeName && <h1 class="font-roboto-slab uppercase font-extrabold"> {section} </h1>}
+    {includeName && <div class="flex w-100 justify-between"><h1 class="font-roboto-slab uppercase font-extrabold"> {section} </h1> <a href={slug ?? section} class="font-roboto-slab text-[14px] underline">See More &gt;</a></div>}
     <Component articles={articles}/>
 </section>
 

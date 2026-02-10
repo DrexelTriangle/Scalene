@@ -1,0 +1,21 @@
+---
+import { normalizeText } from "../utils/data"
+import PhotoArticle from "./PhotoArticle.astro"
+
+const baseUrl = import.meta.env.SITE_ORIGIN || "http://localhost:4321";
+
+const res = await fetch(`${baseUrl}/api/stats`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+        });
+const articles = await res.json()
+---
+<div class="font-playfair mb-[24px]">
+    <h1 class="font-roboto-slab uppercase font-extrabold mb-2"> Most Read </h1>
+    {articles.map((article, idx) => (
+        <div class="flex gap-x-[16px] [&:not(:last-child)]:border-b-[1px] border-triangleGray">
+            <span class="font-libre text-[36px] text-triangleBlue">{idx + 1}</span>
+            <PhotoArticle title={article.title} slug={article.categories_list[0].slug+"/"+article.slug} author={article.authors} date={article.date}/>
+        </div>
+    ))}
+</div>

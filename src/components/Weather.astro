@@ -9,8 +9,8 @@
     const contentType = response?.headers.get("content-type") || "";
     var temp;
     if(response?.ok && contentType.includes("json")){
-        const data = response?.json()
-        temp = "Philadelphia: " + parseInt(String(data.currentConditions.temp * 9 / 5 + 32)) + "°F ";
+        const data = await response?.json()
+        temp = "Philadelphia: " + parseInt(String(data.currentConditions?.temp * 9 / 5 + 32)) + "°F ";
     }
     else {
         temp = "";

@@ -11,8 +11,8 @@ export async function getHomepageArticles() {
   return res.json();
 }
 
-export async function getSectionArticles(section) {
-  const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/section/'+section;
+export async function getSectionArticles(section, page) {
+  const url = 'https://cms.thetriangle.org/wp-json/triangle/v2/section/'+section+'?page='+page;
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
@@ -23,8 +23,8 @@ export async function getSectionArticles(section) {
   return res.json();
 }
 
-export async function getAuthorArticles(author) {
-  const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/author/'+author;
+export async function getAuthorArticles(author, page) {
+  const url = 'https://cms.thetriangle.org/wp-json/triangle/v2/author/'+author+'?page='+page;
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
