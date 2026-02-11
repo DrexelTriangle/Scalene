@@ -1,5 +1,8 @@
 ---
-	const response = await fetch("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Philadelphia?unitGroup=metric&include=current&key=7NQVEHNA74T38VKCKL8BAMFEV&contentType=json", {
+	
+    Astro.response.headers.set('Cache-Control', 'public, max-age=3600');
+    
+    const response = await fetch("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Philadelphia?unitGroup=metric&include=current&key=7NQVEHNA74T38VKCKL8BAMFEV&contentType=json", {
       method: "GET"
     })    
     .catch(err => {

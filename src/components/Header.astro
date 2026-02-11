@@ -3,8 +3,6 @@
   import SideMenu from "./SideMenu.astro"
   import Weather from "./Weather.astro"
 
-  Astro.response.headers.set('Cache-Control', 'public, max-age=3600');
-
   const eventDate = new Date(); // Gets the current date/time
   // const eventDate = new Date('2025-05-15T10:00:00'); // Or a specific date
 
