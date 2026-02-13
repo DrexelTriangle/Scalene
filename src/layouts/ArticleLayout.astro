@@ -1,0 +1,107 @@
+---
+const { title, article } = Astro.props;
+import Footer from '../components/Footer.astro'
+
+const websiteJSON = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "The Triangle",
+  "alternateName": ["Drexel Triangle", "The Drexel Triangle"],
+  "url": "https://thetriangle.org/"
+};
+
+const newsArticleJSON = {
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://thetriangle.org/article/${article.slug}`
+  },
+  "headline": article.title,
+  "image": [article.featured_image],
+  "datePublished": article.date,
+  "dateModified": article.date,
+  "author": {
+      "@type": "Organization",
+      "name": "The Triangle"
+  },
+  "publisher": {
+      "@type": "Organization",
+      "name": "The Triangle",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://thetriangle.org/logo.png"
+      }
+  }
+};
+
+Astro.response.headers.set('Cache-Control', 'public, max-age=600, s-maxage=3600');
+
+---
+<html lang="en">
+  <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <link rel="canonical" href={`https://thetriangle.org/article/${article.slug}`} />
+
+  <!-- Website JSON-LD -->
+  <script type="application/ld+json" set:html={JSON.stringify(websiteJSON)}></script>
+
+  <!-- NewsArticle JSON-LD -->
+  <script type="application/ld+json" set:html={JSON.stringify(newsArticleJSON)}></script>
+</head>
+
+  <body class="w-100 min-h-screen flex flex-col"> <!-- dark:bg-triangleDark dark:text-white -->
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer/>
+
+
+    <script client:load>
+  // Initialize Matomo
+  var _paq = window._paq = window._paq || [];
+  _paq.push(['trackPageView']);      // first page load
+  _paq.push(['enableLinkTracking']); // track clicks automatically
+
+  (function() {
+    var u = "https://stats.thetriangle.org/"; // your Matomo server
+    _paq.push(['setTrackerUrl', u + 'matomo.php']);
+    _paq.push(['setSiteId', '1']); // keep same ID as WP or use new Site ID
+    var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+    g.async = true; g.src = u + 'matomo.js';
+    s.parentNode.insertBefore(g, s);
+  })();
+
+  // Track Astro client-side navigation
+  function trackPage() {
+    if (window._paq) {
+      _paq.push(['setCustomUrl', window.location.href]);
+      _paq.push(['setDocumentTitle', document.title]);
+      _paq.push(['trackPageView']);
+    }
+  }
+
+  // Track initial load
+  document.addEventListener('DOMContentLoaded', trackPage);
+
+  // Track SPA-like navigations
+  document.addEventListener('astro:page-load', trackPage);
+</script>
+
+<noscript>
+  <p>
+    <img
+      referrerpolicy="no-referrer-when-downgrade"
+      src="//stats.thetriangle.org/matomo.php?idsite=1&rec=1"
+      style="border:0;"
+      alt=""
+    />
+  </p>
+</noscript>
+
+
+
+  </body>
+</html>

@@ -12,7 +12,7 @@ import SectionRow from "./Section-Row.astro"
             image={article.featured_image}
             author={article.authors}
             date={article.date}
-            slug={article.categories_list[0].slug+"/"+article.slug}/>
+            slug={"article/"+article.slug}/>
         ))}
     </div>
 
@@ -24,7 +24,7 @@ import SectionRow from "./Section-Row.astro"
             author={article.authors}
             date={article.date}
             excerpt={article.excerpt}
-            slug={article.categories_list[0].slug+"/"+article.slug}/>
+            slug={"article/"+article.slug}/>
         ))}
     </div>
 
@@ -35,7 +35,7 @@ import SectionRow from "./Section-Row.astro"
             category={article.categories_list}
             author={article.authors}
             date={article.date}
-            slug={article.categories_list[0].slug+"/"+article.slug}/>
+            slug={"article/"+article.slug}/>
         ))}
     </div>
 </div>

@@ -10,7 +10,7 @@ const { articles } = Astro.props
             image={article.featured_image}
             author={article.authors}
             date={article.date}
-            slug={article.categories_list[0].slug+"/"+article.slug}/>
+            slug={"article/"+article.slug}/>
         ))}
     </div>
 
@@ -22,7 +22,7 @@ const { articles } = Astro.props
             author={article.authors}
             date={article.date}
             excerpt={article.excerpt}
-            slug={article.categories_list[0].slug+"/"+article.slug}/>
+            slug={"article/"+article.slug}/>
         ))}
     </div>
 </div>
@@ -32,6 +32,6 @@ const { articles } = Astro.props
         category={article.categories_list}
         author={article.authors}
         date={article.date}
-        slug={article.categories_list[0].slug+"/"+article.slug}/>
+        slug={"article/"+article.slug}/>
     ))}
 </div>

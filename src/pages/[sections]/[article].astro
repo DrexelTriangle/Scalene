@@ -3,7 +3,7 @@ export const prerender = false;
 
 const {sections, article} = Astro.params
 
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import ArticleLayout from "../../layouts/ArticleLayout.astro";
 import Header from '../../components/Header.astro';
 import '../../styles/global.css';
 import { getArticle } from '../../utils/db';
@@ -16,7 +16,7 @@ if (!post) {
 }
 
 let authorListLinks = [];
-let authorList = post.authors.forEach((author)=>{authorListLinks.push(`<a class='hover:underline' href='/authors/${author.id}'>${author.name}</a>`);})
+let authorList = post.authors.forEach((author)=>{authorListLinks.push(`<a class='hover:underline' href='/author/${author.slug}'>${author.name}</a>`);})
 
 if(authorListLinks.length > 1){
     authorListLinks[authorListLinks.length - 1] = " and " + authorListLinks[authorListLinks.length - 1];
@@ -28,7 +28,7 @@ const date_string = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullY
 
 authorList = authorListLinks.length > 2 ? authorListLinks.join(", ") + " | " + date_string : authorListLinks.join("") + " | " + date_string;
 ---
-<BaseLayout title={normalizeText(post.title) + " - The Triangle"}>
+<ArticleLayout title={normalizeText(post.title) + " - The Triangle"} article={post}>
     <Header/>
     <article class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto]">
         {post.categories_list && <a href={"../"+post.categories_list[0].slug}><span class="block font-roboto-slab uppercase font-extrabold text-triangleBlue text-[12px] md:text-[14px] italic font-700"> {normalizeText(post.categories_list[0].name)} </span></a>}
@@ -44,4 +44,4 @@ authorList = authorListLinks.length > 2 ? authorListLinks.join(", ") + " | " + d
             src="https://puzzleme.amuselabs.com/pmm/js/puzzleme-embed.js"
         ></script>)}
     </article>
-</BaseLayout>
+</ArticleLayout>
