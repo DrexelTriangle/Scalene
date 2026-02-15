@@ -9,6 +9,10 @@ import '../../styles/global.css';
 import { getArticle } from '../../utils/db';
 import { normalizeText } from "../../utils/data";
 
+if(sections !== "article"){
+    return Astro.redirect('/article/'+article, 301); 
+}
+
 const post = await getArticle(article);
 
 if (!post) {

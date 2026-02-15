@@ -10,8 +10,9 @@ const res = await fetch(`${baseUrl}/api/stats`, {
             headers: { "Content-Type": "application/json" }
         });
 const articles = await res.json()
+
 ---
-<div class="font-playfair mb-[24px]">
+{res.ok && <div class="font-playfair mb-[24px]">
     <h1 class="font-roboto-slab uppercase font-extrabold mb-2"> Most Read </h1>
     {articles.map((article, idx) => (
         <div class="flex gap-x-[16px] [&:not(:last-child)]:border-b-[1px] border-triangleGray">
@@ -19,4 +20,4 @@ const articles = await res.json()
             <PhotoArticle title={article.title} slug={"article/"+article.slug} author={article.authors} date={article.date}/>
         </div>
     ))}
-</div>
+</div> }

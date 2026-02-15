@@ -1,0 +1,32 @@
+---
+    const {article} = Astro.props
+---
+<div id="bn-grandparent" class="relative flex items-center mt-[-25px] h-[48px] w-[100%] text-white font-libre text-[24px] text-center font-bold bg-triangleDanger py-[16px]">
+    <div id="bn-parent" class="absolute">
+        <h1 id="bn">
+            <a class="hover:underline" href={"article/"+article.slug}>
+                BREAKING NEWS: {article.title}
+            </a>
+            &nbsp;&bull;&nbsp;
+            <a class="hover:underline" href={"article/"+article.slug}>
+                BREAKING NEWS: {article.title}
+            </a>
+            &nbsp;&bull;&nbsp; 
+            <a class="hover:underline" href={"article/"+article.slug}>
+                BREAKING NEWS: {article.title}
+            </a>
+            &nbsp;&bull;&nbsp; 
+            <a class="hover:underline" href={"article/"+article.slug}>
+                BREAKING NEWS: {article.title}
+            </a>
+            &nbsp;&bull;&nbsp; 
+            <a class="hover:underline" href={"article/"+article.slug}>
+                BREAKING NEWS: {article.title}
+            </a>
+            &nbsp;&bull;&nbsp; 
+            <a class="hover:underline" href={"article/"+article.slug}>
+                BREAKING NEWS: {article.title}
+            </a>
+        </h1>
+    </div>
+</div>
