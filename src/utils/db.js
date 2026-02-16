@@ -77,7 +77,7 @@ const SITE_ID = "1";
 function getDateRange() {
   const today = new Date();
   const twoWeeksAgo = new Date();
-  twoWeeksAgo.setDate(today.getDate() - 14);
+  twoWeeksAgo.setDate(today.getDate() - 13);
 
   const start = twoWeeksAgo.toISOString().slice(0, 10);
   const end = today.toISOString().slice(0, 10);
@@ -100,7 +100,7 @@ export async function getStats() {
 
     filter_sort_column: "nb_hits",
     filter_sort_order: "desc",
-    filter_limit: "40",
+    filter_limit: "30",
 
     filter_column: "Actions_PageUrl",
 
@@ -116,7 +116,9 @@ export async function getStats() {
 
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`Matomo error ${res.status}: ${text}`);
+    console.error("Matomo status:", res.status);
+    console.error("Matomo response:", text);
+    throw new Error(`Matomo error ${res.status}`);
   }
 
   const data = await res.json();

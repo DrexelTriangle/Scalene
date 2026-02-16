@@ -85,7 +85,7 @@ body {
 }
 
 #article p {
-  @apply font-crimson my-[16px] text-[14px] sm:text-[18px];
+  @apply font-roboto-slab my-[16px] text-[16px] max-w-[700px] mx-[auto];
 }
 
 #article p a {
@@ -329,4 +329,33 @@ body {
   object-fit:cover;
 }
 
+}
+
+/* use this one to move from left to right direction */
+@keyframes move-left-to-right {
+    from {
+        transform: translateX(-50%);
+    }
+    to {
+        transform: translateX(0%);
+    }
+}
+
+/* use this one to move from right to left direction */
+@keyframes move-right-to-left {
+    from {
+        transform: translateX(0%);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+#bn {
+	white-space: nowrap;
+}
+#bn-grandparent, #bn-grandparent * {
+	overflow: hidden;
+}
+#bn-parent{
+	animation: move-left-to-right linear 25s infinite;
 }
