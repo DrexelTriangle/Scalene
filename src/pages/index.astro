@@ -13,14 +13,16 @@ import '../styles/global.css';
 import { getHomepageArticles } from '../utils/db';
 
 const posts = await getHomepageArticles();
+
+const breaking = posts.news[0].breaking_news;
 ---
 
 <BaseLayout title="The Triangle">
     <Header home/>
-    <!-- <BreakingNewsBanner article={posts.news[1]}/> -->
-    <a id="one-hundred" href="/one-hundred-years" class="flex px-[16px] justify-end items-end w-full mt-[-24px] mb-[24px] h-[200px] md:h-[300px] bg-center text-white text-wrap font-bold uppercase font-libre text-[32px] sm:text-[48px] lg:text-[48px] leading-[normal] relative">
+    {breaking && <BreakingNewsBanner article={posts.news[0]}/> }
+    {!breaking && <a id="one-hundred" href="/one-hundred-years" class="flex px-[16px] justify-end items-end w-full mt-[-24px] mb-[24px] h-[200px] md:h-[300px] bg-center text-white text-wrap font-bold uppercase font-libre text-[32px] sm:text-[48px] lg:text-[48px] leading-[normal] relative">
         <span class="z-[10] text-right">100 Years of The Triangle</span>
-    </a>
+    </a>}
 
     <Section section="news" articles={posts.news?.slice(0, 9)} style="3-6-3"/>
     <Section section="news" articles={posts.news?.slice(9)} style="row"/>
