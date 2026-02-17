@@ -38,7 +38,7 @@
                         let author = article.authors;
                         let authorList = author.forEach((author) => {
                             authorListLinks.push(
-                                `<a class='hover:underline' href='/authors/${author.slug}'>${author.name}</a>`,
+                                `<a class='hover:underline' href='/author/${author.slug}'>${author.name}</a>`,
                             );
                         });
 
@@ -99,7 +99,7 @@
                 articleLoader.style.display = localHasMore ? "none" : "block";
                 articleLoader.textContent = localHasMore
                     ? "Loading more articles..."
-                    : "No more articles to load.";
+                    : "";
 
                 if (!localHasMore) {
                     window.removeEventListener("scroll", handleScroll);
