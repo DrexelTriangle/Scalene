@@ -77,7 +77,7 @@ const SITE_ID = "1";
 function getDateRange() {
   const today = new Date();
   const twoWeeksAgo = new Date();
-  twoWeeksAgo.setDate(today.getDate() - 13);
+  twoWeeksAgo.setDate(today.getDate() - 7);
 
   const start = twoWeeksAgo.toISOString().slice(0, 10);
   const end = today.toISOString().slice(0, 10);

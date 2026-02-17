@@ -21,6 +21,8 @@
     "@fortawesome/react-fontawesome": "^3.0.0",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
+    "@vite-pwa/astro": "^1.2.0",
+    "@xmldom/xmldom": "^0.8.11",
     "astro": "^5.1.9",
     "astro-icon": "^1.1.5",
     "autoprefixer": "^10.4.20",
