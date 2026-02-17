@@ -1,6 +1,7 @@
 ---
 const { title } = Astro.props;
 import Footer from '../components/Footer.astro'
+import Splash from '../components/Splash.astro';
 ---
 <html lang="en">
   <head>
@@ -8,6 +9,7 @@ import Footer from '../components/Footer.astro'
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="/manifest.webmanifest" />
     <title>{title}</title>
+    <Splash/>
     <script type="application/ld+json">
     {
       "@context" : "https://schema.org",
