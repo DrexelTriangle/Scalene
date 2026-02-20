@@ -20,11 +20,11 @@
   <div class="inline-flex items-center gap-x-[10px]" id="header-left">
     <i id="search" class="fa-solid fa-magnifying-glass text-[12px] cursor-pointer"></i>
     <form action="/search" method="GET">
-        <input id="s" name="s" type="text" placeholder="Search" class="hiddenSearch font-roboto-slab text-[12px] w-[200px] border-solid border-triangleBlue border-[1px] px-2 py-1 rounded-[10px] transition-[width] duration-[400ms]"/>
+        <input id="s" name="s" type="text" placeholder="Search" class="relative hiddenSearch font-roboto-slab text-[12px] w-[200px] border-solid border-triangleBlue border-[1px] px-2 py-1 rounded-[10px] transition-[width] duration-[400ms] bg-white z-[99]"/>
     </form>
   <Weather server:defer>
   </div>
-  {!home && <a href="/" class="absolute left-[calc(50%-100px)] md:left-[calc(50%-120px)] lg:left-[calc(50%-133px)]"><img class="w-[200px] md:w-[240px] lg:w-[266px]" src="/proxy/wp-content/uploads/2026/01/thetriangle.png"/></a>}
+  {!home && <a id="top-logo" href="/" class="absolute left-[calc(50%-100px)] md:left-[calc(50%-120px)] lg:left-[calc(50%-133px)]"><img class="w-[200px] md:w-[240px] lg:w-[266px]" src="/proxy/wp-content/uploads/2026/01/thetriangle.png"/></a>}
   <div id="header-right" class="inline-flex items-center gap-x-[10px] font-roboto-slab text-[12px] cursor-pointer" id="hamburgerog">
     <nav class="hidden md:flex gap-x-[12px]">
       <a class="hover:underline" href="/about"> About Us </a>
@@ -67,6 +67,7 @@
   let search = document.getElementById("search");
   let hamburger = document.getElementById("hamburger");
   let sidenav = document.getElementById("side-nav");
+  let searchBar = document.getElementById("s");
 
   // Toggle fa-bars and fa-close on hamburger click
   hamburger?.addEventListener('click', () => {
@@ -93,7 +94,7 @@
   });
 
   search?.addEventListener('click', () => {
-    document.getElementById("s").classList.toggle("hiddenSearch");
+    searchBar.classList.toggle("hiddenSearch");
   });
 
   window.addEventListener('scroll', () => {

@@ -39,12 +39,12 @@ let actualArticle = post.content.match("<p[^>]*>(.+?)<\/p>")
 ---
 <ArticleLayout title={normalizeText(post.title) + " - The Triangle"} article={post}>
     <Header/>
-    <article class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto]">
+    <article class="xl:max-w-[1200px] lg:max-w-[1000px] max-w-[90%] mx-[auto]">
         {post.categories_list && <a href={"../"+post.categories_list[0].slug}><span class="block font-roboto-slab uppercase font-extrabold text-triangleBlue text-[12px] md:text-[14px] italic font-700"> {normalizeText(post.categories_list[0].name)} </span></a>}
         <h1 class="font-playfair text-[28px] sm:text-[36px] md:text-[42px] font-bold md:mt-[-12px] leading-[normal]">{normalizeText(post.title)}</h1>
         <div set:html={authorList} class="text-[14px] md:text-[16px] font-roboto-slab font-light"></div>
         <span class="font-light font-roboto-slab text-[12px] mb-[16px]">{date_string}</span>
-        {actualArticle && <div class="grid grid-cols-[1fr] sm:grid-cols-[8fr_4fr] mt-2 divide-x divide-triangleBlue">
+        {actualArticle && <div class="grid grid-cols-[1fr] lg:grid-cols-[9fr_3fr] xl:grid-cols-[8fr_4fr] mt-2 divide-x divide-triangleBlue">
             <div id="main-left" class="main-side">
                 <section 
                 id="article" 
