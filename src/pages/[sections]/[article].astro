@@ -53,7 +53,7 @@ let actualArticle = post.content.match("<p[^>]*>(.+?)<\/p>")
                 .replace(/srcset="[^"]*"/g, "")}>
                 </section>
             </div>
-            <div id="main-right" class="hidden sm:block [&>*:not(:first-child)]:border-t-[1px] [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-triangleBlue main-side">
+            <div id="main-right" class="hidden lg:block [&>*:not(:first-child)]:border-t-[1px] [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-triangleBlue main-side">
                 {/* <MostRead/> */}
                 <Poll />
                 <Social />
