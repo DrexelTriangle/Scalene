@@ -1,0 +1,10 @@
+---
+    const {title, excerpt, labels, link} = Astro.props;
+---
+
+<article class="mb-[4px] md:mb-[0px] [.grid_&:not(:first-child)]:pt-[8px] pb-[8px] cursor-default [&:not(:last-child)]:border-b-[1px] border-solid border-triangleGray-400">
+    {labels && <h3 class="font-roboto-slab uppercase font-extrabold text-triangleDanger text-[10px] font-700"> {labels[0].name} </h3>}
+    {link && <a href={"https://www.thetriangle.org/article/" + link}><h2 class="font-playfair text-[20px] leading-tight"> {title} </h2></a>}
+    {!link && <h2 class="font-playfair text-[20px] leading-tight"> {title} </h2>}
+    <div class="font-crimson text-[16px]">{excerpt}</div>
+</article>

@@ -9,6 +9,7 @@ import Social from '../components/Social.astro';
 import Poll from '../components/Polls.astro';
 import BreakingNewsBanner from '../components/BreakingNewsBanner.astro'
 import MostRead from '../components/MostRead.astro';
+import Developing from '../components/Developing.astro'
 import '../styles/global.css';
 import { getHomepageArticles } from '../utils/db';
 
@@ -26,15 +27,16 @@ const breaking = posts.news[0].breaking_news;
 
     <Section section="news" articles={posts.news?.slice(0, 9)} style="3-6-3"/>
     <Section section="news" articles={posts.news?.slice(9)} style="row"/>
-    <Section section="opinion" articles={posts.opinion} includeName style="3-5-4"/>
     <div class="grid grid-cols-[1fr] sm:grid-cols-[8fr_4fr] mt-2 xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] mb-[8px] divide-x divide-triangleBlue border-t-[1px] border-solid border-triangleBlue pt-[5px] ">
         <div id="main-left" class="main-side">
+            <Section section="opinion" articles={posts.opinion} includeName style="6-6"/>
             <Section section="sports" articles={posts.sports} includeName style="3-5"/>
             <Section section="entertainment" articles={posts.entertainment} includeName style="6-6"/>
             <Section section="comics" slug="candp" articles={posts.candp} includeName style="5-3"/>
         </div>
         <div id="main-right" class="hidden sm:block [&>*:not(:first-child)]:border-t-[1px] [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-triangleBlue main-side">
             <!-- <MostRead/> -->
+            <Developing stories={posts.developingstories}/>
             <Column articles={posts.columns}/>
             <Poll />
             <Social />

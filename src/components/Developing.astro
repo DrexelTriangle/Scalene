@@ -1,0 +1,13 @@
+---
+    const { stories } = Astro.props;
+    import DevStory from "./DevStory.astro";
+---
+<div class="mb-[24px]">
+    <div class="flex w-100 justify-between"><h1 class="font-roboto-slab uppercase font-extrabold"> Developing Stories </h1></div>
+    <div class="font-roboto-slab italic text-[14px] mb-[8px]"> Have a story? Let us know <a href="/contact" class="underline">here</a>. </div>
+    <div class="flex flex-col">
+        {stories.map(story => (
+            <DevStory title={story.title} link={story.link} excerpt={story.excerpt} labels={story.label}/>
+        ))}
+    </div>
+</div>
