@@ -4,35 +4,16 @@
     import BaseLayout from "../layouts/BaseLayout.astro";
     import '../styles/global.css';
 ---
+<style>
+    iframe {
+        width: 100%;
+        height: 600px;
+    }
+</style>
 <BaseLayout title="Find a Triangle - The Triangle">
     <Header/>
     <section class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto]">
         <h1 class="font-playfair text-[42px] mb-[16px]"> Find a Triangle </h1>
-        <div class="grid grid-cols-[8fr_4fr] divide-x divide-triangleGray-400">
-            <img src="/images/stand_locations.png"/>
-            <div class="pl-[16px]"> 
-                <h3 class="font-roboto-slab font-bold text-[24px]"> Stand Locations </h3>
-                <ul class="font-roboto-slab list-disc pl-5 text-gray-800"> 
-                    <li> Residence Halls </li>
-                    <ul class="list-disc pl-5">
-                        <li> Race Hall </li>
-                        <li> North Hall </li>
-                        <li> Millenium Hall </li>
-                        <li> Kelly Hall </li>
-                        <li> Tower Hall </li>
-                        <li> Van Rensselaer Hall </li>
-                    </ul>
-                    <li> Residence Halls </li>
-                    <ul class="list-disc pl-5">
-                        <li> Race Hall </li>
-                        <li> North Hall </li>
-                        <li> Millenium Hall </li>
-                        <li> Kelly Hall </li>
-                        <li> Tower Hall </li>
-                        <li> Van Rensselaer Hall </li>
-                    </ul>
-                </ul>
-            </div>
-        </div>
+        <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1H0gtrP-tkJs0Zed09zFM_IzF3PpsoRo&ehbc=2E312F&noprof=1"></iframe>
     </section>
 </BaseLayout>
