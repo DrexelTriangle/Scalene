@@ -20,6 +20,11 @@ export const GET: APIRoute = async ({ params }) => {
   // White space at the beginning will break the feed
   let newFeed = feed.trim();
 
+  newFeed = newFeed.replace(
+  /(<link>)(https?:\/\/[^\/]+)\/(?:[^\/]+\/)*([^\/\s<"'?]+)\/?(<\/link>)/g,
+  (match, open, base, slug, close) =>
+    `${open}${base}/article/${slug}${close}`
+);
   newFeed = newFeed.replaceAll("https://cms.thetriangle.org/wp-content", "https://thetriangle.org/proxy/wp-content")
   newFeed = newFeed.replaceAll("https://cms.thetriangle.org", "https://thetriangle.org")
 
