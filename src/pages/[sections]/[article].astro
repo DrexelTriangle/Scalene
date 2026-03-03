@@ -11,6 +11,7 @@ import Poll from '../../components/Polls.astro';
 import MostRead from '../../components/MostRead.astro';
 import { getArticle } from '../../utils/db';
 import { normalizeText } from "../../utils/data";
+import DonateBlurb from "../../components/DonateBlurb.astro";
 
 if(sections !== "article"){
     return Astro.redirect('/article/'+article, 301); 
@@ -52,6 +53,7 @@ let actualArticle = post.content.match("<p[^>]*>(.+?)<\/p>")
                 .replaceAll("https://www.thetriangle.org/wp-content", "/proxy/wp-content")
                 .replace(/srcset="[^"]*"/g, "")}>
                 </section>
+                <DonateBlurb/>
             </div>
             <div id="main-right" class="hidden lg:block [&>*:not(:first-child)]:border-t-[1px] [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-triangleBlue main-side">
                 {/* <MostRead/> */}
