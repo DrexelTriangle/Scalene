@@ -1,0 +1,70 @@
+---
+export const prerender = true;
+import Header from '../components/Header.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import '../styles/global.css';
+---
+<BaseLayout title="One Hundred Years - The Triangle">
+    <Header/>
+    <a id="one-hundred" href="/one-hundred-years" class="flex px-[16px] justify-end items-end w-full mt-[-24px] mb-[24px] h-[200px] md:h-[300px] bg-center text-white text-wrap font-bold uppercase font-libre text-[32px] sm:text-[48px] lg:text-[48px] leading-[normal] relative">
+        <span class="z-[10] text-right">100 Years of The Triangle</span>
+    </a>
+    <section class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] mx-auto">
+        <h1 class="font-playfair text-[42px] mb-[16px]"> 100 Years! </h1>
+        <div>
+            Shaped by generations of Drexel students and alumni, it has earned national recognition for journalistic excellence, including 
+            multiple Society of Professional Journalists awards and two National Pacemaker Awards. A pioneer in digital student media, 
+            The Triangle launched its first online edition in the mid-1990s and continues to evolve through thetriangle.org, featuring 
+            interactive stories, podcasts, videos, and archives alongside its print edition. Guided independently by its Editor-in-Chief 
+            and Editorial Board, more than 120 student staff members work year-round to produce professional-quality journalism covering 
+            news, arts and entertainment, and sports for the Drexel community.
+        </div>
+        <h2 class="font-playfair text-[28px] mb-[16px] mt-[16px]"> The Endowment </h2>
+        <div class="flex gap-[32px] flex-wrap md:flex-nowrap justify-center md:justify-start">
+            <p>
+                The Drexel Triangle Endowed Fund, founded by generous and passionate members of the Triangle Alumni Advisory Board (TAAB), is 
+                intended to support The Triangle through the purchase, maintenance, and repair of office equipment and furnishings, utility carts, 
+                supplies, printing costs, and software licenses, as well as the professional development of The Triangle staff. As an endowed fund, 
+                it is designed to provide permanent, sustainable support: <b>Your ongoing investment helps generate resources year after year, ensuring 
+                The Triangle remains strong, independent, and student-run for generations to come</b>.
+                <br/><br/>
+                In honor of this milestone, The Triangle has made copies of the 100th Anniversary print newspaper available for purchase. All proceeds 
+                of these sales will be directed to The Triangle's endowment, with each purchase ensuring that The Triangle runs in perpetuity. Papers 
+                will be mailed out on a weekly basis and delivered to the address of the purchaser. Buy a copy 
+                <a target="_blank" rel="noopener noreferrer" href="https://secure.touchnet.com/C20688_ustores/web/product_detail.jsp?PRODUCTID=5169" class="text-triangleBlue font-bold underline">here</a>.
+            </p>
+            <img src="/proxy/wp-content/uploads/2026/03/front-cover-with-words-scaled.png" class="h-[280px] aspect-1 border-[1px] border-triangleBlue"/>
+        </div>
+        <div class="bg-triangleBlue text-white font-roboto-slab p-5 flex flex-wrap mt-[16px]">
+        <p>For 100 years, The Triangle has operated as a financially and editorially independent student newspaper. 
+            In order to continue this legacy, The Triangle relies on the generosity of our alumni, family, and friends. Please 
+            <a class="underline font-bold" target="_blank" rel="noopener noreferrer" href="https://alumni.drexel.edu/s/1683/form/16/form.aspx?sid=1683&gid=2&pgid=4355&content_id=4154">consider donating to The Triangle</a> 
+            in order to secure the future of student-journalism at Drexel.</p>
+        <a class="inline-block bg-triangleSecondary uppercase p-2 mt-[8px] mx-auto" target="_blank" rel="noopener noreferrer" href="https://alumni.drexel.edu/s/1683/form/16/form.aspx?sid=1683&gid=2&pgid=4355&content_id=4154"> Donate </a>
+    </div>
+        <h2 class="font-playfair text-[28px] mb-[16px] mt-[16px]"> A Message From Our EIC </h2>
+        <div class="flex gap-[16px] flex-wrap md:flex-nowrap justify-center md:justify-start">
+            <img src="/proxy/wp-content/uploads/2025/09/paulie-headshot-2.jpg" class="h-[260px] aspect-1"/>
+            <blockquote class="border-l-[2px] border-triangleBlue border-solid px-[12px] py-[12px]">
+                "For 100 years, The Triangle has been the primary news outlet for Drexel's student body. Over the decades, thousands of Drexel students 
+                have given their time and energy into creating a newspaper worth reading, reporting on the issues of the time, and reflecting the sentiments 
+                of the past century. This 100-year milestone did not come without its struggles. Just a few years ago, The Triangle went bankrupt and was 
+                forced to cease operations. The commitment of passionate students and alumni subsequently revived the spirit of The Triangle, with a pledge 
+                that it would never go dark again.
+                <br/><br/>
+                Our work would not be possible without the continued support of our alumni, whose commitment to The Triangle spans decades. <b>Please consider 
+                contributing to The Triangle's endowment</b> so, with your support, The Triangle will be able to continue its legacy for 100 years to come!" - <cite> Paulie Loscalzo </cite>
+            </blockquote>
+        </div>
+        <h2 class="font-playfair text-[28px] mb-[16px] mt-[16px]"> Library Exhibit </h2>
+        <div>
+            To mark this important milestone in the paper's history, the Drexel University Archives is excited to announce a 
+            <a href="https://libcal.library.drexel.edu/event/16291867" class="text-triangleBlue font-bold underline">two-part exhibit</a>,  "Celebrating a Century of The Triangle: 1926 to 2026."
+            <br/><br/>
+            Part One of the exhibit features historical issues of The Triangle from the last 100 years, which are now on display outside the University Archives' 
+            Reading Room on the lower level of the W. W. Hagerty Library. Part Two of the exhibit will include a larger, more comprehensive display that walks 
+            visitors through a century of campus and local events and showcases the evolution of the paper from 1926 to today. Part Two of the exhibit will 
+            open later this spring.
+        </div>
+    </section>
+</BaseLayout>
