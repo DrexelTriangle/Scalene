@@ -19,7 +19,7 @@ body {
 }
 
 #one-hundred{
-	background: url("/images/100YearBanner.png") no-repeat top center fixed;
+	background: url("/images/100YearBanner.webp") no-repeat top center fixed;
     background-size: cover;
 }
 

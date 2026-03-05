@@ -33,11 +33,11 @@ let hasMore = posts.pagination.hasMore;
         {sectionName}
     </h1>
     <div
-        class="hidden sm:flex xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-roboto-slab font-light text-[12px] gap-x-[16px] border-b-[1px] border-solid border-triangleGray pb-[4px]"
+        class="hidden sm:flex xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-roboto-slab font-light text-[12px] gap-x-[16px] border-b-[1px] border-solid border-triangleGray"
     >
         {
             posts.subsections?.map((subsection) => (
-                <a href={"/" + subsection.slug} class="hover:underline">
+                <a href={"/" + subsection.slug} class="hover:border-triangleBlue border-transparent border-b-[1px] pb-[4px]">
                     {" "}
                     {normalizeText(subsection.name)}
                 </a>
