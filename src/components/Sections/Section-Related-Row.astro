@@ -1,0 +1,19 @@
+---
+import PhotoArticle from "../PhotoArticle.astro";
+const { articles } = Astro.props
+
+const rowSize = articles.length
+const rowSizeClass = "sm:grid-cols-" + rowSize;
+---
+
+<div class="mt-[32px] mb-[-16px] border-t-[2px] border-triangleBlue uppercase font-roboto-slab font-bold relative h-[34px]"><span class="absolute top-[-50%] bg-white px-[8px] left-[100px]">Related Articles</span></div>
+<div class={"grid grid-cols-1 sm:divide-x sm:divide-triangleGray-400 d:mb-8 border-triangleGray-400 " + rowSizeClass}>
+    {articles.map(article => (
+        <PhotoArticle row title={article.title} 
+        category={article.categories_list}
+        image={article.featured_image}
+        author={article.authors}
+        date={article.date}
+        slug={"article/"+article.slug}/>
+    ))}
+</div>

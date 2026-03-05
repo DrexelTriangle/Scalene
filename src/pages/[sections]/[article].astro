@@ -12,6 +12,7 @@ import MostRead from '../../components/MostRead.astro';
 import { getArticle } from '../../utils/db';
 import { normalizeText } from "../../utils/data";
 import DonateBlurb from "../../components/DonateBlurb.astro";
+import Section from "../../components/Sections/Section.astro";
 
 if(sections !== "article"){
     return Astro.redirect('/article/'+article, 301); 
@@ -37,6 +38,7 @@ const date_string = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullY
 authorList = "By " + (authorListLinks.length > 2 ? authorListLinks.join(", ") : authorListLinks.join(""))
 
 let actualArticle = post.content.match("<p[^>]*>(.+?)<\/p>")
+
 ---
 <ArticleLayout title={normalizeText(post.title) + " - The Triangle"} article={post}>
     <Header/>
@@ -54,6 +56,7 @@ let actualArticle = post.content.match("<p[^>]*>(.+?)<\/p>")
                 .replace(/srcset="[^"]*"/g, "")}>
                 </section>
                 <DonateBlurb/>
+                <Section articles={post.related} style="related-row"/>
             </div>
             <div id="main-right" class="hidden lg:block [&>*:not(:first-child)]:border-t-[1px] [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-triangleBlue main-side">
                 {/* <MostRead/> */}
