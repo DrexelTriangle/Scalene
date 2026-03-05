@@ -10,31 +10,30 @@ import Poll from '../components/Polls.astro';
 import '../styles/global.css';
 ---
 
-<BaseLayout title="Contact - The Triangle">
+<BaseLayout title="Tipline - The Triangle">
     <Header/>
-    <h1 class="mt-2 xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-playfair text-[36px]">Contact Us</h1>
+    <h1 class="mt-2 xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-playfair text-[36px]">Tipline</h1>
     <div class="flex xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-roboto-slab font-light text-[12px] gap-x-[16px] border-b-[1px] border-solid border-triangleGray">
-        <a href="/contact" class="border-triangleBlue border-b-[1px] pb-[4px] px-[4px]">General</a>
+        <a href="/contact" class="hover:border-triangleBlue hover:border-b-[1px] pb-[4px] px-[4px]">General</a>
         <a class="hover:border-triangleBlue hover:border-b-[1px] pb-[4px] px-[4px]" href="https://secure.touchnet.com/C20688_ustores/web/store_cat.jsp?STOREID=67&CATID=194">Advertising</a>
-        <a class="hover:border-triangleBlue hover:border-b-[1px] pb-[4px] px-[4px]" href="/tipline">Tipline</a>
+        <a class="border-triangleBlue border-b-[1px] pb-[4px] px-[4px]" href="/tipline">Tipline</a>
         <a class="hover:border-triangleBlue hover:border-b-[1px] pb-[4px] px-[4px]" href="/guest">Guest Post</a>
     </div>
-    <div class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-crimson text-[16px] my-[16px]">
-        Interested in advertising with The Triangle? Check out our <a href="/proxy/wp-content/uploads/2026/01/The-Triangle-Media-Kit.pdf" class="underline hover:text-triangleBlue">media kit</a>!<br/>
-        Have a business inquiry, content request or update? We'd love to hear from you! Please use our contact form to reach out, and we'll 
-        get back to you as soon as possible.
+    <div class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-crimson text-[16px] my-[16px] font-crimson">
+        Have some interesting news, a breaking story, or an upcoming event you want us to cover? <br/>
+        Are you a member of the Drexel Community and want to write the article yourself and submit it as a guest post? Submit it <a href="/guest" class="underline hover:text-triangleBlue">here</a>.
     </div>
     <form id="contact" class="flex flex-wrap xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] gap-[16px] text-[14px]">
     <label class="font-libre w-[calc(50%-8px)]">
-        <span class="block w-[100%]">Name<b class="text-red-500">*</b></span>
+        <span class="block w-[100%]">Subject<b class="text-red-500">*</b></span>
         <input name="name" required class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"/>
     </label>
     <label class="font-libre w-[calc(50%-8px)]">
-        <span class="block w-[100%]">Email<b class="text-red-500">*</b></span>
+        <span class="block w-[100%]">Contact<b class="text-red-500">*</b></span>
         <input name="email" required class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"/></label>
     <label class="font-libre w-[100%]">
-        <span class="block w-[100%]">Message<b class="text-red-500">*</b></span>
-        <textarea name="message" class="border-[1px] border-solid border-triangleBlue w-[100%] h-[280px] p-2 rounded-[10px]"></textarea>
+        <span class="block w-[100%]">Any Additional Info</span>
+        <textarea name="message" class="border-[1px] border-solid border-triangleBlue w-[100%] h-[140px] p-2 rounded-[10px]"></textarea>
     </label>
     <button type="submit" class="flex font-roboto-slab self-end bg-triangleBlue text-white p-3 w-[160px] justify-center rounded-[10px] hover:border-[1px] hover:border-solid hover:border-triangleBlue hover:bg-white hover:text-triangleBlue">Submit</button>
     </form>
@@ -49,7 +48,7 @@ import '../styles/global.css';
             email: form.email.value,
             message: form.message.value
         };
-        const res = await fetch("/api/slack", {
+        const res = await fetch("/api/tipline", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)

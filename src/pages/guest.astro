@@ -1,0 +1,109 @@
+---
+export const prerender = true;
+
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Section from '../components/Sections/Section.astro';
+import Header from '../components/Header.astro';
+import Column from '../components/Columns.astro';
+import Social from '../components/Social.astro';
+import Poll from '../components/Polls.astro';
+import '../styles/global.css';
+---
+
+<BaseLayout title="Guest Posts - The Triangle">
+    <Header/>
+    <h1 class="mt-2 xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-playfair text-[36px]">Submit a Guest Post</h1>
+    <div class="flex xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-roboto-slab font-light text-[12px] gap-x-[16px] border-b-[1px] border-solid border-triangleGray">
+        <a href="/contact" class="hover:border-triangleBlue hover:border-b-[1px] pb-[4px] px-[4px]">General</a>
+        <a class="hover:border-triangleBlue hover:border-b-[1px] pb-[4px] px-[4px]" href="https://secure.touchnet.com/C20688_ustores/web/store_cat.jsp?STOREID=67&CATID=194">Advertising</a>
+        <a class="hover:border-triangleBlue hover:border-b-[1px] pb-[4px] px-[4px]" href="/tipline">Tipline</a>
+        <a class="border-triangleBlue border-b-[1px] pb-[4px] px-[4px]" href="/guest">Guest Post</a>
+    </div>
+
+    <h2 class="font-playfair text-[28px] mb-[16px] mt-[16px] xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto]"> Content Guidelines </h2>
+    <div class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-crimson">
+        The Triangle is the student newspaper of Drexel University. As such, content should focus on events and 
+        topics relevant to the university and its students. Content outside of the scope of the university or the 
+        city of Philadelphia should predominantly feature a college student perspective or Drexel-related angle.
+        <br/><br/>
+        In accordance with national law and Drexel University's code of conduct, <b>The Triangle shall not publish 
+        material that is defamatory in nature, obscene, incites violence or violates agreed upon terms of information 
+        received.</b> This includes but is not limited to quotes and information obtained “off-the-record” or on hold-for-release. 
+        The Triangle may refuse to publish content that contains any of the following:
+        <br/><br/>
+        <ul class="list-disc xl:max-w-[1100px] lg:max-w-[800px] max-w-[90%] mx-[auto] font-crimson">
+            <li>vulgar language outside of a direct quote;</li>
+            <li>explicit sexual details and sexual content in general unless the material is purely factual for the purposes of education;</li>
+            <li>hate speech and discriminatory language outside the context of a direct quote;</li>
+            <li>encourages the abuse or illegal use of drugs, alcohol, or other substances;</li>
+            <li>makes light of or jests about the damages and tragedy of drug and/or alcohol abuse;</li>
+        </ul>
+        <br/>
+        <b>Articles previously published in any other publication, blog, or written for a class may not be published in The Triangle.</b>
+    </div>
+
+    <h2 class="font-playfair text-[28px] mb-[16px] mt-[16px] xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto]"> Authorship Eligability </h2>
+    <div class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto]">
+        The Triangle shall only publish articles written by members of the organization, with exceptions made only for persons related to the 
+        organization or Drexel University, such as alumni, student organizations, or faculty members, at the discretion of the Editorial Board. 
+        The Triangle <b>does not accept paid collaborative “guest posts” by persons or organizations unrelated to the University</b> to be published 
+        online under any circumstances. 
+        <br/><br/>
+        The Triangle does accept suggestions for articles via the contact form, including tips, events for members of the Triangle staff to cover, 
+        and guest posts from members of the Drexel community about topics or events related to the University.
+    </div>
+
+    <h2 class="font-playfair text-[28px] mb-[16px] mt-[16px] xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto]"> Content Removal </h2>
+    <div class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] pb-[32px] border-triangleGray border-b-[1px] font-crimson">
+        The Triangle Editorial Board may decide to remove published content if and only if at least one of the following applies: 
+        <br/><br/>
+        <ul class="list-disc xl:max-w-[1100px] lg:max-w-[800px] max-w-[90%] mx-[auto] font-crimson">
+            <li>The article contains factually inaccurate information</li>
+            <li>The article no longer meets the editorial standards outlined by this document</li>
+            <li>The article presents a clear and present danger to the safety of any individual named in the article</li>
+        </ul>
+    </div>
+    <form enctype="multipart/form-data" id="contact" class="flex flex-wrap xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] gap-[16px] text-[14px] mt-[32px]">
+    <label class="font-libre w-[calc(50%-8px)]">
+        <span class="block w-[100%]">Article Title<b class="text-red-500">*</b></span>
+        <input name="title" required class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"/>
+    </label>
+    <label class="font-libre w-[calc(50%-8px)]">
+        <span class="block w-[100%]">Contact Email<b class="text-red-500">*</b></span>
+        <input name="email" required class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"/>
+    </label>
+    <label class="font-libre w-[calc(50%-8px)]">
+        <span class="block w-[100%]">Author(s) Name<b class="text-red-500">*</b></span>
+        <input name="name" required class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"/>
+    </label>
+    <label class="font-libre w-[calc(50%-8px)]">
+        <span class="block w-[100%]">Author(s) Title / Relationship to Drexel<b class="text-red-500">*</b></span>
+        <input name="relationship" required class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"/>
+    </label>
+    <label class="font-libre w-[100%] mb-[16px]">
+        <span class="block w-[100%]">Article PDF<b class="text-red-500">*</b></span>
+        <input type="file" id="article" name="article" accept=".pdf"/>
+    </label>
+    <button type="submit" class="flex font-roboto-slab self-end bg-triangleBlue text-white p-3 w-[160px] justify-center rounded-[10px] hover:border-[1px] hover:border-solid hover:border-triangleBlue hover:bg-white hover:text-triangleBlue">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById("contact").addEventListener("submit", async (e) => {
+        e.preventDefault(); // stop page reload
+
+        const form = e.target;
+        const formData = new FormData(form);
+
+        const res = await fetch("/api/guest", {
+            method: "POST",
+            body: formData,
+        });
+
+        if (res.ok) {
+            window.location.replace("/submitted");
+        } else {
+            window.location.replace("/error");
+        }
+        });
+    </script>
+</BaseLayout>
