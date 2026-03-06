@@ -1,7 +1,8 @@
 ---
 export const prerender = false;
 
-const {sections, article} = Astro.params
+const { request, params } = Astro;
+const {sections, article} = params
 
 import ArticleLayout from "../../layouts/ArticleLayout.astro";
 import Header from '../../components/Header.astro';
@@ -15,8 +16,14 @@ import DonateBlurb from "../../components/DonateBlurb.astro";
 import Section from "../../components/Sections/Section.astro";
 import SubscribeLink from "../../components/SubscribeLink.astro";
 
+const host = request.headers.get('host');
+const isWww = host.startsWith('www.');
+
+if (!isWww && !host?.includes("localhost")) {
+  return Astro.redirect(`https://www.${host}${request.url}`, 301);
+}
 if(sections !== "article"){
-    return Astro.redirect('/article/'+article, 301); 
+return Astro.redirect('/article/'+article, 301); 
 }
 
 const post = await getArticle(article);
