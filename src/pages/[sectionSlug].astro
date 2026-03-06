@@ -13,6 +13,7 @@ import { getSectionArticles } from "../utils/db";
 import { normalizeText } from "../utils/data";
 import Archive from "../components/Sections/Archive.astro";
 import MostRead from "../components/MostRead.astro";
+import SubscribeLink from "../components/SubscribeLink.astro";
 
 let pageNum = 1;
 const posts = await getSectionArticles(sectionSlug, pageNum);
@@ -65,6 +66,7 @@ let hasMore = posts.pagination.hasMore;
                     id="main-right"
                     class="hidden sm:block main-side [&>*:not(:first-child)]:border-t-[1px] [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-triangleBlue"
                 >
+                    <SubscribeLink/>
                     {/* <MostRead/> */}
                     <Poll />
                     <Social />
