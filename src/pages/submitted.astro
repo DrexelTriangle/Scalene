@@ -5,16 +5,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Section from '../components/Sections/Section.astro';
 import '../styles/global.css';
 
-import { search } from '../utils/db';
-import { normalizeText } from "../utils/data";
 
-const s = Astro.url.searchParams.get('s');
-
-const posts = await search(s);
-
-if (!posts || posts.length == 0) {
-  return Astro.rewrite('/404');
-}
 ---
 <BaseLayout title="Submitted!">
     <Header/>

@@ -1,0 +1,105 @@
+---
+export const prerender = false;
+import Header from "../components/Header.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Section from "../components/Sections/Section.astro";
+import "../styles/global.css";
+---
+
+<BaseLayout title="Subscribe - The Triangle">
+    <Header />
+    <section
+        class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] h-[100vh]"
+        id="subscribe"
+    >
+        <div>
+            <h1 class="text-[36px] font-bold font-roboto-slab mb-2 mt-[48px]">
+                Subscribe to our Newsletter
+            </h1>
+            <div>Get The Triangle right to your inbox!</div>
+            <form id="newsletter-form" class="mt-[16px] flex flex-wrap xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] gap-[16px] text-[14px] border-[1px] border-triangleBlue rounded-[10px] p-[16px]">
+  
+  <label class="font-libre w-[100%]">
+    <span class="block w-[100%]">Email<b class="text-red-500">*</b></span>
+    <input type="email" name="email" required class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]">
+</label>
+
+  <div class="flex flex-col w-[100%] font-libre">
+    <span class="block w-[100%]">Lists<b class="text-red-500">*</b></span>
+<label class="font-libre">
+    <input type="checkbox" name="lists" value="1">
+    Drexel Students
+  </label>
+
+  <label class="font-libre">
+    <input type="checkbox" name="lists" value="2">
+    Alumni
+  </label>
+
+  <label class="font-libre">
+    <input type="checkbox" name="lists" value="3">
+    Parents
+  </label>
+
+  <label class="font-libre">
+    <input type="checkbox" name="lists" value="4">
+    Drexel Administrators, Directors and Trustees
+  </label>
+
+  <label class="font-libre">
+    <input type="checkbox" name="lists" value="5">
+    Drexel Faculty
+  </label>
+
+  <label class="font-libre">
+    <input type="checkbox" name="lists" value="6">
+    Advertisers
+  </label>
+
+  <label class="font-libre">
+    <input type="checkbox" name="lists" value="7">
+    Other
+  </label>
+  </div>
+
+
+
+  <button type="submit" class="flex font-roboto-slab self-end bg-triangleBlue text-white p-3 w-[160px] justify-center rounded-[10px] hover:border-[1px] hover:border-solid hover:border-triangleBlue hover:bg-white hover:text-triangleBlue">Subscribe</button>
+
+</form>
+        </div>
+    </section>
+</BaseLayout>
+<script>
+    document.getElementById("newsletter-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const email = e.target.email.value;
+
+            const lists = Array.from(
+                document.querySelectorAll('input[name="lists"]:checked'),
+            ).map((el) => Number(el.value));
+
+            const res = await fetch(
+                "https://cms.thetriangle.org/wp-json/newsletter/v1/subscribe",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        email,
+                        lists,
+                    }),
+                },
+            );
+
+            const data = await res.json();
+            if(data.success){
+                  document.getElementById("subscribe").innerHTML = '<h1 class="text-[36px] font-bold font-roboto-slab mb-2 mt-[48px]"> Thank you for subscribing! </h1><a href="/" class="text-[16px] mt-4 underline font-roboto-slab hover:text-triangleBlue block"> Return to homepage. </a>';
+            }
+            else{
+                  document.getElementById("subscribe").innerHTML = '<h1 class="text-[36px] font-bold font-roboto-slab mb-2 mt-[48px]"> Oh no! Something went wrong. </h1><a href="/" class="text-[16px] mt-4 underline font-roboto-slab hover:text-triangleBlue block"> Return to homepage. </a>';
+            }
+        });
+</script>

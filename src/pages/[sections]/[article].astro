@@ -13,6 +13,7 @@ import { getArticle } from '../../utils/db';
 import { normalizeText } from "../../utils/data";
 import DonateBlurb from "../../components/DonateBlurb.astro";
 import Section from "../../components/Sections/Section.astro";
+import SubscribeLink from "../../components/SubscribeLink.astro";
 
 if(sections !== "article"){
     return Astro.redirect('/article/'+article, 301); 
@@ -60,6 +61,7 @@ let actualArticle = post.content.match("<p[^>]*>(.+?)<\/p>")
             </div>
             <div id="main-right" class="hidden lg:block [&>*:not(:first-child)]:border-t-[1px] [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-triangleBlue main-side">
                 {/* <MostRead/> */}
+                <SubscribeLink/>
                 <Poll />
                 <Social />
             </div>
