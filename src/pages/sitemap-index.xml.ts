@@ -20,7 +20,7 @@ export const GET: APIRoute = async () => {
 
   const links = Object.entries(groups).map(([year, data]) => `
     <sitemap>
-      <loc>https://thetriangle.org/sitemap-${year}.xml</loc>
+      <loc>https://www.thetriangle.org/sitemap-${year}.xml</loc>
       <lastmod>${data.lastmod}</lastmod>
     </sitemap>
   `).join("");

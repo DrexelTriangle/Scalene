@@ -14,7 +14,7 @@ export const GET: APIRoute = async ({ params }) => {
 
   const urls = filtered.map(a => `
     <url>
-      <loc>https://thetriangle.org/article/${a.slug}</loc>
+      <loc>https://www.thetriangle.org/article/${a.slug}</loc>
       <lastmod>${a.lastmod}</lastmod>
     </url>
   `).join("");
