@@ -8,7 +8,7 @@ const websiteJSON = {
   "@type": "WebSite",
   "name": "The Triangle",
   "alternateName": ["Drexel Triangle", "The Drexel Triangle"],
-  "url": "https://thetriangle.org/"
+  "url": "https://www.thetriangle.org/"
 };
 
 const newsArticleJSON = {
@@ -16,7 +16,7 @@ const newsArticleJSON = {
   "@type": "NewsArticle",
   "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": `https://thetriangle.org/article/${article.slug}`
+      "@id": `https://www.thetriangle.org/article/${article.slug}`
   },
   "headline": article.title,
   "image": [article.featured_image],
@@ -31,7 +31,7 @@ const newsArticleJSON = {
       "name": "The Triangle",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://thetriangle.org/logo.png"
+        "url": "https://www.thetriangle.org/logo.png"
       }
   }
 };

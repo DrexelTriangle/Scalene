@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://thetriangle.org/sitemap-index.xml
+Sitemap: https://www.thetriangle.org/sitemap-index.xml
