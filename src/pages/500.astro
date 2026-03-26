@@ -1,0 +1,16 @@
+---
+import Header from '../components/Header.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import '../styles/global.css';
+---
+
+<BaseLayout title="Something Went Wrong">
+    <Header/>
+    <section class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] gap-[32px] h-[75vh] justify-center flex flex-wrap mt-[48px]">
+        <img src="/images/marioTriangle.webp" class="w-[320px] aspect-[5/4] sm:w-[180px] sm:h-[230px] md:w-[200px] md:h-[250px] lg:w-[270px] lg:h-[300px]"/>
+        <div class="w-[100%] sm:w-[50%] md:w-[50%] lg:w-[60%]">
+            <h1 class="text-[42px] font-bold font-roboto-slab mb-2 text-wrap"> Oh no! Something went wrong! </h1>
+            <a href="mailto:support@thetriangle.org" class="text-[16px] mt-4 underline font-roboto-slab hover:text-triangleBlue block"> Let us know! </a>
+        </div>
+    </section>
+</BaseLayout>
