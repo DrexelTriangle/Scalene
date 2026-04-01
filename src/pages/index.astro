@@ -22,8 +22,8 @@ const breaking = posts.news[0].breaking_news;
 <BaseLayout title="The Triangle">
     <Header home/>
     {breaking && <BreakingNewsBanner article={posts.news[0]}/> }
-    {!breaking && <a id="one-hundred" href="/one-hundred" class="flex px-[16px] justify-end items-end w-full mt-[-24px] mb-[24px] h-[200px] md:h-[300px] bg-center text-white text-wrap font-bold uppercase font-libre text-[32px] sm:text-[48px] lg:text-[48px] leading-[normal] relative">
-        <span class="z-[10] text-right">100 Years of The Triangle</span>
+    {!breaking && <a id="one-hundred" href="https://therectangle.org" class="flex px-[16px] justify-end items-end w-full mt-[-24px] mb-[24px] h-[200px] md:h-[300px] bg-center text-white text-wrap font-bold uppercase font-libre text-[32px] sm:text-[48px] lg:text-[48px] leading-[normal] relative">
+        <span class="z-[10] text-right">APRIL FOOLS!! Check out The Rectangle!!</span>
     </a>}
 
     <Section section="news" articles={posts.news?.slice(0, 9)} style="3-6-3"/>
