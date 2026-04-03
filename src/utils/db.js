@@ -36,15 +36,19 @@ export async function getAuthorArticles(author, page) {
 }
 
 export async function getArticle(article) {
-  const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/post/' + article;
+  console.log("begin")
+  //const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/post/' + article;
+  const url = 'https://localhost:8080/v1/articles/' + article;
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
     cache: 'force-cache',
   });
+  console.log(res)
+  console.log("end")
 
-  if (!res.ok) return;
-  return res.json();
+   if (!res.ok) return;
+   return res.json();
 }
 
 export async function search(search) {

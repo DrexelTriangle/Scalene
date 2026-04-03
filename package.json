@@ -3,9 +3,9 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
+    "dev": "NODE_EXTRA_CA_CERTS=../triangle-cms/server/certs/localhost.crt astro dev",
+    "build": "NODE_EXTRA_CA_CERTS=../triangle-cms/server/certs/localhost.crt astro build",
+    "preview": "NODE_EXTRA_CA_CERTS=../triangle-cms/server/certs/localhost.crt astro preview",
     "astro": "astro"
   },
   "dependencies": {
