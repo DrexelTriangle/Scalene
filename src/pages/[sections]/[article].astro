@@ -39,7 +39,7 @@ if(authorListLinks.length > 1){
     authorListLinks[authorListLinks.length - 1] = " and " + authorListLinks[authorListLinks.length - 1];
 }
 
-let d = new Date(post.date)
+let d = new Date(post.published_date || post.date)
 const months = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
 const date_string = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
 

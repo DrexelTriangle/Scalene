@@ -1,6 +1,6 @@
 ---
 import { normalizeText } from "../utils/data";
-const {title, excerpt, image, author, date, category, row, slug, breaking} = Astro.props;
+const {title, excerpt, image, author, published_date, date, category, row, slug, breaking} = Astro.props;
 
 let imgSrc = image || "hi";
 if(Astro.props.image !== undefined) {
@@ -19,7 +19,7 @@ if(authorListLinks.length > 1){
     authorListLinks[authorListLinks.length - 1] = " and " + authorListLinks[authorListLinks.length - 1];
 }
 
-let d = new Date(date)
+let d = new Date(published_date || date)
 const months = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
 const date_string = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
 

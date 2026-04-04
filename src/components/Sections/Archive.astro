@@ -48,7 +48,7 @@
                                 authorListLinks[authorListLinks.length - 1];
                         }
 
-                        let d = new Date(article.date);
+                        let d = new Date(article.published_date || article.date);
                         let months = [
                             "Jan.",
                             "Feb.",

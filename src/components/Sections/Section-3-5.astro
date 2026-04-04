@@ -9,7 +9,7 @@ const { articles } = Astro.props
             <PhotoArticle title={article.title} 
             image={article.featured_image}
             author={article.authors}
-            date={article.date}
+            published_date={article.published_date}
             slug={"article/"+article.slug}/>
         ))}
     </div>
@@ -20,7 +20,7 @@ const { articles } = Astro.props
             <PhotoArticle title={article.title} 
             image={article.featured_image}
             author={article.authors}
-            date={article.date}
+            published_date={article.published_date}
             excerpt={article.excerpt}
             slug={"article/"+article.slug}/>
         ))}
@@ -31,7 +31,7 @@ const { articles } = Astro.props
         <PhotoArticle title={article.title} 
         category={article.categories_list}
         author={article.authors}
-        date={article.date}
+        published_date={article.published_date}
         slug={"article/"+article.slug}/>
     ))}
 </div>
