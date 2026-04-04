@@ -1,6 +1,7 @@
 
 export async function getHomepageArticles() {
   const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/homepage';
+  // const url = 'https://localhost:8080/v1/homepage';
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
@@ -12,7 +13,10 @@ export async function getHomepageArticles() {
 }
 
 export async function getSectionArticles(section, page) {
-  const url = 'https://cms.thetriangle.org/wp-json/triangle/v2/section/'+section+'?page='+page;
+  // const url = 'https://cms.thetriangle.org/wp-json/triangle/v2/section/'+section+'?page='+page;
+  const limit = 20;
+  const offset = (Math.max(Number(page) || 1, 1) - 1) * limit;
+  const url = 'https://localhost:8080/v1/sections/'+section+'/articles?limit='+limit+'&offset='+offset;
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
@@ -24,7 +28,10 @@ export async function getSectionArticles(section, page) {
 }
 
 export async function getAuthorArticles(author, page) {
-  const url = 'https://cms.thetriangle.org/wp-json/triangle/v2/author/'+author+'?page='+page;
+  // const url = 'https://cms.thetriangle.org/wp-json/triangle/v2/author/'+author+'?page='+page;
+  const limit = 20;
+  const offset = (Math.max(Number(page) || 1, 1) - 1) * limit;
+  const url = 'https://localhost:8080/v1/authors/'+author+'/articles?limit='+limit+'&offset='+offset;
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
@@ -36,7 +43,6 @@ export async function getAuthorArticles(author, page) {
 }
 
 export async function getArticle(article) {
-  console.log("begin")
   //const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/post/' + article;
   const url = 'https://localhost:8080/v1/articles/' + article;
 
@@ -44,15 +50,14 @@ export async function getArticle(article) {
     headers: { Accept: 'application/json' },
     cache: 'force-cache',
   });
-  console.log(res)
-  console.log("end")
 
    if (!res.ok) return;
    return res.json();
 }
 
 export async function search(search) {
-  const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/search?q=' + search;
+  // const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/search?q=' + search;
+  const url = 'https://localhost:8080/v1/search?q=' + search;
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
@@ -64,6 +69,7 @@ export async function search(search) {
 }
 export async function gallery() {
   const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/gallery';
+  // const url = 'https://localhost:8080/v1/media/gallery';
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },

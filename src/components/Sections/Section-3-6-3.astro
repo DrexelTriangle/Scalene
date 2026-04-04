@@ -33,7 +33,7 @@ import SectionRow from "./Section-Row.astro"
     <div class="flex flex-col lg:pl-[12px] order-3 md:order-none md:col-span-2 lg:col-span-1">
         {articles.slice(3, 9).map(article => (
             <PhotoArticle title={article.title} 
-            category={article.categories_list}
+            category={article.categories}
             author={article.authors}
             published_date={article.published_date}
             slug={"article/"+article.slug}/>
