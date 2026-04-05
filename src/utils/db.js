@@ -27,6 +27,20 @@ export async function getSectionArticles(section, page) {
   return res.json();
 }
 
+export async function getSubsectionArticles(subsection, page) {
+  const limit = 20;
+  const offset = (Math.max(Number(page) || 1, 1) - 1) * limit;
+  const url = 'https://localhost:8080/v1/subsections/' + subsection + '/articles?limit=' + limit + '&offset=' + offset;
+
+  const res = await fetch(url, {
+    headers: { Accept: 'application/json' },
+    cache: 'force-cache',
+  });
+
+  if (!res.ok) return;
+  return res.json();
+}
+
 export async function getAuthorArticles(author, page) {
   // const url = 'https://cms.thetriangle.org/wp-json/triangle/v2/author/'+author+'?page='+page;
   const limit = 20;

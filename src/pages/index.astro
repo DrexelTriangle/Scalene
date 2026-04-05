@@ -34,8 +34,8 @@ const breaking = posts.news[0].breaking_news;
             <Section section="sports" articles={posts.sports?.slice(0, 3)} includeName style="3-5"/>
             <Section section="sports" articles={posts.sports?.slice(3, 6)} style="row"/>
             <Section section="entertainment" articles={posts.entertainment} includeName style="6-6"/>
-            <Section section="comics" slug="candp" articles={posts.candp?.slice(0, 3)} includeName style="5-3"/>
-            <Section section="comics" slug="candp" articles={posts.candp?.slice(3, 6)} style="row"/>
+            <Section section="comics" slug="comics-puzzles" articles={posts.candp?.slice(0, 3)} includeName style="5-3"/>
+            <Section section="comics" slug="comics-puzzles" articles={posts.candp?.slice(3, 6)} style="row"/>
         </div>
         <div id="main-right" class="hidden sm:block [&>*:not(:first-child)]:border-t-[1px] [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-triangleBlue main-side">
             <a href="https://go.gwu.edu/AIinDC"><img class="ad medium-rectangle" src="/images/ads/gwu_ad_032626_to_042226.png"/></a>
@@ -48,6 +48,5 @@ const breaking = posts.news[0].breaking_news;
         </div>
     </div>
 </BaseLayout>
-
 
 

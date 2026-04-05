@@ -1,15 +1,16 @@
 ---
     export const prerender = false; // Not needed in 'server' mode
-    const { pageNum, hasMore, sectionSlug, url } = Astro.props;
+    const { pageNum, hasMore, sectionSlug, url, apiPath } = Astro.props;
 ---
 
 <div id="article-loader" style="display: none;">
     Loading more articles...
 </div>
-<script define:vars={{ pageNum, hasMore, sectionSlug, url }}>
+<script define:vars={{ pageNum, hasMore, sectionSlug, url, apiPath }}>
         let isLoading = false;
         let currentPage = 2;
         let localHasMore = hasMore;
+        const limit = 20;
 
         const articleLoader = document.getElementById("article-loader");
         const articlesGrid = document.getElementById("main-left");
@@ -23,7 +24,9 @@
 
             try {
                 const response = await fetch(
-                    `${url}${sectionSlug}?page=${currentPage}`,
+                    apiPath
+                        ? `${apiPath}${sectionSlug}/articles?limit=${limit}&offset=${(currentPage - 1) * limit}`
+                        : `${url}${sectionSlug}?page=${currentPage}`,
                 );
                 const data = await response.json();
 
@@ -81,7 +84,7 @@
                         articleElement.innerHTML = `
                             <article class="grid grid-cols-[5fr_3fr] py-[8px] border-b-[1px] border-solid border-triangleGray-400">
                                 <div class="md:pr-[12px]">
-                                    <a href='${"/" + sectionSlug + "/" + article.slug}'><h2 class="font-playfair text-[28px] leading-tight hover:underline mb-[8px]">${article.title}</h2><a>
+                                    <a href='${"/article/" + article.slug}'><h2 class="font-playfair text-[28px] leading-tight hover:underline mb-[8px]">${article.title}</h2><a>
                                     <div id="byline" class="font-roboto-slab text-[12px] mb-[8px]">${authorList}</div>
                                     <div class="text-[14px]"> ${article.excerpt} </div>
                                 </div>
