@@ -22,9 +22,10 @@ const breaking = posts.news?.[0]?.breaking_news ?? false;
 <BaseLayout title="The Triangle">
     <Header home/>
     {breaking && <BreakingNewsBanner article={posts.news[0]}/> }
-    {!breaking && <a id="one-hundred" href="https://therectangle.org" class="flex px-[16px] justify-end items-end w-full mt-[-24px] mb-[24px] h-[200px] md:h-[300px] bg-center text-white text-wrap font-bold uppercase font-libre text-[32px] sm:text-[48px] lg:text-[48px] leading-[normal] relative">
-        <span class="z-[10] text-right">APRIL FOOLS!! Check out The Rectangle!!</span>
-    </a>}
+    <!-- {!breaking && <a id="one-hundred" href="https://therectangle.org" class="flex px-[16px] justify-end items-end w-full mt-[-24px] mb-[24px] h-[200px] md:h-[300px] bg-center text-white text-wrap font-bold uppercase font-libre text-[32px] sm:text-[48px] lg:text-[48px] leading-[normal] relative">
+        <span class="z-[10] text-right">100 Years of The Triangle</span>
+    </a>} -->
+    {!breaking && <a class="block bg-[#275997]" href="https://docs.google.com/forms/d/e/1FAIpQLScra_6sUenvmpIuQ5FjmMyWO0a2sz9z36HkrqfnYQvJGH9BGQ/viewform"><img src="images/ApplyBanner.webp" class="w-[100%] mb-[12px] md:mb-[0px] md:object-contain object-cover md:aspect-[4] lg:aspect-[7.5] mt-[-24px]"/></a>}
 
     <Section section="news" articles={posts.news?.slice(0, 9)} style="3-6-3"/>
     <Section section="news" articles={posts.news?.slice(9)} style="row"/>
