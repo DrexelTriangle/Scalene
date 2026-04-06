@@ -16,7 +16,7 @@ import SubscribeLink from "../components/SubscribeLink.astro";
 
 const posts = await getHomepageArticles();
 
-const breaking = posts.news[0].breaking_news;
+const breaking = posts.news?.[0]?.breaking_news ?? false;
 ---
 
 <BaseLayout title="The Triangle">
@@ -48,5 +48,4 @@ const breaking = posts.news[0].breaking_news;
         </div>
     </div>
 </BaseLayout>
-
 
