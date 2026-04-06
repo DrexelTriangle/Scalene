@@ -1,7 +1,7 @@
 
 export async function getHomepageArticles() {
-  const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/homepage';
-  // const url = 'https://localhost:8080/v1/homepage';
+  //const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/homepage';
+  const url = 'https://localhost:8080/v1/homepage';
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
