@@ -11,7 +11,7 @@ import SectionRow from "./Section-Row.astro"
             <PhotoArticle title={article.title} 
             image={article.featured_image}
             author={article.authors}
-            date={article.date}
+            published_date={article.published_date}
             slug={"article/"+article.slug}/>
         ))}
     </div>
@@ -22,7 +22,7 @@ import SectionRow from "./Section-Row.astro"
             <PhotoArticle title={article.title} 
             image={article.featured_image}
             author={article.authors}
-            date={article.date}
+            published_date={article.published_date}
             excerpt={article.excerpt}
             slug={"article/"+article.slug}
             breaking={article.breaking_news}/>
@@ -33,9 +33,9 @@ import SectionRow from "./Section-Row.astro"
     <div class="flex flex-col lg:pl-[12px] order-3 md:order-none md:col-span-2 lg:col-span-1">
         {articles.slice(3, 9).map(article => (
             <PhotoArticle title={article.title} 
-            category={article.categories_list}
+            category={article.categories}
             author={article.authors}
-            date={article.date}
+            published_date={article.published_date}
             slug={"article/"+article.slug}/>
         ))}
     </div>

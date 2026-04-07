@@ -1,6 +1,6 @@
 ---
 import { normalizeText } from "../utils/data";
-const {title, excerpt, image, author, date, category, row, slug, breaking} = Astro.props;
+const {title, excerpt, image, author, published_date, date, category, row, slug, breaking} = Astro.props;
 
 let imgSrc = image || "hi";
 if(Astro.props.image !== undefined) {
@@ -19,7 +19,7 @@ if(authorListLinks.length > 1){
     authorListLinks[authorListLinks.length - 1] = " and " + authorListLinks[authorListLinks.length - 1];
 }
 
-let d = new Date(date)
+let d = new Date(published_date || date)
 const months = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
 const date_string = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
 
@@ -37,7 +37,7 @@ const imgClass = row ? "aspect-[4/3] sm:w-[100%] sm:h-[200px] object-cover" : "a
 
 <article class={classes}>
     {Object.hasOwn(Astro.props, 'image') && <a href={"/"+slug}><img class={imgClass} loading="lazy" src={imgSrc} onerror="/images/placeholder.jpg" alt={title || 'Article image'} /></a>}
-    {category && <a href={category[0].slug}><h3 class="font-roboto-slab uppercase font-extrabold text-triangleBlue text-[10px] font-700"> {normalizeText(category[0].name)} </h3></a>}
+    {category && <a href={"/" + category[0].slug}><h3 class="font-roboto-slab uppercase font-extrabold text-triangleBlue text-[10px] font-700"> {normalizeText(category[0].name)} </h3></a>}
     {breaking && <h3 class="font-roboto-slab uppercase font-extrabold text-triangleDanger text-[12px] py-1 font-700 italic"> Breaking News </h3>}
     <a href={"/"+slug}><h2 class="font-playfair text-[20px] leading-tight hover:underline">{normalizeText(title)}</h2><a>
     <div id="byline" class="font-playfair text-[12px]" set:html={authorList}></div>

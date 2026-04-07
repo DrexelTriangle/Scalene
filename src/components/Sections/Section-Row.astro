@@ -9,10 +9,10 @@ const rowSizeClass = "sm:grid-cols-" + rowSize;
 <div class={"grid grid-cols-1 sm:divide-x sm:divide-triangleGray-400 pt-3 mt-3 d:mb-8 border-t-[1px] border-solid border-triangleGray-400 " + rowSizeClass}>
     {articles.map(article => (
         <PhotoArticle row title={article.title} 
-        category={article.categories_list}
+        category={article.categories}
         image={article.featured_image}
         author={article.authors}
-        date={article.date}
+        published_date={article.published_date}
         slug={"article/"+article.slug}/>
     ))}
 </div>

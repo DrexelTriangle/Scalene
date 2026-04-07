@@ -9,19 +9,29 @@ import Section from "../components/Sections/Section.astro";
 import Social from "../components/Social.astro";
 import Poll from "../components/Polls.astro";
 import "../styles/global.css";
-import { getSectionArticles } from "../utils/db";
+import { getSectionArticles, getSubsectionArticles } from "../utils/db";
 import { normalizeText } from "../utils/data";
 import Archive from "../components/Sections/Archive.astro";
 import MostRead from "../components/MostRead.astro";
 import SubscribeLink from "../components/SubscribeLink.astro";
 
 let pageNum = 1;
-const posts = await getSectionArticles(sectionSlug, pageNum);
+let posts = await getSectionArticles(sectionSlug, pageNum);
+let isSubsectionPage = false;
+
+if (!posts) {
+    posts = await getSubsectionArticles(sectionSlug, pageNum);
+    isSubsectionPage = Boolean(posts);
+}
 
 if (!posts) {
     return Astro.rewrite("/404");
 }
-const sectionName = normalizeText(posts.section.name);
+const sectionName = normalizeText(
+    isSubsectionPage
+        ? (posts.subsection?.canonical_title ?? posts.subsection?.name ?? posts.section.canonical_title ?? posts.section.name)
+        : (posts.section.canonical_title ?? posts.section.name)
+);
 
 let hasMore = posts.pagination.hasMore;
 ---
@@ -37,10 +47,10 @@ let hasMore = posts.pagination.hasMore;
         class="hidden sm:flex xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-roboto-slab font-light text-[12px] gap-x-[16px] border-b-[1px] border-solid border-triangleGray"
     >
         {
-            posts.subsections?.map((subsection) => (
+            (!isSubsectionPage ? posts.subsections : [])?.map((subsection) => (
                 <a href={"/" + subsection.slug} class="hover:border-triangleBlue border-transparent border-b-[1px] pb-[4px]">
                     {" "}
-                    {normalizeText(subsection.name)}
+                    {normalizeText(subsection.canonical_title ?? subsection.name)}
                 </a>
             ))
         }
@@ -60,7 +70,7 @@ let hasMore = posts.pagination.hasMore;
                         articles={posts.articles?.slice(13)}
                         style="list"
                     />
-                    <Archive pageNum={pageNum} hasMore={hasMore} sectionSlug={sectionSlug} url="https://cms.thetriangle.org/wp-json/triangle/v2/section/"/>
+                    <Archive pageNum={pageNum} hasMore={hasMore} sectionSlug={sectionSlug} apiPath={isSubsectionPage ? "https://localhost:8080/v1/subsections/" : "https://localhost:8080/v1/sections/"} />
                 </div>
                 <div
                     id="main-right"

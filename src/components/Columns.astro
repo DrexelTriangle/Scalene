@@ -7,9 +7,9 @@
     <div class="flex flex-col">
         {articles.map(article => (
             <PhotoArticle title={article.title} 
-            category={article.categories_list}
+            category={article.categories}
             author={article.authors}
-            date={article.date}
+            published_date={article.published_date}
             slug={"article/"+article.slug}/>
         ))}
     </div>
