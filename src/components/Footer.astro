@@ -2,7 +2,7 @@
 export const prerender = false; // Not needed in 'server' mode
 ---
 
-<footer class="w-[100%] flex border-solid border-t-[1px] border-triangleDark py-[24px] px-[12px] justify-center flex-wrap flex-col items-center bg-white mt-[96px]">
+<footer class="w-[100%] flex border-solid border-t-[1px] border-triangleDark py-[24px] px-[12px] justify-center flex-wrap flex-col items-center bg-white mt-[96px] relative">
       <img src="/old_logos/old_logo_14.svg" class="w-[60%] sm:w-[300px] md:w-[400px] lg:w-[500px]"/>
       <nav class="flex gap-[24px] mt-[12px] xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] justify-around md:justify-between py-[12px] flex-wrap md:flex-nowrap">
         <div class="flex flex-col font-roboto-slab text-[12px] w-[40%] md:w-[auto]">
@@ -67,4 +67,6 @@ export const prerender = false; // Not needed in 'server' mode
       <hr/>
       <div class="text-center text-[12px]">&copy; 2026 The Triangle. All rights are reserved, except where otherwise noted.</div>
       <div class="text-center text-[12px]">The Triangle is an independent student organization and is not owned nor operated by Drexel University.</div>
+
+      <a class="absolute left-0 bottom-0 opacity-80" href="https://danielepstein.netlify.app"><img class="w-[100px] opacity-50" src="/images/credit.webp"></a>
 </footer>
