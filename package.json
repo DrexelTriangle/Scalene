@@ -3,9 +3,9 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "NODE_EXTRA_CA_CERTS=../triangle-cms/server/certs/localhost.crt astro dev",
-    "build": "NODE_EXTRA_CA_CERTS=../triangle-cms/server/certs/localhost.crt astro build",
-    "preview": "NODE_EXTRA_CA_CERTS=../triangle-cms/server/certs/localhost.crt astro preview",
+    "dev": "cross-env NODE_EXTRA_CA_CERTS=../triangle-cms/server/certs/localhost.crt astro dev",
+    "build": "cross-env NODE_EXTRA_CA_CERTS=../triangle-cms/server/certs/localhost.crt astro build",
+    "preview": "cross-env NODE_EXTRA_CA_CERTS=../triangle-cms/server/certs/localhost.crt astro preview",
     "astro": "astro"
   },
   "dependencies": {
@@ -41,6 +41,7 @@
     "tailwindcss": "^3.4.17"
   },
   "devDependencies": {
-    "@astrojs/tailwind": "^6.0.2"
+    "@astrojs/tailwind": "^6.0.2",
+    "cross-env": "^7.0.3"
   }
 }
