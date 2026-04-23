@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "node scripts/run-astro-with-local-ca.mjs dev",
+    "dev": "node scripts/run-astro-with-local-ca.mjs dev --port 4321",
     "build": "node scripts/run-astro-with-local-ca.mjs build",
     "preview": "node scripts/run-astro-with-local-ca.mjs preview",
     "astro": "astro"
