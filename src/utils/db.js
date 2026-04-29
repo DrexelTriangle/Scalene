@@ -11,6 +11,18 @@ export async function getHomepageArticles() {
   return res.json();
 }
 
+export async function getClassifieds() {
+  const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/classifieds';
+
+  const res = await fetch(url, {
+    headers: { Accept: 'application/json' },
+    cache: 'force-cache',
+  });
+
+  if (!res.ok) throw new Error(res.status);
+  return res.json();
+}
+
 export async function getSectionArticles(section, page) {
   const url = 'https://cms.thetriangle.org/wp-json/triangle/v2/section/'+section+'?page='+page;
 

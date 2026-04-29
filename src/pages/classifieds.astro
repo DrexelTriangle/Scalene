@@ -1,0 +1,246 @@
+---
+export const prerender = true;
+
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Section from "../components/Sections/Section.astro";
+import Header from "../components/Header.astro";
+import Column from "../components/Columns.astro";
+import Social from "../components/Social.astro";
+import Poll from "../components/Polls.astro";
+import { getClassifieds } from "../utils/db.js"
+import Classified from "../components/Classified.astro";
+import "../styles/global.css";
+
+const date = new Date();
+const date2 = new Date();
+
+date2.setDate(date.getDate() + 30);
+
+function formatDate(d) {
+    let month = d.getMonth() + 1;
+    if (month < 10) {
+        month = "0" + month;
+    }
+
+    let day = date.getDate();
+    if (day < 10) {
+        day = "0" + day;
+    }
+    return d.getFullYear() + "-" + month + "-" + day;
+}
+
+const minDate = formatDate(date);
+const maxDate = formatDate(date2);
+
+const classifieds = await getClassifieds();
+---
+
+<BaseLayout title="Classifieds - The Triangle">
+    <Header />
+    <h1
+        class="mt-2 xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-playfair text-[36px]"
+    >
+        Classifieds
+    </h1>
+    <div
+        class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-crimson text-[16px] my-[16px]"
+    >
+        Looking for a sublet, research participants, or free advertising for
+        your upcoming Drexel event? Submit a classified!
+    </div>
+    <div
+        class="grid grid-cols-[1fr] sm:grid-cols-[8fr_4fr] mt-2 xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] mb-[8px] divide-x divide-triangleBlue pt-[5px]"
+    >
+        <div id="main-left" class="main-side">
+            {classifieds.map(classified => (
+            <Classified contact={classified.title} email={classified.meta.email} label={classified.meta.label} message={classified.content}/>
+        ))}
+        </div>
+        <div
+            id="main-right"
+            class="hidden sm:block main-side"
+        >
+        <h1 class="font-roboto-slab uppercase font-extrabold"> Submit your own </h1>
+            <form
+                id="contact"
+                class="flex flex-wrap xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] gap-[16px] text-[14px]"
+            >
+                <label class="font-libre w-[100%]">
+                    <span class="block w-[100%]"
+                        >Name<b class="text-red-500">*</b></span
+                    >
+                    <input
+                        name="name"
+                        required
+                        class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"
+                    />
+                </label>
+                <label class="font-libre w-[100%]">
+                    <span class="block w-[100%]"
+                        >Email<b class="text-red-500">*</b></span
+                    >
+                    <input
+                        name="email"
+                        required
+                        class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"
+                    /></label
+                >
+                <label class="font-libre w-[100%]">
+                    <span class="block w-[100%]"
+                        >Category<b class="text-red-500">*</b></span
+                    >
+                    <select
+                        name="type"
+                        class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"
+                    >
+                        <option value="Other" disabled selected hidden
+                            >Please choose an option</option
+                        >
+                        <option value="Housing">Housing</option>
+                        <option value="Club Event">Club Events</option>
+                        <option value="Missed Connection"
+                            >Missed Connection</option
+                        >
+                        <option value="Research/Job"
+                            >Research/Job Oppurtunities</option
+                        >
+                        <option value="Other">Other</option>
+                    </select>
+                </label>
+                <label class="font-libre w-[100%]">
+                    <span class="block w-[100%]"
+                        >End Date<b class="text-red-500">*</b></span
+                    >
+                    <input
+                        name="end"
+                        type="date"
+                        min={minDate}
+                        max={maxDate}
+                        required
+                        class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"
+                    /></label
+                >
+                <label class="font-libre w-[100%]">
+                    <span class="block w-[100%]"
+                        >Message<b class="text-red-500">*</b></span
+                    >
+                    <textarea
+                        name="message"
+                        maxlength="100"
+                        class="resize-none border-[1px] border-solid border-triangleBlue w-[100%] h-[140px] p-2 rounded-[10px]"
+                    ></textarea>
+                </label>
+                <button
+                    type="submit"
+                    class="flex font-roboto-slab self-end bg-triangleBlue text-white p-3 w-[160px] justify-center rounded-[10px] hover:border-[1px] hover:border-solid hover:border-triangleBlue hover:bg-white hover:text-triangleBlue"
+                    >Submit</button
+                >
+            </form>
+        </div>
+    </div>
+    <div class="block md:hidden">
+        <h1 class="font-roboto-slab uppercase font-extrabold xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto]"> Submit your own </h1>
+            <form
+                id="contact"
+                class="flex flex-wrap xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] gap-[16px] text-[14px]"
+            >
+                <label class="font-libre w-[100%]">
+                    <span class="block w-[100%]"
+                        >Name<b class="text-red-500">*</b></span
+                    >
+                    <input
+                        name="name"
+                        required
+                        class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"
+                    />
+                </label>
+                <label class="font-libre w-[100%]">
+                    <span class="block w-[100%]"
+                        >Email<b class="text-red-500">*</b></span
+                    >
+                    <input
+                        name="email"
+                        required
+                        class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"
+                    /></label
+                >
+                <label class="font-libre w-[100%]">
+                    <span class="block w-[100%]"
+                        >Category<b class="text-red-500">*</b></span
+                    >
+                    <select
+                        name="type"
+                        class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"
+                    >
+                        <option value="Other" disabled selected hidden
+                            >Please choose an option</option
+                        >
+                        <option value="Housing">Housing</option>
+                        <option value="Club Event">Club Events</option>
+                        <option value="Missed Connection"
+                            >Missed Connection</option
+                        >
+                        <option value="Research/Job"
+                            >Research/Job Oppurtunities</option
+                        >
+                        <option value="Other">Other</option>
+                    </select>
+                </label>
+                <label class="font-libre w-[100%]">
+                    <span class="block w-[100%]"
+                        >End Date<b class="text-red-500">*</b></span
+                    >
+                    <input
+                        name="end"
+                        type="date"
+                        min={minDate}
+                        max={maxDate}
+                        required
+                        class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"
+                    /></label
+                >
+                <label class="font-libre w-[100%]">
+                    <span class="block w-[100%]"
+                        >Message<b class="text-red-500">*</b></span
+                    >
+                    <textarea
+                        name="message"
+                        maxlength="100"
+                        class="resize-none border-[1px] border-solid border-triangleBlue w-[100%] h-[140px] p-2 rounded-[10px]"
+                    ></textarea>
+                </label>
+                <button
+                    type="submit"
+                    class="flex font-roboto-slab self-end bg-triangleBlue text-white p-3 w-[160px] justify-center rounded-[10px] hover:border-[1px] hover:border-solid hover:border-triangleBlue hover:bg-white hover:text-triangleBlue"
+                    >Submit</button
+                >
+            </form>
+    </div>
+    <script>
+        document
+            .getElementById("contact")
+            .addEventListener("submit", async (e) => {
+                e.preventDefault(); // stop page reload
+
+                const form = e.target;
+                const data = {
+                    name: form.name.value,
+                    email: form.email.value,
+                    message: form.message.value,
+                    category: form.type.value,
+                    end: form.end.value,
+                };
+                const res = await fetch("/api/classifieds", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data),
+                });
+
+                if (res.ok) {
+                    window.location.replace("/submitted");
+                } else {
+                    window.location.replace("/error");
+                }
+            });
+    </script>
+</BaseLayout>

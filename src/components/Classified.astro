@@ -1,0 +1,10 @@
+---
+    const {contact, email, message, label} = Astro.props;
+    import { normalizeText } from "../utils/data";
+---
+
+<article class="break-all mb-[8px] md:mb-[4px] [.grid_&:not(:first-child)]:pt-[8px] pb-[8px] cursor-default [&:not(:last-child)]:border-b-[1px] border-solid border-triangleGray-400">
+    {label&& <h3 class="font-roboto-slab uppercase font-extrabold text-triangleBlue text-[10px] font-700"> {label} </h3>}
+    <div class="font-roboto-slab text-[12px] mb-[8px]">{contact} | <a href={"mailto: " + email}>{email}</a></div>
+    <div class="font-crimson text-[16px]">{normalizeText(message)}</div>
+</article>
