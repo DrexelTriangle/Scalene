@@ -141,7 +141,7 @@ const classifieds = await getClassifieds();
     <div class="block md:hidden">
         <h1 class="font-roboto-slab uppercase font-extrabold xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto]"> Submit your own </h1>
             <form
-                id="contact"
+                id="contact-mobile"
                 class="flex flex-wrap xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] gap-[16px] text-[14px]"
             >
                 <label class="font-libre w-[100%]">
@@ -149,7 +149,7 @@ const classifieds = await getClassifieds();
                         >Name<b class="text-red-500">*</b></span
                     >
                     <input
-                        name="name"
+                        name="namemobile"
                         required
                         class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"
                     />
@@ -159,7 +159,7 @@ const classifieds = await getClassifieds();
                         >Email<b class="text-red-500">*</b></span
                     >
                     <input
-                        name="email"
+                        name="emailmobile"
                         required
                         class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"
                     /></label
@@ -169,7 +169,7 @@ const classifieds = await getClassifieds();
                         >Category<b class="text-red-500">*</b></span
                     >
                     <select
-                        name="type"
+                        name="typemobile"
                         class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"
                     >
                         <option value="Other" disabled selected hidden
@@ -192,7 +192,7 @@ const classifieds = await getClassifieds();
                     >
                     <input
                         name="end"
-                        type="date"
+                        type="datemobile"
                         min={minDate}
                         max={maxDate}
                         required
@@ -204,7 +204,7 @@ const classifieds = await getClassifieds();
                         >Message<b class="text-red-500">*</b></span
                     >
                     <textarea
-                        name="message"
+                        name="messagemobile"
                         maxlength="100"
                         class="resize-none border-[1px] border-solid border-triangleBlue w-[100%] h-[140px] p-2 rounded-[10px]"
                     ></textarea>
@@ -229,6 +229,32 @@ const classifieds = await getClassifieds();
                     message: form.message.value,
                     category: form.type.value,
                     end: form.end.value,
+                };
+                const res = await fetch("/api/classifieds", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data),
+                });
+
+                if (res.ok) {
+                    window.location.replace("/submitted");
+                } else {
+                    window.location.replace("/error");
+                }
+            });
+
+         document
+            .getElementById("contact-mobile")
+            .addEventListener("submit", async (e) => {
+                e.preventDefault(); // stop page reload
+
+                const form = e.target;
+                const data = {
+                    name: form.namemobile.value,
+                    email: form.emailmobile.value,
+                    message: form.messagemobile.value,
+                    category: form.typemobile.value,
+                    end: form.endmobile.value,
                 };
                 const res = await fetch("/api/classifieds", {
                     method: "POST",
