@@ -1,0 +1,42 @@
+---
+// Matomo analytics — loaded once in BaseLayout, tracks both initial page loads
+// and Astro's client-side navigations via the astro:page-load event.
+---
+
+<script is:inline>
+  var _paq = window._paq = window._paq || [];
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+
+  (function() {
+    var u = "https://stats.thetriangle.org/";
+    _paq.push(['setTrackerUrl', u + 'matomo.php']);
+    _paq.push(['setSiteId', '1']);
+    var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+    g.async = true; g.src = u + 'matomo.js';
+    s.parentNode.insertBefore(g, s);
+  })();
+</script>
+
+<script>
+  // Re-track on Astro view transitions navigations
+  function trackPage() {
+    if (window._paq) {
+      window._paq.push(['setCustomUrl', window.location.href]);
+      window._paq.push(['setDocumentTitle', document.title]);
+      window._paq.push(['trackPageView']);
+    }
+  }
+  document.addEventListener('astro:page-load', trackPage);
+</script>
+
+<noscript>
+  <p>
+    <img
+      referrerpolicy="no-referrer-when-downgrade"
+      src="//stats.thetriangle.org/matomo.php?idsite=1&rec=1"
+      style="border:0;"
+      alt=""
+    />
+  </p>
+</noscript>

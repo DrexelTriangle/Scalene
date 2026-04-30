@@ -1,45 +1,60 @@
 ---
-import { normalizeText } from "../utils/data";
-const {title, excerpt, image, author, date, category, row, slug, breaking} = Astro.props;
+import { normalizeText, buildByline } from '../utils/data';
 
-let imgSrc = image || "hi";
-if(Astro.props.image !== undefined) {
-    imgSrc = imgSrc.replace("https://www.thetriangle.org", "/proxy").replace("https://cms.thetriangle.org", "/proxy");
-}
-if(imgSrc == "hi"){
-    imgSrc = "/proxy/wp-content/uploads/2024/12/IMG_2493-2048x1365.jpg"
-}
+const { title, excerpt, image, author, date, category, row, slug, breaking } = Astro.props;
 
-let authorListLinks = [];
-if(author){
-    let authorList = author.forEach((author)=>{authorListLinks.push(`<a class='hover:underline' href='/author/${author.slug}'>${author.name}</a>`);})
+const DEFAULT_IMGS = ['/proxy/wp-content/uploads/2024/12/IMG_2493-2048x1365.jpg', '/proxy/wp-content/uploads/2026/02/what-gets-drexel-students-through-sarah-ruzicka.jpg', '/proxy//wp-content/uploads/2023/12/Drexel-Summary-and-Analysis-of-Report-Lucas-Tusinean-2-scaled.jpeg'];
+
+let imgSrc = image || DEFAULT_IMGS[Math.floor(Math.random() * DEFAULT_IMGS.length)];
+if (Astro.props.image !== undefined) {
+  imgSrc = imgSrc
+    .replace('https://www.thetriangle.org', '/proxy')
+    .replace('https://cms.thetriangle.org', '/proxy');
 }
 
-if(authorListLinks.length > 1){
-    authorListLinks[authorListLinks.length - 1] = " and " + authorListLinks[authorListLinks.length - 1];
-}
+const byline = buildByline(author, date);
 
-let d = new Date(date)
-const months = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
-const date_string = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+const classes = row
+  ? 'mb-[4px] md:mb-[0px] flex-1 sm:px-[16px] first:pl-0 sm:last:pr-0'
+  : 'mb-[4px] md:mb-[0px] [.grid_&:not(:first-child)]:pt-[8px] pb-[8px] cursor-default [&:not(:last-child)]:border-b-[1px] border-solid border-triangleGray-400';
 
-let authorList;
-if(authorListLinks.length){
-    authorList = authorListLinks.length > 2 ? authorListLinks.join(", ") + " | " + date_string : authorListLinks.join("") + " | " + date_string;
-}
-
-export const prerender = true;
-
-const classes = row ? "mb-[4px] md:mb-[0px] flex-1 sm:px-[16px] first:pl-0 sm:last:pr-0" : "mb-[4px] md:mb-[0px] [.grid_&:not(:first-child)]:pt-[8px] pb-[8px] cursor-default [&:not(:last-child)]:border-b-[1px] border-solid border-triangleGray-400"
-const imgClass = row ? "aspect-[4/3] sm:w-[100%] sm:h-[200px] object-cover" : "aspect-[4/3] object-cover"
-
+const imgClass = row
+  ? 'aspect-[4/3] sm:w-[100%] sm:h-[200px] object-cover'
+  : 'aspect-[4/3] object-cover';
 ---
 
-<article class={classes}>
-    {Object.hasOwn(Astro.props, 'image') && <a href={"/"+slug}><img class={imgClass} loading="lazy" src={imgSrc} onerror="/images/placeholder.jpg" alt={title || 'Article image'} /></a>}
-    {category && <a href={category[0].slug}><h3 class="font-roboto-slab uppercase font-extrabold text-triangleBlue text-[10px] font-700"> {normalizeText(category[0].name)} </h3></a>}
-    {breaking && <h3 class="font-roboto-slab uppercase font-extrabold text-triangleDanger text-[12px] py-1 font-700 italic"> Breaking News </h3>}
-    <a href={"/"+slug}><h2 class="font-playfair text-[20px] leading-tight hover:underline">{normalizeText(title)}</h2><a>
-    <div id="byline" class="font-playfair text-[12px]" set:html={authorList}></div>
-    {excerpt && <div set:html={normalizeText(excerpt)} class="font-crimson text-[16px]"></div>}
+<article
+  class={classes}
+>
+  {image !== undefined && (
+    <a href={`/${slug}`}>
+      <img
+        class={imgClass}
+        loading="lazy"
+        src={imgSrc}
+        alt={title || 'Article image'}
+      />
+    </a>
+  )}
+  {category && (
+    <a href={category[0].slug}>
+      <h3 class="font-roboto-slab uppercase font-extrabold text-triangleBlue text-[10px] font-700">
+        {normalizeText(category[0].name)}
+      </h3>
+    </a>
+  )}
+  {breaking && (
+    <h3 class="font-roboto-slab uppercase font-extrabold text-triangleDanger text-[12px] py-1 font-700 italic">
+      Breaking News
+    </h3>
+  )}
+  <a href={`/${slug}`}>
+    <h2 class="font-playfair text-[20px] leading-tight hover:underline">
+      {normalizeText(title)}
+    </h2>
+  </a>
+  <div class="font-playfair text-[12px]" set:html={byline} />
+  {excerpt && (
+    <div set:html={normalizeText(excerpt)} class="font-crimson text-[16px]" />
+  )}
 </article>
