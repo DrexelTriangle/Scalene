@@ -27,12 +27,41 @@ body {
 	content:'';
 	width:100%;
 	height: 100%;
-	/*background: linear-gradient(to top, #df2935, rgba(0,0,0,0));; */
   background: linear-gradient(to top, #2563EB, rgba(0,0,0,0));;
 	position: absolute;
 	top: 0px;
 	left: 0px;
 	z-index: 9;
+}
+
+.home-hero-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.one-hundred-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+
+  background: url("/images/100YearBanner.webp") no-repeat top center fixed;
+  background-size: cover;
+}
+
+.one-hundred-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  background: linear-gradient(to top, #2563EB, rgba(0, 0, 0, 0));
+}
+
+.one-hundred-slide {
+  position: relative;
+  z-index: 2;
+  background: transparent;
 }
 
 #one-hundred-cover{
