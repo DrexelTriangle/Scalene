@@ -182,6 +182,7 @@ body {
 	width: 100%;
 	aspect-ratio:1;
 	object-fit:cover;
+  object-position: top;
   background-image: url("/proxy/wp-content/uploads/2025/04/default-profile-picture1-1.jpg");
 }
 
