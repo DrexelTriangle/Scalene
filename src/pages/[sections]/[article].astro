@@ -59,9 +59,20 @@ let actualArticle = post.content.match("<p[^>]*>(.+?)<\/p>")
             <div id="main-left" class="main-side">
                 <section 
                 id="article" 
-                set:html={post.content.replaceAll("https://cms.thetriangle.org/wp-content", "/proxy/wp-content")
-                .replaceAll("https://www.thetriangle.org/wp-content", "/proxy/wp-content")
-                .replace(/srcset="[^"]*"/g, "")}>
+                set:html={post.content
+                    .replaceAll("https://cms.thetriangle.org/wp-content", "/proxy/wp-content")
+                    .replaceAll("https://www.thetriangle.org/wp-content", "/proxy/wp-content")
+                    .replace(/srcset="[^"]*"/g, "")
+                    .replace(/\s(width|height):"[^"]*"/g, "")
+                    .replace(/style="([^"]*)"/g, (_, style) => {
+  const cleaned = style
+    .replace(/(?:^|;)\s*(min-|max-)?(width|height)\s*:\s*[^;]+;?/gi, "")
+    .trim()
+    .replace(/^;|;$/g, "");
+
+  return cleaned ? `style="${cleaned}"` : "";
+})
+                }>
                 </section>
                 <DonateBlurb/>
                 <Section articles={post.related} style="related-row"/>
@@ -76,9 +87,20 @@ let actualArticle = post.content.match("<p[^>]*>(.+?)<\/p>")
         </div>}
         {!actualArticle && <section 
                 id="article" 
-                set:html={post.content.replaceAll("https://cms.thetriangle.org/wp-content", "/proxy/wp-content")
-                .replaceAll("https://www.thetriangle.org/wp-content", "/proxy/wp-content")
-                .replace(/srcset="[^"]*"/g, "")}>
+                set:html={post.content
+                    .replaceAll("https://cms.thetriangle.org/wp-content", "/proxy/wp-content")
+                    .replaceAll("https://www.thetriangle.org/wp-content", "/proxy/wp-content")
+                    .replace(/srcset="[^"]*"/g, "")
+                    .replace(/\s(width|height):"[^"]*"/g, "")
+                    .replace(/style="([^"]*)"/g, (_, style) => {
+  const cleaned = style
+    .replace(/(?:^|;)\s*(min-|max-)?(width|height)\s*:\s*[^;]+;?/gi, "")
+    .trim()
+    .replace(/^;|;$/g, "");
+
+  return cleaned ? `style="${cleaned}"` : "";
+})
+                }>
                 </section>}
         {post.content.includes('pm-embed-div') && (
         <script 
