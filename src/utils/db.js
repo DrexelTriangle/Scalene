@@ -59,6 +59,18 @@ export async function getArticle(article) {
   return res.json();
 }
 
+export async function getRandomArticle() {
+  const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/random/';
+
+  const res = await fetch(url, {
+    headers: { Accept: 'application/json' },
+    cache: 'force-cache',
+  });
+
+  if (!res.ok) return;
+  return res.json();
+}
+
 export async function search(search) {
   const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/search?q=' + search;
 
