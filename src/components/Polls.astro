@@ -1,15 +1,132 @@
 ---
+import { getPollCounts, getPollOptions } from '../utils/pollStore';
+
+const pollOptions = getPollOptions();
+const pollOptionCounts = getPollCounts();
+const totalVotes = Object.values(pollOptionCounts).reduce((sum, count) => sum + count, 0);
 ---
-<div class="font-playfair mb-[48px]">
+<div class="font-playfair mb-[48px]" data-poll-root>
     <h1 class="font-roboto-slab uppercase font-extrabold mb-2"> Polls </h1>
-    <form>
+    <form data-poll-form>
         <h3 class="mb-[8px] font-bold"> What is your favorite section of The Triangle?</h3>
-        <label class="flex items-center border-solid border-triangleBlue border-[1px] p-[8px] gap-x-2 font-roboto-slab rounded-[5px] mb-[8px] cursor-pointer hover:scale-105"><input type="radio" name="poll"/> News </label>
-        <label class="flex items-center border-solid border-triangleBlue border-[1px] p-[8px] gap-x-2 font-roboto-slab rounded-[5px] mb-[8px] cursor-pointer hover:scale-105"><input type="radio" name="poll"/> Opinion </label>
-        <label class="flex items-center border-solid border-triangleBlue border-[1px] p-[8px] gap-x-2 font-roboto-slab rounded-[5px] mb-[8px] cursor-pointer hover:scale-105"><input type="radio" name="poll"/> Sports </label>
-        <label class="flex items-center border-solid border-triangleBlue border-[1px] p-[8px] gap-x-2 font-roboto-slab rounded-[5px] mb-[8px] cursor-pointer hover:scale-105"><input type="radio" name="poll"/> Arts & Entertainment </label>
-        <label class="flex items-center border-solid border-triangleBlue border-[1px] p-[8px] gap-x-2 font-roboto-slab rounded-[5px] mb-[8px] cursor-pointer hover:scale-105"><input type="radio" name="poll"/> Comics </label>
-        <label class="flex items-center border-solid border-triangleBlue border-[1px] p-[8px] gap-x-2 font-roboto-slab rounded-[5px] mb-[8px] cursor-pointer hover:scale-105"><input type="radio" name="poll"/> Photography </label>
-        <button class="flex ml-[auto] bg-triangleBlue text-white rounded-[5px] px-4 py-1 font-roboto-slab self-end hover:bg-white hover:text-triangleBlue border-[1px] border-triangleBlue"> Vote </button>
+        {pollOptions.map((option) => (
+            <label
+                data-poll-option={option}
+                style={`background: linear-gradient(to right, rgba(37, 99, 235, 0.25) 0%, rgba(37, 99, 235, 0.25) ${
+                    totalVotes ? (pollOptionCounts[option] / totalVotes) * 100 : 0
+                }%, transparent ${
+                    totalVotes ? (pollOptionCounts[option] / totalVotes) * 100 : 0
+                }%, transparent 100%);`}
+                class="flex items-center border-solid border-triangleBlue border-[1px] p-[8px] gap-x-2 font-roboto-slab rounded-[5px] mb-[8px] cursor-pointer hover:scale-105"
+            >
+                <input type="radio" name="poll" value={option}/> {option}
+            </label>
+        ))}
+        <button type="submit" class="flex ml-[auto] bg-triangleBlue text-white rounded-[5px] px-4 py-1 font-roboto-slab self-end hover:bg-white hover:text-triangleBlue border-[1px] border-triangleBlue"> Vote </button>
     </form>
+    <p class="mt-[8px] font-roboto-slab text-[14px]" data-user-vote></p>
 </div>
+
+<script>
+  const POLL_CHOICE_KEY = 'triangle-poll-choice';
+  const pollRoot = document.querySelector('[data-poll-root]');
+  const pollForm = pollRoot?.querySelector('[data-poll-form]');
+  const userVoteNode = pollRoot?.querySelector('[data-user-vote]');
+  const submitButton = pollForm?.querySelector('button[type="submit"]');
+  let hasVoted = false;
+  const setOptionFill = (option, percentage) => {
+    const optionNode = pollRoot?.querySelector(`[data-poll-option="${CSS.escape(option)}"]`);
+    if (!optionNode) {
+      return;
+    }
+
+    optionNode.style.background = `linear-gradient(to right, rgba(37, 99, 235, 0.25) 0%, rgba(37, 99, 235, 0.25) ${percentage}%, transparent ${percentage}%, transparent 100%)`;
+  };
+
+  const updateOptionBackgrounds = (counts) => {
+    const totalVotes = Object.values(counts).reduce((sum, count) => sum + Number(count), 0);
+    Object.entries(counts).forEach(([option, count]) => {
+      const percentage = totalVotes ? (Number(count) / totalVotes) * 100 : 0;
+      setOptionFill(option, percentage);
+    });
+  };
+
+  const showSavedVote = (option) => {
+    if (!userVoteNode) {
+      return;
+    }
+    userVoteNode.textContent = option ? `You voted: ${option}.` : '';
+  };
+
+  const lockVoting = () => {
+    if (!pollForm) {
+      return;
+    }
+    const inputs = pollForm.querySelectorAll('input[name="poll"]');
+    inputs.forEach((input) => {
+      input.disabled = true;
+    });
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.classList.add('opacity-60', 'cursor-not-allowed');
+    }
+    hasVoted = true;
+  };
+
+  const restoreSavedVote = () => {
+    try {
+      const savedOption = localStorage.getItem(POLL_CHOICE_KEY);
+      if (!savedOption || !pollForm) {
+        return;
+      }
+
+      const savedInput = pollForm.querySelector(`input[name="poll"][value="${savedOption}"]`);
+      if (savedInput) {
+        savedInput.checked = true;
+        showSavedVote(savedOption);
+        lockVoting();
+      }
+    } catch {
+      // Ignore localStorage access issues.
+    }
+  };
+
+  restoreSavedVote();
+
+  pollForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (hasVoted) {
+      return;
+    }
+
+    const formData = new FormData(pollForm);
+    const selectedOption = formData.get('poll');
+    if (!selectedOption) {
+      return;
+    }
+
+    try {
+      localStorage.setItem(POLL_CHOICE_KEY, String(selectedOption));
+    } catch {
+      // Ignore localStorage access issues.
+    }
+    showSavedVote(String(selectedOption));
+    lockVoting();
+
+    const response = await fetch('/api/poll', {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!response.ok) {
+      return;
+    }
+
+    const payload = await response.json();
+    const counts = payload?.counts;
+    if (!counts) {
+      return;
+    }
+    updateOptionBackgrounds(counts);
+  });
+</script>
