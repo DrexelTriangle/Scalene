@@ -40,26 +40,37 @@ import '../styles/global.css';
     </form>
 
     <script>
-        document.getElementById("contact").addEventListener("submit", async (e) => {
-        e.preventDefault(); // stop page reload
+  const contactForm = document.getElementById("contact");
 
-        const form = e.target;
-        const data = {
-            name: form.name.value,
-            email: form.email.value,
-            message: form.message.value
-        };
-        const res = await fetch("/api/slack", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-        });
+  contactForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-        if (res.ok) {
-            window.location.replace("/submitted");
-        } else {
-            window.location.replace("/error");
-        }
-        });
-    </script>
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    const data = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      message: formData.get("message"),
+    };
+
+    try {
+      const res = await fetch("/api/slack", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (res.ok) {
+        window.location.href = "/submitted";
+      } else {
+        window.location.href = "/error";
+      }
+    } catch (err) {
+      window.location.href = "/error";
+    }
+  });
+</script>
 </BaseLayout>
