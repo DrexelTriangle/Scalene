@@ -1,18 +1,22 @@
 ---
 import { normalizeText, buildByline } from '../utils/data';
 
-const { title, excerpt, image, author, date, category, row, slug, breaking } = Astro.props;
+const { title, excerpt, image, author, published_date, date, category, row, slug, breaking } = Astro.props;
 
-const DEFAULT_IMGS = ['/proxy/wp-content/uploads/2024/12/IMG_2493-2048x1365.jpg', '/proxy/wp-content/uploads/2026/02/what-gets-drexel-students-through-sarah-ruzicka.jpg', '/proxy//wp-content/uploads/2023/12/Drexel-Summary-and-Analysis-of-Report-Lucas-Tusinean-2-scaled.jpeg'];
+const DEFAULT_IMGS = [
+  '/proxy/wp-content/uploads/2024/12/IMG_2493-2048x1365.jpg',
+  '/proxy/wp-content/uploads/2026/02/what-gets-drexel-students-through-sarah-ruzicka.jpg',
+  '/proxy//wp-content/uploads/2023/12/Drexel-Summary-and-Analysis-of-Report-Lucas-Tusinean-2-scaled.jpeg'
+];
 
 let imgSrc = image || DEFAULT_IMGS[Math.floor(Math.random() * DEFAULT_IMGS.length)];
-if (Astro.props.image !== undefined) {
+if (image !== undefined) {
   imgSrc = imgSrc
     .replace('https://www.thetriangle.org', '/proxy')
     .replace('https://cms.thetriangle.org', '/proxy');
 }
 
-const byline = buildByline(author, date);
+const byline = buildByline(author, published_date || date);
 
 const classes = row
   ? 'mb-[4px] md:mb-[0px] flex-1 sm:px-[16px] first:pl-0 sm:last:pr-0'
@@ -23,38 +27,23 @@ const imgClass = row
   : 'aspect-[4/3] object-cover w-[100%]';
 ---
 
-<article
-  class={classes}
->
+<article class={classes}>
   {image !== undefined && (
     <a href={`/${slug}`}>
-      <img
-        class={imgClass}
-        loading="lazy"
-        src={imgSrc}
-        alt={title || 'Article image'}
-      />
+      <img class={imgClass} loading="lazy" src={imgSrc} alt={title || 'Article image'} />
     </a>
   )}
   {category && (
-    <a href={category[0].slug}>
+    <a href={`/${category[0].slug}`}>
       <h3 class="font-roboto-slab uppercase font-extrabold text-triangleBlue text-[10px] font-700">
         {normalizeText(category[0].name)}
       </h3>
     </a>
   )}
-  {breaking && (
-    <h3 class="font-roboto-slab uppercase font-extrabold text-triangleDanger text-[12px] py-1 font-700 italic">
-      Breaking News
-    </h3>
-  )}
+  {breaking && <h3 class="font-roboto-slab uppercase font-extrabold text-triangleDanger text-[12px] py-1 font-700 italic">Breaking News</h3>}
   <a href={`/${slug}`}>
-    <h2 class="font-playfair text-[20px] leading-tight hover:underline">
-      {normalizeText(title)}
-    </h2>
+    <h2 class="font-playfair text-[20px] leading-tight hover:underline">{normalizeText(title)}</h2>
   </a>
-  <div class="font-playfair text-[12px]" set:html={byline} />
-  {excerpt && (
-    <div set:html={normalizeText(excerpt)} class="font-crimson text-[16px]" />
-  )}
+  <div id="byline" class="font-playfair text-[12px]" set:html={byline} />
+  {excerpt && <div set:html={normalizeText(excerpt)} class="font-crimson text-[16px]" />}
 </article>

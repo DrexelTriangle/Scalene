@@ -1,87 +1,135 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import path from 'node:path';
+type PollCounts = Record<string, number>;
 
-const pollOptions = [
-  'News',
-  'Opinion',
-  'Sports',
-  'Arts & Entertainment',
-  'Comics',
-  'Photography'
-] as const;
-
-type PollOption = (typeof pollOptions)[number];
-
-type PollCounts = Record<PollOption, number>;
-
-const defaultPollCounts: PollCounts = {
-  News: 0,
-  Opinion: 0,
-  Sports: 0,
-  'Arts & Entertainment': 0,
-  Comics: 0,
-  Photography: 0
-};
-
-const dataDir = path.join(process.cwd(), 'data');
-const pollCountsFile = path.join(dataDir, 'poll-counts.json');
-
-const pollOptionSet = new Set<string>(pollOptions);
+const cmsBaseUrl = import.meta.env.CMS_API_BASE_URL ?? 'https://localhost:8080/v1';
+const normalizedCmsBaseUrl = String(cmsBaseUrl).replace(/\/$/, '');
+const pollUrl = `${normalizedCmsBaseUrl}/poll`;
+const pollOptionsUrl = `${normalizedCmsBaseUrl}/poll/options`;
+const pollTitleUrl = `${normalizedCmsBaseUrl}/poll/title`;
 
 function coercePollCounts(value: unknown): PollCounts {
-  const nextCounts = { ...defaultPollCounts };
+  const nextCounts: PollCounts = {};
   if (!value || typeof value !== 'object') {
     return nextCounts;
   }
 
-  for (const option of pollOptions) {
-    const maybeCount = (value as Record<string, unknown>)[option];
+  for (const [option, maybeCount] of Object.entries(value as Record<string, unknown>)) {
+    const normalizedOption = option.trim();
+    if (!normalizedOption) {
+      continue;
+    }
     if (typeof maybeCount === 'number' && Number.isFinite(maybeCount) && maybeCount >= 0) {
-      nextCounts[option] = Math.floor(maybeCount);
+      nextCounts[normalizedOption] = Math.floor(maybeCount);
     }
   }
 
   return nextCounts;
 }
 
-function persistPollCounts(counts: PollCounts): void {
-  if (!existsSync(dataDir)) {
-    mkdirSync(dataDir, { recursive: true });
+function extractCounts(payload: unknown): PollCounts {
+  if (!payload || typeof payload !== 'object') {
+    return {};
   }
-  writeFileSync(pollCountsFile, JSON.stringify(counts, null, 2), 'utf-8');
+
+  const maybeCounts = (payload as Record<string, unknown>).counts;
+  if (maybeCounts && typeof maybeCounts === 'object') {
+    return coercePollCounts(maybeCounts);
+  }
+
+  return coercePollCounts(payload);
 }
 
-function loadPollCounts(): PollCounts {
-  if (!existsSync(pollCountsFile)) {
-    persistPollCounts(defaultPollCounts);
-    return { ...defaultPollCounts };
-  }
-
+async function fetchCms(url: string, init: RequestInit): Promise<Response | null> {
   try {
-    const raw = readFileSync(pollCountsFile, 'utf-8');
-    return coercePollCounts(JSON.parse(raw));
+    const response = await fetch(url, init);
+    return response.ok ? response : null;
   } catch {
-    persistPollCounts(defaultPollCounts);
-    return { ...defaultPollCounts };
+    return null;
   }
 }
 
-const pollCounts: PollCounts = loadPollCounts();
+function extractOptions(payload: unknown): string[] {
+  if (!payload || typeof payload !== 'object') {
+    return [];
+  }
 
-export function getPollOptions() {
-  return [...pollOptions];
+  const value = (payload as Record<string, unknown>).options;
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  const options = value
+    .map((item) => (typeof item === 'string' ? item.trim() : ''))
+    .filter((item) => item.length > 0);
+
+  return options;
 }
 
-export function getPollCounts(): PollCounts {
-  return { ...pollCounts };
+export async function getPollOptions(): Promise<string[]> {
+  const response = await fetchCms(pollOptionsUrl, {
+    method: 'GET',
+    headers: { Accept: 'application/json' },
+    cache: 'no-store'
+  });
+
+  if (!response) {
+    return [];
+  }
+
+  const payload = await response.json();
+  return extractOptions(payload);
 }
 
-export function incrementPollCount(option: string): PollCounts | null {
-  if (!pollOptionSet.has(option)) {
+export async function getPollTitle(): Promise<string> {
+  const response = await fetchCms(pollTitleUrl, {
+    method: 'GET',
+    headers: { Accept: 'application/json' },
+    cache: 'no-store'
+  });
+
+  if (!response) {
+    return "";
+  }
+
+  const payload = await response.json() as { title?: unknown };
+  const title = typeof payload?.title === 'string' ? payload.title.trim() : '';
+  return title;
+}
+
+export async function getPollCounts(): Promise<PollCounts> {
+  const response = await fetchCms(pollUrl, {
+    method: 'GET',
+    headers: { Accept: 'application/json' },
+    cache: 'no-store'
+  });
+
+  if (!response) {
+    return {};
+  }
+
+  const payload = await response.json();
+  return extractCounts(payload);
+}
+
+export async function incrementPollCount(option: string): Promise<PollCounts | null> {
+  const trimmedOption = option.trim();
+  if (!trimmedOption) {
     return null;
   }
 
-  pollCounts[option as PollOption] += 1;
-  persistPollCounts(pollCounts);
-  return getPollCounts();
+  const response = await fetchCms(pollUrl, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ option: trimmedOption }),
+    cache: 'no-store'
+  });
+
+  if (!response) {
+    return null;
+  }
+
+  const payload = await response.json();
+  return extractCounts(payload);
 }

@@ -3,9 +3,9 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
+    "dev": "node scripts/run-astro-with-local-ca.mjs dev --port 4321",
+    "build": "node scripts/run-astro-with-local-ca.mjs build",
+    "preview": "node scripts/run-astro-with-local-ca.mjs preview",
     "astro": "astro"
   },
   "dependencies": {
