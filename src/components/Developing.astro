@@ -6,8 +6,16 @@
     <div class="flex w-100 justify-between"><h1 class="font-roboto-slab uppercase font-extrabold"> Developing Stories </h1></div>
     <div class="font-roboto-slab italic text-[14px] mb-[8px]"> Have a story? Let us know <a href="/contact" class="underline">here</a>. </div>
     <div class="flex flex-col">
-        {stories.map(story => (
-            <DevStory title={story.title} link={story.link} excerpt={story.excerpt} labels={story.label}/>
-        ))}
+        {stories.map((story) => {
+            const entry = typeof story === "string" ? { title: story } : (story ?? {});
+            return (
+                <DevStory
+                    title={entry.title ?? ""}
+                    link={entry.link ?? ""}
+                    excerpt={entry.excerpt ?? ""}
+                    labels={entry.label ?? []}
+                />
+            );
+        })}
     </div>
 </div>
