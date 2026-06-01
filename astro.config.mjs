@@ -14,6 +14,9 @@ export default defineConfig({
   }),
   integrations: [react(), tailwind()],
   vite: {
+    server: {
+      allowedHosts: ["skin-exempt-package-hoped.trycloudflare.com"],
+    },
     plugins: [
       VitePWA({
         registerType: "autoUpdate",

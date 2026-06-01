@@ -4,6 +4,7 @@ import Footer from "../components/Footer.astro";
 import Splash from "../components/Splash.astro";
 import Matomo from "../components/Matomo.astro";
 import "../styles/global.css";
+import { getSiteTitle } from "../utils/siteConfig";
 
 interface Props {
   title: string;
@@ -22,6 +23,8 @@ const {
   ogType = "website",
   noindex = false,
 } = Astro.props;
+const siteTitle = await getSiteTitle();
+const resolvedTitle = String(title).replaceAll("The Triangle", siteTitle);
 
 const siteUrl = "https://www.thetriangle.org";
 const pageUrl = canonical ?? siteUrl;
@@ -29,7 +32,7 @@ const pageUrl = canonical ?? siteUrl;
 const websiteJSON = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "The Triangle",
+  name: siteTitle,
   alternateName: ["Drexel Triangle", "The Drexel Triangle"],
   url: "https://www.thetriangle.org/",
   // SearchAction enables Google's Sitelinks Search Box in search results
@@ -64,9 +67,9 @@ const websiteJSON = {
     />
 
     <!-- Open Graph -->
-    <meta property="og:site_name" content="The Triangle" />
+    <meta property="og:site_name" content={siteTitle} />
     <meta property="og:type" content={ogType} />
-    <meta property="og:title" content={title} />
+    <meta property="og:title" content={resolvedTitle} />
     {description && <meta property="og:description" content={description} />}
     <meta property="og:url" content={pageUrl} />
     <meta property="og:image" content={ogImage} />
@@ -74,7 +77,7 @@ const websiteJSON = {
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@DrexelTriangle" />
-    <meta name="twitter:title" content={title} />
+    <meta name="twitter:title" content={resolvedTitle} />
     {description && <meta name="twitter:description" content={description} />}
     <meta name="twitter:image" content={ogImage} />
     <meta name="google-adsense-account" content="ca-pub-3937492883909624" />
@@ -94,7 +97,7 @@ const websiteJSON = {
       })(window, document, "script", "prop_70U4oqbEQg0rQPaCMMuR");
     </script>
 
-    <title>{title}</title>
+    <title>{resolvedTitle}</title>
     <Splash />
     <script type="application/ld+json" set:html={JSON.stringify(websiteJSON)} />
     <!-- Extra head content from child layouts (e.g. article JSON-LD) -->

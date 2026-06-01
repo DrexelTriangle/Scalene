@@ -4,7 +4,7 @@ import { getPollCounts, incrementPollCount } from '../../utils/pollStore';
 export const prerender = false;
 
 export const GET: APIRoute = async () => {
-  return new Response(JSON.stringify({ counts: getPollCounts() }), {
+  return new Response(JSON.stringify({ counts: await getPollCounts() }), {
     headers: { 'Content-Type': 'application/json' }
   });
 };
@@ -22,7 +22,7 @@ export const POST: APIRoute = async ({ request }) => {
       option = String(formData.get('poll') ?? '');
     }
 
-    const counts = incrementPollCount(option);
+    const counts = await incrementPollCount(option);
     if (!counts) {
       return new Response(JSON.stringify({ error: 'Invalid poll option' }), {
         status: 400,

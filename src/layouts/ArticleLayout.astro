@@ -2,11 +2,14 @@
 const { title, article } = Astro.props;
 import Footer from "../components/Footer.astro";
 import Splash from "../components/Splash.astro";
+import { getSiteTitle } from "../utils/siteConfig";
+const siteTitle = await getSiteTitle();
+const resolvedTitle = String(title).replaceAll("The Triangle", siteTitle);
 
 const websiteJSON = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "The Triangle",
+  name: siteTitle,
   alternateName: ["Drexel Triangle", "The Drexel Triangle"],
   url: "https://www.thetriangle.org/",
 };
@@ -24,11 +27,11 @@ const newsArticleJSON = {
   "dateModified": article.published_date,
   "author": {
       "@type": "Organization",
-      "name": "The Triangle"
+      "name": siteTitle
   },
   publisher: {
     "@type": "Organization",
-    name: "The Triangle",
+    name: siteTitle,
     logo: {
       "@type": "ImageObject",
       url: "https://www.thetriangle.org/logo.png",
@@ -64,7 +67,7 @@ Astro.response.headers.set(
     </script>
 
     <meta name="google-adsense-account" content="ca-pub-3937492883909624" />
-    <title>{title}</title>
+    <title>{resolvedTitle}</title>
     <Splash />
     <link
       rel="canonical"
