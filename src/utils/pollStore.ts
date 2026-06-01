@@ -87,12 +87,12 @@ export async function getPollTitle(): Promise<string> {
   });
 
   if (!response) {
-    return "What is your favorite section of The Triangle?";
+    return "";
   }
 
   const payload = await response.json() as { title?: unknown };
   const title = typeof payload?.title === 'string' ? payload.title.trim() : '';
-  return title || "What is your favorite section of The Triangle?";
+  return title;
 }
 
 export async function getPollCounts(): Promise<PollCounts> {
