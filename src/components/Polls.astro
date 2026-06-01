@@ -30,13 +30,14 @@ const totalVotes = Object.values(pollOptionCounts).reduce((sum, count) => sum + 
 
 <script>
   const POLL_CHOICE_KEY = 'triangle-poll-choice';
-  const pollRoot = document.querySelector('[data-poll-root]');
-  const pollForm = pollRoot?.querySelector('[data-poll-form]');
-  const userVoteNode = pollRoot?.querySelector('[data-user-vote]');
-  const submitButton = pollForm?.querySelector('button[type="submit"]');
+  const pollRoot = document.querySelector<HTMLElement>('[data-poll-root]');
+  const pollForm = pollRoot?.querySelector<HTMLFormElement>('[data-poll-form]');
+  const userVoteNode = pollRoot?.querySelector<HTMLElement>('[data-user-vote]');
+  const submitButton = pollForm?.querySelector<HTMLButtonElement>('button[type="submit"]');
   let hasVoted = false;
-  const setOptionFill = (option, percentage) => {
-    const optionNode = pollRoot?.querySelector(`[data-poll-option="${CSS.escape(option)}"]`);
+  let isSubmitting = false;
+  const setOptionFill = (option: string, percentage: number) => {
+    const optionNode = pollRoot?.querySelector<HTMLElement>(`[data-poll-option="${CSS.escape(option)}"]`);
     if (!optionNode) {
       return;
     }
@@ -44,15 +45,15 @@ const totalVotes = Object.values(pollOptionCounts).reduce((sum, count) => sum + 
     optionNode.style.background = `linear-gradient(to right, rgba(37, 99, 235, 0.25) 0%, rgba(37, 99, 235, 0.25) ${percentage}%, transparent ${percentage}%, transparent 100%)`;
   };
 
-  const updateOptionBackgrounds = (counts) => {
-    const totalVotes = Object.values(counts).reduce((sum, count) => sum + Number(count), 0);
+  const updateOptionBackgrounds = (counts: Record<string, number>) => {
+    const totalVotes = Object.values(counts).reduce((sum: number, count: number) => sum + Number(count), 0);
     Object.entries(counts).forEach(([option, count]) => {
       const percentage = totalVotes ? (Number(count) / totalVotes) * 100 : 0;
       setOptionFill(option, percentage);
     });
   };
 
-  const showSavedVote = (option) => {
+  const showSavedVote = (option: string) => {
     if (!userVoteNode) {
       return;
     }
@@ -63,7 +64,7 @@ const totalVotes = Object.values(pollOptionCounts).reduce((sum, count) => sum + 
     if (!pollForm) {
       return;
     }
-    const inputs = pollForm.querySelectorAll('input[name="poll"]');
+    const inputs = pollForm.querySelectorAll<HTMLInputElement>('input[name="poll"]');
     inputs.forEach((input) => {
       input.disabled = true;
     });
@@ -81,7 +82,8 @@ const totalVotes = Object.values(pollOptionCounts).reduce((sum, count) => sum + 
         return;
       }
 
-      const savedInput = pollForm.querySelector(`input[name="poll"][value="${savedOption}"]`);
+      const savedInput = Array.from(pollForm.querySelectorAll<HTMLInputElement>('input[name="poll"]'))
+        .find((input) => input.value === savedOption);
       if (savedInput) {
         savedInput.checked = true;
         showSavedVote(savedOption);
@@ -96,13 +98,31 @@ const totalVotes = Object.values(pollOptionCounts).reduce((sum, count) => sum + 
 
   pollForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
-    if (hasVoted) {
+    if (hasVoted || isSubmitting) {
       return;
     }
 
     const formData = new FormData(pollForm);
     const selectedOption = formData.get('poll');
     if (!selectedOption) {
+      return;
+    }
+
+    isSubmitting = true;
+    if (submitButton) {
+      submitButton.disabled = true;
+    }
+
+    const response = await fetch('/api/poll', {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!response.ok) {
+      isSubmitting = false;
+      if (submitButton && !hasVoted) {
+        submitButton.disabled = false;
+      }
       return;
     }
 
@@ -114,16 +134,7 @@ const totalVotes = Object.values(pollOptionCounts).reduce((sum, count) => sum + 
     showSavedVote(String(selectedOption));
     lockVoting();
 
-    const response = await fetch('/api/poll', {
-      method: 'POST',
-      body: formData
-    });
-
-    if (!response.ok) {
-      return;
-    }
-
-    const payload = await response.json();
+    const payload = await response.json() as { counts?: Record<string, number> };
     const counts = payload?.counts;
     if (!counts) {
       return;
