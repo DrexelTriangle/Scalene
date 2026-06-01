@@ -157,3 +157,5 @@ dist
 
 package-lock.json
 
+# Poll runtime persistence
+data/poll-counts.json

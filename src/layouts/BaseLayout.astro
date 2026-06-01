@@ -1,16 +1,16 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
-import Footer from '../components/Footer.astro';
-import Splash from '../components/Splash.astro';
-import Matomo from '../components/Matomo.astro';
-import '../styles/global.css';
+import { ViewTransitions } from "astro:transitions";
+import Footer from "../components/Footer.astro";
+import Splash from "../components/Splash.astro";
+import Matomo from "../components/Matomo.astro";
+import "../styles/global.css";
 
 interface Props {
   title: string;
   description?: string;
   canonical?: string;
   ogImage?: string;
-  ogType?: 'website' | 'article';
+  ogType?: "website" | "article";
   noindex?: boolean;
 }
 
@@ -18,31 +18,32 @@ const {
   title,
   description,
   canonical,
-  ogImage = 'https://www.thetriangle.org/logo.png',
-  ogType = 'website',
+  ogImage = "https://www.thetriangle.org/logo.png",
+  ogType = "website",
   noindex = false,
 } = Astro.props;
 
-const siteUrl = 'https://www.thetriangle.org';
+const siteUrl = "https://www.thetriangle.org";
 const pageUrl = canonical ?? siteUrl;
 
 const websiteJSON = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  "name": "The Triangle",
-  "alternateName": ["Drexel Triangle", "The Drexel Triangle"],
-  "url": "https://www.thetriangle.org/",
+  name: "The Triangle",
+  alternateName: ["Drexel Triangle", "The Drexel Triangle"],
+  url: "https://www.thetriangle.org/",
   // SearchAction enables Google's Sitelinks Search Box in search results
-  "potentialAction": {
+  potentialAction: {
     "@type": "SearchAction",
-    "target": {
+    target: {
       "@type": "EntryPoint",
-      "urlTemplate": "https://www.thetriangle.org/search?s={search_term_string}"
+      urlTemplate: "https://www.thetriangle.org/search?s={search_term_string}",
     },
-    "query-input": "required name=search_term_string"
-  }
+    "query-input": "required name=search_term_string",
+  },
 };
 ---
+
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -57,7 +58,10 @@ const websiteJSON = {
     <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
     {description && <meta name="description" content={description} />}
     {canonical && <link rel="canonical" href={canonical} />}
-    <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
+    <meta
+      name="robots"
+      content={noindex ? "noindex, nofollow" : "index, follow"}
+    />
 
     <!-- Open Graph -->
     <meta property="og:site_name" content="The Triangle" />
@@ -74,8 +78,22 @@ const websiteJSON = {
     {description && <meta name="twitter:description" content={description} />}
     <meta name="twitter:image" content={ogImage} />
     <meta name="google-adsense-account" content="ca-pub-3937492883909624" />
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3937492883909624" crossorigin="anonymous"></script>
-    <script type="text/javascript" is:inline> (function (w, d, s, p) { let f = d.getElementsByTagName(s)[0], j = d.createElement(s); j.id = 'flytedigital'; j.async = true; j.src = "https://digital.flytedesk.com/js/head.js#" + p; f.parentNode.insertBefore(j, f); })(window, document, 'script', 'prop_lt0vdtASYdHOWZmsZWzk'); </script>
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3937492883909624"
+      crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+      (function (w, d, s, p) {
+        let f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s);
+        j.id = "flytedigital";
+        j.async = true;
+        j.src = "https://digital.flytedesk.com/js/head.js#" + p;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "prop_70U4oqbEQg0rQPaCMMuR");
+    </script>
+
     <title>{title}</title>
     <Splash />
     <script type="application/ld+json" set:html={JSON.stringify(websiteJSON)} />
