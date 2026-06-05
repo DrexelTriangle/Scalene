@@ -135,6 +135,29 @@ body {
   @apply font-roboto-slab my-[16px] text-[16px] max-w-[700px] mx-[auto];
 }
 
+#article ul,
+#article ol {
+  @apply font-roboto-slab my-[16px] text-[16px] max-w-[700px] mx-[auto] pl-[28px];
+}
+
+#article ul {
+  list-style: disc;
+}
+
+#article ol {
+  list-style: decimal;
+}
+
+#article li {
+  margin: 0 0 8px;
+}
+
+#article li > ul,
+#article li > ol {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
 #article p a {
   font-weight: 500;
   text-decoration: underline;
