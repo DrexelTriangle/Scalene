@@ -8,57 +8,62 @@ import "@splidejs/splide/dist/css/splide.min.css";
   <div class="splide relative z-[2]" aria-label="My Splide" data-home-splide>
     <div class="splide__track">
       <ul class="splide__list">
-        <!-- <li class="hidden md:block splide__slide w-[100%] mb-[12px] md:mb-[0px]">
+        <li
+          class="hidden md:block splide__slide w-[100%] mb-[12px] md:mb-[0px]"
+        >
           <a
             href="/one-hundred"
             class="one-hundred-slide md:aspect-[4] lg:aspect-[7.5] flex px-[16px] justify-end items-end text-white text-wrap font-bold uppercase font-libre text-[32px] sm:text-[48px] lg:text-[48px] leading-[normal] relative"
           >
             <span class="z-[10] text-right">100 Years of The Triangle</span>
           </a>
-        </li> -->
+        </li>
 
-        <!-- <li class="splide__slide w-[100%] mb-[12px] md:mb-[0px]">
+        <li class="splide__slide w-[100%] mb-[12px] md:mb-[0px]">
           <a class="block bg-[#acd4f4]" href="https://tr.ee/bqz8s-E4NK">
             <img
               src="/images/PodcastBanner.webp"
               class="w-full md:object-contain object-cover md:aspect-[4] lg:aspect-[7.5]"
             />
           </a>
-        </li> -->
+        </li>
 
-        <!-- <li class="splide__slide w-[100%] mb-[12px] md:mb-[0px]">
+        <li class="splide__slide w-[100%] mb-[12px] md:mb-[0px]">
           <a class="block bg-[#E5E7EB]" href="/classifieds">
             <img
               src="/images/classifiedsBannerNew.webp"
               class="w-full md:object-contain object-cover md:aspect-[4] lg:aspect-[7.5]"
             />
           </a>
-        </li> -->
+        </li>
 
-        <!-- <li class="splide__slide w-[100%] mb-[12px] md:mb-[0px]">
-          <a class="block bg-[#275997]" href="https://docs.google.com/forms/d/e/1FAIpQLScra_6sUenvmpIuQ5FjmMyWO0a2sz9z36HkrqfnYQvJGH9BGQ/viewform">
+        <li class="splide__slide w-[100%] mb-[12px] md:mb-[0px]">
+          <a
+            class="block bg-[#275997]"
+            href="https://docs.google.com/forms/d/e/1FAIpQLScra_6sUenvmpIuQ5FjmMyWO0a2sz9z36HkrqfnYQvJGH9BGQ/viewform"
+          >
             <img
               src="/images/applyBannerNew.webp"
               class="w-full md:object-contain object-cover md:aspect-[4] lg:aspect-[7.5]"
             />
           </a>
-        </li> -->
+        </li>
 
-        <li class="splide__slide w-[100%] mb-[12px] md:mb-[0px]">
+        <!-- <li class="splide__slide w-[100%] mb-[12px] md:mb-[0px]">
           <a class="block bg-[#f3f592]" href="/graduation">
             <img
               src="/images/graduation-banner.webp"
               class="w-full md:object-contain object-cover object-bottom aspect-[5.5]"
             />
           </a>
-        </li>
+        </li> -->
       </ul>
     </div>
   </div>
 </section>
 
 <script>
-    import Splide from "@splidejs/splide";
+  import Splide from "@splidejs/splide";
 
   function initSplides() {
     document.querySelectorAll("[data-home-splide]").forEach((el) => {

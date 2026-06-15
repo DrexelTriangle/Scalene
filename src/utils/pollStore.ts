@@ -2,12 +2,15 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 const pollOptions = [
-  'News',
-  'Opinion',
-  'Sports',
-  'Arts & Entertainment',
-  'Comics',
-  'Photography'
+  'CoAS',
+  'LeBow',
+  'CoEC',
+  'Kline',
+  'Westphal',
+  'Medicine',
+  'Nursing',
+  'Goodwin',
+  'Dornsife'
 ] as const;
 
 type PollOption = (typeof pollOptions)[number];
@@ -15,12 +18,15 @@ type PollOption = (typeof pollOptions)[number];
 type PollCounts = Record<PollOption, number>;
 
 const defaultPollCounts: PollCounts = {
-  News: 0,
-  Opinion: 0,
-  Sports: 0,
-  'Arts & Entertainment': 0,
-  Comics: 0,
-  Photography: 0
+  CoAS: 0,
+  LeBow: 0,
+  CoEC: 0,
+  Kline: 0,
+  Westphal: 0,
+  Medicine: 0,
+  Nursing: 0,
+  Goodwin: 0,
+  Dornsife: 0
 };
 
 const dataDir = path.join(process.cwd(), 'data');

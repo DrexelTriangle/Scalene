@@ -8,7 +8,7 @@ const totalVotes = Object.values(pollOptionCounts).reduce((sum, count) => sum + 
 <div class="font-playfair mb-[48px]" data-poll-root>
     <h1 class="font-roboto-slab uppercase font-extrabold mb-2"> Polls </h1>
     <form data-poll-form>
-        <h3 class="mb-[8px] font-bold"> What is your favorite section of The Triangle?</h3>
+        <h3 class="mb-[8px] font-bold"> What is your favorite college at Drexel?</h3>
         {pollOptions.map((option) => (
             <label
                 data-poll-option={option}
