@@ -17,7 +17,13 @@ export default defineConfig({
     plugins: [
       VitePWA({
         registerType: "autoUpdate",
-        includeAssets: ["favicon.svg", "robots.txt"],
+        includeAssets: [
+          "favicon.ico",
+          "favicon-16x16.png",
+          "favicon-32x32.png",
+          "apple-touch-icon.png",
+          "robots.txt",
+        ],
         manifest: {
           name: "The Triangle",
           short_name: "The Triangle",
@@ -27,12 +33,12 @@ export default defineConfig({
           theme_color: "#2563EB",
           icons: [
             {
-              src: "/logo_192_x_192.png",
+              src: "/android-chrome-192x192.png",
               sizes: "192x192",
               type: "image/png"
             },
             {
-              src: "/logo_512_x_512.png",
+              src: "/android-chrome-512x512.png",
               sizes: "512x512",
               type: "image/png"
             }
