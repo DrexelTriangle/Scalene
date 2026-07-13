@@ -1,0 +1,63 @@
+name: Deploy production
+
+# Runs only after the CI workflow completes for a push to main. The deploy job
+# runs on the self-hosted production runner and invokes a trusted, root-owned
+# server script. It never checks out or executes repository / pull-request code.
+on:
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
+
+# Least privilege: the deploy job only calls a local server script.
+permissions:
+  contents: read
+
+# Never run two production deployments at once, and never cancel one midway.
+concurrency:
+  group: triangle-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # Defensive gate: only deploy when the triggering CI run succeeded, was
+    # started by a push (never a pull_request), and targeted the main branch.
+    # This ensures pull-request code can never reach the self-hosted runner.
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main'
+
+    runs-on:
+      - self-hosted
+      - Linux
+      - X64
+      - production
+
+    environment:
+      name: production
+      url: https://www.thetriangle.org
+
+    timeout-minutes: 15
+
+    # No checkout step: the runner must not fetch or execute repository code.
+    # All git pull / npm ci / build / restart logic lives in the trusted,
+    # root-owned deployment script, which is intentionally not duplicated here.
+    steps:
+      - name: Deploy website
+        run: sudo /usr/local/bin/deploy-scalene
+
+      - name: Verify production health
+        run: |
+          curl \
+            --fail \
+            --show-error \
+            --silent \
+            --location \
+            --max-time 10 \
+            --retry 5 \
+            --retry-delay 5 \
+            --retry-all-errors \
+            https://www.thetriangle.org/ >/dev/null
+          echo "Production is healthy."
