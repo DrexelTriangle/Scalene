@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+# Least privilege: CI only needs to read the repository contents.
+permissions:
+  contents: read
+
+# Cancel superseded CI runs for the same branch or PR so stale runs don't pile up.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Validate and build
+    # GitHub-hosted runner only. Pull requests (including from forks) must never
+    # execute on the self-hosted production runner.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Detect which optional validation scripts are actually defined in
+      # package.json. Steps below run only when their script exists, so no
+      # non-existent npm script is ever invoked and no failure is hidden.
+      - name: Detect available scripts
+        id: scripts
+        run: |
+          node --input-type=module <<'EOF'
+          import { readFileSync, appendFileSync } from 'node:fs';
+          const { scripts = {} } = JSON.parse(readFileSync('package.json', 'utf8'));
+          const has = (name) => Object.prototype.hasOwnProperty.call(scripts, name);
+          const flags = {
+            lint: has('lint'),
+            typecheck: has('typecheck'),
+            check: has('check'),
+            test: has('test'),
+            format: has('format:check'),
+          };
+          const lines = Object.entries(flags).map(([k, v]) => `${k}=${v}`);
+          appendFileSync(process.env.GITHUB_OUTPUT, lines.join('\n') + '\n');
+          for (const line of lines) console.log(line);
+          EOF
+
+      - name: Lint
+        if: steps.scripts.outputs.lint == 'true'
+        run: npm run lint
+
+      - name: Type check
+        if: steps.scripts.outputs.typecheck == 'true'
+        run: npm run typecheck
+
+      - name: Astro check
+        if: steps.scripts.outputs.check == 'true'
+        run: npm run check
+
+      - name: Test
+        if: steps.scripts.outputs.test == 'true'
+        run: npm test
+
+      - name: Formatting check
+        if: steps.scripts.outputs.format == 'true'
+        run: npm run format:check
+
+      # Always run the build; this is the one validation script that exists today.
+      - name: Build
+        run: npm run build
