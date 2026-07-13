@@ -1,32 +1,16 @@
 ---
-    const {article} = Astro.props
+const {text} = Astro.props
+const repeats = 6
 ---
 <div id="bn-grandparent" class="relative flex items-center mb-[12px] sm:mb-[0px] mt-[-25px] h-[48px] w-[100%] text-white font-libre text-[24px] text-center font-bold bg-triangleDanger py-[16px]">
     <div id="bn-parent" class="absolute">
         <h1 id="bn">
-            <a class="hover:underline" href={"article/"+article.slug}>
-                BREAKING NEWS: {article.title}
-            </a>
-            &nbsp;&bull;&nbsp;
-            <a class="hover:underline" href={"article/"+article.slug}>
-                BREAKING NEWS: {article.title}
-            </a>
-            &nbsp;&bull;&nbsp; 
-            <a class="hover:underline" href={"article/"+article.slug}>
-                BREAKING NEWS: {article.title}
-            </a>
-            &nbsp;&bull;&nbsp; 
-            <a class="hover:underline" href={"article/"+article.slug}>
-                BREAKING NEWS: {article.title}
-            </a>
-            &nbsp;&bull;&nbsp; 
-            <a class="hover:underline" href={"article/"+article.slug}>
-                BREAKING NEWS: {article.title}
-            </a>
-            &nbsp;&bull;&nbsp; 
-            <a class="hover:underline" href={"article/"+article.slug}>
-                BREAKING NEWS: {article.title}
-            </a>
+            {Array.from({length: repeats}).map((_, i) => (
+                <>
+                    <span>BREAKING NEWS: {text}</span>
+                    {i < repeats - 1 && <>&nbsp;&bull;&nbsp;</>}
+                </>
+            ))}
         </h1>
     </div>
 </div>

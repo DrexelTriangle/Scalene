@@ -8,6 +8,9 @@
     "preview": "node scripts/run-astro-with-local-ca.mjs preview",
     "astro": "astro"
   },
+  "engines": {
+    "node": ">=20.3.0 <23"
+  },
   "dependencies": {
     "": "file:",
     "@astrojs/node": "^9.5.2",

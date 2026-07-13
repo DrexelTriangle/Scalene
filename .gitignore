@@ -155,7 +155,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-package-lock.json
-
 # Poll runtime persistence
 data/poll-counts.json
