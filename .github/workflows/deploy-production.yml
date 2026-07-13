@@ -46,7 +46,7 @@ jobs:
     # root-owned deployment script, which is intentionally not duplicated here.
     steps:
       - name: Deploy website
-        run: sudo /usr/local/bin/deploy-scalene
+        run: /usr/local/bin/deploy-scalene
 
       - name: Verify production health
         run: |
