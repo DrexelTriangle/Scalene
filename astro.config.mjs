@@ -12,6 +12,14 @@ export default defineConfig({
   adapter: node({
     mode: 'standalone', // required!
   }),
+  // The guest form submits multipart/form-data through the nginx reverse
+  // proxy, which terminates TLS. Astro's checkOrigin compares the browser
+  // Origin (https) against the app's computed origin (http/localhost behind
+  // the proxy), so it rejects the submission. These endpoints are public and
+  // unauthenticated, so CSRF origin-checking adds little; disable it.
+  security: {
+    checkOrigin: false,
+  },
   integrations: [react(), tailwind()],
   vite: {
     plugins: [
