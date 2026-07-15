@@ -2,11 +2,7 @@
 export const prerender = true;
 
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Section from '../components/Sections/Section.astro';
 import Header from '../components/Header.astro';
-import Column from '../components/Columns.astro';
-import Social from '../components/Social.astro';
-import Poll from '../components/Polls.astro';
 import '../styles/global.css';
 ---
 
@@ -63,7 +59,7 @@ import '../styles/global.css';
             <li>The article presents a clear and present danger to the safety of any individual named in the article</li>
         </ul>
     </div>
-    <form method="POST" action="/api/guest" enctype="multipart/form-data" id="contact" class="flex flex-wrap xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] gap-[16px] text-[14px] mt-[32px]">
+    <form method="POST" action="/api/guest" enctype="multipart/form-data" data-astro-reload id="guest-form" class="flex flex-wrap xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] gap-[16px] text-[14px] mt-[32px]">
     <label class="font-libre w-[calc(50%-8px)]">
         <span class="block w-[100%]">Article Title<b class="text-red-500">*</b></span>
         <input name="title" required class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"/>
@@ -86,60 +82,4 @@ import '../styles/global.css';
     </label>
     <button type="submit" class="flex font-roboto-slab self-end bg-triangleBlue text-white p-3 w-[160px] justify-center rounded-[10px] hover:border-[1px] hover:border-solid hover:border-triangleBlue hover:bg-white hover:text-triangleBlue">Submit</button>
     </form>
-
-    <script is:inline>
-        function setupGuestForm() {
-            const guestForm = document.getElementById("contact");
-
-            if (!guestForm) {
-                console.error("Guest form not found");
-                return;
-            }
-
-            // Guard against binding the submit handler more than once.
-            // setupGuestForm runs on both initial load and astro:page-load,
-            // and a duplicate handler fires two concurrent submissions.
-            if (guestForm.dataset.bound === "true") {
-                return;
-            }
-            guestForm.dataset.bound = "true";
-
-            guestForm.addEventListener("submit", async function (e) {
-                e.preventDefault(); // stop page reload
-                e.stopPropagation();
-
-                const submitButton = guestForm.querySelector('button[type="submit"]');
-                if (submitButton) {
-                    submitButton.disabled = true;
-                }
-
-                const formData = new FormData(guestForm);
-
-                try {
-                    const res = await fetch("/api/guest", {
-                        method: "POST",
-                        headers: { Accept: "application/json" },
-                        body: formData,
-                    });
-
-                    if (res.ok) {
-                        window.location.href = "/submitted";
-                    } else {
-                        window.location.href = "/error";
-                    }
-                } catch (err) {
-                    console.error(err);
-                    window.location.href = "/error";
-                }
-            });
-        }
-
-        if (document.readyState === "loading") {
-            document.addEventListener("DOMContentLoaded", setupGuestForm);
-        } else {
-            setupGuestForm();
-        }
-
-        document.addEventListener("astro:page-load", setupGuestForm);
-    </script>
 </BaseLayout>
