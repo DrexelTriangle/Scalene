@@ -4,6 +4,11 @@ import type { APIRoute } from "astro";
 import nodemailer from "nodemailer";
 
 export const POST: APIRoute = async ({ request }) => {
+  // The guest form submits as a native browser navigation, so we respond
+  // with a redirect to the success/error page in every case.
+  const redirect = (path: "/submitted" | "/error") =>
+    Response.redirect(new URL(path, request.url), 303);
+
   const formData = await request.formData();
 
   const name = formData.get("name");
@@ -13,10 +18,7 @@ export const POST: APIRoute = async ({ request }) => {
   const title = formData.get("title");
 
   if (!name || !email || !rel || !title) {
-    return new Response(
-      JSON.stringify({ success: false, error: "Missing required fields" }),
-      { status: 400 }
-    );
+    return redirect("/error");
   }
 
   const user = import.meta.env.EMAIL;
@@ -26,10 +28,7 @@ export const POST: APIRoute = async ({ request }) => {
     console.error(
       "[api/guest] EMAIL/PASS env vars are not set; cannot send submission email."
     );
-    return new Response(
-      JSON.stringify({ success: false, error: "Mail service not configured" }),
-      { status: 500 }
-    );
+    return redirect("/error");
   }
 
   let attachment;
@@ -66,13 +65,8 @@ export const POST: APIRoute = async ({ request }) => {
     });
   } catch (err) {
     console.error("[api/guest] Failed to send submission email:", err);
-    return new Response(
-      JSON.stringify({ success: false, error: "Failed to send submission" }),
-      { status: 500 }
-    );
+    return redirect("/error");
   }
 
-  return new Response(JSON.stringify({ success: true }), {
-    status: 200,
-  });
+  return redirect("/submitted");
 };
