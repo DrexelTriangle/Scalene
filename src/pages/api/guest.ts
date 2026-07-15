@@ -5,8 +5,9 @@ import nodemailer from "nodemailer";
 
 export const POST: APIRoute = async ({ request }) => {
   // A native (no-JS) form submission is a browser navigation and accepts
-  // HTML; our fetch() call does not. For native submissions we redirect to
-  // the success/error pages instead of returning JSON.
+  // HTML; the JS fetch() explicitly sends `Accept: application/json`. For
+  // native submissions we redirect to the success/error pages instead of
+  // returning JSON.
   const wantsHtml = (request.headers.get("accept") || "").includes("text/html");
   const respond = (ok: boolean, status: number, error?: string) =>
     wantsHtml

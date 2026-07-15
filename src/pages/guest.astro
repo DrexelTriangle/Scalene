@@ -118,6 +118,7 @@ import '../styles/global.css';
                 try {
                     const res = await fetch("/api/guest", {
                         method: "POST",
+                        headers: { Accept: "application/json" },
                         body: formData,
                     });
 
