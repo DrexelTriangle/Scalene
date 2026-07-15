@@ -96,9 +96,22 @@ import '../styles/global.css';
                 return;
             }
 
+            // Guard against binding the submit handler more than once.
+            // setupGuestForm runs on both initial load and astro:page-load,
+            // and a duplicate handler fires two concurrent submissions.
+            if (guestForm.dataset.bound === "true") {
+                return;
+            }
+            guestForm.dataset.bound = "true";
+
             guestForm.addEventListener("submit", async function (e) {
                 e.preventDefault(); // stop page reload
                 e.stopPropagation();
+
+                const submitButton = guestForm.querySelector('button[type="submit"]');
+                if (submitButton) {
+                    submitButton.disabled = true;
+                }
 
                 const formData = new FormData(guestForm);
 
