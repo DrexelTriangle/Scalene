@@ -42,7 +42,7 @@ import '../styles/global.css';
         <b>Articles previously published in any other publication, blog, or written for a class may not be published in The Triangle.</b>
     </div>
 
-    <h2 class="font-playfair text-[28px] mb-[16px] mt-[16px] xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto]"> Authorship Eligability </h2>
+    <h2 class="font-playfair text-[28px] mb-[16px] mt-[16px] xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto]"> Authorship Eligibility</h2>
     <div class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto]">
         The Triangle shall only publish articles written by members of the organization, with exceptions made only for persons related to the 
         organization or Drexel University, such as alumni, student organizations, or faculty members, at the discretion of the Editorial Board. 
@@ -87,23 +87,58 @@ import '../styles/global.css';
     <button type="submit" class="flex font-roboto-slab self-end bg-triangleBlue text-white p-3 w-[160px] justify-center rounded-[10px] hover:border-[1px] hover:border-solid hover:border-triangleBlue hover:bg-white hover:text-triangleBlue">Submit</button>
     </form>
 
-    <script>
-        document.getElementById("contact").addEventListener("submit", async (e) => {
-        e.preventDefault(); // stop page reload
+    <script is:inline>
+        function setupGuestForm() {
+            const guestForm = document.getElementById("contact");
 
-        const form = e.target;
-        const formData = new FormData(form);
+            if (!guestForm) {
+                console.error("Guest form not found");
+                return;
+            }
 
-        const res = await fetch("/api/guest", {
-            method: "POST",
-            body: formData,
-        });
+            // Guard against binding the submit handler more than once.
+            // setupGuestForm runs on both initial load and astro:page-load,
+            // and a duplicate handler fires two concurrent submissions.
+            if (guestForm.dataset.bound === "true") {
+                return;
+            }
+            guestForm.dataset.bound = "true";
 
-        if (res.ok) {
-            window.location.replace("/submitted");
-        } else {
-            window.location.replace("/error");
+            guestForm.addEventListener("submit", async function (e) {
+                e.preventDefault(); // stop page reload
+                e.stopPropagation();
+
+                const submitButton = guestForm.querySelector('button[type="submit"]');
+                if (submitButton) {
+                    submitButton.disabled = true;
+                }
+
+                const formData = new FormData(guestForm);
+
+                try {
+                    const res = await fetch("/api/guest", {
+                        method: "POST",
+                        body: formData,
+                    });
+
+                    if (res.ok) {
+                        window.location.href = "/submitted";
+                    } else {
+                        window.location.href = "/error";
+                    }
+                } catch (err) {
+                    console.error(err);
+                    window.location.href = "/error";
+                }
+            });
         }
-        });
+
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", setupGuestForm);
+        } else {
+            setupGuestForm();
+        }
+
+        document.addEventListener("astro:page-load", setupGuestForm);
     </script>
 </BaseLayout>
