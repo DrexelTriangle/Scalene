@@ -12,13 +12,21 @@ export default defineConfig({
   adapter: node({
     mode: 'standalone', // required!
   }),
-  // The guest form submits multipart/form-data through the nginx reverse
-  // proxy, which terminates TLS. Astro's checkOrigin compares the browser
-  // Origin (https) against the app's computed origin (http/localhost behind
-  // the proxy), so it rejects the submission. These endpoints are public and
-  // unauthenticated, so CSRF origin-checking adds little; disable it.
+  // Behind the nginx reverse proxy (which terminates TLS), Astro only trusts
+  // the forwarded Host / X-Forwarded-Proto headers when the resulting origin
+  // matches an allowed domain; otherwise it falls back to "localhost" and its
+  // checkOrigin CSRF guard rejects same-site multipart form POSTs (the guest
+  // form). Listing our hostnames keeps checkOrigin enabled while letting
+  // legitimate submissions through.
+  //
+  // Requires nginx to forward the real host and scheme, e.g.:
+  //   proxy_set_header Host $host;
+  //   proxy_set_header X-Forwarded-Proto $scheme;
   security: {
-    checkOrigin: false,
+    allowedDomains: [
+      { hostname: "www.thetriangle.org" },
+      { hostname: "thetriangle.org" },
+    ],
   },
   integrations: [react(), tailwind()],
   vite: {
