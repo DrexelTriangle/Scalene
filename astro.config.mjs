@@ -12,6 +12,22 @@ export default defineConfig({
   adapter: node({
     mode: 'standalone', // required!
   }),
+  // Behind the nginx reverse proxy (which terminates TLS), Astro only trusts
+  // the forwarded Host / X-Forwarded-Proto headers when the resulting origin
+  // matches an allowed domain; otherwise it falls back to "localhost" and its
+  // checkOrigin CSRF guard rejects same-site multipart form POSTs (the guest
+  // form). Listing our hostnames keeps checkOrigin enabled while letting
+  // legitimate submissions through.
+  //
+  // Requires nginx to forward the real host and scheme, e.g.:
+  //   proxy_set_header Host $host;
+  //   proxy_set_header X-Forwarded-Proto $scheme;
+  security: {
+    allowedDomains: [
+      { hostname: "www.thetriangle.org" },
+      { hostname: "thetriangle.org" },
+    ],
+  },
   integrations: [react(), tailwind()],
   vite: {
     plugins: [
