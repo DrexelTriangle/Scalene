@@ -3,11 +3,9 @@
     const { pageNum, hasMore, sectionSlug, url } = Astro.props;
 ---
 
-<!-- Sentinel: kept in the layout (not display:none) so the IntersectionObserver
-     has a real box to watch. It triggers the next fetch while still a screenful
-     below the fold, so the next page lands before the reader reaches it. -->
 <div id="article-loader" style="min-height: 1px;"></div>
-<script define:vars={{ pageNum, hasMore, sectionSlug, url }}>
+<script is:inline define:vars={{ pageNum, hasMore, sectionSlug, url }} data-astro-rerun>
+    (() => {
         let isLoading = false;
         let currentPage = 2;
         let localHasMore = hasMore;
@@ -101,9 +99,6 @@
                 if (!localHasMore) {
                     observer.disconnect();
                 } else {
-                    // After appending, the sentinel may still sit inside the
-                    // prefetch margin (tall viewport / short page): re-check so
-                    // the buffer keeps filling until it's a screenful ahead.
                     queueMicrotask(checkSentinel);
                 }
             }
@@ -111,14 +106,10 @@
 
         const checkSentinel = () => {
             if (isLoading || !localHasMore) return;
-            // Prefetch once the sentinel is within ~1.5 viewports of the fold,
-            // so the next 20 articles arrive before the trigger is on screen.
             const rect = articleLoader.getBoundingClientRect();
             if (rect.top <= window.innerHeight * 2.5) fetchMoreArticles();
         };
 
-        // Same 1.5-viewport prefetch margin, handled natively for cheap,
-        // passive scroll/resize tracking.
         const observer = new IntersectionObserver(
             (entries) => {
                 if (entries.some((e) => e.isIntersecting)) fetchMoreArticles();
@@ -127,4 +118,5 @@
         );
 
         observer.observe(articleLoader);
+    })();
     </script>
