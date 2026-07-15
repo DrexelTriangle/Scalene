@@ -4,6 +4,18 @@ import type { APIRoute } from "astro";
 import nodemailer from "nodemailer";
 
 export const POST: APIRoute = async ({ request }) => {
+  // A native (no-JS) form submission is a browser navigation and accepts
+  // HTML; our fetch() call does not. For native submissions we redirect to
+  // the success/error pages instead of returning JSON.
+  const wantsHtml = (request.headers.get("accept") || "").includes("text/html");
+  const respond = (ok: boolean, status: number, error?: string) =>
+    wantsHtml
+      ? Response.redirect(
+          new URL(ok ? "/submitted" : "/error", request.url),
+          303
+        )
+      : new Response(JSON.stringify({ success: ok, error }), { status });
+
   const formData = await request.formData();
 
   const name = formData.get("name");
@@ -13,10 +25,7 @@ export const POST: APIRoute = async ({ request }) => {
   const title = formData.get("title");
 
   if (!name || !email || !rel || !title) {
-    return new Response(
-      JSON.stringify({ success: false, error: "Missing required fields" }),
-      { status: 400 }
-    );
+    return respond(false, 400, "Missing required fields");
   }
 
   const user = import.meta.env.EMAIL;
@@ -26,10 +35,7 @@ export const POST: APIRoute = async ({ request }) => {
     console.error(
       "[api/guest] EMAIL/PASS env vars are not set; cannot send submission email."
     );
-    return new Response(
-      JSON.stringify({ success: false, error: "Mail service not configured" }),
-      { status: 500 }
-    );
+    return respond(false, 500, "Mail service not configured");
   }
 
   let attachment;
@@ -66,13 +72,8 @@ export const POST: APIRoute = async ({ request }) => {
     });
   } catch (err) {
     console.error("[api/guest] Failed to send submission email:", err);
-    return new Response(
-      JSON.stringify({ success: false, error: "Failed to send submission" }),
-      { status: 500 }
-    );
+    return respond(false, 500, "Failed to send submission");
   }
 
-  return new Response(JSON.stringify({ success: true }), {
-    status: 200,
-  });
+  return respond(true, 200);
 };

@@ -63,7 +63,7 @@ import '../styles/global.css';
             <li>The article presents a clear and present danger to the safety of any individual named in the article</li>
         </ul>
     </div>
-    <form enctype="multipart/form-data" id="contact" class="flex flex-wrap xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] gap-[16px] text-[14px] mt-[32px]">
+    <form method="POST" action="/api/guest" enctype="multipart/form-data" id="contact" class="flex flex-wrap xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] gap-[16px] text-[14px] mt-[32px]">
     <label class="font-libre w-[calc(50%-8px)]">
         <span class="block w-[100%]">Article Title<b class="text-red-500">*</b></span>
         <input name="title" required class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"/>
