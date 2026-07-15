@@ -51,6 +51,9 @@ export default defineConfig({
           // build assets -- never HTML pages, which are dynamic and would
           // otherwise be served stale from the cache.
           globPatterns: ["**/*.{js,css,ico,png,svg,webp,woff,woff2}"],
+          // Too large to precache (3.66 MB, over workbox's 2 MB limit);
+          // exclude it so the build doesn't warn/exit non-zero.
+          globIgnores: ["**/images/Rectangle.webp"],
           // MPA/SSR site: do NOT serve a cached shell for page navigations.
           // Navigations must always hit the network so pages are never stale.
           navigateFallback: null,
