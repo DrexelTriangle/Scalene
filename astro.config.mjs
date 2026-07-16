@@ -7,7 +7,6 @@ import { VitePWA } from "vite-plugin-pwa";
 
 // https://astro.build/config
 export default defineConfig({
-  host: '0.0.0.0',
   output: 'server',
   adapter: node({
     mode: 'standalone', // required!

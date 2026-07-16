@@ -1,5 +1,7 @@
+import type { APIContext } from "astro";
+
 export const prerender = false;
-export async function POST({ request }) {
+export async function POST({ request }: APIContext) {
   let data;
 
   const contentType = request.headers.get("content-type") || "";

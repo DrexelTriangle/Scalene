@@ -1,6 +1,12 @@
 ---
 import PhotoArticle from "../PhotoArticle.astro";
-const { articles } = Astro.props
+import type { SectionCardArticle } from "../../utils/types";
+
+interface Props {
+  articles: SectionCardArticle[];
+}
+
+const { articles } = Astro.props;
 ---
 <div class="grid grid-cols-[1fr] md:grid-cols-[3fr_5fr_4fr] md:divide-x md:divide-triangleGray-400 ">
     <!-- Column 1: 2 blocks -->

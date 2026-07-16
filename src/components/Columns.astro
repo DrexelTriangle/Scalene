@@ -1,6 +1,12 @@
 ---
     import PhotoArticle from "./PhotoArticle.astro";
-    const { articles } = Astro.props;
+import type { SectionCardArticle } from "../utils/types";
+
+interface Props {
+  articles: SectionCardArticle[];
+}
+
+const { articles } = Astro.props;
 ---
 <div class="mb-[24px]">
     <div class="flex w-100 justify-between"><h1 class="font-roboto-slab uppercase font-extrabold"> Columns </h1> <a href="/columns" class="font-roboto-slab text-[14px] underline">See More &gt;</a></div>

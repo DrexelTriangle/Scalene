@@ -17,22 +17,22 @@ import Section from "../../components/Sections/Section.astro";
 import SubscribeLink from "../../components/SubscribeLink.astro";
 
 const host = request.headers.get('host');
-const isWww = host.startsWith('www.');
+const isWww = host?.startsWith('www.') ?? false;
 
-if (!isWww && !host?.includes("localhost")) {
+if (host && !isWww && !host.includes("localhost")) {
   return Astro.redirect(`https://www.${host}${request.url}`, 301);
 }
 if(sections !== "article"){
-return Astro.redirect('/article/'+article, 301); 
+return Astro.redirect('/article/'+article, 301);
 }
 
-const post = await getArticle(article);
+const post = article ? await getArticle(article) : undefined;
 
 if (!post) {
   return Astro.rewrite('/404');
 }
 
-const authorListLinks = [];
+const authorListLinks: string[] = [];
 post.authors.forEach((author)=>{authorListLinks.push(`<a class='hover:underline' href='/author/${author.slug}'>${author.name}</a>`);})
 
 let authorPrint = "<p class='print-authors font-bold hidden print:block'>" + authorListLinks.join("<br/>") + "</p>"

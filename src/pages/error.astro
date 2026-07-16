@@ -10,7 +10,7 @@ import { normalizeText } from "../utils/data";
 
 const s = Astro.url.searchParams.get('s');
 
-const posts = await search(s);
+const posts = s ? await search(s) : undefined;
 
 if (!posts || posts.length == 0) {
   return Astro.rewrite('/404');
