@@ -1,4 +1,14 @@
+/**
+ * @typedef {import('./types').Article} Article
+ * @typedef {import('./types').ArticleSummary} ArticleSummary
+ * @typedef {import('./types').Homepage} Homepage
+ * @typedef {import('./types').SectionArticles} SectionArticles
+ * @typedef {import('./types').AuthorArticles} AuthorArticles
+ * @typedef {import('./types').GalleryImage} GalleryImage
+ * @typedef {import('./types').ClassifiedPost} ClassifiedPost
+ */
 
+/** @returns {Promise<Homepage>} */
 export async function getHomepageArticles() {
   const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/homepage';
 
@@ -7,10 +17,11 @@ export async function getHomepageArticles() {
     cache: 'force-cache',
   });
 
-  if (!res.ok) throw new Error(res.status);
+  if (!res.ok) throw new Error(String(res.status));
   return res.json();
 }
 
+/** @returns {Promise<ClassifiedPost[]>} */
 export async function getClassifieds() {
   const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/classifieds';
 
@@ -19,10 +30,15 @@ export async function getClassifieds() {
     cache: 'force-cache',
   });
 
-  if (!res.ok) throw new Error(res.status);
+  if (!res.ok) throw new Error(String(res.status));
   return res.json();
 }
 
+/**
+ * @param {string} section
+ * @param {number|string} page
+ * @returns {Promise<SectionArticles|undefined>}
+ */
 export async function getSectionArticles(section, page) {
   const url = 'https://cms.thetriangle.org/wp-json/triangle/v2/section/'+section+'?page='+page;
 
@@ -35,6 +51,11 @@ export async function getSectionArticles(section, page) {
   return res.json();
 }
 
+/**
+ * @param {string} author
+ * @param {number|string} page
+ * @returns {Promise<AuthorArticles|undefined>}
+ */
 export async function getAuthorArticles(author, page) {
   const url = 'https://cms.thetriangle.org/wp-json/triangle/v2/author/'+author+'?page='+page;
 
@@ -47,6 +68,10 @@ export async function getAuthorArticles(author, page) {
   return res.json();
 }
 
+/**
+ * @param {string} article
+ * @returns {Promise<Article|undefined>}
+ */
 export async function getArticle(article) {
   const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/post/' + article;
 
@@ -59,6 +84,7 @@ export async function getArticle(article) {
   return res.json();
 }
 
+/** @returns {Promise<Article|undefined>} */
 export async function getRandomArticle() {
   const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/random/';
 
@@ -71,6 +97,10 @@ export async function getRandomArticle() {
   return res.json();
 }
 
+/**
+ * @param {string} search
+ * @returns {Promise<ArticleSummary[]|undefined>}
+ */
 export async function search(search) {
   const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/search?q=' + search;
 
@@ -82,6 +112,7 @@ export async function search(search) {
   if (!res.ok) return;
   return res.json();
 }
+/** @returns {Promise<GalleryImage[]|undefined>} */
 export async function gallery() {
   const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/gallery';
 
@@ -109,6 +140,7 @@ function getDateRange() {
   return { start, end };
 }
 
+/** @returns {Promise<Article[]>} */
 export async function getStats() {
   const { start, end } = getDateRange();
 

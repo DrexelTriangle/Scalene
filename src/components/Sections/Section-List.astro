@@ -1,7 +1,13 @@
 ---
 import PhotoArticleLong from "../PhotoArticleLong.astro"
 
-const { articles } = Astro.props
+import type { SectionCardArticle } from "../../utils/types";
+
+interface Props {
+  articles: SectionCardArticle[];
+}
+
+const { articles } = Astro.props;
 
 
 ---

@@ -66,7 +66,7 @@ import "@splidejs/splide/dist/css/splide.min.css";
   import Splide from "@splidejs/splide";
 
   function initSplides() {
-    document.querySelectorAll("[data-home-splide]").forEach((el) => {
+    document.querySelectorAll<HTMLElement>("[data-home-splide]").forEach((el) => {
       if (el.dataset.splideMounted === "true") return;
 
       el.dataset.splideMounted = "true";

@@ -10,7 +10,7 @@ import SectionRelatedRow from './Section-Related-Row.astro'
 import SectionList from './Section-List.astro'
 
 
-const {section, articles, includeName, style, slug} = Astro.props
+import type { SectionCardArticle } from "../../utils/types";
 
 const styles = {
     "3-5-4": Section354,
@@ -24,7 +24,17 @@ const styles = {
     "list": SectionList,
 }
 
-const Component = styles[style] ?? Section354;
+interface Props {
+    section?: string;
+    articles: SectionCardArticle[];
+    includeName?: boolean;
+    style?: keyof typeof styles;
+    slug?: string;
+}
+
+const {section, articles, includeName, style, slug} = Astro.props
+
+const Component = (style && styles[style]) || Section354;
 
 export const prerender = true;
 

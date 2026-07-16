@@ -15,8 +15,8 @@ import Scroll from "../components/Sections/Scroll.astro";
 import MostRead from "../components/MostRead.astro";
 import SubscribeLink from "../components/SubscribeLink.astro";
 
-let pageNum = 1;
-const posts = await getSectionArticles(sectionSlug, pageNum);
+const pageNum = 1;
+const posts = sectionSlug ? await getSectionArticles(sectionSlug, pageNum) : undefined;
 
 if (!posts) {
     return Astro.rewrite("/404");

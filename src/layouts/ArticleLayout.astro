@@ -93,8 +93,13 @@ Astro.response.headers.set(
     <Footer />
 
     <script is:inline>
-      // Initialize Matomo
-      const _paq = (window._paq = window._paq || []);
+      // Initialize Matomo.
+      // `var` is required, not a style slip: matomo.js reassigns the global
+      // _paq once it loads. `var` puts _paq on `window`, which that assignment
+      // updates. A const/let binding here would shadow the window property and
+      // make matomo.js throw "Assignment to constant variable".
+      // eslint-disable-next-line no-var
+      var _paq = (window._paq = window._paq || []);
       _paq.push(["trackPageView"]); // first page load
       _paq.push(["enableLinkTracking"]); // track clicks automatically
 

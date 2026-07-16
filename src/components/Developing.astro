@@ -1,6 +1,12 @@
 ---
-    const { stories } = Astro.props;
     import DevStory from "./DevStory.astro";
+    import type { DevelopingStory } from "../utils/types";
+
+    interface Props {
+        stories: DevelopingStory[];
+    }
+
+    const { stories } = Astro.props;
 ---
 <div class="mb-[24px]">
     <div class="flex w-100 justify-between"><h1 class="font-roboto-slab uppercase font-extrabold"> Developing Stories </h1></div>

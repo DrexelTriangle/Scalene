@@ -13,15 +13,15 @@ import { getAuthorArticles } from '../../utils/db';
 import { normalizeText } from "../../utils/data";
 import Scroll from "../../components/Sections/Scroll.astro";
 
-let pageNum = 1;
-const authorData = await getAuthorArticles(author, pageNum);
-let hasMore = authorData.pagination.hasMore;
+const pageNum = 1;
+const authorData = author ? await getAuthorArticles(author, pageNum) : undefined;
 
 if (!authorData) {
   return Astro.rewrite('/404');
 }
 
-const name = authorData?.author?.display_name
+const hasMore = authorData.pagination.hasMore;
+const name = authorData.author?.display_name
 ---
 <BaseLayout title={name + " - The Triangle"}>
     <Header/>
