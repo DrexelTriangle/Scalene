@@ -32,8 +32,8 @@ if (!post) {
   return Astro.rewrite('/404');
 }
 
-let authorListLinks = [];
-let authorList = post.authors.forEach((author)=>{authorListLinks.push(`<a class='hover:underline' href='/author/${author.slug}'>${author.name}</a>`);})
+const authorListLinks = [];
+post.authors.forEach((author)=>{authorListLinks.push(`<a class='hover:underline' href='/author/${author.slug}'>${author.name}</a>`);})
 
 let authorPrint = "<p class='print-authors font-bold hidden print:block'>" + authorListLinks.join("<br/>") + "</p>"
 
@@ -45,9 +45,9 @@ let d = new Date(post.date)
 const months = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
 const date_string = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
 
-authorList = "By " + (authorListLinks.length > 2 ? authorListLinks.join(", ") : authorListLinks.join(""))
+const authorList = "By " + (authorListLinks.length > 2 ? authorListLinks.join(", ") : authorListLinks.join(""))
 
-let actualArticle = post.content.match("<p[^>]*>(.+?)<\/p>")
+const actualArticle = post.content.match("<p[^>]*>(.+?)</p>")
 
 ---
 <ArticleLayout title={normalizeText(post.title) + " - The Triangle"} article={post}>

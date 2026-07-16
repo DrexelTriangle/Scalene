@@ -22,10 +22,10 @@
     <form action="/search" method="GET">
         <input id="s" name="s" type="text" placeholder="Search" class="relative hiddenSearch font-roboto-slab text-[12px] w-[200px] border-solid border-triangleBlue border-[1px] px-2 py-1 rounded-[10px] transition-[width] duration-[400ms] bg-white z-[99]"/>
     </form>
-  <Weather server:defer>
+  <Weather server:defer />
   </div>
   {!home && <a id="top-logo" href="/" class="absolute left-[calc(50%-100px)] md:left-[calc(50%-120px)] lg:left-[calc(50%-133px)]"><img class="w-[200px] md:w-[240px] lg:w-[266px]" src="/proxy/wp-content/uploads/2026/01/thetriangle.png"/></a>}
-  <div id="header-right" class="inline-flex items-center gap-x-[10px] font-roboto-slab text-[12px] cursor-pointer" id="hamburgerog">
+  <div id="header-right" class="inline-flex items-center gap-x-[10px] font-roboto-slab text-[12px] cursor-pointer">
     <nav class="hidden lg:flex gap-x-[12px]">
       <a class="hover:underline" href="/about"> About Us </a>
       <a class="hover:underline" href="/proxy/wp-content/uploads/2026/01/The-Triangle-Media-Kit.pdf"> Media Kit </a>

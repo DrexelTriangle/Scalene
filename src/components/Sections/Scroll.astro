@@ -32,9 +32,9 @@
                     data.articles.forEach((article) => {
                         const articleElement =
                             document.createElement("article");
-                        let authorListLinks = [];
-                        let author = article.authors;
-                        let authorList = author.forEach((author) => {
+                        const authorListLinks = [];
+                        const author = article.authors;
+                        author.forEach((author) => {
                             authorListLinks.push(
                                 `<a class='hover:underline' href='/author/${author.slug}'>${author.name}</a>`,
                             );
@@ -46,27 +46,27 @@
                                 authorListLinks[authorListLinks.length - 1];
                         }
 
-                        let d = new Date(article.date);
-                        let months = [
-                            "Jan.",
-                            "Feb.",
-                            "March",
-                            "April",
-                            "May",
-                            "June",
-                            "July",
-                            "Aug.",
-                            "Sep.",
-                            "Oct.",
-                            "Nov.",
-                            "Dec.",
-                        ];
-                        let date_string =
-                            months[d.getMonth()] +
-                            " " +
-                            d.getDate() +
-                            ", " +
-                            d.getFullYear();
+                        const d = new Date(article.date);
+                        const months = [
+                        "Jan.",
+                        "Feb.",
+                        "March",
+                        "April",
+                        "May",
+                        "June",
+                        "July",
+                        "Aug.",
+                        "Sep.",
+                        "Oct.",
+                        "Nov.",
+                        "Dec.",
+                    ];
+                        const date_string =
+                        months[d.getMonth()] +
+                        " " +
+                        d.getDate() +
+                        ", " +
+                        d.getFullYear();
 
                         authorList =
                             authorListLinks.length > 2
