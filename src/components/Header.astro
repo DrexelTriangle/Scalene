@@ -6,7 +6,7 @@
   const eventDate = new Date(); // Gets the current date/time
   // const eventDate = new Date('2025-05-15T10:00:00'); // Or a specific date
 
-  const options = {
+  const options: Intl.DateTimeFormatOptions = {
       weekday: 'long', // Full name of the day of the week (e.g., "Monday")
       year: 'numeric', // Full numeric year (e.g., "2024")
       month: 'long',   // Full name of the month (e.g., "February")
@@ -62,62 +62,79 @@
 </div>
 
 <script>
-  let hl = document.getElementById("header-left")
-  let hr = document.getElementById("header-right")
-  let scrollnav = document.getElementById("scrollnav")
-  let search = document.getElementById("search");
-  let hamburger = document.getElementById("hamburger");
-  let sidenav = document.getElementById("side-nav");
-  let searchBar = document.getElementById("s");
+  function setupHeader() {
+    const hamburger = document.getElementById("hamburger");
+    const search = document.getElementById("search");
+    const searchBar = document.getElementById("s");
+    const sideNav = document.getElementById("side-nav");
+    const mainNav = document.getElementById("main-nav");
+    const subNav = document.getElementById("sub-nav");
 
-  // Toggle fa-bars and fa-close on hamburger click
-  hamburger?.addEventListener('click', () => {
-    if (hamburger.classList.contains('fa-bars')) {
-      hamburger.classList.remove('fa-bars');
-      hamburger.classList.add('fa-close');
-      document.getElementById("side-nav").style.width = "200px";
-      document.getElementById("side-nav").style.borderLeft = "1px solid #2563EB";
-      document.getElementById("side-nav").style.padding = "0px 8px";
-      
-      document.getElementById("main-nav").style.display = "flex";
-      document.getElementById("sub-nav").style.display = "flex";
-    } else {
-      hamburger.classList.remove('fa-close');
-      hamburger.classList.add('fa-bars');
-      document.getElementById("side-nav").style.width = "0px";
-      document.getElementById("side-nav").style.padding = "0px 0px";
-      setTimeout(() => {
-        document.getElementById("main-nav").style.display = "none";
-        document.getElementById("sub-nav").style.display = "none";
-        document.getElementById("side-nav").style.borderLeft = "none";
-      }, 200);
+    // Toggle fa-bars and fa-close on hamburger click
+    if (hamburger && sideNav && mainNav && subNav) {
+      hamburger.addEventListener('click', () => {
+        if (hamburger.classList.contains('fa-bars')) {
+          hamburger.classList.remove('fa-bars');
+          hamburger.classList.add('fa-close');
+          sideNav.style.width = "200px";
+          sideNav.style.borderLeft = "1px solid #2563EB";
+          sideNav.style.padding = "0px 8px";
+
+          mainNav.style.display = "flex";
+          subNav.style.display = "flex";
+        } else {
+          hamburger.classList.remove('fa-close');
+          hamburger.classList.add('fa-bars');
+          sideNav.style.width = "0px";
+          sideNav.style.padding = "0px 0px";
+          setTimeout(() => {
+            mainNav.style.display = "none";
+            subNav.style.display = "none";
+            sideNav.style.borderLeft = "none";
+          }, 200);
+        }
+      });
     }
-  });
 
-  search?.addEventListener('click', () => {
-    searchBar.classList.toggle("hiddenSearch");
-  });
+    if (search && searchBar) {
+      search.addEventListener('click', () => {
+        searchBar.classList.toggle("hiddenSearch");
+      });
+    }
+  }
 
-  window.addEventListener('scroll', () => {
+  function onScroll() {
+    const hl = document.getElementById("header-left");
+    const hr = document.getElementById("header-right");
+    const scrollnav = document.getElementById("scrollnav");
+    const search = document.getElementById("search");
+    const hamburger = document.getElementById("hamburger");
+    if (!hl || !hr || !scrollnav || !search || !hamburger) return;
+
+    const isNarrow = window.matchMedia("(max-width: 639px)").matches;
+
     if (window.scrollY > 130) {
-      search?.classList.add("scrollstickyleft");
-      hamburger?.classList.add("scrollstickyright");
-      scrollnav?.prepend(search);
-      scrollnav?.append(hamburger);
-      if (window.matchMedia("(max-width: 639px)").matches) {
-        document.getElementById("scrollnav").style.paddingTop = "40px";
-      } 
-    } else {
-      search?.classList.remove("scrollstickyleft")
-      hamburger?.classList.remove("scrollstickyright");
-      hl?.prepend(search);
-      hr?.append(hamburger);
-      if (window.matchMedia("(max-width: 639px)").matches) {
-        document.getElementById("scrollnav").style.paddingTop = "0px";
-      } else {
-        document.getElementById("scrollnav").style.paddingTop = "8px";
+      search.classList.add("scrollstickyleft");
+      hamburger.classList.add("scrollstickyright");
+      scrollnav.prepend(search);
+      scrollnav.append(hamburger);
+      if (isNarrow) {
+        scrollnav.style.paddingTop = "40px";
       }
+    } else {
+      search.classList.remove("scrollstickyleft");
+      hamburger.classList.remove("scrollstickyright");
+      hl.prepend(search);
+      hr.append(hamburger);
+      scrollnav.style.paddingTop = isNarrow ? "0px" : "8px";
     }
+  }
+
+  window.addEventListener('scroll', onScroll);
+
+  document.addEventListener("astro:page-load", () => {
+    setupHeader();
+    onScroll();
   });
 
       // let idx = 0;
