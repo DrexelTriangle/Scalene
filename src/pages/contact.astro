@@ -2,11 +2,7 @@
 export const prerender = true;
 
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Section from '../components/Sections/Section.astro';
 import Header from '../components/Header.astro';
-import Column from '../components/Columns.astro';
-import Social from '../components/Social.astro';
-import Poll from '../components/Polls.astro';
 import '../styles/global.css';
 ---
 
@@ -24,7 +20,7 @@ import '../styles/global.css';
         Have a business inquiry, content request or update? We'd love to hear from you! Please use our contact form to reach out, and we'll 
         get back to you as soon as possible.
     </div>
-    <form id="contact" action="/error" method="POST" class="flex flex-wrap xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] gap-[16px] text-[14px]">
+    <form id="contact-form" action="/error" method="POST" class="flex flex-wrap xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] gap-[16px] text-[14px]">
     <label class="font-libre w-[calc(50%-8px)]">
         <span class="block w-[100%]">Name<b class="text-red-500">*</b></span>
         <input name="name" required class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"/>
@@ -41,12 +37,12 @@ import '../styles/global.css';
 
     <script is:inline>
   function setupContactForm() {
-    const contactForm = document.getElementById("contact");
+    const contactForm = document.getElementById("contact-form");
 
-    if (!contactForm) {
-      console.error("Contact form not found");
+    if (!contactForm || contactForm.dataset.bound === "true") {
       return;
     }
+    contactForm.dataset.bound = "true";
 
     contactForm.addEventListener("submit", async function (e) {
       e.preventDefault();
