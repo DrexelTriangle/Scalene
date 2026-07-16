@@ -2,11 +2,7 @@
 export const prerender = true;
 
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Section from '../components/Sections/Section.astro';
 import Header from '../components/Header.astro';
-import Column from '../components/Columns.astro';
-import Social from '../components/Social.astro';
-import Poll from '../components/Polls.astro';
 import '../styles/global.css';
 ---
 
@@ -19,11 +15,11 @@ import '../styles/global.css';
         <a class="border-triangleBlue border-b-[1px] pb-[4px] px-[4px]" href="/tipline">Tipline</a>
         <a class="hover:border-triangleBlue hover:border-b-[1px] pb-[4px] px-[4px]" href="/guest">Guest Post</a>
     </div>
-    <div class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-crimson text-[16px] my-[16px] font-crimson">
+    <div class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-crimson text-[16px] my-[16px]">
         Have some interesting news, a breaking story, or an upcoming event you want us to cover? <br/>
         Are you a member of the Drexel Community and want to write the article yourself and submit it as a guest post? Submit it <a href="/guest" class="underline hover:text-triangleBlue">here</a>.
     </div>
-    <form id="contact" class="flex flex-wrap xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] gap-[16px] text-[14px]">
+    <form id="tipline-form" class="flex flex-wrap xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] gap-[16px] text-[14px]">
     <label class="font-libre w-[calc(50%-8px)]">
         <span class="block w-[100%]">Subject<b class="text-red-500">*</b></span>
         <input name="name" required class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"/>
@@ -39,14 +35,14 @@ import '../styles/global.css';
     </form>
 
     <script>
-        document.getElementById("contact").addEventListener("submit", async (e) => {
+        document.getElementById("tipline-form")?.addEventListener("submit", async (e) => {
         e.preventDefault(); // stop page reload
 
-        const form = e.target;
+        const fd = new FormData(e.target as HTMLFormElement);
         const data = {
-            name: form.name.value,
-            email: form.email.value,
-            message: form.message.value
+            name: fd.get("name"),
+            email: fd.get("email"),
+            message: fd.get("message")
         };
         const res = await fetch("/api/tipline", {
             method: "POST",

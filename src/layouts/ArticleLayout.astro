@@ -58,7 +58,7 @@ Astro.response.headers.set(
 
     <script type="text/javascript">
       (function (w, d, s, p) {
-        let f = d.getElementsByTagName(s)[0],
+        const f = d.getElementsByTagName(s)[0],
           j = d.createElement(s);
         j.id = "flytedigital";
         j.async = true;
@@ -92,17 +92,17 @@ Astro.response.headers.set(
     </main>
     <Footer />
 
-    <script client:load>
+    <script is:inline>
       // Initialize Matomo
-      var _paq = (window._paq = window._paq || []);
+      const _paq = (window._paq = window._paq || []);
       _paq.push(["trackPageView"]); // first page load
       _paq.push(["enableLinkTracking"]); // track clicks automatically
 
       (function () {
-        var u = "https://stats.thetriangle.org/"; // your Matomo server
+        const u = "https://stats.thetriangle.org/"; // your Matomo server
         _paq.push(["setTrackerUrl", u + "matomo.php"]);
         _paq.push(["setSiteId", "1"]); // keep same ID as WP or use new Site ID
-        var d = document,
+        const d = document,
           g = d.createElement("script"),
           s = d.getElementsByTagName("script")[0];
         g.async = true;
