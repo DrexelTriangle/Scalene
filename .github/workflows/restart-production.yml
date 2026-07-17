@@ -1,0 +1,50 @@
+name: Restart production
+
+# Manual "restart the website" button. Runs on the self-hosted production
+# runner and invokes the same trusted, root-owned server script the automatic
+# deploy uses. It never checks out or executes repository / pull-request code.
+on:
+  workflow_dispatch:
+
+# Least privilege: the restart job only calls a local server script.
+permissions:
+  contents: read
+
+# Shares the deploy group so a manual restart can never overlap with an
+# in-flight production deployment, and neither cancels the other.
+concurrency:
+  group: triangle-production
+  cancel-in-progress: false
+
+jobs:
+  restart:
+    runs-on:
+      - self-hosted
+      - Linux
+      - X64
+      - production
+
+    environment:
+      name: production
+      url: https://www.thetriangle.org
+
+    timeout-minutes: 15
+
+    # No checkout step: the runner must not fetch or execute repository code.
+    steps:
+      - name: Restart website
+        run: /usr/local/bin/deploy-scalene
+
+      - name: Verify production health
+        run: |
+          curl \
+            --fail \
+            --show-error \
+            --silent \
+            --location \
+            --max-time 10 \
+            --retry 5 \
+            --retry-delay 5 \
+            --retry-all-errors \
+            https://www.thetriangle.org/ >/dev/null
+          echo "Production is healthy."
