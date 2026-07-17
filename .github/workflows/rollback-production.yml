@@ -1,0 +1,176 @@
+name: Rollback production
+run-name: Rollback PR #${{ inputs.pr_number }} — requested by @${{ github.actor }}
+
+# Manual "roll back the website" button. Opens a revert pull request for a
+# merged PR; it does not deploy anything itself.
+#
+# main requires a review and a passing status check, so this workflow never
+# pushes there. Merging the revert PR is an ordinary push to main, which runs
+# CI, which triggers Deploy production. That is what redeploys the site.
+#
+# Consequence worth knowing before you click: rollback is gated on CI plus a
+# reviewer, so this is not an instant outage button.
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "Number of the merged PR to revert (e.g. 60)"
+        required: true
+        type: string
+      reason:
+        description: "Why are you rolling back? (optional, recorded on the PR)"
+        required: false
+        type: string
+
+# One revert branch per PR; a second click supersedes the first.
+concurrency:
+  group: rollback-${{ inputs.pr_number }}
+  cancel-in-progress: false
+
+jobs:
+  revert:
+    name: Open revert PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    permissions:
+      contents: write # push the revert branch (not main)
+      pull-requests: write # open the revert PR
+
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          # Full history: reverting a merge needs both of its parents present.
+          fetch-depth: 0
+
+      - name: Resolve merge commit for PR
+        id: resolve
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+        run: |
+          set -euo pipefail
+
+          state=$(gh pr view "$PR_NUMBER" --json state -q .state)
+          if [ "$state" != "MERGED" ]; then
+            echo "::error::PR #$PR_NUMBER is $state, not MERGED. Nothing to roll back."
+            exit 1
+          fi
+
+          sha=$(gh pr view "$PR_NUMBER" --json mergeCommit -q .mergeCommit.oid)
+          if [ -z "$sha" ] || [ "$sha" = "null" ]; then
+            echo "::error::PR #$PR_NUMBER has no merge commit (squashed or rebased?)."
+            exit 1
+          fi
+
+          if ! git merge-base --is-ancestor "$sha" origin/main; then
+            echo "::error::Merge commit $sha is not on main."
+            exit 1
+          fi
+
+          title=$(gh pr view "$PR_NUMBER" --json title -q .title)
+          {
+            echo "sha=$sha"
+            echo "title=$title"
+          } >>"$GITHUB_OUTPUT"
+          echo "Will revert $sha (PR #$PR_NUMBER: $title)."
+
+      - name: Create revert branch
+        id: revert
+        env:
+          MERGE_SHA: ${{ steps.resolve.outputs.sha }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          branch="revert/pr-${PR_NUMBER}"
+          git checkout -b "$branch"
+
+          # -m 1 keeps the first parent, i.e. main as it stood before the merge.
+          # Fail loudly on conflict rather than opening a half-resolved PR.
+          if ! git revert --mainline 1 --no-edit "$MERGE_SHA"; then
+            git revert --abort || true
+            echo "::error::Reverting $MERGE_SHA conflicts with later commits on main. Roll back by hand."
+            exit 1
+          fi
+
+          # Force-push so re-clicking refreshes the branch against current main.
+          git push --force origin "$branch"
+          echo "branch=$branch" >>"$GITHUB_OUTPUT"
+
+      - name: Open pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+          BRANCH: ${{ steps.revert.outputs.branch }}
+          TITLE: ${{ steps.resolve.outputs.title }}
+          MERGE_SHA: ${{ steps.resolve.outputs.sha }}
+          REASON: ${{ inputs.reason }}
+          ACTOR: ${{ github.actor }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+
+          reason_line="_No reason given._"
+          if [ -n "$REASON" ]; then
+            reason_line="$REASON"
+          fi
+
+          # Reuse the open PR for this branch if there is one; the force-push
+          # above has already updated its contents.
+          url=$(gh pr list --head "$BRANCH" --state open --json url -q '.[0].url')
+
+          if [ -n "$url" ]; then
+            echo "Refreshed existing revert PR: $url"
+          else
+            body=$(cat <<EOF
+          Rolls back **#${PR_NUMBER} — ${TITLE}** by reverting merge commit \`${MERGE_SHA}\`.
+
+          **Reason:** ${reason_line}
+
+          Requested by @${ACTOR} via the Rollback production workflow: ${RUN_URL}
+
+          Merging this PR runs CI and triggers a production deploy, as with any
+          push to main.
+
+          > [!WARNING]
+          > Reverting a merge does not un-merge the branch. Once this lands, merging
+          > \`#${PR_NUMBER}\`'s branch again will restore **nothing** — git already
+          > considers those commits part of main's history. To ship that work later,
+          > revert this revert rather than re-merging the original branch.
+          EOF
+          )
+
+            url=$(gh pr create \
+              --base main \
+              --head "$BRANCH" \
+              --title "Revert #${PR_NUMBER}: ${TITLE}" \
+              --body "$body")
+            echo "Opened revert PR: $url"
+          fi
+
+          # Best effort: an unassigned revert PR is one nobody merges. Not every
+          # actor is assignable (outside collaborators, bots), and that must not
+          # fail a rollback.
+          if ! gh pr edit "$url" --add-assignee "$ACTOR" >/dev/null 2>&1; then
+            echo "::warning::Could not assign @${ACTOR}; assign a reviewer by hand."
+          fi
+
+          {
+            echo "### Revert PR ready"
+            echo ""
+            echo "**[$url]($url)**"
+            echo ""
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Rolls back | #${PR_NUMBER} — ${TITLE} |"
+            echo "| Merge commit | \`${MERGE_SHA}\` |"
+            echo "| Reason | ${reason_line} |"
+            echo ""
+            echo "Merge it to deploy the rollback. Nothing has changed in production yet."
+          } >>"$GITHUB_STEP_SUMMARY"
