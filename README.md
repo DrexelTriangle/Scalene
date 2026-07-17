@@ -1,12 +1,5 @@
 # Scalene
-The Triangle Website, but like, React!
-
-
-
-# Project Setup
-- installed astro
-- added tailwind to project
-- added react-router-dom
+The Triangle Website, but like, Astro!
 
 # Operations
 Production is https://www.thetriangle.org. Merging to `main` needs CI green and a review, and the deploy then waits for an approval on the `production` environment before it touches the server. Once both clear, **Deploy production** runs the server's deploy script. There's no unattended path to production, by design.
