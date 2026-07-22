@@ -11,6 +11,13 @@ if (!post) {
   return Astro.rewrite('/404');
 }
 
-return Astro.rewrite("/article/" + post.slug);
+const response = await Astro.rewrite("/article/" + post.slug);
+
+response.headers.set(
+  "Cache-Control",
+  "no-store, no-cache, must-revalidate"
+);
+
+return response;
 
 ---
