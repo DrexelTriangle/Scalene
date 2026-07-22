@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 import Footer from "../components/Footer.astro";
 import Splash from "../components/Splash.astro";
 import Matomo from "../components/Matomo.astro";
@@ -104,7 +104,7 @@ const websiteJSON = {
     <script type="application/ld+json" set:html={JSON.stringify(websiteJSON)} />
     <!-- Extra head content from child layouts (e.g. article JSON-LD) -->
     <slot name="head" />
-    <ViewTransitions />
+    <ClientRouter />
   </head>
   <body class="w-100 min-h-screen flex flex-col">
     <main class="flex-1">
