@@ -21,7 +21,7 @@ export const GET: APIRoute = async ({ params }) => {
   let newFeed = feed.trim();
 
   newFeed = newFeed.replace(
-  /(<link>)(https?:\/\/[^\/]+)\/(?:[^\/]+\/)*([^\/\s<"'?]+)\/?(<\/link>)/g,
+  /(<link>)(https?:\/\/[^/]+)\/(?:[^/]+\/)*([^/\s<"'?]+)\/?(<\/link>)/g,
   (match, open, base, slug, close) =>
     `${open}${base}/article/${slug}${close}`
 );

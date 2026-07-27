@@ -2,30 +2,25 @@
 export const prerender = false;
 
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Section from "../components/Sections/Section.astro";
 import Header from "../components/Header.astro";
-import Column from "../components/Columns.astro";
-import Social from "../components/Social.astro";
-import Poll from "../components/Polls.astro";
 import { getClassifieds } from "../utils/db.js"
 import Classified from "../components/Classified.astro";
 import "../styles/global.css";
+
+interface ClassifiedPost {
+    title: string;
+    content: string;
+    meta: { email: string; label: string };
+}
 
 const date = new Date();
 const date2 = new Date();
 
 date2.setDate(date.getDate() + 30);
 
-function formatDate(d) {
-    let month = d.getMonth() + 1;
-    if (month < 10) {
-        month = "0" + month;
-    }
-
-    let day = date.getDate();
-    if (day < 10) {
-        day = "0" + day;
-    }
+function formatDate(d: Date) {
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
     return d.getFullYear() + "-" + month + "-" + day;
 }
 
@@ -52,7 +47,7 @@ const classifieds = await getClassifieds();
         class="grid grid-cols-[1fr] sm:grid-cols-[8fr_4fr] mt-2 xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] mb-[8px] divide-x divide-triangleBlue pt-[5px]"
     >
         <div id="main-left" class="main-side">
-            {classifieds.map(classified => (
+            {classifieds.map((classified: ClassifiedPost) => (
             <Classified contact={classified.title} email={classified.meta.email} label={classified.meta.label} message={classified.content}/>
         ))}
         </div>
@@ -62,7 +57,7 @@ const classifieds = await getClassifieds();
         >
         <h1 class="font-roboto-slab uppercase font-extrabold"> Submit your own </h1>
             <form
-                id="contact"
+                id="classifieds-form"
                 class="flex flex-wrap xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] gap-[16px] text-[14px]"
             >
                 <label class="font-libre w-[100%]">
@@ -141,7 +136,7 @@ const classifieds = await getClassifieds();
     <div class="block md:hidden">
         <h1 class="font-roboto-slab uppercase font-extrabold xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto]"> Submit your own </h1>
             <form
-                id="contact-mobile"
+                id="classifieds-mobile-form"
                 class="flex flex-wrap xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] gap-[16px] text-[14px]"
             >
                 <label class="font-libre w-[100%]">
@@ -192,7 +187,7 @@ const classifieds = await getClassifieds();
                     >
                     <input
                         name="end"
-                        type="datemobile"
+                        type="date"
                         min={minDate}
                         max={maxDate}
                         required
@@ -218,17 +213,17 @@ const classifieds = await getClassifieds();
     </div>
     <script>
         document
-            .getElementById("contact")
-            .addEventListener("submit", async (e) => {
+            .getElementById("classifieds-form")
+            ?.addEventListener("submit", async (e) => {
                 e.preventDefault(); // stop page reload
 
-                const form = e.target;
+                const fd = new FormData(e.target as HTMLFormElement);
                 const data = {
-                    name: form.name.value,
-                    email: form.email.value,
-                    message: form.message.value,
-                    category: form.type.value,
-                    end: form.end.value,
+                    name: fd.get("name"),
+                    email: fd.get("email"),
+                    message: fd.get("message"),
+                    category: fd.get("type"),
+                    end: fd.get("end"),
                 };
                 const res = await fetch("/api/classifieds", {
                     method: "POST",
@@ -244,17 +239,17 @@ const classifieds = await getClassifieds();
             });
 
          document
-            .getElementById("contact-mobile")
-            .addEventListener("submit", async (e) => {
+            .getElementById("classifieds-mobile-form")
+            ?.addEventListener("submit", async (e) => {
                 e.preventDefault(); // stop page reload
 
-                const form = e.target;
+                const fd = new FormData(e.target as HTMLFormElement);
                 const data = {
-                    name: form.namemobile.value,
-                    email: form.emailmobile.value,
-                    message: form.messagemobile.value,
-                    category: form.typemobile.value,
-                    end: form.endmobile.value,
+                    name: fd.get("namemobile"),
+                    email: fd.get("emailmobile"),
+                    message: fd.get("messagemobile"),
+                    category: fd.get("typemobile"),
+                    end: fd.get("end"),
                 };
                 const res = await fetch("/api/classifieds", {
                     method: "POST",

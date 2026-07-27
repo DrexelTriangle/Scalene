@@ -7,9 +7,8 @@ import Section from '../components/Sections/Section.astro';
 import '../styles/global.css';
 
 import { gallery } from '../utils/db';
-import { normalizeText } from "../utils/data";
 
-const images = await gallery();
+const images = (await gallery()) ?? [];
 ---
 <BaseLayout title="Photo Gallery - The Triangle">
   <Header />

@@ -4,15 +4,20 @@
 ---
 
 <script is:inline>
+  // `var` is required, not a style slip: matomo.js reassigns the global _paq
+  // once it loads. `var` puts _paq on `window`, which that assignment updates.
+  // A const/let binding here would shadow the window property and make
+  // matomo.js throw "Assignment to constant variable", killing analytics.
+  // eslint-disable-next-line no-var
   var _paq = window._paq = window._paq || [];
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);
 
   (function() {
-    var u = "https://stats.thetriangle.org/";
+    const u = "https://stats.thetriangle.org/";
     _paq.push(['setTrackerUrl', u + 'matomo.php']);
     _paq.push(['setSiteId', '1']);
-    var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+    const d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
     g.async = true; g.src = u + 'matomo.js';
     s.parentNode.insertBefore(g, s);
   })();

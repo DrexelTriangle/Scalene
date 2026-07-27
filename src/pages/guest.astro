@@ -2,11 +2,7 @@
 export const prerender = true;
 
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Section from '../components/Sections/Section.astro';
 import Header from '../components/Header.astro';
-import Column from '../components/Columns.astro';
-import Social from '../components/Social.astro';
-import Poll from '../components/Polls.astro';
 import '../styles/global.css';
 ---
 
@@ -42,7 +38,7 @@ import '../styles/global.css';
         <b>Articles previously published in any other publication, blog, or written for a class may not be published in The Triangle.</b>
     </div>
 
-    <h2 class="font-playfair text-[28px] mb-[16px] mt-[16px] xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto]"> Authorship Eligability </h2>
+    <h2 class="font-playfair text-[28px] mb-[16px] mt-[16px] xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto]"> Authorship Eligibility</h2>
     <div class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto]">
         The Triangle shall only publish articles written by members of the organization, with exceptions made only for persons related to the 
         organization or Drexel University, such as alumni, student organizations, or faculty members, at the discretion of the Editorial Board. 
@@ -63,7 +59,7 @@ import '../styles/global.css';
             <li>The article presents a clear and present danger to the safety of any individual named in the article</li>
         </ul>
     </div>
-    <form enctype="multipart/form-data" id="contact" class="flex flex-wrap xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] gap-[16px] text-[14px] mt-[32px]">
+    <form method="POST" action="/api/guest" enctype="multipart/form-data" data-astro-reload id="guest-form" class="flex flex-wrap xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] gap-[16px] text-[14px] mt-[32px]">
     <label class="font-libre w-[calc(50%-8px)]">
         <span class="block w-[100%]">Article Title<b class="text-red-500">*</b></span>
         <input name="title" required class="border-[1px] border-solid border-triangleBlue w-[100%] p-2 rounded-[10px]"/>
@@ -86,24 +82,4 @@ import '../styles/global.css';
     </label>
     <button type="submit" class="flex font-roboto-slab self-end bg-triangleBlue text-white p-3 w-[160px] justify-center rounded-[10px] hover:border-[1px] hover:border-solid hover:border-triangleBlue hover:bg-white hover:text-triangleBlue">Submit</button>
     </form>
-
-    <script>
-        document.getElementById("contact").addEventListener("submit", async (e) => {
-        e.preventDefault(); // stop page reload
-
-        const form = e.target;
-        const formData = new FormData(form);
-
-        const res = await fetch("/api/guest", {
-            method: "POST",
-            body: formData,
-        });
-
-        if (res.ok) {
-            window.location.replace("/submitted");
-        } else {
-            window.location.replace("/error");
-        }
-        });
-    </script>
 </BaseLayout>

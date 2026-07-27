@@ -11,15 +11,15 @@ import Poll from "../components/Polls.astro";
 import "../styles/global.css";
 import { getSectionArticles, getSubsectionArticles } from "../utils/db";
 import { normalizeText } from "../utils/data";
-import Archive from "../components/Sections/Archive.astro";
+import Scroll from "../components/Sections/Scroll.astro";
 import MostRead from "../components/MostRead.astro";
 import SubscribeLink from "../components/SubscribeLink.astro";
 
-let pageNum = 1;
-let posts = await getSectionArticles(sectionSlug, pageNum);
+const pageNum = 1;
+let posts = sectionSlug ? await getSectionArticles(sectionSlug, pageNum) : undefined;
 let isSubsectionPage = false;
 
-if (!posts) {
+if (!posts && sectionSlug) {
     posts = await getSubsectionArticles(sectionSlug, pageNum);
     isSubsectionPage = Boolean(posts);
 }
@@ -70,7 +70,7 @@ let hasMore = posts.pagination.hasMore;
                         articles={posts.articles?.slice(13)}
                         style="list"
                     />
-                    <Archive pageNum={pageNum} hasMore={hasMore} sectionSlug={sectionSlug} apiPath={isSubsectionPage ? "https://localhost:8080/v1/subsections/" : "https://localhost:8080/v1/sections/"} />
+                    <Scroll pageNum={pageNum} hasMore={hasMore} sectionSlug={sectionSlug} apiPath={isSubsectionPage ? "https://localhost:8080/v1/subsections/" : "https://localhost:8080/v1/sections/"} />
                 </div>
                 <div
                     id="main-right"

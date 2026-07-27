@@ -50,6 +50,10 @@ Astro.response.headers.set(
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <script
       async
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3937492883909624"
@@ -57,7 +61,7 @@ Astro.response.headers.set(
 
     <script type="text/javascript">
       (function (w, d, s, p) {
-        let f = d.getElementsByTagName(s)[0],
+        const f = d.getElementsByTagName(s)[0],
           j = d.createElement(s);
         j.id = "flytedigital";
         j.async = true;
@@ -91,17 +95,22 @@ Astro.response.headers.set(
     </main>
     <Footer />
 
-    <script client:load>
-      // Initialize Matomo
+    <script is:inline>
+      // Initialize Matomo.
+      // `var` is required, not a style slip: matomo.js reassigns the global
+      // _paq once it loads. `var` puts _paq on `window`, which that assignment
+      // updates. A const/let binding here would shadow the window property and
+      // make matomo.js throw "Assignment to constant variable".
+      // eslint-disable-next-line no-var
       var _paq = (window._paq = window._paq || []);
       _paq.push(["trackPageView"]); // first page load
       _paq.push(["enableLinkTracking"]); // track clicks automatically
 
       (function () {
-        var u = "https://stats.thetriangle.org/"; // your Matomo server
+        const u = "https://stats.thetriangle.org/"; // your Matomo server
         _paq.push(["setTrackerUrl", u + "matomo.php"]);
         _paq.push(["setSiteId", "1"]); // keep same ID as WP or use new Site ID
-        var d = document,
+        const d = document,
           g = d.createElement("script"),
           s = d.getElementsByTagName("script")[0];
         g.async = true;

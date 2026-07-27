@@ -17,23 +17,23 @@ import Section from "../../components/Sections/Section.astro";
 import SubscribeLink from "../../components/SubscribeLink.astro";
 
 const host = request.headers.get('host');
-const isWww = host.startsWith('www.');
+const isWww = host?.startsWith('www.') ?? false;
 
-if (!isWww && !host?.includes("localhost")) {
+if (host && !isWww && !host.includes("localhost")) {
   return Astro.redirect(`https://www.${host}${request.url}`, 301);
 }
 if(sections !== "article"){
-return Astro.redirect('/article/'+article, 301); 
+return Astro.redirect('/article/'+article, 301);
 }
 
-const post = await getArticle(article);
+const post = article ? await getArticle(article) : undefined;
 
 if (!post) {
   return Astro.rewrite('/404');
 }
 
-let authorListLinks = [];
-let authorList = post.authors.forEach((author)=>{authorListLinks.push(`<a class='hover:underline' href='/author/${author.slug}'>${author.name}</a>`);})
+const authorListLinks: string[] = [];
+post.authors.forEach((author)=>{authorListLinks.push(`<a class='hover:underline' href='/author/${author.slug}'>${author.name}</a>`);})
 
 let authorPrint = "<p class='print-authors font-bold hidden print:block'>" + authorListLinks.join("<br/>") + "</p>"
 
@@ -45,9 +45,9 @@ let d = new Date(post.published_date || post.date)
 const months = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
 const date_string = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
 
-authorList = "By " + (authorListLinks.length > 2 ? authorListLinks.join(", ") : authorListLinks.join(""))
+const authorList = "By " + (authorListLinks.length > 2 ? authorListLinks.join(", ") : authorListLinks.join(""))
 
-let actualArticle = post.content.match("<p[^>]*>(.+?)<\/p>")
+const actualArticle = post.content.match("<p[^>]*>(.+?)</p>")
 
 ---
 <ArticleLayout title={normalizeText(post.title) + " - The Triangle"} article={post}>

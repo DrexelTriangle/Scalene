@@ -2,37 +2,8 @@
 export const prerender = false;
 
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Section from "../components/Sections/Section.astro";
 import Header from "../components/Header.astro";
-import Column from "../components/Columns.astro";
-import Social from "../components/Social.astro";
-import Poll from "../components/Polls.astro";
-import { getClassifieds } from "../utils/db.js";
-import Classified from "../components/Classified.astro";
 import "../styles/global.css";
-
-const date = new Date();
-const date2 = new Date();
-
-date2.setDate(date.getDate() + 30);
-
-function formatDate(d) {
-  let month = d.getMonth() + 1;
-  if (month < 10) {
-    month = "0" + month;
-  }
-
-  let day = date.getDate();
-  if (day < 10) {
-    day = "0" + day;
-  }
-  return d.getFullYear() + "-" + month + "-" + day;
-}
-
-const minDate = formatDate(date);
-const maxDate = formatDate(date2);
-
-const classifieds = await getClassifieds();
 ---
 
 <BaseLayout title="Subscribe - The Triangle">
@@ -184,15 +155,26 @@ const classifieds = await getClassifieds();
   </div>
   </div>
   <script>
-    document
-      .getElementById("newsletter-form")
-      .addEventListener("submit", async (e) => {
+    const SUCCESS_HTML =
+      '<h1 class="text-[36px] font-bold font-roboto-slab mb-2 mt-[48px]"> Thank you for subscribing! </h1><a href="/" class="text-[16px] mt-4 underline font-roboto-slab hover:text-triangleBlue block"> Return to homepage. </a>';
+    const FAILURE_HTML =
+      '<h1 class="text-[36px] font-bold font-roboto-slab mb-2 mt-[48px]"> Oh no! Something went wrong. </h1><a href="/" class="text-[16px] mt-4 underline font-roboto-slab hover:text-triangleBlue block"> Return to homepage. </a>';
+
+    function bindNewsletterForm(formId: string, listsName: string) {
+      const form = document.getElementById(formId);
+      if (!(form instanceof HTMLFormElement)) return;
+
+      form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const email = e.target.email.value;
+        const emailField = form.elements.namedItem("email");
+        if (!(emailField instanceof HTMLInputElement)) return;
+        const email = emailField.value;
 
         const lists = Array.from(
-          document.querySelectorAll('input[name="lists"]:checked'),
+          document.querySelectorAll<HTMLInputElement>(
+            `input[name="${listsName}"]:checked`,
+          ),
         ).map((el) => Number(el.value));
 
         const res = await fetch(
@@ -210,48 +192,18 @@ const classifieds = await getClassifieds();
         );
 
         const data = await res.json();
-        if (data.success) {
-          document.getElementById("subscribe").innerHTML =
-            '<h1 class="text-[36px] font-bold font-roboto-slab mb-2 mt-[48px]"> Thank you for subscribing! </h1><a href="/" class="text-[16px] mt-4 underline font-roboto-slab hover:text-triangleBlue block"> Return to homepage. </a>';
-        } else {
-          document.getElementById("subscribe").innerHTML =
-            '<h1 class="text-[36px] font-bold font-roboto-slab mb-2 mt-[48px]"> Oh no! Something went wrong. </h1><a href="/" class="text-[16px] mt-4 underline font-roboto-slab hover:text-triangleBlue block"> Return to homepage. </a>';
+        const result = document.getElementById("subscribe");
+        if (result) {
+          result.innerHTML = data.success ? SUCCESS_HTML : FAILURE_HTML;
         }
       });
+    }
 
-    document
-      .getElementById("newsletter-form-mobile")
-      .addEventListener("submit", async (e) => {
-        e.preventDefault();
+    function setupNewsletter() {
+      bindNewsletterForm("newsletter-form", "lists");
+      bindNewsletterForm("newsletter-form-mobile", "lists-mobile");
+    }
 
-        const email = e.target.email.value;
-
-        const lists = Array.from(
-          document.querySelectorAll('input[name="lists-mobile"]:checked'),
-        ).map((el) => Number(el.value));
-
-        const res = await fetch(
-          "https://cms.thetriangle.org/wp-json/newsletter/v1/subscribe",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email,
-              lists,
-            }),
-          },
-        );
-
-        const data = await res.json();
-        if (data.success) {
-          document.getElementById("subscribe").innerHTML =
-            '<h1 class="text-[36px] font-bold font-roboto-slab mb-2 mt-[48px]"> Thank you for subscribing! </h1><a href="/" class="text-[16px] mt-4 underline font-roboto-slab hover:text-triangleBlue block"> Return to homepage. </a>';
-        } else {
-          document.getElementById("subscribe").innerHTML =
-            '<h1 class="text-[36px] font-bold font-roboto-slab mb-2 mt-[48px]"> Oh no! Something went wrong. </h1><a href="/" class="text-[16px] mt-4 underline font-roboto-slab hover:text-triangleBlue block"> Return to homepage. </a>';
-        }
-      });
+    document.addEventListener("astro:page-load", setupNewsletter);
   </script>
 </BaseLayout>

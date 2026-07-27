@@ -1,7 +1,7 @@
 ---
 export const prerender = false;
-import { normalizeText } from "../utils/data"
 import PhotoArticle from "./PhotoArticle.astro"
+import type { Article } from "../utils/types"
 
 const baseUrl = import.meta.env.SITE_ORIGIN || "http://localhost:4321";
 
@@ -9,7 +9,7 @@ const res = await fetch(`${baseUrl}/api/stats`, {
             method: "GET",
             headers: { "Content-Type": "application/json" }
         });
-const articles = await res.json()
+const articles: Article[] = res.ok ? await res.json() : []
 
 ---
 {res.ok && <div class="font-playfair mb-[24px]">
