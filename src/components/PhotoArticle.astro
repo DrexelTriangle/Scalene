@@ -1,5 +1,5 @@
 ---
-import { normalizeText, buildByline } from '../utils/data';
+import { normalizeText, buildByline, proxyMediaUrl } from '../utils/data';
 
 const { title, excerpt, image, author, published_date, date, category, row, slug, breaking } = Astro.props;
 
@@ -11,9 +11,7 @@ const DEFAULT_IMGS = [
 
 let imgSrc = image || DEFAULT_IMGS[Math.floor(Math.random() * DEFAULT_IMGS.length)];
 if (image !== undefined) {
-  imgSrc = imgSrc
-    .replace('https://www.thetriangle.org', '/proxy')
-    .replace('https://cms.thetriangle.org', '/proxy');
+  imgSrc = proxyMediaUrl(imgSrc);
 }
 
 const byline = buildByline(author, published_date || date);

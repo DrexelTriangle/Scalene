@@ -188,6 +188,28 @@ export interface SitemapSlug {
   lastmod: string;
 }
 
+/** triangle-cms: a comment from /v1/articles/<slug>/comments. */
+export interface Comment {
+  id: number;
+  article_id: number;
+  /** 0 for a top-level comment, otherwise the id of the comment replied to. */
+  parent_id: number;
+  author_name: string;
+  author_url?: string;
+  content: string;
+  created_at?: string;
+  created_at_gmt?: string;
+  status: string;
+  type: string;
+}
+
+/** triangle-cms: /v1/articles/<slug>/comments. */
+export interface ArticleComments {
+  article_slug: string;
+  comments: Comment[];
+  total_count: number;
+}
+
 export interface ClassifiedPost {
   title: string;
   content: string;

@@ -10,11 +10,12 @@ import '../../styles/global.css';
 import Social from '../../components/Social.astro';
 import Poll from '../../components/Polls.astro';
 import MostRead from '../../components/MostRead.astro';
-import { getArticle } from '../../utils/db';
+import { getArticle, getArticleComments } from '../../utils/db';
 import { normalizeText } from "../../utils/data";
 import DonateBlurb from "../../components/DonateBlurb.astro";
 import Section from "../../components/Sections/Section.astro";
 import SubscribeLink from "../../components/SubscribeLink.astro";
+import Comments from "../../components/Comments.astro";
 
 const host = request.headers.get('host');
 const isWww = host?.startsWith('www.') ?? false;
@@ -32,6 +33,9 @@ if (!post) {
   return Astro.rewrite('/404');
 }
 
+const commentsResponse = article ? await getArticleComments(article) : undefined;
+const comments = Array.isArray(commentsResponse?.comments) ? commentsResponse.comments : [];
+
 const authorListLinks: string[] = [];
 post.authors.forEach((author)=>{authorListLinks.push(`<a class='hover:underline' href='/author/${author.slug}'>${author.name}</a>`);})
 
@@ -48,13 +52,14 @@ const date_string = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullY
 const authorList = "By " + (authorListLinks.length > 2 ? authorListLinks.join(", ") : authorListLinks.join(""))
 
 const actualArticle = post.content.match("<p[^>]*>(.+?)</p>")
+const primaryCategory = post.categories?.[0] ?? post.categories_list?.[0];
 
 ---
 <ArticleLayout title={normalizeText(post.title) + " - The Triangle"} article={post}>
     <Header/>
-    <span class="hidden print:block text-center uppercase text-[14px] mb-[12px]"> THE TRIANGLE &nbsp; <b>{normalizeText(post.categories_list[0].name)}</b> &nbsp; {date_string} </span>
+    <span class="hidden print:block text-center uppercase text-[14px] mb-[12px]"> THE TRIANGLE &nbsp; <b>{normalizeText(primaryCategory?.name ?? "")}</b> &nbsp; {date_string} </span>
     <article class="xl:max-w-[1200px] lg:max-w-[1000px] max-w-[90%] mx-[auto]">
-        {post.categories && <a href={"../"+post.categories[0].slug}><span class="block font-roboto-slab uppercase font-extrabold text-triangleBlue text-[12px] md:text-[14px] italic font-700"> {normalizeText(post.categories[0].name)} </span></a>}
+        {primaryCategory && <a href={"../"+primaryCategory.slug}><span class="block font-roboto-slab uppercase font-extrabold text-triangleBlue text-[12px] md:text-[14px] italic font-700"> {normalizeText(primaryCategory.name)} </span></a>}
         <h1 class="font-playfair text-[28px] sm:text-[36px] md:text-[42px] font-bold md:mt-[-12px] leading-[normal]">{normalizeText(post.title)}</h1>
         <div set:html={authorList} class="text-[14px] md:text-[16px] font-roboto-slab font-light print:hidden"></div>
         <span class="font-light font-roboto-slab text-[12px] mb-[16px] print:hidden">{date_string}</span>
@@ -81,6 +86,7 @@ const actualArticle = post.content.match("<p[^>]*>(.+?)</p>")
                 {/* <div class="print-featured-photo"><img src={post.featured_image.replaceAll("https://cms.thetriangle.org/wp-content", "/proxy/wp-content")
                     .replaceAll("https://www.thetriangle.org/wp-content", "/proxy/wp-content")}/></div> */}
                 </div>
+                <Comments comments={comments} slug={post.slug ?? article} />
                 <DonateBlurb/>
                 <Section articles={post.related} style="related-row"/>
             </div>
@@ -109,6 +115,7 @@ const actualArticle = post.content.match("<p[^>]*>(.+?)</p>")
 })
                 }>
                 </section>}
+        {!actualArticle && <Comments comments={comments} slug={post.slug ?? article} />}
         {post.content.includes('pm-embed-div') && (
         <script 
             is:inline 

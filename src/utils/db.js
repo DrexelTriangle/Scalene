@@ -6,12 +6,37 @@
  * @typedef {import('./types').AuthorArticles} AuthorArticles
  * @typedef {import('./types').GalleryImage} GalleryImage
  * @typedef {import('./types').ClassifiedPost} ClassifiedPost
+ * @typedef {import('./types').ArticleComments} ArticleComments
  */
+
+const cmsBaseUrl = import.meta.env.CMS_API_BASE_URL ?? "https://localhost:8080/v1";
+const normalizedCmsBaseUrl = String(cmsBaseUrl).replace(/\/$/, "");
+
+async function getOptionalJson(url, fallback = undefined) {
+  try {
+    const res = await fetch(url, {
+      headers: { Accept: 'application/json' },
+      cache: 'force-cache',
+    });
+
+    if (!res.ok) return fallback;
+    return res.json();
+  } catch {
+    return fallback;
+  }
+}
+
+function normalizeArticle(post) {
+  if (post && !post.categories_list && Array.isArray(post.categories)) {
+    post.categories_list = post.categories;
+  }
+  return post;
+}
 
 /** @returns {Promise<Homepage>} */
 export async function getHomepageArticles() {
   //const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/homepage';
-  const url = 'https://localhost:8080/v1/homepage';
+  const url = normalizedCmsBaseUrl + '/homepage';
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
@@ -44,7 +69,7 @@ export async function getSectionArticles(section, page) {
   // const url = 'https://cms.thetriangle.org/wp-json/triangle/v2/section/'+section+'?page='+page;
   const limit = 20;
   const offset = (Math.max(Number(page) || 1, 1) - 1) * limit;
-  const url = 'https://localhost:8080/v1/sections/'+section+'/articles?limit='+limit+'&offset='+offset;
+  const url = normalizedCmsBaseUrl + '/sections/'+section+'/articles?limit='+limit+'&offset='+offset;
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
@@ -58,7 +83,7 @@ export async function getSectionArticles(section, page) {
 export async function getSubsectionArticles(subsection, page) {
   const limit = 20;
   const offset = (Math.max(Number(page) || 1, 1) - 1) * limit;
-  const url = 'https://localhost:8080/v1/subsections/' + subsection + '/articles?limit=' + limit + '&offset=' + offset;
+  const url = normalizedCmsBaseUrl + '/subsections/' + subsection + '/articles?limit=' + limit + '&offset=' + offset;
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
@@ -78,7 +103,7 @@ export async function getAuthorArticles(author, page) {
   // const url = 'https://cms.thetriangle.org/wp-json/triangle/v2/author/'+author+'?page='+page;
   const limit = 20;
   const offset = (Math.max(Number(page) || 1, 1) - 1) * limit;
-  const url = 'https://localhost:8080/v1/authors/'+author+'/articles?limit='+limit+'&offset='+offset;
+  const url = normalizedCmsBaseUrl + '/authors/'+author+'/articles?limit='+limit+'&offset='+offset;
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
@@ -95,15 +120,25 @@ export async function getAuthorArticles(author, page) {
  */
 export async function getArticle(article) {
   //const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/post/' + article;
-  const url = 'https://localhost:8080/v1/articles/' + article;
+  const url = normalizedCmsBaseUrl + '/articles/' + article;
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
     cache: 'force-cache',
   });
 
-   if (!res.ok) return;
-   return res.json();
+  if (!res.ok) return;
+  return normalizeArticle(await res.json());
+}
+
+/**
+ * @param {string} article
+ * @returns {Promise<ArticleComments>}
+ */
+export async function getArticleComments(article) {
+  const url = normalizedCmsBaseUrl + '/articles/' + article + '/comments';
+
+  return getOptionalJson(url, { comments: [], total_count: 0 });
 }
 
 /** @returns {Promise<Article|undefined>} */
@@ -125,7 +160,7 @@ export async function getRandomArticle() {
  */
 export async function search(search) {
   // const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/search?q=' + search;
-  const url = 'https://localhost:8080/v1/search?q=' + search;
+  const url = normalizedCmsBaseUrl + '/search?q=' + search;
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
