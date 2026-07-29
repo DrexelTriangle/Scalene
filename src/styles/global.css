@@ -423,12 +423,23 @@ body {
 }
 #bn {
 	white-space: nowrap;
+	/* h1 carries a ~1em default margin, which pushed the text below the 48px
+	   banner box and got it clipped. line-height 1 keeps the single line tight. */
+	margin: 0;
+	line-height: 1;
 }
-#bn-grandparent, #bn-grandparent * {
+/* Only the outer banner clips. This previously also matched every descendant
+   (`#bn-grandparent *`), so the scrolling text clipped against its own box
+   instead of against the banner viewport. */
+#bn-grandparent {
 	overflow: hidden;
 }
 #bn-parent{
 	animation: move-left-to-right linear 25s infinite;
+	/* Must stay in flow: the banner centres it with flex `items-center`, which an
+	   absolutely positioned child ignores. Don't add translateY to centre it
+	   either -- the marquee animation owns `transform`. */
+	position: relative;
 }
 
 #article::file-selector-button {

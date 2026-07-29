@@ -1,8 +1,14 @@
 ---
 import "@splidejs/splide/dist/css/splide.min.css";
+
+// The nav (#scrollnav) carries mb-[24px], and whichever block comes first after
+// it pulls itself up by 24px to sit flush. That is normally this hero -- but when
+// the breaking-news banner renders, IT is first and does the pulling, so this
+// must not pull up too or it overlaps the banner and hides its lower half.
+const { pullUp = true } = Astro.props;
 ---
 
-<section class="home-hero-wrap mt-[-24px] relative mb-[16px] md:mb-[0px]">
+<section class:list={["home-hero-wrap relative mb-[16px] md:mb-[0px]", pullUp && "mt-[-24px]"]}>
   <div class="one-hundred-bg hidden md:block" aria-hidden="true"></div>
 
   <div class="splide relative z-[2]" aria-label="My Splide" data-home-splide>
