@@ -17,11 +17,23 @@ import Section from "../../components/Sections/Section.astro";
 import SubscribeLink from "../../components/SubscribeLink.astro";
 import Comments from "../../components/Comments.astro";
 
+// Canonicalise the bare production domain to www. Deliberately scoped to that
+// one host: this previously fired for ANY non-www, non-localhost host, so IP
+// deployments and dev hostnames 301'd to a https://www.<that host> which does
+// not exist.
+//
+// Only the PATH may be appended. request.url is the full URL, so using it here
+// produced Location: https://www.<host>http://localhost/article/... -- and the
+// embedded "localhost" is Astro falling back when the incoming host is absent
+// from `security.allowedDomains` in astro.config.mjs.
 const host = request.headers.get('host');
-const isWww = host?.startsWith('www.') ?? false;
+const requestUrl = new URL(request.url);
 
-if (host && !isWww && !host.includes("localhost")) {
-  return Astro.redirect(`https://www.${host}${request.url}`, 301);
+if (host === 'thetriangle.org') {
+  return Astro.redirect(
+    `https://www.thetriangle.org${requestUrl.pathname}${requestUrl.search}`,
+    301,
+  );
 }
 if(sections !== "article"){
 return Astro.redirect('/article/'+article, 301);
