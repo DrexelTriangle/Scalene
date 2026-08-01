@@ -14,20 +14,6 @@
 const cmsBaseUrl = import.meta.env.CMS_API_BASE_URL ?? "https://localhost:8080/v1";
 const normalizedCmsBaseUrl = String(cmsBaseUrl).replace(/\/$/, "");
 
-async function getOptionalJson(url, fallback = undefined) {
-  try {
-    const res = await fetch(url, {
-      headers: { Accept: 'application/json' },
-      cache: 'force-cache',
-    });
-
-    if (!res.ok) return fallback;
-    return res.json();
-  } catch {
-    return fallback;
-  }
-}
-
 function normalizeArticle(post) {
   if (post && !post.categories_list && Array.isArray(post.categories)) {
     post.categories_list = post.categories;
@@ -145,7 +131,17 @@ export async function getArticle(article) {
 export async function getArticleComments(article) {
   const url = normalizedCmsBaseUrl + '/articles/' + article + '/comments';
 
-  return getOptionalJson(url, { comments: [], total_count: 0 });
+  try {
+    const res = await fetch(url, {
+      headers: { Accept: 'application/json' },
+      cache: 'no-store',
+    });
+
+    if (!res.ok) return { comments: [], total_count: 0 };
+    return res.json();
+  } catch {
+    return { comments: [], total_count: 0 };
+  }
 }
 
 /** @returns {Promise<RandomArticle|undefined>} */

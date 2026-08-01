@@ -47,6 +47,7 @@ if (!post) {
 
 const commentsResponse = article ? await getArticleComments(article) : undefined;
 const comments = Array.isArray(commentsResponse?.comments) ? commentsResponse.comments : [];
+const commentsClosed = String(post.comment_status ?? "").trim().toLowerCase() === "closed";
 
 const authorListLinks: string[] = [];
 post.authors.forEach((author)=>{authorListLinks.push(`<a class='hover:underline' href='/author/${author.slug}'>${author.name}</a>`);})
@@ -98,7 +99,7 @@ const primaryCategory = post.categories?.[0] ?? post.categories_list?.[0];
                 {/* <div class="print-featured-photo"><img src={post.featured_image.replaceAll("https://cms.thetriangle.org/wp-content", "/proxy/wp-content")
                     .replaceAll("https://www.thetriangle.org/wp-content", "/proxy/wp-content")}/></div> */}
                 </div>
-                <Comments comments={comments} slug={post.slug ?? article} />
+                <Comments comments={comments} slug={post.slug ?? article} commentsClosed={commentsClosed} />
                 <DonateBlurb/>
                 <Section articles={post.related} style="related-row"/>
             </div>
@@ -127,7 +128,7 @@ const primaryCategory = post.categories?.[0] ?? post.categories_list?.[0];
 })
                 }>
                 </section>}
-        {!actualArticle && <Comments comments={comments} slug={post.slug ?? article} />}
+        {!actualArticle && <Comments comments={comments} slug={post.slug ?? article} commentsClosed={commentsClosed} />}
         {post.content.includes('pm-embed-div') && (
         <script 
             is:inline 

@@ -48,6 +48,8 @@ export interface ArticleSummary {
   published_date?: string;
   /** triangle-cms: replaces `categories_list`. */
   categories?: Category[];
+  /** triangle-cms: controls whether public comment submission is open. */
+  comment_status?: string;
 }
 
 /** Sidebar "related" entries carried on a full article. */
@@ -77,6 +79,8 @@ export interface Article {
   published_date?: string;
   /** triangle-cms: replaces `categories_list`. */
   categories?: Category[];
+  /** triangle-cms: controls whether public comment submission is open. */
+  comment_status?: string;
 }
 
 /**
