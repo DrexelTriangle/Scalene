@@ -125,11 +125,11 @@ function avatarTone(name: string) {
     <div class="grid gap-3 sm:grid-cols-2">
       <label class="block">
         <span class="mb-1 block text-[12px] font-extrabold uppercase tracking-[0.06em] text-neutral-500">Name</span>
-        <input name="author_name" required maxlength="80" class="w-full border border-triangleGray-400 px-3 py-2 text-[15px] outline-none focus:border-triangleBlue" />
+        <input data-comment-author-name name="author_name" required maxlength="80" class="w-full border border-triangleGray-400 px-3 py-2 text-[15px] outline-none focus:border-triangleBlue" />
       </label>
       <label class="block">
         <span class="mb-1 block text-[12px] font-extrabold uppercase tracking-[0.06em] text-neutral-500">Email</span>
-        <input name="author_email" type="email" maxlength="254" class="w-full border border-triangleGray-400 px-3 py-2 text-[15px] outline-none focus:border-triangleBlue" />
+        <input data-comment-author-email name="author_email" type="email" maxlength="254" class="w-full border border-triangleGray-400 px-3 py-2 text-[15px] outline-none focus:border-triangleBlue" />
       </label>
     </div>
 
@@ -222,6 +222,40 @@ function avatarTone(name: string) {
   const replyContext = document.querySelector("[data-reply-context]");
   const replyLabel = document.querySelector("[data-reply-label]");
   const clearReply = document.querySelector("[data-clear-reply]");
+  const authorNameInput = document.querySelector("[data-comment-author-name]");
+  const authorEmailInput = document.querySelector("[data-comment-author-email]");
+  const commenterStorageKey = "triangle.commenter";
+
+  function loadCachedCommenter() {
+    try {
+      const raw = window.localStorage.getItem(commenterStorageKey);
+      if (!raw) return;
+      const cached = JSON.parse(raw);
+      if (authorNameInput instanceof HTMLInputElement && typeof cached.name === "string") {
+        authorNameInput.value = cached.name;
+      }
+      if (authorEmailInput instanceof HTMLInputElement && typeof cached.email === "string") {
+        authorEmailInput.value = cached.email;
+      }
+    } catch {
+      try {
+        window.localStorage.removeItem(commenterStorageKey);
+      } catch {
+        // Ignore storage failures so comment submission still works.
+      }
+    }
+  }
+
+  function cacheCommenter(formData: FormData) {
+    const name = String(formData.get("author_name") ?? "").trim();
+    const email = String(formData.get("author_email") ?? "").trim();
+    if (!name && !email) return;
+    try {
+      window.localStorage.setItem(commenterStorageKey, JSON.stringify({ name, email }));
+    } catch {
+      // Ignore storage failures so comment submission still works.
+    }
+  }
 
   function setStatus(message: string, isError = false) {
     if (!(statusEl instanceof HTMLElement)) return;
@@ -255,6 +289,8 @@ function avatarTone(name: string) {
 
   clearReply?.addEventListener("click", clearReplyContext);
 
+  loadCachedCommenter();
+
   form?.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (!(form instanceof HTMLFormElement)) return;
@@ -278,11 +314,14 @@ function avatarTone(name: string) {
         throw new Error(data.error ? `${data.error} (${response.status})` : `Could not post comment (${response.status})`);
       }
       if (data.status === "approved") {
+        cacheCommenter(formData);
         setStatus("Comment posted.");
         window.location.reload();
         return;
       }
+      cacheCommenter(formData);
       form.reset();
+      loadCachedCommenter();
       clearReplyContext();
       setStatus("Comment submitted and awaiting moderation.");
     } catch (error) {
