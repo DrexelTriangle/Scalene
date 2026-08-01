@@ -1,14 +1,13 @@
 import type { APIRoute } from "astro";
+import { getSitemapSlugs } from "../utils/db";
 
 export const GET: APIRoute = async () => {
-  const res = await fetch(
-    "https://cms.thetriangle.org/wp-json/triangle/v2/sitemap-slugs"
-  );
-  const articles = await res.json();
+  const articles = await getSitemapSlugs();
 
   const groups: Record<string, { lastmod: string }> = {};
 
   for (const a of articles) {
+    if (!a.lastmod) continue;
     const year = new Date(a.lastmod).getFullYear().toString();
 
     if (!groups[year]) {

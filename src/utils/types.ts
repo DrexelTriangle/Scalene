@@ -176,16 +176,28 @@ export interface AuthorArticles {
   pagination: Pagination;
 }
 
+/** triangle-cms: one image from /v1/gallery. */
 export interface GalleryImage {
   id: number;
-  title: string;
+  path: string;
+  file_name: string;
   url: string;
+  mime_type: string;
+  width?: number;
+  height?: number;
+  alt_text?: string;
 }
 
-/** /v2/sitemap-slugs — every published article, for the year-partitioned sitemaps. */
+/** triangle-cms: /v1/sitemap/slugs — every live article, for the year-partitioned sitemaps. */
 export interface SitemapSlug {
   slug: string;
   lastmod: string;
+}
+
+/** triangle-cms: /v1/articles/random — just enough to redirect to. */
+export interface RandomArticle {
+  slug: string;
+  title: string;
 }
 
 /** triangle-cms: a comment from /v1/articles/<slug>/comments. */

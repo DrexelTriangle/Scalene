@@ -5,6 +5,8 @@
  * @typedef {import('./types').SectionArticles} SectionArticles
  * @typedef {import('./types').AuthorArticles} AuthorArticles
  * @typedef {import('./types').GalleryImage} GalleryImage
+ * @typedef {import('./types').RandomArticle} RandomArticle
+ * @typedef {import('./types').SitemapSlug} SitemapSlug
  * @typedef {import('./types').ClassifiedPost} ClassifiedPost
  * @typedef {import('./types').ArticleComments} ArticleComments
  */
@@ -146,9 +148,10 @@ export async function getArticleComments(article) {
   return getOptionalJson(url, { comments: [], total_count: 0 });
 }
 
-/** @returns {Promise<Article|undefined>} */
+/** @returns {Promise<RandomArticle|undefined>} */
 export async function getRandomArticle() {
-  const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/random/';
+  // const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/random/';
+  const url = normalizedCmsBaseUrl + '/articles/random';
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
@@ -175,18 +178,56 @@ export async function search(search) {
   if (!res.ok) return;
   return res.json();
 }
-/** @returns {Promise<GalleryImage[]|undefined>} */
+/** @returns {Promise<GalleryImage[]>} */
 export async function gallery() {
-  const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/gallery';
-  // const url = 'https://localhost:8080/v1/media/gallery';
+  // const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/gallery';
+  const url = normalizedCmsBaseUrl + '/gallery';
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
     cache: 'force-cache',
   });
 
-  if (!res.ok) return;
-  return res.json();
+  if (!res.ok) return [];
+  const body = await res.json();
+  return Array.isArray(body?.media) ? body.media : [];
+}
+
+/**
+ * The most recently published articles, newest first. Used by the RSS feed.
+ * @param {number} limit
+ * @returns {Promise<ArticleSummary[]>}
+ */
+export async function getRecentArticles(limit = 20) {
+  const url = normalizedCmsBaseUrl + '/articles?limit=' + limit + '&sort_by=published_date&sort_direction=desc';
+
+  const res = await fetch(url, {
+    headers: { Accept: 'application/json' },
+    cache: 'force-cache',
+  });
+
+  if (!res.ok) return [];
+  const body = await res.json();
+  return Array.isArray(body?.articles) ? body.articles : [];
+}
+
+/**
+ * Every live article's slug and last-modified date, for the year-partitioned
+ * sitemaps. Unpaginated by design: both sitemap routes bucket the whole set.
+ * @returns {Promise<SitemapSlug[]>}
+ */
+export async function getSitemapSlugs() {
+  // const url = 'https://cms.thetriangle.org/wp-json/triangle/v2/sitemap-slugs';
+  const url = normalizedCmsBaseUrl + '/sitemap/slugs';
+
+  const res = await fetch(url, {
+    headers: { Accept: 'application/json' },
+    cache: 'force-cache',
+  });
+
+  if (!res.ok) return [];
+  const body = await res.json();
+  return Array.isArray(body) ? body : [];
 }
 
 const MATOMO_URL = "https://stats.thetriangle.org/index.php";
