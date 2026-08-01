@@ -264,12 +264,17 @@ function avatarTone(name: string) {
     setStatus("Posting...");
 
     try {
+      const formData = new FormData(form);
       const response = await fetch("/api/comments", {
         method: "POST",
-        body: new FormData(form),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Object.fromEntries(formData.entries())),
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) {
+        if (response.status === 403) {
+          throw new Error("Comments are closed for this article or the comment service rejected this submission. (403)");
+        }
         throw new Error(data.error ? `${data.error} (${response.status})` : `Could not post comment (${response.status})`);
       }
       if (data.status === "approved") {

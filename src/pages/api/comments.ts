@@ -22,14 +22,17 @@ function fallbackErrorFromText(text: string, status: number) {
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   try {
-    const formData = await request.formData();
+    const contentType = request.headers.get("content-type") ?? "";
+    const data = contentType.includes("application/json")
+      ? await request.json()
+      : Object.fromEntries((await request.formData()).entries());
 
-    const slug = String(formData.get("slug") ?? "").trim();
-    const authorName = String(formData.get("author_name") ?? "").trim();
-    const authorEmail = String(formData.get("author_email") ?? "").trim();
-    const authorUrl = String(formData.get("author_url") ?? "").trim();
-    const content = String(formData.get("content") ?? "").trim();
-    const parentID = Number(formData.get("parent_id") ?? 0) || 0;
+    const slug = String(data?.slug ?? "").trim();
+    const authorName = String(data?.author_name ?? "").trim();
+    const authorEmail = String(data?.author_email ?? "").trim();
+    const authorUrl = String(data?.author_url ?? "").trim();
+    const content = String(data?.content ?? "").trim();
+    const parentID = Number(data?.parent_id ?? 0) || 0;
 
     if (!slug) return jsonResponse({ error: "Missing article slug" }, 400);
     if (!authorName) return jsonResponse({ error: "Name is required" }, 400);
@@ -52,8 +55,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     });
 
     const text = await response.text();
-    const contentType = response.headers.get("content-type") ?? "";
-    if (contentType.includes("application/json")) {
+    const responseContentType = response.headers.get("content-type") ?? "";
+    if (responseContentType.includes("application/json")) {
       return new Response(text, {
         status: response.status,
         headers: { "Content-Type": "application/json" },
