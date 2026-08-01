@@ -30,7 +30,7 @@ const breaking = (posts.breaking_news?.enabled ?? false) && breakingText !== "";
     <!-- {!breaking && <Banner server:defer/>} -->
      <!-- Only the first block after the nav may pull up 24px to close its
           margin; when the breaking banner renders it takes that role. -->
-     <Banner server:defer pullUp={!breaking}/>
+     <Banner server:defer pullUp={!breaking} slides={posts.carousel ?? []}/>
 
     <Section section="news" articles={posts.news?.slice(0, 9)} style="3-6-3"/>
     <Section section="news" articles={posts.news?.slice(9)} style="row"/>

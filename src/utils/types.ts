@@ -98,6 +98,17 @@ export interface BreakingNews {
   text: string;
 }
 
+/** triangle-cms: one item in the editable homepage Splide carousel. */
+export interface HomepageCarouselSlide {
+  enabled: boolean;
+  title: string;
+  link_url: string;
+  image_url: string;
+  background_color: string;
+  text_color: string;
+  desktop_only: boolean;
+}
+
 export interface Homepage {
   news: ArticleSummary[];
   opinion: ArticleSummary[];
@@ -108,6 +119,8 @@ export interface Homepage {
   developingstories: DevelopingStory[];
   /** triangle-cms */
   breaking_news?: BreakingNews;
+  /** triangle-cms */
+  carousel?: HomepageCarouselSlide[];
 }
 
 export interface SectionInfo {
