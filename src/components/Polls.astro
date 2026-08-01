@@ -26,6 +26,9 @@ const totalVotes = Object.values(pollOptionCounts).reduce((sum, count) => sum + 
         <button type="submit" class="flex ml-[auto] bg-triangleBlue text-white rounded-[5px] px-4 py-1 font-roboto-slab self-end hover:bg-white hover:text-triangleBlue border-[1px] border-triangleBlue"> Vote </button>
     </form>
     <p class="mt-[8px] font-roboto-slab text-[14px]" data-user-vote></p>
+    <a href="/pollsarchive" class="font-roboto-slab text-[13px] text-triangleBlue hover:underline">
+        See past polls →
+    </a>
 </div>
 
 <script>

@@ -5,6 +5,23 @@ const normalizedCmsBaseUrl = String(cmsBaseUrl).replace(/\/$/, '');
 const pollUrl = `${normalizedCmsBaseUrl}/poll`;
 const pollOptionsUrl = `${normalizedCmsBaseUrl}/poll/options`;
 const pollTitleUrl = `${normalizedCmsBaseUrl}/poll/title`;
+const pollsUrl = `${normalizedCmsBaseUrl}/polls`;
+
+export type ArchivedPollOption = {
+  option: string;
+  votes: number;
+  percentage: number;
+};
+
+export type ArchivedPoll = {
+  id: number;
+  question: string;
+  status: string;
+  startsAt: string;
+  endsAt: string;
+  totalVotes: number;
+  options: ArchivedPollOption[];
+};
 
 function coercePollCounts(value: unknown): PollCounts {
   const nextCounts: PollCounts = {};
@@ -108,6 +125,74 @@ export async function getPollCounts(): Promise<PollCounts> {
 
   const payload = await response.json();
   return extractCounts(payload);
+}
+
+function coerceArchivedPoll(value: unknown): ArchivedPoll | null {
+  if (!value || typeof value !== 'object') {
+    return null;
+  }
+
+  const raw = value as Record<string, unknown>;
+  const id = typeof raw.id === 'number' ? raw.id : Number(raw.id);
+  const question = typeof raw.question === 'string' ? raw.question.trim() : '';
+  if (!Number.isFinite(id) || !question) {
+    return null;
+  }
+
+  const rawOptions = Array.isArray(raw.options) ? raw.options : [];
+  const options: ArchivedPollOption[] = [];
+  for (const entry of rawOptions) {
+    if (!entry || typeof entry !== 'object') {
+      continue;
+    }
+    const opt = entry as Record<string, unknown>;
+    const label = typeof opt.option === 'string' ? opt.option.trim() : '';
+    if (!label) {
+      continue;
+    }
+    const votes = Number(opt.votes);
+    const percentage = Number(opt.percentage);
+    options.push({
+      option: label,
+      votes: Number.isFinite(votes) && votes >= 0 ? Math.floor(votes) : 0,
+      percentage: Number.isFinite(percentage) && percentage >= 0 ? percentage : 0
+    });
+  }
+
+  const totalVotes = Number(raw.total_votes);
+
+  return {
+    id,
+    question,
+    status: typeof raw.status === 'string' ? raw.status : '',
+    startsAt: typeof raw.starts_at === 'string' ? raw.starts_at : '',
+    endsAt: typeof raw.ends_at === 'string' ? raw.ends_at : '',
+    totalVotes: Number.isFinite(totalVotes) && totalVotes >= 0 ? Math.floor(totalVotes) : 0,
+    options
+  };
+}
+
+// Published polls, newest first, for the archive page. The CMS already excludes
+// drafts from this endpoint, so nothing unpublished can reach the public site.
+export async function getPolls(): Promise<ArchivedPoll[]> {
+  const response = await fetchCms(pollsUrl, {
+    method: 'GET',
+    headers: { Accept: 'application/json' },
+    cache: 'no-store'
+  });
+
+  if (!response) {
+    return [];
+  }
+
+  const payload = await response.json() as { polls?: unknown };
+  if (!Array.isArray(payload?.polls)) {
+    return [];
+  }
+
+  return payload.polls
+    .map(coerceArchivedPoll)
+    .filter((poll): poll is ArchivedPoll => poll !== null);
 }
 
 export async function incrementPollCount(option: string): Promise<PollCounts | null> {
