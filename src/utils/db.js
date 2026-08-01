@@ -49,15 +49,20 @@ export async function getHomepageArticles() {
 
 /** @returns {Promise<ClassifiedPost[]>} */
 export async function getClassifieds() {
-  const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/classifieds';
+  // const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/classifieds';
+  const url = normalizedCmsBaseUrl + '/classifieds';
 
+  // Approved-and-unexpired filtering happens in the CMS, so this is the list
+  // as-is. No-store because an approval should show up on the next page load,
+  // not whenever a cache decides.
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
-    cache: 'force-cache',
+    cache: 'no-store',
   });
 
-  if (!res.ok) throw new Error(String(res.status));
-  return res.json();
+  if (!res.ok) return [];
+  const body = await res.json();
+  return Array.isArray(body?.classifieds) ? body.classifieds : [];
 }
 
 /**

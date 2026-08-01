@@ -210,8 +210,14 @@ export interface ArticleComments {
   total_count: number;
 }
 
+/** triangle-cms: an approved classified from /v1/classifieds. */
 export interface ClassifiedPost {
-  title: string;
-  content: string;
-  meta: { email: string; label: string };
+  id: number;
+  name: string;
+  email: string;
+  label: string;
+  message: string;
+  end_date: string;
+  status: string;
+  created_at?: string;
 }
