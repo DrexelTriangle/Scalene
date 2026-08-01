@@ -270,7 +270,7 @@ function avatarTone(name: string) {
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        throw new Error(data.error || "Could not post comment");
+        throw new Error(data.error ? `${data.error} (${response.status})` : `Could not post comment (${response.status})`);
       }
       if (data.status === "approved") {
         setStatus("Comment posted.");

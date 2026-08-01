@@ -12,6 +12,14 @@ function jsonResponse(body: unknown, status = 200) {
   });
 }
 
+function fallbackErrorFromText(text: string, status: number) {
+  const trimmed = text.replace(/\s+/g, " ").trim();
+  if (trimmed) {
+    return trimmed.slice(0, 240);
+  }
+  return `Comment service returned ${status}`;
+}
+
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   try {
     const formData = await request.formData();
@@ -27,7 +35,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     if (!authorName) return jsonResponse({ error: "Name is required" }, 400);
     if (!content) return jsonResponse({ error: "Comment is required" }, 400);
 
-    const response = await fetch(`${normalizedCmsBaseUrl}/articles/${slug}/comments`, {
+    const response = await fetch(`${normalizedCmsBaseUrl}/articles/${encodeURIComponent(slug)}/comments`, {
       method: "POST",
       headers: {
         "Accept": "application/json",
@@ -44,11 +52,21 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     });
 
     const text = await response.text();
-    return new Response(text, {
-      status: response.status,
-      headers: { "Content-Type": response.headers.get("content-type") ?? "application/json" },
-    });
-  } catch {
-    return jsonResponse({ error: "Failed to submit comment" }, 500);
+    const contentType = response.headers.get("content-type") ?? "";
+    if (contentType.includes("application/json")) {
+      return new Response(text, {
+        status: response.status,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    if (!response.ok) {
+      return jsonResponse({ error: fallbackErrorFromText(text, response.status) }, response.status);
+    }
+
+    return jsonResponse({ error: "Comment service returned an invalid response" }, 502);
+  } catch (error) {
+    const message = error instanceof Error && error.message ? error.message : "Failed to submit comment";
+    return jsonResponse({ error: message }, 500);
   }
 };
