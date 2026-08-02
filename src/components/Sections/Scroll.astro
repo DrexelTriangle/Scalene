@@ -1,15 +1,14 @@
 ---
     export const prerender = false; // Not needed in 'server' mode
-    const { pageNum, hasMore, sectionSlug, url, apiPath } = Astro.props;
+    const { pageNum, hasMore, sectionSlug, url } = Astro.props;
 ---
 
 <div id="article-loader" style="min-height: 1px;"></div>
-<script is:inline define:vars={{ pageNum, hasMore, sectionSlug, url, apiPath }} data-astro-rerun data-cfasync="false">
+<script is:inline define:vars={{ pageNum, hasMore, sectionSlug, url }} data-astro-rerun data-cfasync="false">
     (() => {
         let isLoading = false;
         let currentPage = 2;
         let localHasMore = hasMore;
-        const limit = 20;
 
         const articleLoader = document.getElementById("article-loader");
         const articlesGrid = document.getElementById("main-left");
@@ -22,16 +21,18 @@
 
             try {
                 const response = await fetch(
-                    apiPath
-                        ? `${apiPath}${sectionSlug}/articles?limit=${limit}&offset=${(currentPage - 1) * limit}`
-                        : `${url}${sectionSlug}?page=${currentPage}`,
+                    `${url}${sectionSlug}?page=${currentPage}`,
                 );
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const data = await response.json();
 
                 if (!data.articles || data.articles.length === 0) {
                     localHasMore = false;
                 } else {
                     currentPage++;
+                    if (data.pagination && data.pagination.hasMore === false) {
+                        localHasMore = false;
+                    }
                     data.articles.forEach((article) => {
                         const articleElement =
                             document.createElement("article");

@@ -70,7 +70,7 @@ let hasMore = posts.pagination.hasMore;
                         articles={posts.articles?.slice(13)}
                         style="list"
                     />
-                    <Scroll pageNum={pageNum} hasMore={hasMore} sectionSlug={sectionSlug} apiPath={isSubsectionPage ? "https://localhost:8080/v1/subsections/" : "https://localhost:8080/v1/sections/"} />
+                    <Scroll pageNum={pageNum} hasMore={hasMore} sectionSlug={sectionSlug} url={isSubsectionPage ? "/api/subsections/" : "/api/sections/"} />
                 </div>
                 <div
                     id="main-right"
