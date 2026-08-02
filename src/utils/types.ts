@@ -144,12 +144,18 @@ export interface Subsection {
   canonical_title?: string;
 }
 
+/**
+ * triangle-cms pagination. Note the snake_case: this is the CMS JSON shape,
+ * not the camelCase one the old WordPress endpoints returned. Reading
+ * `hasMore` off this silently yields undefined, which reads as "no more
+ * pages" and stops infinite scroll before it makes a single request.
+ */
 export interface Pagination {
-  currentPage: number;
-  perPage: number;
-  total: number;
-  totalPages: number;
-  hasMore: boolean;
+  page: number;
+  limit: number;
+  offset: number;
+  has_more: boolean;
+  total_count: number;
 }
 
 export interface SectionArticles {

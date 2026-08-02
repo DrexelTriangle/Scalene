@@ -33,7 +33,7 @@ const sectionName = normalizeText(
         : (posts.section.canonical_title ?? posts.section.name)
 );
 
-let hasMore = posts.pagination.hasMore;
+let hasMore = posts.pagination.has_more;
 ---
 
 <BaseLayout title={sectionName + " - The Triangle"}>
