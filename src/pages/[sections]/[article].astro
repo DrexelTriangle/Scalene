@@ -12,6 +12,7 @@ import Poll from '../../components/Polls.astro';
 import MostRead from '../../components/MostRead.astro';
 import { getArticle, getArticleComments } from '../../utils/db';
 import { normalizeText } from "../../utils/data";
+import { expandShortcodes } from "../../utils/shortcodes";
 import DonateBlurb from "../../components/DonateBlurb.astro";
 import Section from "../../components/Sections/Section.astro";
 import SubscribeLink from "../../components/SubscribeLink.astro";
@@ -64,7 +65,12 @@ const date_string = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullY
 
 const authorList = "By " + (authorListLinks.length > 2 ? authorListLinks.join(", ") : authorListLinks.join(""))
 
-const actualArticle = post.content.match("<p[^>]*>(.+?)</p>")
+// Shortcodes have to be expanded before anything inspects or renders the
+// body: the puzzle embed script is only injected when the markup contains
+// pm-embed-div, which is precisely what expansion produces.
+const content = expandShortcodes(post.content);
+
+const actualArticle = content.match("<p[^>]*>(.+?)</p>")
 const primaryCategory = post.categories?.[0] ?? post.categories_list?.[0];
 
 ---
@@ -81,7 +87,7 @@ const primaryCategory = post.categories?.[0] ?? post.categories_list?.[0];
                 <div id="print-wrap">
                 <section 
                 id="article" 
-                set:html={authorPrint + post.content
+                set:html={authorPrint + content
                     .replaceAll("https://cms.thetriangle.org/wp-content", "/proxy/wp-content")
                     .replaceAll("https://www.thetriangle.org/wp-content", "/proxy/wp-content")
                     .replace(/srcset="[^"]*"/g, "")
@@ -113,7 +119,7 @@ const primaryCategory = post.categories?.[0] ?? post.categories_list?.[0];
         </div>}
         {!actualArticle && <section 
                 id="article" 
-                set:html={post.content
+                set:html={content
                     .replaceAll("https://cms.thetriangle.org/wp-content", "/proxy/wp-content")
                     .replaceAll("https://www.thetriangle.org/wp-content", "/proxy/wp-content")
                     .replace(/srcset="[^"]*"/g, "")
@@ -129,7 +135,7 @@ const primaryCategory = post.categories?.[0] ?? post.categories_list?.[0];
                 }>
                 </section>}
         {!actualArticle && <Comments comments={comments} slug={post.slug ?? article} commentsClosed={commentsClosed} />}
-        {post.content.includes('pm-embed-div') && (
+        {content.includes('pm-embed-div') && (
         <script 
             is:inline 
             id="pm-script" 

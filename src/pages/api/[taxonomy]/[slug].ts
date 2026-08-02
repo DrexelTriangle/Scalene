@@ -1,5 +1,9 @@
 import type { APIRoute } from "astro";
-import { getSectionArticles, getSubsectionArticles } from "../../../utils/db.js";
+import {
+  getAuthorArticles,
+  getSectionArticles,
+  getSubsectionArticles,
+} from "../../../utils/db.js";
 
 export const prerender = false;
 
@@ -7,10 +11,17 @@ export const prerender = false;
 // CMS_API_BASE_URL points at an internal host and the CMS sends no CORS
 // headers. So the page fetches this same-origin route and we make the CMS
 // call server-side, exactly like the first page of results does.
+const loaders = {
+  sections: getSectionArticles,
+  subsections: getSubsectionArticles,
+  authors: getAuthorArticles,
+} as const;
+
 export const GET: APIRoute = async ({ params, url }) => {
   const { taxonomy, slug } = params;
+  const loadArticles = loaders[taxonomy as keyof typeof loaders];
 
-  if (taxonomy !== "sections" && taxonomy !== "subsections") {
+  if (!loadArticles) {
     return new Response(JSON.stringify({ error: "Unknown taxonomy" }), {
       status: 404,
       headers: { "Content-Type": "application/json" },
@@ -26,10 +37,7 @@ export const GET: APIRoute = async ({ params, url }) => {
   const page = Math.max(Number(url.searchParams.get("page")) || 1, 1);
 
   try {
-    const posts =
-      taxonomy === "sections"
-        ? await getSectionArticles(slug, page)
-        : await getSubsectionArticles(slug, page);
+    const posts = await loadArticles(slug, page);
 
     if (!posts) {
       return new Response(JSON.stringify({ error: "Not found" }), {
