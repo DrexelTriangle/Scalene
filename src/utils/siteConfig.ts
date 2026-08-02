@@ -78,7 +78,7 @@ export const defaultFooterColumns: FooterColumn[] = [
       link("Academic Transformation", "/academic-transformation"),
       link("Politics", "/politics"),
       link("Transit", "/transit"),
-      link("Crime & Policy Violations", "/crime-policy-violations"),
+      link("Public Safety", "/public-safety"),
     ],
   },
   {
