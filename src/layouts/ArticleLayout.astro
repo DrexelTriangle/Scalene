@@ -7,28 +7,31 @@ import { normalizeText } from "../utils/data";
 const siteTitle = await getSiteTitle();
 
 const siteUrl = "https://www.thetriangle.org";
-const cleanText = (value) => normalizeText(String(value ?? ""));
-const truncateDescription = (value) => {
+const cleanText = (value: unknown): string => normalizeText(String(value ?? ""));
+const truncateDescription = (value: unknown): string => {
   const text = cleanText(value);
   if (text.length <= 160) return text;
   const clipped = text.slice(0, 157);
   const lastSpace = clipped.lastIndexOf(" ");
   return `${clipped.slice(0, lastSpace > 80 ? lastSpace : 157).trim()}...`;
 };
-const absoluteUrl = (value, fallback) => {
+const absoluteUrl = (value: unknown, fallback: string): string => {
   const url = String(value ?? "").trim();
   if (!url) return fallback;
   if (/^https?:\/\//i.test(url)) return url;
   if (url.startsWith("/")) return `${siteUrl}${url}`;
   return url;
 };
-const normalizeTagName = (tag) => {
+const normalizeTagName = (tag: unknown): string => {
   if (typeof tag === "string") return cleanText(tag);
-  if (tag && typeof tag === "object") return cleanText(tag.name ?? tag.slug ?? "");
+  if (tag && typeof tag === "object") {
+    const record = tag as { name?: unknown; slug?: unknown };
+    return cleanText(record.name ?? record.slug ?? "");
+  }
   return "";
 };
-const normalizeTags = (raw) => {
-  let values = [];
+const normalizeTags = (raw: unknown): string[] => {
+  let values: unknown[] = [];
   if (Array.isArray(raw)) {
     values = raw;
   } else if (typeof raw === "string") {
