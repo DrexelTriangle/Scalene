@@ -70,8 +70,45 @@ const authorList = "By " + (authorListLinks.length > 2 ? authorListLinks.join(",
 // pm-embed-div, which is precisely what expansion produces.
 const content = expandShortcodes(post.content);
 
-const actualArticle = content.match("<p[^>]*>(.+?)</p>")
+const proxyWpContent = (html: string) =>
+  html
+    .replaceAll("https://cms.thetriangle.org/wp-content", "/proxy/wp-content")
+    .replaceAll("https://www.thetriangle.org/wp-content", "/proxy/wp-content");
+
+// Strip the dimensions WordPress baked into its markup so images can be sized
+// responsively here instead.
+const stripDimensions = (html: string) =>
+  html
+    .replace(/srcset="[^"]*"/g, "")
+    .replace(/\s(width|height):"[^"]*"/g, "")
+    .replace(/style="([^"]*)"/g, (_, style) => {
+      const cleaned = style
+        .replace(/(?:^|;)\s*(min-|max-)?(width|height)\s*:\s*[^;]+;?/gi, "")
+        .trim()
+        .replace(/^;|;$/g, "");
+
+      return cleaned ? `style="${cleaned}"` : "";
+    });
+
+const articleHtml = stripDimensions(proxyWpContent(content));
+
+// "Does this body have prose?" -- comics and other image-only posts don't, and
+// they get the single-column treatment. This used to look for <p> alone, which
+// missed every Trix-authored body (Trix wraps blocks in <div>) and dropped
+// those articles into the image-only layout, sidebar and all. The block has to
+// open on text rather than another tag, so a wrapper div -- the puzzle embed,
+// say -- isn't mistaken for a paragraph. [\s\S] rather than . so a paragraph
+// broken across lines still counts.
+const actualArticle = /<(p|div|blockquote|h[1-6])(\s[^>]*)?>\s*[^<\s][\s\S]*?<\/\1>/i.test(content);
 const primaryCategory = post.categories?.[0] ?? post.categories_list?.[0];
+
+// Legacy WordPress bodies carry their lead image inline as a <figure>, so only
+// posts without any inline image need the featured image rendered for them --
+// otherwise every imported article would show it twice.
+const featuredImage =
+  post.featured_image && !/<img\b/i.test(content)
+    ? proxyWpContent(post.featured_image)
+    : undefined;
 
 ---
 <ArticleLayout title={normalizeText(post.title) + " - The Triangle"} article={post}>
@@ -85,25 +122,10 @@ const primaryCategory = post.categories?.[0] ?? post.categories_list?.[0];
         {actualArticle && <div class="grid grid-cols-[1fr] lg:grid-cols-[9fr_3fr] xl:grid-cols-[8fr_4fr] mt-2 divide-x divide-triangleBlue">
             <div id="main-left" class="main-side">
                 <div id="print-wrap">
-                <section 
-                id="article" 
-                set:html={authorPrint + content
-                    .replaceAll("https://cms.thetriangle.org/wp-content", "/proxy/wp-content")
-                    .replaceAll("https://www.thetriangle.org/wp-content", "/proxy/wp-content")
-                    .replace(/srcset="[^"]*"/g, "")
-                    .replace(/\s(width|height):"[^"]*"/g, "")
-                    .replace(/style="([^"]*)"/g, (_, style) => {
-  const cleaned = style
-    .replace(/(?:^|;)\s*(min-|max-)?(width|height)\s*:\s*[^;]+;?/gi, "")
-    .trim()
-    .replace(/^;|;$/g, "");
-
-  return cleaned ? `style="${cleaned}"` : "";
-})
-                }>
+                <section id="article">
+                    {featuredImage && <figure><img src={featuredImage} alt={normalizeText(post.title)}/></figure>}
+                    <Fragment set:html={authorPrint + articleHtml} />
                 </section>
-                {/* <div class="print-featured-photo"><img src={post.featured_image.replaceAll("https://cms.thetriangle.org/wp-content", "/proxy/wp-content")
-                    .replaceAll("https://www.thetriangle.org/wp-content", "/proxy/wp-content")}/></div> */}
                 </div>
                 <Comments comments={comments} slug={post.slug ?? article} commentsClosed={commentsClosed} />
                 <DonateBlurb/>
@@ -117,22 +139,9 @@ const primaryCategory = post.categories?.[0] ?? post.categories_list?.[0];
                 <Social />
             </div>
         </div>}
-        {!actualArticle && <section 
-                id="article" 
-                set:html={content
-                    .replaceAll("https://cms.thetriangle.org/wp-content", "/proxy/wp-content")
-                    .replaceAll("https://www.thetriangle.org/wp-content", "/proxy/wp-content")
-                    .replace(/srcset="[^"]*"/g, "")
-                    .replace(/\s(width|height):"[^"]*"/g, "")
-                    .replace(/style="([^"]*)"/g, (_, style) => {
-  const cleaned = style
-    .replace(/(?:^|;)\s*(min-|max-)?(width|height)\s*:\s*[^;]+;?/gi, "")
-    .trim()
-    .replace(/^;|;$/g, "");
-
-  return cleaned ? `style="${cleaned}"` : "";
-})
-                }>
+        {!actualArticle && <section id="article">
+                    {featuredImage && <figure><img src={featuredImage} alt={normalizeText(post.title)}/></figure>}
+                    <Fragment set:html={articleHtml} />
                 </section>}
         {!actualArticle && <Comments comments={comments} slug={post.slug ?? article} commentsClosed={commentsClosed} />}
         {content.includes('pm-embed-div') && (
