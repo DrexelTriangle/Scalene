@@ -31,6 +31,12 @@ const totalVotes = Object.values(pollOptionCounts).reduce((sum, count) => sum + 
         <button type="submit" class="flex ml-[auto] bg-triangleBlue text-white rounded-[5px] px-4 py-1 font-roboto-slab self-end hover:bg-white hover:text-triangleBlue border-[1px] border-triangleBlue"> Vote </button>
     </form>
     <p class="mt-[8px] font-roboto-slab text-[14px]" data-user-vote></p>
+    <p
+        class="mt-[8px] font-roboto-slab text-[14px] text-red-700 hidden"
+        data-poll-error
+        role="status"
+        aria-live="polite"
+    ></p>
     <a href="/pollsarchive" class="font-roboto-slab text-[13px] text-triangleBlue hover:underline">
         See past polls →
     </a>
@@ -39,115 +45,163 @@ const totalVotes = Object.values(pollOptionCounts).reduce((sum, count) => sum + 
 
 <script>
   const POLL_CHOICE_KEY = 'triangle-poll-choice';
-  const pollRoot = document.querySelector<HTMLElement>('[data-poll-root]');
-  const pollForm = pollRoot?.querySelector<HTMLFormElement>('[data-poll-form]');
-  const userVoteNode = pollRoot?.querySelector<HTMLElement>('[data-user-vote]');
-  const submitButton = pollForm?.querySelector<HTMLButtonElement>('button[type="submit"]');
-  let hasVoted = false;
-  let isSubmitting = false;
-  const setOptionFill = (option: string, percentage: number) => {
-    const optionNode = pollRoot?.querySelector<HTMLElement>(`[data-poll-option="${CSS.escape(option)}"]`);
-    if (!optionNode) {
-      return;
-    }
 
-    optionNode.style.background = `linear-gradient(to right, rgba(37, 99, 235, 0.25) 0%, rgba(37, 99, 235, 0.25) ${percentage}%, transparent ${percentage}%, transparent 100%)`;
-  };
+  // Bound on astro:page-load, not at module scope. The site uses
+  // <ViewTransitions />, and a bundled module script only executes once per
+  // browser session -- after a client-side navigation back to a page with the
+  // poll, a module-scope binding would never be re-attached, so the form would
+  // fall back to a native GET submit (/?poll=Yes) and no vote would be cast.
+  const setupPoll = () => {
+    const pollRoot = document.querySelector<HTMLElement>('[data-poll-root]');
+    const pollForm = pollRoot?.querySelector<HTMLFormElement>('[data-poll-form]');
+    const userVoteNode = pollRoot?.querySelector<HTMLElement>('[data-user-vote]');
+    const submitButton = pollForm?.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const errorNode = pollRoot?.querySelector<HTMLElement>('[data-poll-error]');
+    let hasVoted = false;
+    let isSubmitting = false;
 
-  const updateOptionBackgrounds = (counts: Record<string, number>) => {
-    const totalVotes = Object.values(counts).reduce((sum: number, count: number) => sum + Number(count), 0);
-    Object.entries(counts).forEach(([option, count]) => {
-      const percentage = totalVotes ? (Number(count) / totalVotes) * 100 : 0;
-      setOptionFill(option, percentage);
-    });
-  };
-
-  const showSavedVote = (option: string) => {
-    if (!userVoteNode) {
-      return;
-    }
-    userVoteNode.textContent = option ? `You voted: ${option}.` : '';
-  };
-
-  const lockVoting = () => {
-    if (!pollForm) {
-      return;
-    }
-    const inputs = pollForm.querySelectorAll<HTMLInputElement>('input[name="poll"]');
-    inputs.forEach((input) => {
-      input.disabled = true;
-    });
-    if (submitButton) {
-      submitButton.disabled = true;
-      submitButton.classList.add('opacity-60', 'cursor-not-allowed');
-    }
-    hasVoted = true;
-  };
-
-  const restoreSavedVote = () => {
-    try {
-      const savedOption = localStorage.getItem(POLL_CHOICE_KEY);
-      if (!savedOption || !pollForm) {
+    const showError = (message: string) => {
+      if (!errorNode) {
+        return;
+      }
+      errorNode.textContent = message;
+      errorNode.classList.toggle('hidden', !message);
+    };
+    const clearError = () => showError('');
+    const setOptionFill = (option: string, percentage: number) => {
+      const optionNode = pollRoot?.querySelector<HTMLElement>(`[data-poll-option="${CSS.escape(option)}"]`);
+      if (!optionNode) {
         return;
       }
 
-      const savedInput = Array.from(pollForm.querySelectorAll<HTMLInputElement>('input[name="poll"]'))
-        .find((input) => input.value === savedOption);
-      if (savedInput) {
-        savedInput.checked = true;
-        showSavedVote(savedOption);
-        lockVoting();
+      optionNode.style.background = `linear-gradient(to right, rgba(37, 99, 235, 0.25) 0%, rgba(37, 99, 235, 0.25) ${percentage}%, transparent ${percentage}%, transparent 100%)`;
+    };
+
+    const updateOptionBackgrounds = (counts: Record<string, number>) => {
+      const totalVotes = Object.values(counts).reduce((sum: number, count: number) => sum + Number(count), 0);
+      Object.entries(counts).forEach(([option, count]) => {
+        const percentage = totalVotes ? (Number(count) / totalVotes) * 100 : 0;
+        setOptionFill(option, percentage);
+      });
+    };
+
+    const showSavedVote = (option: string) => {
+      if (!userVoteNode) {
+        return;
       }
-    } catch {
-      // Ignore localStorage access issues.
-    }
+      userVoteNode.textContent = option ? `You voted: ${option}.` : '';
+    };
+
+    const lockVoting = () => {
+      if (!pollForm) {
+        return;
+      }
+      const inputs = pollForm.querySelectorAll<HTMLInputElement>('input[name="poll"]');
+      inputs.forEach((input) => {
+        input.disabled = true;
+      });
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.classList.add('opacity-60', 'cursor-not-allowed');
+      }
+      hasVoted = true;
+    };
+
+    const restoreSavedVote = () => {
+      try {
+        const savedOption = localStorage.getItem(POLL_CHOICE_KEY);
+        if (!savedOption || !pollForm) {
+          return;
+        }
+
+        const savedInput = Array.from(pollForm.querySelectorAll<HTMLInputElement>('input[name="poll"]'))
+          .find((input) => input.value === savedOption);
+        if (savedInput) {
+          savedInput.checked = true;
+          showSavedVote(savedOption);
+          lockVoting();
+        }
+      } catch {
+        // Ignore localStorage access issues.
+      }
+    };
+
+    restoreSavedVote();
+
+    // Changing the selection is the reader responding to the error, so retire it.
+    pollForm?.addEventListener('change', clearError);
+
+    pollForm?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (hasVoted || isSubmitting) {
+        return;
+      }
+
+      const formData = new FormData(pollForm);
+      const selectedOption = formData.get('poll');
+      if (!selectedOption) {
+        showError('Pick an option first.');
+        return;
+      }
+
+      clearError();
+      isSubmitting = true;
+      if (submitButton) {
+        submitButton.disabled = true;
+      }
+
+      // Re-open the button so a transient failure is retryable. A closed poll is
+      // the exception: retrying can never succeed, so voting stays locked.
+      const failVote = (message: string, retryable = true) => {
+        showError(message);
+        isSubmitting = false;
+        if (retryable) {
+          if (submitButton && !hasVoted) {
+            submitButton.disabled = false;
+          }
+        } else {
+          lockVoting();
+        }
+      };
+
+      let response: Response;
+      try {
+        response = await fetch('/api/poll', {
+          method: 'POST',
+          body: formData
+        });
+      } catch {
+        // Offline, or the request never left the browser.
+        failVote("Couldn't reach the server. Check your connection and try again.");
+        return;
+      }
+
+      if (!response.ok) {
+        const failure = await response.json().catch(() => null) as
+          { error?: string; reason?: string } | null;
+        failVote(
+          failure?.error ?? "Couldn't record your vote. Try again in a moment.",
+          failure?.reason !== 'poll-closed'
+        );
+        return;
+      }
+
+      try {
+        localStorage.setItem(POLL_CHOICE_KEY, String(selectedOption));
+      } catch {
+        // Ignore localStorage access issues.
+      }
+      showSavedVote(String(selectedOption));
+      lockVoting();
+
+      const payload = await response.json() as { counts?: Record<string, number> };
+      const counts = payload?.counts;
+      if (!counts) {
+        return;
+      }
+      updateOptionBackgrounds(counts);
+    });
   };
 
-  restoreSavedVote();
-
-  pollForm?.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    if (hasVoted || isSubmitting) {
-      return;
-    }
-
-    const formData = new FormData(pollForm);
-    const selectedOption = formData.get('poll');
-    if (!selectedOption) {
-      return;
-    }
-
-    isSubmitting = true;
-    if (submitButton) {
-      submitButton.disabled = true;
-    }
-
-    const response = await fetch('/api/poll', {
-      method: 'POST',
-      body: formData
-    });
-
-    if (!response.ok) {
-      isSubmitting = false;
-      if (submitButton && !hasVoted) {
-        submitButton.disabled = false;
-      }
-      return;
-    }
-
-    try {
-      localStorage.setItem(POLL_CHOICE_KEY, String(selectedOption));
-    } catch {
-      // Ignore localStorage access issues.
-    }
-    showSavedVote(String(selectedOption));
-    lockVoting();
-
-    const payload = await response.json() as { counts?: Record<string, number> };
-    const counts = payload?.counts;
-    if (!counts) {
-      return;
-    }
-    updateOptionBackgrounds(counts);
-  });
+  document.addEventListener('astro:page-load', setupPoll);
 </script>

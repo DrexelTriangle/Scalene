@@ -195,26 +195,58 @@ export async function getPolls(): Promise<ArchivedPoll[]> {
     .filter((poll): poll is ArchivedPoll => poll !== null);
 }
 
-export async function incrementPollCount(option: string): Promise<PollCounts | null> {
+// Why this returns a reason instead of null: a vote can fail because the option
+// is bogus, because the poll closed underneath the reader, because the CMS is
+// rate limiting us, or because the CMS is unreachable. Collapsing all four into
+// null means the reader is told "invalid option" when the truth is "try again in
+// a minute", so the reason has to survive the trip back to the browser.
+export type VoteFailure = 'invalid-option' | 'poll-closed' | 'rate-limited' | 'unavailable';
+
+export type VoteResult =
+  | { ok: true; counts: PollCounts }
+  | { ok: false; reason: VoteFailure };
+
+// clientAddress is the reader's IP, forwarded the same way api/comments.ts does
+// it. Votes are proxied by this server, so without it every vote on the site
+// reaches the CMS from one address and its per-IP rate limit (5/min) becomes a
+// site-wide cap that turns away the sixth reader of every minute.
+export async function incrementPollCount(option: string, clientAddress?: string): Promise<VoteResult> {
   const trimmedOption = option.trim();
   if (!trimmedOption) {
-    return null;
+    return { ok: false, reason: 'invalid-option' };
   }
 
-  const response = await fetchCms(pollUrl, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ option: trimmedOption }),
-    cache: 'no-store'
-  });
+  let response: Response;
+  try {
+    response = await fetch(pollUrl, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        ...(clientAddress ? { 'X-Forwarded-For': clientAddress } : {})
+      },
+      body: JSON.stringify({ option: trimmedOption }),
+      cache: 'no-store'
+    });
+  } catch {
+    return { ok: false, reason: 'unavailable' };
+  }
 
-  if (!response) {
-    return null;
+  if (!response.ok) {
+    // The CMS statuses this maps: 400 invalid option, 409 no poll running or
+    // poll closed, 429 rate limit, 5xx anything else.
+    switch (response.status) {
+      case 400:
+        return { ok: false, reason: 'invalid-option' };
+      case 409:
+        return { ok: false, reason: 'poll-closed' };
+      case 429:
+        return { ok: false, reason: 'rate-limited' };
+      default:
+        return { ok: false, reason: 'unavailable' };
+    }
   }
 
   const payload = await response.json();
-  return extractCounts(payload);
+  return { ok: true, counts: extractCounts(payload) };
 }
