@@ -144,6 +144,7 @@ const featuredImage =
                     <Fragment set:html={articleHtml} />
                 </section>}
         {!actualArticle && <Comments comments={comments} slug={post.slug ?? article} commentsClosed={commentsClosed} />}
+        {!actualArticle && <DonateBlurb/>}
         {content.includes('pm-embed-div') && (
         <script 
             is:inline 
