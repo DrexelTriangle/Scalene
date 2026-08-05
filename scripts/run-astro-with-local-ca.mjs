@@ -15,9 +15,16 @@ if (!validCommands.has(command)) {
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDir, "..");
-const astroCli = path.resolve(projectRoot, "node_modules/astro/astro.js");
+// Astro 7 moved the CLI entrypoint to bin/astro.mjs; astro.js is where it
+// lived up to Astro 6. Check both so this keeps working either way.
+const astroCliCandidates = [
+  path.resolve(projectRoot, "node_modules/astro/bin/astro.mjs"),
+  path.resolve(projectRoot, "node_modules/astro/astro.js"),
+];
 
-if (!existsSync(astroCli)) {
+const astroCli = astroCliCandidates.find((candidate) => existsSync(candidate));
+
+if (!astroCli) {
   console.error("Astro CLI not found. Run `npm install` first.");
   process.exit(1);
 }
