@@ -13,8 +13,16 @@
   --color-gray: #E5E7EB;
 }
 
+/*
+ * This said "Crimson Text", serif -- but nothing ever loaded Crimson Text (the
+ * @font-face imports above cover Roboto Slab, Playfair Display and Libre
+ * Franklin only), so every page has always rendered the generic serif behind
+ * it. Naming the family we actually get keeps the stylesheet honest; if we ever
+ * want Crimson Text for real, it needs an @import first. The matching
+ * `font-crimson` Tailwind token was dropped for the same reason.
+ */
 body {
-  font-family: "Crimson Text", serif;
+  font-family: serif;
   font-size: 18px;
   background-color: white;
 }

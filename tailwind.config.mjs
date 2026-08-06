@@ -9,7 +9,8 @@ export default {
 	theme: {
 		extend: {
 			fontFamily: {
-				'crimson': ['Crimson Text'],
+				// No 'crimson' token: Crimson Text was never loaded, so it only ever
+				// resolved to the body serif its users already inherit.
 				'roboto-slab': ["Roboto Slab", 'serif'],
 				'playfair': ['Playfair Display'],
 				'libre': ['Libre Franklin']

@@ -43,5 +43,5 @@ const imgClass = row
     <h2 class="font-playfair text-[20px] leading-tight hover:underline">{normalizeText(title)}</h2>
   </a>
   <div id="byline" class="font-playfair text-[12px]" set:html={byline} />
-  {excerpt && <div set:html={normalizeText(excerpt)} class="font-crimson text-[16px]" />}
+  {excerpt && <div set:html={normalizeText(excerpt)} class="text-[16px]" />}
 </article>
