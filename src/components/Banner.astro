@@ -1,62 +1,93 @@
 ---
 import "@splidejs/splide/dist/css/splide.min.css";
+import type { HomepageCarouselSlide } from "../utils/types";
+
+// The nav (#scrollnav) carries mb-[24px], and whichever block comes first after
+// it pulls itself up by 24px to sit flush. That is normally this hero -- but when
+// the breaking-news banner renders, IT is first and does the pulling, so this
+// must not pull up too or it overlaps the banner and hides its lower half.
+const { pullUp = true, slides = [] } = Astro.props as {
+  pullUp?: boolean;
+  slides?: HomepageCarouselSlide[];
+};
+
+const defaultSlides: HomepageCarouselSlide[] = [
+  {
+    enabled: true,
+    title: "100 Years of The Triangle",
+    link_url: "/one-hundred",
+    image_url: "",
+    background_color: "",
+    text_color: "#ffffff",
+    desktop_only: true,
+  },
+  {
+    enabled: true,
+    title: "Podcast",
+    link_url: "https://tr.ee/bqz8s-E4NK",
+    image_url: "/images/PodcastBanner.webp",
+    background_color: "#acd4f4",
+    text_color: "#ffffff",
+    desktop_only: false,
+  },
+  {
+    enabled: true,
+    title: "Classifieds",
+    link_url: "/classifieds",
+    image_url: "/images/classifiedsBannerNew.webp",
+    background_color: "#E5E7EB",
+    text_color: "#ffffff",
+    desktop_only: false,
+  },
+  {
+    enabled: true,
+    title: "Apply to The Triangle",
+    link_url: "https://docs.google.com/forms/d/e/1FAIpQLScra_6sUenvmpIuQ5FjmMyWO0a2sz9z36HkrqfnYQvJGH9BGQ/viewform",
+    image_url: "/images/applyBannerNew.webp",
+    background_color: "#275997",
+    text_color: "#ffffff",
+    desktop_only: false,
+  },
+];
+
+const carouselSlides = (slides.length > 0 ? slides : defaultSlides).filter((slide) => slide.enabled);
 ---
 
-<section class="home-hero-wrap mt-[-24px] relative mb-[16px] md:mb-[0px]">
-  <div class="one-hundred-bg hidden md:block" aria-hidden="true"></div>
+<section class:list={["home-hero-wrap relative mb-[16px] md:mb-[0px]", pullUp && "mt-[-24px]"]}>
+  {
+    carouselSlides.some((slide) => !slide.image_url) && (
+      <div class="one-hundred-bg hidden md:block" aria-hidden="true"></div>
+    )
+  }
 
   <div class="splide relative z-[2]" aria-label="My Splide" data-home-splide>
     <div class="splide__track">
       <ul class="splide__list">
-        <li
-          class="hidden md:block splide__slide w-[100%] mb-[12px] md:mb-[0px]"
-        >
-          <a
-            href="/one-hundred"
-            class="one-hundred-slide md:aspect-[4] lg:aspect-[7.5] flex px-[16px] justify-end items-end text-white text-wrap font-bold uppercase font-libre text-[32px] sm:text-[48px] lg:text-[48px] leading-[normal] relative"
-          >
-            <span class="z-[10] text-right">100 Years of The Triangle</span>
-          </a>
-        </li>
-
-        <li class="splide__slide w-[100%] mb-[12px] md:mb-[0px]">
-          <a class="block bg-[#acd4f4]" href="https://tr.ee/bqz8s-E4NK">
-            <img
-              src="/images/PodcastBanner.webp"
-              class="w-full md:object-contain object-cover md:aspect-[4] lg:aspect-[7.5]"
-            />
-          </a>
-        </li>
-
-        <li class="splide__slide w-[100%] mb-[12px] md:mb-[0px]">
-          <a class="block bg-[#E5E7EB]" href="/classifieds">
-            <img
-              src="/images/classifiedsBannerNew.webp"
-              class="w-full md:object-contain object-cover md:aspect-[4] lg:aspect-[7.5]"
-            />
-          </a>
-        </li>
-
-        <li class="splide__slide w-[100%] mb-[12px] md:mb-[0px]">
-          <a
-            class="block bg-[#275997]"
-            href="https://docs.google.com/forms/d/e/1FAIpQLScra_6sUenvmpIuQ5FjmMyWO0a2sz9z36HkrqfnYQvJGH9BGQ/viewform"
-          >
-            <img
-              src="/images/applyBannerNew.webp"
-              class="w-full md:object-contain object-cover md:aspect-[4] lg:aspect-[7.5]"
-            />
-          </a>
-        </li>
-
-        <!-- <li class="splide__slide w-[100%] mb-[12px] md:mb-[0px]">
-          <a class="block bg-[#f3f592]" href="/graduation">
-            <img
-              src="/images/graduation-banner.webp"
-              class="w-full md:object-contain object-cover object-bottom aspect-[5.5]"
-            />
-          </a>
-        </li> -->
+        {
+          carouselSlides.map((slide) => (
+            <li class:list={[slide.desktop_only && "hidden md:block", "splide__slide w-[100%] mb-[12px] md:mb-[0px]"]}>
+              <a
+                href={slide.link_url}
+                style={`background-color: ${slide.background_color || "transparent"}; color: ${slide.text_color || "#ffffff"};`}
+                class:list={[
+                  slide.image_url
+                    ? "block"
+                    : "one-hundred-slide md:aspect-[4] lg:aspect-[7.5] flex px-[16px] justify-end items-end text-wrap font-bold uppercase font-libre text-[32px] sm:text-[48px] lg:text-[48px] leading-[normal] relative",
+                ]}
+              >
+                {slide.image_url ? (
+                  <img
+                    src={slide.image_url}
+                    alt={slide.title}
+                    class="w-full md:object-contain object-cover md:aspect-[4] lg:aspect-[7.5]"
+                  />
+                ) : (
+                  <span class="z-[10] text-right">{slide.title}</span>
+                )}
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </div>
   </div>

@@ -8,7 +8,6 @@ import Column from '../components/Columns.astro';
 import Social from '../components/Social.astro';
 import Poll from '../components/Polls.astro';
 import BreakingNewsBanner from '../components/BreakingNewsBanner.astro'
-import MostRead from '../components/MostRead.astro';
 import Developing from '../components/Developing.astro'
 import '../styles/global.css';
 import { getHomepageArticles } from '../utils/db';
@@ -17,17 +16,20 @@ import Banner from "../components/Banner.astro";
 
 const posts = await getHomepageArticles();
 
-const breaking = posts.news[0].breaking_news;
+const breakingText = posts.breaking_news?.text?.trim() ?? "";
+const breaking = (posts.breaking_news?.enabled ?? false) && breakingText !== "";
 ---
 
 <BaseLayout title="The Triangle">
     <Header home/>
-    <!-- {breaking && <BreakingNewsBanner article={posts.news[0]}/> } -->
+    {breaking && <BreakingNewsBanner text={breakingText}/> }
     <!-- {!breaking && <a id="one-hundred" href="https://therectangle.org" class="flex px-[16px] justify-end items-end w-full mt-[-24px] mb-[24px] h-[200px] md:h-[300px] bg-center text-white text-wrap font-bold uppercase font-libre text-[32px] sm:text-[48px] lg:text-[48px] leading-[normal] relative">
         <span class="z-[10] text-right">100 Years of The Triangle</span>
     </a>} -->
     <!-- {!breaking && <Banner server:defer/>} -->
-     <Banner server:defer/>
+     <!-- Only the first block after the nav may pull up 24px to close its
+          margin; when the breaking banner renders it takes that role. -->
+     <Banner server:defer pullUp={!breaking} slides={posts.carousel ?? []}/>
 
     <Section section="news" articles={posts.news?.slice(0, 9)} style="3-6-3"/>
     <Section section="news" articles={posts.news?.slice(9)} style="row"/>
@@ -37,13 +39,13 @@ const breaking = posts.news[0].breaking_news;
             <Section section="sports" articles={posts.sports?.slice(0, 3)} includeName style="3-5"/>
             <Section section="sports" articles={posts.sports?.slice(3, 6)} style="row"/>
             <Section section="entertainment" articles={posts.entertainment} includeName style="6-6"/>
-            <Section section="comics" slug="candp" articles={posts.candp?.slice(0, 3)} includeName style="5-3"/>
-            <Section section="comics" slug="candp" articles={posts.candp?.slice(3, 6)} style="row"/>
+            <Section section="comics" slug="comics-puzzles" articles={posts.candp?.slice(0, 3)} includeName style="5-3"/>
+            <Section section="comics" slug="comics-puzzles" articles={posts.candp?.slice(3, 6)} style="row"/>
         </div>
         <div id="main-right" class="hidden sm:block [&>*:not(:first-child)]:border-t-[1px] [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-triangleBlue main-side">
             <!-- <a href="https://go.gwu.edu/AIinDC"><img class="ad medium-rectangle" src="/images/ads/gwu_ad_032626_to_042226.png"/></a> -->
             <SubscribeLink/>
-            {posts.developingstories.length > 0 && <Developing stories={posts.developingstories}/>}
+            {posts.developingstories?.length > 0 && <Developing stories={posts.developingstories}/>}
             <!-- <MostRead/> -->
             <Column articles={posts.columns}/>
             <Poll />
@@ -51,6 +53,3 @@ const breaking = posts.news[0].breaking_news;
         </div>
     </div>
 </BaseLayout>
-
-
-

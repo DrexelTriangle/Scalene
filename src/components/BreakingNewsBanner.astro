@@ -1,32 +1,26 @@
 ---
-    const {article} = Astro.props
+const {text} = Astro.props
+const repeats = 6
 ---
-<div id="bn-grandparent" class="relative flex items-center mb-[12px] sm:mb-[0px] mt-[-25px] h-[48px] w-[100%] text-white font-libre text-[24px] text-center font-bold bg-triangleDanger py-[16px]">
-    <div id="bn-parent" class="absolute">
+<!-- No vertical padding here: the box is a fixed 48px tall, so py-[16px] left
+     only 16px of content height for 24px text and forced it to overflow.
+     `items-center` handles the centring instead. -->
+<!-- Height is 24px taller than the visible band, with a matching pt-[24px].
+     #scrollnav above is `sticky top-0 z-[99]` with an opaque white background,
+     so the 24px this pulls up is painted over -- making the red flush with the
+     nav while the padding keeps the text inside the visible 48px. A bare
+     mt-[-24px] without the padding hides the text itself, and raising z-index
+     above 99 is not an option (the banner would then cover the nav on scroll).
+     `items-center` centres within the 48px content box. -->
+<div id="bn-grandparent" class="relative flex items-center mb-[12px] sm:mb-[0px] mt-[-24px] pt-[24px] h-[72px] w-[100%] text-white font-libre text-[24px] text-center font-bold bg-triangleDanger">
+    <div id="bn-parent">
         <h1 id="bn">
-            <a class="hover:underline" href={"article/"+article.slug}>
-                BREAKING NEWS: {article.title}
-            </a>
-            &nbsp;&bull;&nbsp;
-            <a class="hover:underline" href={"article/"+article.slug}>
-                BREAKING NEWS: {article.title}
-            </a>
-            &nbsp;&bull;&nbsp; 
-            <a class="hover:underline" href={"article/"+article.slug}>
-                BREAKING NEWS: {article.title}
-            </a>
-            &nbsp;&bull;&nbsp; 
-            <a class="hover:underline" href={"article/"+article.slug}>
-                BREAKING NEWS: {article.title}
-            </a>
-            &nbsp;&bull;&nbsp; 
-            <a class="hover:underline" href={"article/"+article.slug}>
-                BREAKING NEWS: {article.title}
-            </a>
-            &nbsp;&bull;&nbsp; 
-            <a class="hover:underline" href={"article/"+article.slug}>
-                BREAKING NEWS: {article.title}
-            </a>
+            {Array.from({length: repeats}).map((_, i) => (
+                <>
+                    <span>BREAKING NEWS: {text}</span>
+                    {i < repeats - 1 && <>&nbsp;&bull;&nbsp;</>}
+                </>
+            ))}
         </h1>
     </div>
 </div>

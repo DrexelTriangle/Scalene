@@ -1,10 +1,10 @@
 ---
     export const prerender = false; // Not needed in 'server' mode
-    const { pageNum, hasMore, sectionSlug, url } = Astro.props;
+    const { hasMore, sectionSlug, url } = Astro.props;
 ---
 
 <div id="article-loader" style="min-height: 1px;"></div>
-<script is:inline define:vars={{ pageNum, hasMore, sectionSlug, url }} data-astro-rerun data-cfasync="false">
+<script is:inline define:vars={{ hasMore, sectionSlug, url }} data-astro-rerun data-cfasync="false">
     (() => {
         let isLoading = false;
         let currentPage = 2;
@@ -23,12 +23,16 @@
                 const response = await fetch(
                     `${url}${sectionSlug}?page=${currentPage}`,
                 );
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const data = await response.json();
 
                 if (!data.articles || data.articles.length === 0) {
                     localHasMore = false;
                 } else {
                     currentPage++;
+                    if (data.pagination && data.pagination.has_more === false) {
+                        localHasMore = false;
+                    }
                     data.articles.forEach((article) => {
                         const articleElement =
                             document.createElement("article");
@@ -46,27 +50,27 @@
                                 authorListLinks[authorListLinks.length - 1];
                         }
 
-                        const d = new Date(article.date);
+                        const d = new Date(article.published_date || article.date);
                         const months = [
-                        "Jan.",
-                        "Feb.",
-                        "March",
-                        "April",
-                        "May",
-                        "June",
-                        "July",
-                        "Aug.",
-                        "Sep.",
-                        "Oct.",
-                        "Nov.",
-                        "Dec.",
-                    ];
+                            "Jan.",
+                            "Feb.",
+                            "March",
+                            "April",
+                            "May",
+                            "June",
+                            "July",
+                            "Aug.",
+                            "Sep.",
+                            "Oct.",
+                            "Nov.",
+                            "Dec.",
+                        ];
                         const date_string =
-                        months[d.getMonth()] +
-                        " " +
-                        d.getDate() +
-                        ", " +
-                        d.getFullYear();
+                            months[d.getMonth()] +
+                            " " +
+                            d.getDate() +
+                            ", " +
+                            d.getFullYear();
 
                         authorList =
                             authorListLinks.length > 2
@@ -79,11 +83,11 @@
                         articleElement.innerHTML = `
                             <article class="grid grid-cols-[5fr_3fr] py-[8px] border-b-[1px] border-solid border-triangleGray-400">
                                 <div class="md:pr-[12px]">
-                                    <a href='${"/" + sectionSlug + "/" + article.slug}'><h2 class="font-playfair text-[28px] leading-tight hover:underline mb-[8px]">${article.title}</h2><a>
+                                    <a href='${"/article/" + article.slug}'><h2 class="font-playfair text-[28px] leading-tight hover:underline mb-[8px]">${article.title}</h2><a>
                                     <div id="byline" class="font-roboto-slab text-[12px] mb-[8px]">${authorList}</div>
                                     <div class="text-[14px]"> ${article.excerpt} </div>
                                 </div>
-                                <img src=${article.featured_image ? article.featured_image.replace("https://www.thetriangle.org", "/proxy").replace("https://cms.thetriangle.org", "/proxy") : "/proxy/wp-content/uploads/2024/12/IMG_2493-2048x1365.jpg"} alt="article image" class="ml-[12px] bg-[url('/images/loading.jpg')] bg-cover w-[calc(100%-12px)] h-[169px] object-cover"/>
+                                <img src=${article.featured_image ? article.featured_image : "/proxy/wp-content/uploads/2024/12/IMG_2493-2048x1365.jpg"} alt="article image" class="ml-[12px] bg-[url('/images/loading.jpg')] bg-cover w-[calc(100%-12px)] h-[169px] object-cover"/>
                             </article>
                         `;
                         articlesGrid.appendChild(articleElement);

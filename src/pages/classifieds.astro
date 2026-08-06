@@ -7,11 +7,7 @@ import { getClassifieds } from "../utils/db.js"
 import Classified from "../components/Classified.astro";
 import "../styles/global.css";
 
-interface ClassifiedPost {
-    title: string;
-    content: string;
-    meta: { email: string; label: string };
-}
+import type { ClassifiedPost } from "../utils/types";
 
 const date = new Date();
 const date2 = new Date();
@@ -48,7 +44,7 @@ const classifieds = await getClassifieds();
     >
         <div id="main-left" class="main-side">
             {classifieds.map((classified: ClassifiedPost) => (
-            <Classified contact={classified.title} email={classified.meta.email} label={classified.meta.label} message={classified.content}/>
+            <Classified contact={classified.name} email={classified.email} label={classified.label} message={classified.message}/>
         ))}
         </div>
         <div

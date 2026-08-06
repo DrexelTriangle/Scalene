@@ -10,7 +10,6 @@ import Social from '../../components/Social.astro';
 import Poll from '../../components/Polls.astro';
 import '../../styles/global.css';
 import { getAuthorArticles } from '../../utils/db';
-import { normalizeText } from "../../utils/data";
 import Scroll from "../../components/Sections/Scroll.astro";
 
 const pageNum = 1;
@@ -20,7 +19,7 @@ if (!authorData) {
   return Astro.rewrite('/404');
 }
 
-const hasMore = authorData.pagination.hasMore;
+const hasMore = authorData.pagination.has_more;
 const name = authorData.author?.display_name
 ---
 <BaseLayout title={name + " - The Triangle"}>
@@ -31,7 +30,7 @@ const name = authorData.author?.display_name
     {authorData?.articles?.length > 13 && <div class="grid grid-cols-[1fr] sm:grid-cols-[8fr_4fr] mt-2 xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] mb-[8px] divide-x divide-triangleBlue pt-[5px]">
         <div id="main-left" class="main-side">
             <Section section="" articles={authorData?.articles?.slice(13, 25)} includeName style="list"/>
-            <Scroll pageNum={pageNum} hasMore={hasMore} sectionSlug={authorData?.author?.slug} url="/proxy/wp-json/triangle/v2/author/"/>
+            <Scroll hasMore={hasMore} sectionSlug={authorData?.author?.slug} url="/api/authors/"/>
         </div>
         <div id="main-right" class="hidden sm:block main-side [&>*:not(:first-child)]:border-t-[1px] [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-triangleBlue">
             <Poll />

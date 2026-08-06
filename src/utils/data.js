@@ -18,6 +18,16 @@ export function normalizeText(s) {
     .trim();
 }
 
+export function proxyMediaUrl(url) {
+  if (!url) return url;
+
+  return String(url)
+    .replace(/^https:\/\/(?:www|cms)\.thetriangle\.org\/proxy\/wp-content/i, '/proxy/wp-content')
+    .replace(/^https:\/\/(?:www|cms)\.thetriangle\.org\/wp-content/i, '/proxy/wp-content')
+    .replace(/^\/proxy\/proxy\/wp-content/i, '/proxy/wp-content')
+    .replace(/^\/proxy\/\/wp-content/i, '/proxy/wp-content');
+}
+
 /**
  * Replace absolute CMS image URLs with the local /proxy path,
  * and strip srcset attributes (not needed with proxy images).
@@ -25,8 +35,12 @@ export function normalizeText(s) {
  */
 export function proxyContent(html) {
   return html
+    .replaceAll('https://cms.thetriangle.org/proxy/wp-content', '/proxy/wp-content')
+    .replaceAll('https://www.thetriangle.org/proxy/wp-content', '/proxy/wp-content')
     .replaceAll('https://cms.thetriangle.org/wp-content', '/proxy/wp-content')
     .replaceAll('https://www.thetriangle.org/wp-content', '/proxy/wp-content')
+    .replaceAll('/proxy/proxy/wp-content', '/proxy/wp-content')
+    .replaceAll('/proxy//wp-content', '/proxy/wp-content')
     .replace(/srcset="[^"]*"/g, '');
 }
 

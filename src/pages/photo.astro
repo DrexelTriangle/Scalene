@@ -3,7 +3,6 @@
 // export const prerender = false;
 import Header from '../components/Header.astro';
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Section from '../components/Sections/Section.astro';
 import '../styles/global.css';
 
 import { gallery } from '../utils/db';
@@ -15,10 +14,12 @@ const images = (await gallery()) ?? [];
   <section>
     <h1 class="my-2 xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-playfair text-[36px]">Photo Gallery </h1>
     <div class="mx-auto xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] columns-2 sm:columns-3 md:columns-4 gap-4">
+      {/* gallery() now reads the CMS (/v1/gallery), which serves canonical
+          media URLs — no legacy-origin rewrite needed. */}
       {images.map((img) => (
         <img
-          src={img.url.replace("https://cms.thetriangle.org/", "/proxy/")}
-          alt=""
+          src={img.url}
+          alt={img.alt_text ?? ""}
           class="mb-4 w-full rounded-lg break-inside-avoid"
           loading="lazy"
         />

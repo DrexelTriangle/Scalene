@@ -1,0 +1,111 @@
+---
+export const prerender = false;
+
+import Header from '../components/Header.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/global.css';
+
+import { getPolls, type ArchivedPoll } from '../utils/pollStore';
+
+const polls = await getPolls();
+
+// Percentages are computed by the CMS so every surface shows the same number.
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+
+function formatPollDate(value: string): string {
+  if (!value) {
+    return '';
+  }
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) {
+    return '';
+  }
+  return dateFormatter.format(parsed);
+}
+
+// One line describing when the poll ran, rather than two fields that are blank
+// more often than not. An open-ended poll reads as "since <date>".
+function runLine(startsAt: string, endsAt: string): string {
+  const start = formatPollDate(startsAt);
+  const end = formatPollDate(endsAt);
+  if (start && end) return `${start} – ${end}`;
+  if (start) return `Open since ${start}`;
+  if (end) return `Closed ${end}`;
+  return 'Date not recorded';
+}
+
+// The leading option gets the emphasis; ties are fine, they simply both read as
+// the top result.
+function topPercentage(poll: ArchivedPoll): number {
+  return poll.options.reduce((max: number, option) => Math.max(max, option.percentage), 0);
+}
+---
+<BaseLayout title="Polls Archive - The Triangle">
+  <Header />
+  <section class="xl:max-w-[900px] lg:max-w-[800px] max-w-[90%] mx-[auto] mb-[64px]">
+    <header class="mt-[24px] mb-[32px]">
+      <h1 class="font-playfair text-[36px] md:text-[42px] leading-tight">Polls Archive</h1>
+      <p class="font-roboto-slab text-[14px] mt-[4px] text-gray-600">
+        Every reader poll The Triangle has run, with final results.
+      </p>
+    </header>
+
+    {polls.length === 0 && (
+      <p class="font-roboto-slab text-[16px] py-[48px] text-center text-gray-600">
+        No polls have been published yet.
+      </p>
+    )}
+
+    <div class="flex flex-col gap-[40px]">
+      {polls.map((poll) => {
+        const leader = topPercentage(poll);
+        return (
+          <article class="border-t-[2px] border-triangleBlue pt-[16px]">
+            <div class="flex items-baseline justify-between gap-[16px] flex-wrap">
+              <h2 class="font-playfair text-[24px] md:text-[28px] leading-tight">
+                {poll.question}
+              </h2>
+              {poll.status === 'active' && (
+                <span class="font-roboto-slab uppercase text-[11px] tracking-wide text-triangleBlue border-[1px] border-triangleBlue rounded-[3px] px-[6px] py-[1px]">
+                  Open now
+                </span>
+              )}
+            </div>
+
+            <p class="font-roboto-slab text-[12px] text-gray-600 mt-[4px] mb-[16px]">
+              {`${runLine(poll.startsAt, poll.endsAt)} · ${poll.totalVotes.toLocaleString()} ${poll.totalVotes === 1 ? 'vote' : 'votes'}`}
+            </p>
+
+            <ul class="flex flex-col gap-[10px] list-none p-0 m-0">
+              {poll.options.map((option) => (
+                <li>
+                  <div class="flex items-baseline justify-between gap-[12px] font-roboto-slab text-[14px]">
+                    <span class={option.percentage === leader && leader > 0 ? 'font-bold' : ''}>
+                      {option.option}
+                    </span>
+                    <span class="text-gray-600 shrink-0 tabular-nums">
+                      {Math.round(option.percentage)}%
+                    </span>
+                  </div>
+                  {/* Decorative: the percentage is already stated in the label,
+                      so the bar carries nothing a screen reader needs. */}
+                  <div class="mt-[3px] h-[6px] w-full bg-triangleGray rounded-[3px] overflow-hidden" aria-hidden="true">
+                    <div
+                      class={`h-full rounded-[3px] ${option.percentage === leader && leader > 0 ? 'bg-triangleBlue' : 'bg-triangleBlue/40'}`}
+                      style={`width: ${Math.max(option.percentage, 0)}%;`}
+                    >
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </article>
+        );
+      })}
+    </div>
+  </section>
+</BaseLayout>
