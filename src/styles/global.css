@@ -13,8 +13,16 @@
   --color-gray: #E5E7EB;
 }
 
+/*
+ * This said "Crimson Text", serif -- but nothing ever loaded Crimson Text (the
+ * @font-face imports above cover Roboto Slab, Playfair Display and Libre
+ * Franklin only), so every page has always rendered the generic serif behind
+ * it. Naming the family we actually get keeps the stylesheet honest; if we ever
+ * want Crimson Text for real, it needs an @import first. The matching
+ * `font-crimson` Tailwind token was dropped for the same reason.
+ */
 body {
-  font-family: "Crimson Text", serif;
+  font-family: serif;
   font-size: 18px;
   background-color: white;
 }
@@ -133,17 +141,41 @@ body {
 }
 
 /*
+ * The body typeface lives on the container, not on the per-block rule below.
+ * That rule has to sniff each block's contents to tell prose from layout
+ * wrappers, and a block can stop matching for reasons outside our control --
+ * flytedesk injects its in-content ad units *inside* a paragraph, which used to
+ * drop that paragraph out of the rule and let it inherit body's generic serif
+ * (Times on iOS). Anchoring the font here means a mis-sniffed block can lose
+ * its measure but never its face.
+ */
+#article {
+  @apply font-roboto-slab;
+}
+
+/*
  * Bodies reach us in two shapes. Legacy WordPress content uses <p> per
  * paragraph; anything authored or re-saved in the Delta CMS comes out of Trix,
  * which wraps every block in a plain <div> instead. Both have to read the same.
  *
- * The :not(:has(...)) guard keeps this off wrapper divs that exist for layout
- * rather than prose -- most importantly the puzzle embed, which would otherwise
- * be squeezed into the 700px prose column.
+ * The :not(...) guard keeps this off wrapper divs that exist for layout rather
+ * than prose -- most importantly the puzzle embed, which would otherwise be
+ * squeezed into the 700px prose column. It carries .article-embed to say so
+ * outright; the :has() clauses are the fallback for legacy WordPress bodies,
+ * which wrap embeds in bare divs we cannot go back and annotate.
+ *
+ * Ad containers are subtracted from those clauses. They are injected into real
+ * paragraphs after load, and once an ad fills they sprout an <iframe> too, so
+ * without this a paragraph is disqualified by whichever clause the ad trips.
  */
 #article p,
-#article > div:not(:has(div, figure, iframe, table, script)) {
-  @apply font-roboto-slab my-[16px] text-[16px] max-w-[700px] mx-[auto];
+#article > div:not(
+    .article-embed,
+    :has(figure, table, script),
+    :has(div:not(.flytead, .flytead *)),
+    :has(iframe:not(.flytead *))
+  ) {
+  @apply my-[16px] text-[16px] max-w-[700px] mx-[auto];
 }
 
 /*
