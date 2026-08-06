@@ -50,8 +50,11 @@ function puzzlemeEmbed(raw: string): string {
     ? `\n            <div class="pm-attribution-div" style="font-family: sans-serif;font-size: 12px;color:#666666;padding-top: 5px;width: 100%">${attribution}</div>`
     : "";
 
+  // .article-embed opts this wrapper out of the prose column in global.css.
+  // The stylesheet can otherwise only infer "layout, not prose" from a block's
+  // contents, which is a guess a third-party script can invalidate.
   return `
-        <div style="position: relative;text-align: center">
+        <div class="article-embed" style="position: relative;text-align: center">
             <div class="pm-embed-div" data-id="${escapeAttribute(id)}" data-set="${escapeAttribute(set)}" data-puzzleType="${escapeAttribute(puzzleType)}" data-height="700px" data-embedparams="embed=wp"></div>${attributionDiv}
         </div>`;
 }
