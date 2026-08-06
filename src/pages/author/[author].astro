@@ -30,7 +30,7 @@ const name = authorData.author?.display_name
     {authorData?.articles?.length > 13 && <div class="grid grid-cols-[1fr] sm:grid-cols-[8fr_4fr] mt-2 xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] mb-[8px] divide-x divide-triangleBlue pt-[5px]">
         <div id="main-left" class="main-side">
             <Section section="" articles={authorData?.articles?.slice(13, 25)} includeName style="list"/>
-            <Scroll pageNum={pageNum} hasMore={hasMore} sectionSlug={authorData?.author?.slug} url="/api/authors/"/>
+            <Scroll hasMore={hasMore} sectionSlug={authorData?.author?.slug} url="/api/authors/"/>
         </div>
         <div id="main-right" class="hidden sm:block main-side [&>*:not(:first-child)]:border-t-[1px] [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-triangleBlue">
             <Poll />

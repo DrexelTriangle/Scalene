@@ -1,10 +1,10 @@
 ---
     export const prerender = false; // Not needed in 'server' mode
-    const { pageNum, hasMore, sectionSlug, url } = Astro.props;
+    const { hasMore, sectionSlug, url } = Astro.props;
 ---
 
 <div id="article-loader" style="min-height: 1px;"></div>
-<script is:inline define:vars={{ pageNum, hasMore, sectionSlug, url }} data-astro-rerun data-cfasync="false">
+<script is:inline define:vars={{ hasMore, sectionSlug, url }} data-astro-rerun data-cfasync="false">
     (() => {
         let isLoading = false;
         let currentPage = 2;

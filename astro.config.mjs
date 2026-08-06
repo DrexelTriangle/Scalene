@@ -1,6 +1,5 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import react from '@astrojs/react';
 import node from '@astrojs/node';
 import { VitePWA } from "vite-plugin-pwa";
 
@@ -26,8 +25,9 @@ export default defineConfig({
       { hostname: "thetriangle.org" },
     ],
   },
-  // Tailwind is not listed here -- see postcss.config.mjs.
-  integrations: [react()],
+  // No integrations: Tailwind runs through postcss.config.mjs, and the site
+  // is all .astro -- no framework components to hydrate.
+  integrations: [],
   vite: {
     plugins: [
       VitePWA({
