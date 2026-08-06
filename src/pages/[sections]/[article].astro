@@ -101,11 +101,16 @@ const articleHtml = stripDimensions(proxyWpContent(content));
 const actualArticle = /<(p|div|blockquote|h[1-6])(\s[^>]*)?>\s*[^<\s][\s\S]*?<\/\1>/i.test(content);
 const primaryCategory = post.categories?.[0] ?? post.categories_list?.[0];
 
+// Puzzle posts set a screenshot of the puzzle as their featured image so they
+// have a thumbnail in section lists and social cards, but on the article page
+// the playable embed sits right below it -- the still is pure duplication.
+const hasPuzzleEmbed = content.includes("pm-embed-div");
+
 // Legacy WordPress bodies carry their lead image inline as a <figure>, so only
 // posts without any inline image need the featured image rendered for them --
 // otherwise every imported article would show it twice.
 const featuredImage =
-  post.featured_image && !/<img\b/i.test(content)
+  post.featured_image && !/<img\b/i.test(content) && !hasPuzzleEmbed
     ? proxyWpContent(post.featured_image)
     : undefined;
 
@@ -144,7 +149,7 @@ const featuredImage =
                 </section>}
         {!actualArticle && <Comments comments={comments} slug={post.slug ?? article} commentsClosed={commentsClosed} />}
         {!actualArticle && <DonateBlurb/>}
-        {content.includes('pm-embed-div') && (
+        {hasPuzzleEmbed && (
         <script 
             is:inline 
             id="pm-script" 
