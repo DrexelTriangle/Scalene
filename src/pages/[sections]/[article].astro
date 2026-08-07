@@ -12,6 +12,7 @@ import Poll from '../../components/Polls.astro';
 import { getArticle, getArticleComments } from '../../utils/db';
 import { normalizeText } from "../../utils/data";
 import { expandShortcodes } from "../../utils/shortcodes";
+import { normalizeArticleHtml } from "../../utils/articleHtml";
 import DonateBlurb from "../../components/DonateBlurb.astro";
 import Section from "../../components/Sections/Section.astro";
 import SubscribeLink from "../../components/SubscribeLink.astro";
@@ -67,7 +68,12 @@ const authorList = "By " + (authorListLinks.length > 2 ? authorListLinks.join(",
 // Shortcodes have to be expanded before anything inspects or renders the
 // body: the puzzle embed script is only injected when the markup contains
 // pm-embed-div, which is precisely what expansion produces.
-const content = expandShortcodes(post.content);
+//
+// Normalisation runs on the same early copy rather than on articleHtml further
+// down, because the layout sniff below reads `content` too -- and one of the
+// things normalisation fixes is that sniff misreading a CMS-authored body as an
+// image-only post.
+const content = normalizeArticleHtml(expandShortcodes(post.content));
 
 const proxyWpContent = (html: string) =>
   html
