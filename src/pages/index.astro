@@ -18,6 +18,17 @@ const posts = await getHomepageArticles();
 
 const breakingText = posts.breaking_news?.text?.trim() ?? "";
 const breaking = (posts.breaking_news?.enabled ?? false) && breakingText !== "";
+
+// Far shorter than an article page's hour (see ArticleLayout): an article is
+// finished once it publishes, but the homepage is the editors' live control
+// surface -- the featured lead, the breaking banner and the carousel all change
+// on demand and are worth nothing if the edge is holding yesterday's copy.
+// Without this the page states no freshness at all and every cache in front of
+// us invents its own.
+Astro.response.headers.set(
+  "Cache-Control",
+  "public, max-age=60, s-maxage=60, stale-while-revalidate=300",
+);
 ---
 
 <BaseLayout title="The Triangle">
