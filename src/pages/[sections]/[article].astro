@@ -89,7 +89,63 @@ const stripDimensions = (html: string) =>
       return cleaned ? `style="${cleaned}"` : "";
     });
 
-const articleHtml = stripDimensions(proxyWpContent(content));
+// The description the editor wrote for this image on this article. No fallback
+// to the headline: it sits directly above the image, so announcing it again as
+// the alt tells a screen-reader user nothing they haven't just heard. An empty
+// alt leaves the gap visible to an audit instead of hiding it behind a
+// duplicate.
+const featuredImageAlt = normalizeText(post.featured_image_alt ?? "");
+
+// A media file identified by its upload, with WordPress's size suffix removed.
+// The body's copy of the lead image is a resized variant of the same upload the
+// CMS holds as the featured image -- P1180110-1-1024x770.jpg against
+// P1180110-1.jpg -- so the two only line up once the -WxH is gone.
+const mediaKey = (url: string): string =>
+  (url.split(/[?#]/)[0].split("/").pop() ?? "")
+    .replace(/\.(jpe?g|png|gif|webp|avif)$/i, "")
+    .replace(/-\d+x\d+$/, "")
+    .toLowerCase();
+
+const escapeAttribute = (value: string): string =>
+  value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+
+// Put the editor's description on the tag readers actually reach.
+//
+// Imported articles keep their lead image inline in the body, so the featured
+// image is never rendered for them (see featuredImage below) and the alt the
+// CMS holds for it would go nowhere. WordPress exported those <img>s with
+// alt="", which is most of the archive: of the 40 most recently published
+// articles, 37 lead with the featured image inline and 36 of those have no
+// description on it.
+//
+// Only when it is demonstrably the same photo, and only when there is nothing
+// there to overwrite -- an alt an author wrote is better than one written for a
+// different context. First image only: describing the lead photo says nothing
+// about the third one down the page.
+const describeLeadImage = (html: string): string => {
+  const featuredKey = post.featured_image ? mediaKey(post.featured_image) : "";
+  if (!featuredImageAlt || !featuredKey) return html;
+
+  // Non-global on purpose: only the first <img> in the body is a candidate.
+  return html.replace(/<img\b[^>]*>/i, (tag) => {
+    const src = /\ssrc="([^"]*)"/i.exec(tag)?.[1];
+    if (!src || mediaKey(src) !== featuredKey) return tag;
+
+    const alt = /\salt="([^"]*)"/i.exec(tag);
+    if (alt?.[1].trim()) return tag;
+
+    const described = `alt="${escapeAttribute(featuredImageAlt)}"`;
+    return alt
+      ? tag.replace(/\salt="[^"]*"/i, ` ${described}`)
+      : tag.replace(/<img\b/i, `<img ${described}`);
+  });
+};
+
+const articleHtml = describeLeadImage(stripDimensions(proxyWpContent(content)));
 
 // "Does this body have prose?" -- comics and other image-only posts don't, and
 // they get the single-column treatment. This used to look for <p> alone, which
@@ -113,13 +169,6 @@ const featuredImage =
   post.featured_image && !/<img\b/i.test(content) && !hasPuzzleEmbed
     ? proxyWpContent(post.featured_image)
     : undefined;
-
-// The description the editor wrote for this image on this article. No fallback
-// to the headline: it sits directly above the image, so announcing it again as
-// the alt tells a screen-reader user nothing they haven't just heard. An empty
-// alt leaves the gap visible to an audit instead of hiding it behind a
-// duplicate.
-const featuredImageAlt = normalizeText(post.featured_image_alt ?? "");
 
 ---
 <ArticleLayout title={normalizeText(post.title) + " - The Triangle"} article={post}>
