@@ -90,7 +90,10 @@
                                 <img src=${article.featured_image ? article.featured_image : "/proxy/wp-content/uploads/2024/12/IMG_2493-2048x1365.jpg"} alt="article image" class="ml-[12px] bg-[url('/images/loading.jpg')] bg-cover w-[calc(100%-12px)] h-[169px] object-cover"/>
                             </article>
                         `;
-                        articlesGrid.appendChild(articleElement);
+                        articlesGrid.insertBefore(
+                            articleElement,
+                            articleLoader,
+                        );
                     });
                 }
             } catch (error) {
