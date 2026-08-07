@@ -26,9 +26,14 @@ export async function getHomepageArticles() {
   //const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/homepage';
   const url = normalizedCmsBaseUrl + '/homepage';
 
+  // Not force-cache, which is "reuse the stored response even when it is
+  // stale": on the one endpoint that carries the featured lead and the breaking
+  // banner that means an editor's change can sit invisible behind a cache entry
+  // with no expiry. 'default' honours the CMS's own Cache-Control (60s), so the
+  // homepage is still cached -- just never past the bound the CMS states.
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
-    cache: 'force-cache',
+    cache: 'default',
   });
 
   if (!res.ok) throw new Error(String(res.status));
