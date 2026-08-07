@@ -70,3 +70,28 @@ export function expandShortcodes(content: string): string {
     puzzlemeEmbed(raw),
   );
 }
+
+/**
+ * Two shapes, both narrow enough to leave editorial brackets ("[sic]",
+ * "[Editor's note]") alone: the shortcodes this corpus actually carries, named
+ * explicitly; and any bracketed token carrying attributes, which is what makes
+ * it a shortcode rather than prose. Mirrors shortcodePattern in the CMS's
+ * database/http_models.go, which keeps them out of newly derived excerpts.
+ */
+const shortcodePattern =
+  /\[\/?(?:puzzleme|caption|gallery|embed|playlist|audio|video)\b[^\]]*\]|\[[a-z][a-z0-9_-]*\s+[^\]]*=[^\]]*\]/gis;
+
+/**
+ * Remove shortcodes rather than expand them, for the places that show article
+ * text as plain prose: excerpts and meta descriptions. Only the body has room
+ * for an embed, and an excerpt that is a shortcode is worse than a short one --
+ * a crossword post whose whole body is [puzzleme ...] printed its embed ids
+ * under the headline on section listings, in the RSS feed and in <meta
+ * name="description">. Excerpts stored before the CMS learned to skip
+ * shortcodes still carry them, so this is what actually clears the page.
+ */
+export function stripShortcodes(content: string): string {
+  if (!content || !content.includes("[")) return content;
+
+  return content.replace(shortcodePattern, " ");
+}

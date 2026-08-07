@@ -11,6 +11,8 @@
  * @typedef {import('./types').ArticleComments} ArticleComments
  */
 
+import { stripShortcodes } from "./shortcodes";
+
 const cmsBaseUrl = import.meta.env.CMS_API_BASE_URL ?? "https://localhost:8080/v1";
 const normalizedCmsBaseUrl = String(cmsBaseUrl).replace(/\/$/, "");
 
@@ -19,6 +21,30 @@ function normalizeArticle(post) {
     post.categories_list = post.categories;
   }
   return post;
+}
+
+/**
+ * Strip WordPress shortcodes out of every excerpt in a CMS payload.
+ *
+ * Done here rather than at the ~10 places an excerpt is rendered: excerpts ride
+ * along inside a different shape on every endpoint (homepage sections, section
+ * and author listings, search) and reach the page through cards, the RSS feed,
+ * the infinite-scroll route and <meta name="description">. Walking the parsed
+ * body once covers all of them, and the payloads are a page of articles.
+ * @template T
+ * @param {T} value
+ * @returns {T}
+ */
+function sanitizeExcerpts(value) {
+  if (Array.isArray(value)) {
+    value.forEach(sanitizeExcerpts);
+  } else if (value && typeof value === 'object') {
+    if (typeof value.excerpt === 'string') {
+      value.excerpt = stripShortcodes(value.excerpt).replace(/\s+/g, ' ').trim();
+    }
+    Object.values(value).forEach(sanitizeExcerpts);
+  }
+  return value;
 }
 
 /** @returns {Promise<Homepage>} */
@@ -37,7 +63,7 @@ export async function getHomepageArticles() {
   });
 
   if (!res.ok) throw new Error(String(res.status));
-  return res.json();
+  return sanitizeExcerpts(await res.json());
 }
 
 /** @returns {Promise<ClassifiedPost[]>} */
@@ -75,7 +101,7 @@ export async function getSectionArticles(section, page) {
   });
 
   if (!res.ok) return;
-  return res.json();
+  return sanitizeExcerpts(await res.json());
 }
 
 export async function getSubsectionArticles(subsection, page) {
@@ -89,7 +115,7 @@ export async function getSubsectionArticles(subsection, page) {
   });
 
   if (!res.ok) return;
-  return res.json();
+  return sanitizeExcerpts(await res.json());
 }
 
 /**
@@ -109,7 +135,7 @@ export async function getAuthorArticles(author, page) {
   });
 
   if (!res.ok) return;
-  return res.json();
+  return sanitizeExcerpts(await res.json());
 }
 
 /**
@@ -126,7 +152,7 @@ export async function getArticle(article) {
   });
 
   if (!res.ok) return;
-  return normalizeArticle(await res.json());
+  return sanitizeExcerpts(normalizeArticle(await res.json()));
 }
 
 /**
@@ -160,7 +186,7 @@ export async function getRandomArticle() {
   });
 
   if (!res.ok) return;
-  return res.json();
+  return sanitizeExcerpts(await res.json());
 }
 
 /**
@@ -177,7 +203,7 @@ export async function search(search) {
   });
 
   if (!res.ok) return;
-  return res.json();
+  return sanitizeExcerpts(await res.json());
 }
 /** @returns {Promise<GalleryImage[]>} */
 export async function gallery() {
@@ -209,7 +235,7 @@ export async function getRecentArticles(limit = 20) {
 
   if (!res.ok) return [];
   const body = await res.json();
-  return Array.isArray(body?.articles) ? body.articles : [];
+  return Array.isArray(body?.articles) ? sanitizeExcerpts(body.articles) : [];
 }
 
 /**
