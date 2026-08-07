@@ -13,6 +13,8 @@
  * data-basepath at all.
  */
 
+import he from "he";
+
 /** Attributes are single-quoted in practice, but accept double quotes too. */
 function parseAttributes(raw: string): Record<string, string> {
   const attributes: Record<string, string> = {};
@@ -44,8 +46,12 @@ function puzzlemeEmbed(raw: string): string {
 
   const puzzleType = attributes.type || "crossword";
   // Attribution is authored as HTML (it contains a link), so it is inserted
-  // as-is, exactly as WordPress did.
-  const attribution = attributes.attribution ?? "";
+  // as-is, exactly as WordPress did -- but only WordPress-era bodies hold that
+  // markup raw. A post written in the CMS editor stores the shortcode with the
+  // attribution entity-encoded ("&lt;a href=..."), which printed the tags as
+  // visible text under the puzzle. Decoding first gives both shapes the same
+  // markup to insert; on a legacy body with no entities it is a no-op.
+  const attribution = he.decode(attributes.attribution ?? "");
   const attributionDiv = attribution
     ? `\n            <div class="pm-attribution-div" style="font-family: sans-serif;font-size: 12px;color:#666666;padding-top: 5px;width: 100%">${attribution}</div>`
     : "";
