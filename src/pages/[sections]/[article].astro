@@ -114,6 +114,13 @@ const featuredImage =
     ? proxyWpContent(post.featured_image)
     : undefined;
 
+// The description the editor wrote for this image on this article. No fallback
+// to the headline: it sits directly above the image, so announcing it again as
+// the alt tells a screen-reader user nothing they haven't just heard. An empty
+// alt leaves the gap visible to an audit instead of hiding it behind a
+// duplicate.
+const featuredImageAlt = normalizeText(post.featured_image_alt ?? "");
+
 ---
 <ArticleLayout title={normalizeText(post.title) + " - The Triangle"} article={post}>
     <Header/>
@@ -127,7 +134,7 @@ const featuredImage =
             <div id="main-left" class="main-side">
                 <div id="print-wrap">
                 <section id="article">
-                    {featuredImage && <figure><img src={featuredImage} alt={normalizeText(post.title)}/></figure>}
+                    {featuredImage && <figure><img src={featuredImage} alt={featuredImageAlt}/></figure>}
                     <Fragment set:html={authorPrint + articleHtml} />
                 </section>
                 </div>
@@ -144,7 +151,7 @@ const featuredImage =
             </div>
         </div>}
         {!actualArticle && <section id="article">
-                    {featuredImage && <figure><img src={featuredImage} alt={normalizeText(post.title)}/></figure>}
+                    {featuredImage && <figure><img src={featuredImage} alt={featuredImageAlt}/></figure>}
                     <Fragment set:html={articleHtml} />
                 </section>}
         {!actualArticle && <Comments comments={comments} slug={post.slug ?? article} commentsClosed={commentsClosed} />}

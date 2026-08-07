@@ -72,6 +72,12 @@ export interface Article {
   authors: Author[];
   content: string;
   featured_image: string;
+  /**
+   * triangle-cms: the editor's description of `featured_image`, written on the
+   * article rather than on the library record. Absent on WordPress-era
+   * articles, which never had anywhere to put one.
+   */
+  featured_image_alt?: string;
   categories_list: Category[];
   seo: Seo;
   related: RelatedArticle[];
