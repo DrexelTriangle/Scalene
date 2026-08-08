@@ -10,12 +10,28 @@ import Social from '../../components/Social.astro';
 import Poll from '../../components/Polls.astro';
 import '../../styles/global.css';
 import { getAuthorArticles } from '../../utils/db';
+import { getSlugKind } from '../../utils/taxonomyStore';
 import Scroll from "../../components/Sections/Scroll.astro";
 
 const pageNum = 1;
 const authorData = author ? await getAuthorArticles(author, pageNum) : undefined;
 
 if (!authorData) {
+  // Most of what misses here is not a person. WordPress gave categories an
+  // author-shaped archive, so /author/crossword, /author/movies and
+  // /author/womens-basketball are all still indexed and still linked -- 31 of
+  // the 68 distinct slugs that 404'd on this route name a section or a
+  // subsection this site does serve, just at /<slug>.
+  //
+  // Only redirect on a definite answer. getSlugKind returns 'unavailable' when
+  // the CMS could not be read, and sending a real author's page to /<slug>
+  // during a blip would turn a brief outage into a confidently wrong redirect
+  // that caches.
+  const kind = author ? await getSlugKind(author) : 'unknown';
+  if (kind === 'section' || kind === 'subsection') {
+    return Astro.redirect('/' + author, 301);
+  }
+
   return Astro.rewrite('/404');
 }
 
