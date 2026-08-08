@@ -61,3 +61,32 @@ jobs:
             --retry-all-errors \
             https://www.thetriangle.org/ >/dev/null
           echo "Production is healthy."
+
+      # /sw.js is a root path, so a missing worker does not fail loudly: the
+      # request falls through to the [sectionSlug] catch-all and comes back as
+      # an HTML error page. Assert the content type, not just the status.
+      - name: Verify service worker is served
+        run: |
+          content_type=$(
+            curl \
+              --fail \
+              --show-error \
+              --silent \
+              --location \
+              --max-time 10 \
+              --retry 5 \
+              --retry-delay 5 \
+              --retry-all-errors \
+              --output /dev/null \
+              --write-out '%{content_type}' \
+              https://www.thetriangle.org/sw.js
+          )
+          case "$content_type" in
+            *javascript*)
+              echo "Service worker is served as $content_type."
+              ;;
+            *)
+              echo "::error::/sw.js returned content-type '$content_type', expected JavaScript."
+              exit 1
+              ;;
+          esac
