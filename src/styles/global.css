@@ -141,16 +141,22 @@ body {
 }
 
 /*
- * The body typeface lives on the container, not on the per-block rule below.
- * That rule has to sniff each block's contents to tell prose from layout
+ * The body typeface *and size* live on the container, not on the per-block rule
+ * below. That rule has to sniff each block's contents to tell prose from layout
  * wrappers, and a block can stop matching for reasons outside our control --
  * flytedesk injects its in-content ad units *inside* a paragraph, which used to
  * drop that paragraph out of the rule and let it inherit body's generic serif
- * (Times on iOS). Anchoring the font here means a mis-sniffed block can lose
- * its measure but never its face.
+ * (Times on iOS).
+ *
+ * The face was anchored here first; the size had to follow for the same reason.
+ * A paragraph that embeds an image inline is a real prose block, but it trips
+ * the :has(figure) clause below and falls out of the rule, and body is 18px --
+ * so those paragraphs rendered two points larger than the ones around them, in
+ * the same article. Anchoring both means a mis-sniffed block can lose its
+ * measure but never its face or its size.
  */
 #article {
-  @apply font-roboto-slab;
+  @apply font-roboto-slab text-[16px];
 }
 
 /*
