@@ -1,5 +1,6 @@
 ---
 import { normalizeText, buildByline, proxyMediaUrl } from '../utils/data';
+import { getCategoryHref } from '../utils/taxonomyStore';
 
 const { title, excerpt, image, author, published_date, date, category, row, slug, breaking } = Astro.props;
 
@@ -15,6 +16,10 @@ if (image !== undefined) {
 }
 
 const byline = buildByline(author, published_date || date);
+
+// Most WordPress categories are not pages of their own, so the label only gets
+// an href where the taxonomy says it leads somewhere. See getCategoryHref.
+const categoryHref = category ? await getCategoryHref(category[0]) : null;
 
 const classes = row
   ? 'mb-[4px] md:mb-[0px] flex-1 sm:px-[16px] first:pl-0 sm:last:pr-0'
@@ -32,7 +37,7 @@ const imgClass = row
     </a>
   )}
   {category && (
-    <a href={`/${category[0].slug}`}>
+    <a href={categoryHref ?? undefined}>
       <h3 class="font-roboto-slab uppercase font-extrabold text-triangleBlue text-[10px] font-700">
         {normalizeText(category[0].name)}
       </h3>

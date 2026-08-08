@@ -1,5 +1,6 @@
-// Server-side cache of the CMS taxonomy, used to route a root-level slug to
-// the right article endpoint.
+// Server-side cache of the CMS taxonomy, used to answer two routing questions
+// the site cannot answer on its own: what a root-level slug is, and where an
+// article's category label should link.
 //
 // Without it the only way to tell /politics (a subsection) from /news (a
 // section) is to call the section endpoint and see it fail, which costs every
@@ -34,9 +35,25 @@ export type SlugKind = 'section' | 'subsection' | 'unknown' | 'unavailable';
 
 type SlugKinds = Map<string, 'section' | 'subsection'>;
 
+/**
+ * Category title (lowercased) -> the routable slug that owns it.
+ *
+ * The CMS records the category titles an imported article carries for a section
+ * it does not name directly: Columns owns "Podcasts", Entertainment owns
+ * "Arts & Entertainment", Sports owns "Men's Lacrosse" and a dozen more.
+ * Article pages label themselves with the raw category, so this is what turns
+ * that label into a link that goes somewhere.
+ */
+type AliasOwners = Map<string, string>;
+
+type Taxonomy = {
+  kinds: SlugKinds;
+  aliases: AliasOwners;
+};
+
 type CacheEntry = {
   /** null when the last attempt failed and we have nothing to serve. */
-  kinds: SlugKinds | null;
+  taxonomy: Taxonomy | null;
   fetchedAt: number;
 };
 
@@ -44,21 +61,31 @@ let cache: CacheEntry | null = null;
 /** Dedupes concurrent misses so a burst of traffic makes one upstream call. */
 let inFlight: Promise<CacheEntry> | null = null;
 
-function indexBySlug(items: TaxonomyItem[]): SlugKinds {
+function indexTaxonomy(items: TaxonomyItem[]): Taxonomy {
   const kinds: SlugKinds = new Map();
+  const aliases: AliasOwners = new Map();
 
   for (const item of items) {
     if (item?.type !== 'section' && item?.type !== 'subsection') continue;
     if (typeof item.slug !== 'string' || !item.slug) continue;
+
     // Sections win a collision, matching the order the old probe tried them in.
-    if (item.type === 'subsection' && kinds.has(item.slug)) continue;
-    kinds.set(item.slug, item.type);
+    if (!(item.type === 'subsection' && kinds.has(item.slug))) {
+      kinds.set(item.slug, item.type);
+    }
+
+    for (const alias of item.category_aliases ?? []) {
+      if (typeof alias !== 'string') continue;
+      const key = alias.trim().toLowerCase();
+      // Same precedence: the first owner of a title keeps it.
+      if (key && !aliases.has(key)) aliases.set(key, item.slug);
+    }
   }
 
-  return kinds;
+  return { kinds, aliases };
 }
 
-async function fetchKinds(): Promise<SlugKinds | null> {
+async function fetchTaxonomy(): Promise<Taxonomy | null> {
   try {
     const items = await getTaxonomy();
     if (!items) {
@@ -66,8 +93,8 @@ async function fetchKinds(): Promise<SlugKinds | null> {
       return null;
     }
 
-    const kinds = indexBySlug(items);
-    if (kinds.size === 0) {
+    const taxonomy = indexTaxonomy(items);
+    if (taxonomy.kinds.size === 0) {
       // A CMS that answers with no sections at all is a broken CMS, not a site
       // with no sections. Treat it as a failure so routing falls back to
       // probing rather than 404ing every section page.
@@ -75,7 +102,7 @@ async function fetchKinds(): Promise<SlugKinds | null> {
       return null;
     }
 
-    return kinds;
+    return taxonomy;
   } catch (err) {
     console.error('Taxonomy: fetch failed:', err instanceof Error ? err.message : err);
     return null;
@@ -83,27 +110,27 @@ async function fetchKinds(): Promise<SlugKinds | null> {
 }
 
 function isFresh(entry: CacheEntry, now: number): boolean {
-  const ttl = entry.kinds === null ? ERROR_BACKOFF_MS : CACHE_TTL_MS;
+  const ttl = entry.taxonomy === null ? ERROR_BACKOFF_MS : CACHE_TTL_MS;
   return now - entry.fetchedAt < ttl;
 }
 
-async function loadKinds(): Promise<SlugKinds | null> {
+async function loadTaxonomy(): Promise<Taxonomy | null> {
   const now = Date.now();
 
   if (cache && isFresh(cache, now)) {
-    return cache.kinds;
+    return cache.taxonomy;
   }
 
   if (!inFlight) {
-    inFlight = fetchKinds()
-      .then((kinds) => {
+    inFlight = fetchTaxonomy()
+      .then((taxonomy) => {
         // If this attempt failed but we still hold a recent-enough taxonomy,
         // keep using it. A stale taxonomy is very likely still correct, and it
         // beats routing on guesses.
-        if (kinds === null && cache?.kinds && now - cache.fetchedAt < STALE_MAX_MS) {
-          return { kinds: cache.kinds, fetchedAt: now };
+        if (taxonomy === null && cache?.taxonomy && now - cache.fetchedAt < STALE_MAX_MS) {
+          return { taxonomy: cache.taxonomy, fetchedAt: now };
         }
-        return { kinds, fetchedAt: now };
+        return { taxonomy, fetchedAt: now };
       })
       .then((entry) => {
         cache = entry;
@@ -115,7 +142,7 @@ async function loadKinds(): Promise<SlugKinds | null> {
   }
 
   const entry = await inFlight;
-  return entry.kinds;
+  return entry.taxonomy;
 }
 
 /**
@@ -129,8 +156,39 @@ async function loadKinds(): Promise<SlugKinds | null> {
 export async function getSlugKind(slug: string): Promise<SlugKind> {
   if (!slug) return 'unknown';
 
-  const kinds = await loadKinds();
-  if (!kinds) return 'unavailable';
+  const taxonomy = await loadTaxonomy();
+  if (!taxonomy) return 'unavailable';
 
-  return kinds.get(slug) ?? 'unknown';
+  return taxonomy.kinds.get(slug) ?? 'unknown';
+}
+
+/** The `{ name, slug }` shape every CMS payload uses for an article category. */
+type ArticleCategory = { name?: string; slug?: string };
+
+/**
+ * Where an article's category label should link, or null if nowhere.
+ *
+ * An article carries whatever category WordPress gave it, and most of those are
+ * not pages. 273 articles name a primary category that is not a section or a
+ * subsection -- `wrestling` (103), `triangle-talks` (72), `theater` (25),
+ * `sjn-grant` (9) -- and the kicker above their headline used to link to it
+ * regardless, so every one of those articles shipped a link to a 404.
+ *
+ * Resolution order: the slug itself if it is routable, then the category title
+ * against the taxonomy's alias map ("Podcasts" -> /columns). Null means the
+ * caller should render the label as plain text rather than a dead link.
+ */
+export async function getCategoryHref(category: ArticleCategory | undefined): Promise<string | null> {
+  if (!category) return null;
+
+  const taxonomy = await loadTaxonomy();
+  // With no taxonomy to check against, keep the old behaviour and link to the
+  // slug: a link that might 404 beats dropping every category link site-wide
+  // for as long as the CMS is unreachable.
+  if (!taxonomy) return category.slug ? `/${category.slug}` : null;
+
+  if (category.slug && taxonomy.kinds.has(category.slug)) return `/${category.slug}`;
+
+  const owner = category.name && taxonomy.aliases.get(category.name.trim().toLowerCase());
+  return owner ? `/${owner}` : null;
 }

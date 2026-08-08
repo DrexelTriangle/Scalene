@@ -10,6 +10,7 @@ import '../../styles/global.css';
 import Social from '../../components/Social.astro';
 import Poll from '../../components/Polls.astro';
 import { getArticle, getArticleComments } from '../../utils/db';
+import { getCategoryHref } from "../../utils/taxonomyStore";
 import { normalizeText } from "../../utils/data";
 import { expandShortcodes } from "../../utils/shortcodes";
 import { normalizeArticleHtml } from "../../utils/articleHtml";
@@ -162,6 +163,9 @@ const articleHtml = describeLeadImage(stripDimensions(proxyWpContent(content)));
 // broken across lines still counts.
 const actualArticle = /<(p|div|blockquote|h[1-6])(\s[^>]*)?>\s*[^<\s][\s\S]*?<\/\1>/i.test(content);
 const primaryCategory = post.categories?.[0] ?? post.categories_list?.[0];
+// Most WordPress categories are not pages of their own. Link the kicker only
+// where the taxonomy says the label leads somewhere; otherwise plain text.
+const primaryCategoryHref = await getCategoryHref(primaryCategory);
 
 // Puzzle posts set a screenshot of the puzzle as their featured image so they
 // have a thumbnail in section lists and social cards, but on the article page
@@ -181,7 +185,10 @@ const featuredImage =
     <Header/>
     <span class="hidden print:block text-center uppercase text-[14px] mb-[12px]"> THE TRIANGLE &nbsp; <b>{normalizeText(primaryCategory?.name ?? "")}</b> &nbsp; {date_string} </span>
     <article class="xl:max-w-[1200px] lg:max-w-[1000px] max-w-[90%] mx-[auto]">
-        {primaryCategory && <a href={"../"+primaryCategory.slug}><span class="block font-roboto-slab uppercase font-extrabold text-triangleBlue text-[12px] md:text-[14px] italic font-700"> {normalizeText(primaryCategory.name)} </span></a>}
+        {/* No href when the category is not a page: Astro drops the attribute,
+            leaving a plain <a> -- which is what HTML has for a link that is not
+            currently active, and renders as the same unlinked kicker text. */}
+        {primaryCategory && <a href={primaryCategoryHref ?? undefined}><span class="block font-roboto-slab uppercase font-extrabold text-triangleBlue text-[12px] md:text-[14px] italic font-700"> {normalizeText(primaryCategory.name)} </span></a>}
         <h1 class="font-playfair text-[28px] sm:text-[36px] md:text-[42px] font-bold md:mt-[-12px] leading-[normal]">{normalizeText(post.title)}</h1>
         <div set:html={authorList} class="text-[14px] md:text-[16px] font-roboto-slab font-light print:hidden"></div>
         <span class="font-light font-roboto-slab text-[12px] mb-[16px] print:hidden">{date_string}</span>
