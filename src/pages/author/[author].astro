@@ -11,6 +11,7 @@ import Poll from '../../components/Polls.astro';
 import '../../styles/global.css';
 import { getAuthorArticles } from '../../utils/db';
 import { getSlugKind } from '../../utils/taxonomyStore';
+import { resolveAuthorSlug } from '../../utils/authorIndex';
 import Scroll from "../../components/Sections/Scroll.astro";
 
 const pageNum = 1;
@@ -30,6 +31,20 @@ if (!authorData) {
   const kind = author ? await getSlugKind(author) : 'unknown';
   if (kind === 'section' || kind === 'subsection') {
     return Astro.redirect('/' + author, 301);
+  }
+
+  // The rest are real people whose slug the import got wrong. It builds them
+  // from the WordPress login, and the logins do not agree with the names the
+  // site links by -- rkeating, by-nayab-iqbal, sanjana-bandi-2 and
+  // stefan-kusmirek-dev-thetriangle-org are four different shapes of the same
+  // defect. Matching on the display name is what they have in common.
+  //
+  // The ETL fix for this only lands on the next reseed, and these are live 404s
+  // now, so the recovery lives here. It runs only after the lookup misses, so a
+  // real author's page never pays for it.
+  const resolved = author ? await resolveAuthorSlug(author) : null;
+  if (resolved) {
+    return Astro.redirect('/author/' + resolved, 301);
   }
 
   return Astro.rewrite('/404');
