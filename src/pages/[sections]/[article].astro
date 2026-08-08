@@ -11,6 +11,7 @@ import Social from '../../components/Social.astro';
 import Poll from '../../components/Polls.astro';
 import { getArticle, getArticleComments } from '../../utils/db';
 import { getCategoryHref } from "../../utils/taxonomyStore";
+import { LEGACY_ARTICLE_SLUGS } from '../../utils/legacySlugs';
 import { normalizeText } from "../../utils/data";
 import { expandShortcodes } from "../../utils/shortcodes";
 import { normalizeArticleHtml } from "../../utils/articleHtml";
@@ -37,8 +38,36 @@ if (host === 'thetriangle.org') {
     301,
   );
 }
-if(sections !== "article"){
-return Astro.redirect('/article/'+article, 301);
+// WordPress served articles at /<category>/<slug>, so those two-segment URLs are
+// still indexed and still linked, and they redirect to this site's /article/<slug>.
+//
+// That redirect used to fire on the *shape* of the path alone, without asking
+// whether the second segment named an article at all. Every other two-segment
+// WordPress URL matches the same shape -- /tag/<term> archives, /page/<n>
+// pagination, /about/us -- so each one 301'd to an /article/ URL that could only
+// 404, turning one dead URL into two requests plus a redirect hop that hid the
+// original path from the CMS logs. 633 such lookups over the retained window
+// across 256 distinct slugs, nearly all of them tag archives.
+//
+// So resolve first and redirect only on a hit. The extra lookup lands only on the
+// legacy path and is a cheap one: the CMS marks article detail cacheable for a
+// minute and this fetch is force-cache, so the redirected request reads it warm.
+if (sections !== "article") {
+  // A renamed slug resolves through the map rather than the CMS -- the middleware
+  // only rewrites paths already under /article/, so without this a legacy slug
+  // arriving under its old category would 404 here instead of reaching its
+  // replacement.
+  const renamed = article ? LEGACY_ARTICLE_SLUGS[article] : undefined;
+  if (renamed) {
+    return Astro.redirect('/article/' + renamed, 301);
+  }
+
+  const legacyPost = article ? await getArticle(article) : undefined;
+  if (!legacyPost) {
+    return Astro.rewrite('/404');
+  }
+
+  return Astro.redirect('/article/' + article, 301);
 }
 
 const post = article ? await getArticle(article) : undefined;
