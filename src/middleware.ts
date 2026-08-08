@@ -27,24 +27,25 @@ const FEED_SEGMENTS = new Set([
 ]);
 
 // Asset requests for a site that no longer serves them: sw.js and
-// workbox-<hash>.js from the WordPress-era service worker still installed in
-// returning browsers, and the crawler-driven sitemap and manifest spellings this
-// site does not use. Answered here so they stop at the edge -- [sectionSlug]
-// otherwise asks the CMS about each one twice, once as a section and once as a
-// subsection, which is where the 86 sw.js lookups in the logs came from.
+// the sitemap spellings WordPress used and this site does not serve. Answered
+// here so they stop at the edge -- [sectionSlug] otherwise asks the CMS about
+// each one twice, once as a section and once as a subsection.
 //
-// Deliberately an explicit list and not a general "has a file extension" test.
-// robots.txt, ads.txt, favicon.ico and the rest of public/ are real files, and
-// /sitemap-index.xml and /sitemap-<year>.xml are real routes; a blanket
-// extension rule would answer 404 for all of them if the adapter ever let a
-// static path reach middleware.
+// Only genuinely dead paths belong here, and "dead" has to be checked against
+// the built site rather than assumed from the logs. /sw.js, /workbox-<hash>.js
+// and /manifest.webmanifest look like the same kind of WordPress leftover and
+// are not: they are this site's own PWA output, the manifest is referenced from
+// every page's <link rel="manifest">, and listing them here would be a 404 for
+// the service worker and the install manifest the moment a request reached
+// middleware ahead of static file serving.
+//
+// Which is also why this is an explicit list and not a general "has a file
+// extension" test: robots.txt, ads.txt, favicon.ico and the rest of public/ are
+// real files, and /sitemap-index.xml and /sitemap-<year>.xml are real routes.
 const DEAD_ASSETS = new Set([
-  "/sw.js",
   "/sitemap.xml",
   "/sitemap_index.xml",
-  "/manifest.webmanifest",
 ]);
-const DEAD_WORKBOX = /^\/workbox-[0-9a-f]+\.js$/i;
 
 export const onRequest: MiddlewareHandler = (context, next) => {
   const { pathname } = context.url;
@@ -55,7 +56,7 @@ export const onRequest: MiddlewareHandler = (context, next) => {
     return context.redirect("/feed", 301);
   }
 
-  if (DEAD_ASSETS.has(pathname) || DEAD_WORKBOX.test(pathname)) {
+  if (DEAD_ASSETS.has(pathname)) {
     return new Response(null, { status: 404 });
   }
 
