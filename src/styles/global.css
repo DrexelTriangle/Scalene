@@ -132,8 +132,23 @@ body {
   object-fit:cover;
 }
 
+/*
+ * Trix bodies keep their images *inside* the paragraph div rather than beside
+ * it, so an inline <figure> has no prose sibling whose margin could space it
+ * off the text above. Own the gap here instead of leaning on the neighbours;
+ * where a <p> is the neighbour the two margins just collapse to the same 16px.
+ *
+ * The trailing <br> is what the editor left behind when the figure was dropped
+ * mid-paragraph. It sits after a block element, so it buys nothing but a stray
+ * empty line under the caption.
+ */
 #article figure{
   max-width: 100% !important;
+  @apply my-[16px];
+}
+
+#article figure + br{
+  display: none;
 }
 
 #article figure figcaption{
