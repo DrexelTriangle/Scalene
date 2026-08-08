@@ -73,7 +73,8 @@
     const subNav = document.getElementById("sub-nav");
 
     // Toggle fa-bars and fa-close on hamburger click
-    if (hamburger && sideNav && mainNav && subNav) {
+    if (hamburger && sideNav && mainNav && subNav && !hamburger.dataset.bound) {
+      hamburger.dataset.bound = "1";
       hamburger.addEventListener('click', () => {
         if (hamburger.classList.contains('fa-bars')) {
           hamburger.classList.remove('fa-bars');
@@ -98,7 +99,8 @@
       });
     }
 
-    if (search && searchBar) {
+    if (search && searchBar && !search.dataset.bound) {
+      search.dataset.bound = "1";
       search.addEventListener('click', () => {
         searchBar.classList.toggle("hiddenSearch");
       });
@@ -134,10 +136,23 @@
 
   window.addEventListener('scroll', onScroll);
 
-  document.addEventListener("astro:page-load", () => {
+  function initHeader() {
     setupHeader();
     onScroll();
-  });
+  }
+
+  // Article pages render through ArticleLayout, which has no <ClientRouter />,
+  // so astro:page-load never fires there. Binding on that event alone left the
+  // hamburger and search icon dead on every article. Bind on plain DOM readiness
+  // too; setupHeader() marks the elements it wires so the extra call on
+  // ClientRouter pages is a no-op.
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initHeader);
+  } else {
+    initHeader();
+  }
+
+  document.addEventListener("astro:page-load", initHeader);
 
       // let idx = 0;
       // setInterval(() => {

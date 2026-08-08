@@ -53,6 +53,15 @@ const totalVotes = Object.values(pollOptionCounts).reduce((sum, count) => sum + 
   // fall back to a native GET submit (/?poll=Yes) and no vote would be cast.
   const setupPoll = () => {
     const pollRoot = document.querySelector<HTMLElement>('[data-poll-root]');
+    // Article pages render through ArticleLayout, which has no <ClientRouter />,
+    // so astro:page-load never fires there and none of this ran. setupPoll is now
+    // also called on DOM readiness; this flag keeps the second call on
+    // ClientRouter pages from binding the submit handler twice.
+    if (!pollRoot || pollRoot.dataset.bound) {
+      return;
+    }
+    pollRoot.dataset.bound = '1';
+
     const pollForm = pollRoot?.querySelector<HTMLFormElement>('[data-poll-form]');
     const userVoteNode = pollRoot?.querySelector<HTMLElement>('[data-user-vote]');
     const submitButton = pollForm?.querySelector<HTMLButtonElement>('button[type="submit"]');
@@ -202,6 +211,12 @@ const totalVotes = Object.values(pollOptionCounts).reduce((sum, count) => sum + 
       updateOptionBackgrounds(counts);
     });
   };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupPoll);
+  } else {
+    setupPoll();
+  }
 
   document.addEventListener('astro:page-load', setupPoll);
 </script>
