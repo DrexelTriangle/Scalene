@@ -251,6 +251,23 @@ export interface ArticleComments {
   total_count: number;
 }
 
+/**
+ * triangle-cms: one row of the CMS's site_taxonomy. `/v1/taxonomy` returns
+ * these as a bare array -- sections, subsections and tags together, so callers
+ * that care about one kind have to filter on `type`.
+ */
+export interface TaxonomyItem {
+  id: number;
+  type: 'section' | 'subsection' | 'tag';
+  slug: string;
+  canonical_title: string;
+  /** Set on subsections: the slug of the section they hang under. */
+  parent_slug?: string;
+  article_count: number;
+  /** Extra category titles whose articles also belong to this item. */
+  category_aliases: string[];
+}
+
 /** triangle-cms: an approved classified from /v1/classifieds. */
 export interface ClassifiedPost {
   id: number;
