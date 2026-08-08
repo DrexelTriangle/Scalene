@@ -9,6 +9,7 @@
  * @typedef {import('./types').SitemapSlug} SitemapSlug
  * @typedef {import('./types').ClassifiedPost} ClassifiedPost
  * @typedef {import('./types').ArticleComments} ArticleComments
+ * @typedef {import('./types').TaxonomyItem} TaxonomyItem
  */
 
 import { stripShortcodes } from "./shortcodes";
@@ -102,6 +103,35 @@ export async function getSectionArticles(section, page) {
 
   if (!res.ok) return;
   return sanitizeExcerpts(await res.json());
+}
+
+/**
+ * Every section, subsection and tag the CMS knows about, in one response
+ * (~52 rows / 8 KB today). Distinguishes a section slug from a subsection slug
+ * without asking the article endpoints, which is otherwise only answerable by
+ * calling one and seeing it fail.
+ *
+ * Go through taxonomyStore rather than calling this directly: it sits on the
+ * path of every section page, and this function has no cache of its own.
+ * Returns undefined on failure, so a caller can tell an unreachable CMS from a
+ * genuinely empty taxonomy.
+ * @returns {Promise<TaxonomyItem[]|undefined>}
+ */
+export async function getTaxonomy() {
+  const url = normalizedCmsBaseUrl + '/taxonomy';
+
+  // no-store, unlike its neighbours: /v1/taxonomy states no Cache-Control, and
+  // force-cache with nothing to respect would pin the first response for the
+  // life of the process -- a new section would never appear. Freshness is
+  // taxonomyStore's job, where there is an explicit TTL.
+  const res = await fetch(url, {
+    headers: { Accept: 'application/json' },
+    cache: 'no-store',
+  });
+
+  if (!res.ok) return;
+  const body = await res.json();
+  return Array.isArray(body) ? body : undefined;
 }
 
 export async function getSubsectionArticles(subsection, page) {

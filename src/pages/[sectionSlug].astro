@@ -10,19 +10,42 @@ import Social from "../components/Social.astro";
 import Poll from "../components/Polls.astro";
 import "../styles/global.css";
 import { getSectionArticles, getSubsectionArticles } from "../utils/db";
+import { getSlugKind } from "../utils/taxonomyStore";
+import type { SectionArticles, Subsection } from "../utils/types";
 import { normalizeText } from "../utils/data";
 import Scroll from "../components/Sections/Scroll.astro";
 import SubscribeLink from "../components/SubscribeLink.astro";
 
 const pageNum = 1;
-let posts = sectionSlug ? await getSectionArticles(sectionSlug, pageNum) : undefined;
+
+// This route is the site's root-level catch-all, so it sees subsections,
+// sections and every stray path alike (/sw.js used to land here). Ask the
+// taxonomy which one this is and call only that endpoint: probing the section
+// endpoint first and falling through on failure cost every subsection page a
+// wasted CMS round trip, and every unknown path two.
+const slugKind = sectionSlug ? await getSlugKind(sectionSlug) : "unknown";
+
+let posts: SectionArticles | undefined;
 let isSubsectionPage = false;
 
-if (!posts && sectionSlug) {
-    posts = await getSubsectionArticles(sectionSlug, pageNum);
-    isSubsectionPage = Boolean(posts);
+if (sectionSlug) {
+    if (slugKind === "section") {
+        posts = await getSectionArticles(sectionSlug, pageNum);
+    } else if (slugKind === "subsection") {
+        posts = await getSubsectionArticles(sectionSlug, pageNum);
+        isSubsectionPage = Boolean(posts);
+    } else if (slugKind === "unavailable") {
+        // The taxonomy could not be read. Fall back to the old probe rather
+        // than 404: a CMS blip must not take every section page down with it.
+        posts = await getSectionArticles(sectionSlug, pageNum);
+        if (!posts) {
+            posts = await getSubsectionArticles(sectionSlug, pageNum);
+            isSubsectionPage = Boolean(posts);
+        }
+    }
 }
 
+// "unknown" lands here having made no article request at all.
 if (!posts) {
     return Astro.rewrite("/404");
 }
@@ -33,6 +56,10 @@ const sectionName = normalizeText(
 );
 
 let hasMore = posts.pagination.has_more;
+
+// The nav strip lists a section's subsections; a subsection page has none of
+// its own to show.
+const subsectionLinks: Subsection[] = isSubsectionPage ? [] : (posts.subsections ?? []);
 ---
 
 <BaseLayout title={sectionName + " - The Triangle"}>
@@ -46,7 +73,7 @@ let hasMore = posts.pagination.has_more;
         class="hidden sm:flex xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] font-roboto-slab font-light text-[12px] gap-x-[16px] border-b-[1px] border-solid border-triangleGray"
     >
         {
-            (!isSubsectionPage ? posts.subsections : [])?.map((subsection) => (
+            subsectionLinks.map((subsection) => (
                 <a href={"/" + subsection.slug} class="hover:border-triangleBlue border-transparent border-b-[1px] pb-[4px]">
                     {" "}
                     {normalizeText(subsection.canonical_title ?? subsection.name)}
