@@ -117,6 +117,43 @@ export async function getSectionArticles(section, page) {
  * genuinely empty taxonomy.
  * @returns {Promise<TaxonomyItem[]|undefined>}
  */
+/**
+ * Every author, paged out of the CMS.
+ *
+ * Only used to answer "which slug holds the person this URL names", so it is
+ * worth the several round trips it costs -- 875 authors at 200 a page today.
+ * Go through authorIndex rather than calling this directly: it has no cache of
+ * its own, and this must never sit on the path of a URL that already resolves.
+ *
+ * Returns undefined if any page fails, so a caller can tell an unreachable CMS
+ * from a genuinely empty list. A partial index is worse than none here: a page
+ * that failed to load looks exactly like an author who does not exist.
+ * @returns {Promise<{slug: string, display_name: string}[]|undefined>}
+ */
+export async function getAllAuthors() {
+  const limit = 200;
+  const authors = [];
+
+  for (let offset = 0; ; offset += limit) {
+    const url = `${normalizedCmsBaseUrl}/authors?limit=${limit}&offset=${offset}`;
+    const res = await fetch(url, {
+      headers: { Accept: 'application/json' },
+      cache: 'no-store',
+    });
+
+    if (!res.ok) return;
+    const body = await res.json();
+    if (!Array.isArray(body?.authors)) return;
+
+    authors.push(...body.authors);
+    if (!body.pagination?.has_more) return authors;
+
+    // The CMS decides when the pages run out; this only stops a pagination bug
+    // from spinning here forever.
+    if (authors.length > 20000) return authors;
+  }
+}
+
 export async function getTaxonomy() {
   const url = normalizedCmsBaseUrl + '/taxonomy';
 
