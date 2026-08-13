@@ -38,17 +38,29 @@ type SlugKinds = Map<string, 'section' | 'subsection'>;
 /**
  * Category title (lowercased) -> the routable slug that owns it.
  *
- * The CMS records the category titles an imported article carries for a section
- * it does not name directly: Columns owns "Podcasts", Entertainment owns
- * "Arts & Entertainment", Sports owns "Men's Lacrosse" and a dozen more.
- * Article pages label themselves with the raw category, so this is what turns
- * that label into a link that goes somewhere.
+ * Article pages label themselves with the raw category the import gave them, so
+ * this is what turns that label into a link that goes somewhere. Two things put
+ * a title here, and the order between them matters.
+ *
+ * A row's OWN title comes first. An alias is second, and only fills a title no
+ * row claims: aliases exist so a section can absorb a category that has no page
+ * of its own ("Arts & Entertainment" -> /entertainment), so an alias must never
+ * outrank that category once it does have a page. Sports still aliases "Men's
+ * Lacrosse", and there is now a Men's Lacrosse subsection; the label belongs to
+ * the subsection.
+ *
+ * This is the same precedence the CMS applies when it answers the same question
+ * (RefreshCategoryAliases in triangle-cms), and matching it is the point -- the
+ * CMS sends a resolved slug on every category, and the two must agree about
+ * what that slug should be. Indexing aliases alone got it backwards silently,
+ * because /sports is a real page that really does list the article, so the
+ * wrong link looked exactly like the right one.
  */
-type AliasOwners = Map<string, string>;
+type CategoryOwners = Map<string, string>;
 
 type Taxonomy = {
   kinds: SlugKinds;
-  aliases: AliasOwners;
+  owners: CategoryOwners;
 };
 
 type CacheEntry = {
@@ -63,7 +75,8 @@ let inFlight: Promise<CacheEntry> | null = null;
 
 function indexTaxonomy(items: TaxonomyItem[]): Taxonomy {
   const kinds: SlugKinds = new Map();
-  const aliases: AliasOwners = new Map();
+  const owners: CategoryOwners = new Map();
+  const aliased: CategoryOwners = new Map();
 
   for (const item of items) {
     if (item?.type !== 'section' && item?.type !== 'subsection') continue;
@@ -74,15 +87,26 @@ function indexTaxonomy(items: TaxonomyItem[]): Taxonomy {
       kinds.set(item.slug, item.type);
     }
 
+    if (typeof item.canonical_title === 'string') {
+      const title = item.canonical_title.trim().toLowerCase();
+      // First writer wins within a tier, so a title two rows share cannot make
+      // the resolved slug depend on the order the CMS listed them in.
+      if (title && !owners.has(title)) owners.set(title, item.slug);
+    }
+
     for (const alias of item.category_aliases ?? []) {
       if (typeof alias !== 'string') continue;
       const key = alias.trim().toLowerCase();
-      // Same precedence: the first owner of a title keeps it.
-      if (key && !aliases.has(key)) aliases.set(key, item.slug);
+      if (key && !aliased.has(key)) aliased.set(key, item.slug);
     }
   }
 
-  return { kinds, aliases };
+  // Aliases fill only the titles no row claims as its own.
+  for (const [title, slug] of aliased) {
+    if (!owners.has(title)) owners.set(title, slug);
+  }
+
+  return { kinds, owners };
 }
 
 async function fetchTaxonomy(): Promise<Taxonomy | null> {
@@ -175,8 +199,10 @@ type ArticleCategory = { name?: string; slug?: string };
  * regardless, so every one of those articles shipped a link to a 404.
  *
  * Resolution order: the slug itself if it is routable, then the category title
- * against the taxonomy's alias map ("Podcasts" -> /columns). Null means the
- * caller should render the label as plain text rather than a dead link.
+ * against the taxonomy's owner map ("Podcasts" -> /podcasts, and
+ * "Arts & Entertainment" -> /entertainment, which has no page of its own).
+ * Null means the caller should render the label as plain text rather than a
+ * dead link.
  */
 export async function getCategoryHref(category: ArticleCategory | undefined): Promise<string | null> {
   if (!category) return null;
@@ -189,6 +215,6 @@ export async function getCategoryHref(category: ArticleCategory | undefined): Pr
 
   if (category.slug && taxonomy.kinds.has(category.slug)) return `/${category.slug}`;
 
-  const owner = category.name && taxonomy.aliases.get(category.name.trim().toLowerCase());
+  const owner = category.name && taxonomy.owners.get(category.name.trim().toLowerCase());
   return owner ? `/${owner}` : null;
 }
