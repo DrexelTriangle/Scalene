@@ -57,9 +57,12 @@ const sectionName = normalizeText(
 
 let hasMore = posts.pagination.has_more;
 
-// The nav strip lists a section's subsections; a subsection page has none of
-// its own to show.
-const subsectionLinks: Subsection[] = isSubsectionPage ? [] : (posts.subsections ?? []);
+// The nav strip lists whatever hangs directly under this page. A subsection can
+// have children of its own now -- /food links Beer Reviews, Wine Reviews and
+// Restaurant Reviews -- so both kinds of page read the same field. It is absent
+// or empty for the leaf subsections, which is most of them, and the strip then
+// renders as nothing exactly as it did before.
+const subsectionLinks: Subsection[] = posts.subsections ?? [];
 ---
 
 <BaseLayout title={sectionName + " - The Triangle"}>
