@@ -12,16 +12,18 @@
 // regenerated wholesale after every reseed, and a hand-maintained entry living
 // in it would be silently overwritten.
 //
-// Add an entry only where the destination genuinely holds the content. The CMS
-// records this relationship itself as a `category_aliases` entry on the owning
-// section -- "Podcasts" is listed on Columns -- so that is the source to check
-// before adding a row here.
+// Add an entry only where the destination genuinely holds the content, and only
+// where the slug has no taxonomy row of its own. A row is always the better
+// answer: it gives the category its own page instead of pointing at a section
+// that merely contains it.
 //
-// If a slug here is ever given a real taxonomy row, remove it from this map:
-// the redirect runs ahead of routing and would shadow the new page.
-export const LEGACY_SECTION_SLUGS: Record<string, string> = {
-  // Columns carries "Podcasts" in its category_aliases. 784 requests over the
-  // ten days of retained logs, and nothing on the site links it -- this is
-  // entirely inbound from the WordPress era.
-  podcasts: "/columns",
-};
+// If a slug here is ever given a real taxonomy row, remove it from this map.
+// The redirect runs ahead of routing, so it shadows the new page completely --
+// which is what happened to /podcasts. The CMS gave Podcasts a subsection row
+// with 75 articles, and this map went on sending every request for it to
+// /columns -- 784 of them in the ten days of logs that were retained when this
+// entry was added, none of them from a link on the site.
+//
+// Empty is the healthy state. Every WordPress sub-category the migration left
+// behind now has a row.
+export const LEGACY_SECTION_SLUGS: Record<string, string> = {};
