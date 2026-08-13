@@ -200,6 +200,46 @@ body {
 }
 
 /*
+ * Expanded WordPress media shortcodes: a YouTube video and a SoundCloud player.
+ *
+ * The sizing lives here rather than in the markup expandShortcodes emits,
+ * because the article page strips width and height out of every inline style it
+ * renders. That pass exists to unpick the dimensions WordPress baked into its
+ * images and it cannot tell an embed's layout from an image's, so an iframe
+ * that sizes itself inline loses both and falls back to the HTML default of
+ * 300x150 -- which is exactly what these did before the class.
+ *
+ * Video gets a 16:9 box rather than the shortcode's own 560x315: that is a
+ * fixed-width column from 2013 and it does not survive a phone.
+ *
+ * Scoped to these two classes, never to .article-embed itself: that class is
+ * what opts a wrapper OUT of the 700px prose column, and the puzzle embed needs
+ * every pixel it can get.
+ */
+#article .article-embed-video,
+#article .article-embed-audio {
+  @apply my-[16px] mx-[auto] max-w-[700px];
+}
+
+#article .article-embed-video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+#article .article-embed-video iframe,
+#article .article-embed-audio iframe {
+  border: 0;
+}
+
+#article .article-embed-video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/*
  * Trix's heading button emits <h1> and its quote button a bare <blockquote>.
  * Neither had any rule here, so Tailwind's preflight flattened them into
  * body text. Sized down from the article title, which is the page's real h1.
