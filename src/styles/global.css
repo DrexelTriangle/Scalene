@@ -133,6 +133,17 @@ body {
 }
 
 /*
+ * Comics and puzzles are drawn to their own frame -- the panels and the
+ * lettering go right up to the edge -- so the banner crop above takes the joke
+ * out with the margins. The article page tags their bodies (see
+ * [article].astro) rather than trying to tell a strip from a photo in CSS.
+ */
+#article.uncropped-images figure img{
+  aspect-ratio: auto;
+  object-fit: contain;
+}
+
+/*
  * Trix bodies keep their images *inside* the paragraph div rather than beside
  * it, so an inline <figure> has no prose sibling whose margin could space it
  * off the text above. Own the gap here instead of leaning on the neighbours;

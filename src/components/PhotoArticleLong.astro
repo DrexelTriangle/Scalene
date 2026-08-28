@@ -1,7 +1,8 @@
 ---
 import { normalizeText, buildByline, proxyMediaUrl } from '../utils/data';
+import { isComicPost } from '../utils/comics';
 
-const { title, excerpt, image, author, published_date, date, slug } = Astro.props;
+const { title, excerpt, image, author, published_date, date, slug, categories } = Astro.props;
 
 const DEFAULT_IMGS = [
   '/proxy/wp-content/uploads/2024/12/IMG_2493-2048x1365.jpg',
@@ -15,6 +16,10 @@ if (image !== undefined) {
 }
 
 const byline = buildByline(author, published_date || date);
+
+// The thumbnail is a fixed-height box, so a photo gets cropped into it. A comic
+// is fitted whole instead and letterboxes within the same box -- see comics.ts.
+const fit = isComicPost(categories) ? 'object-contain' : 'object-cover';
 ---
 
 <article class="grid grid-cols-[5fr_3fr] py-[8px] border-b-[1px] border-solid border-triangleGray-400">
@@ -32,7 +37,7 @@ const byline = buildByline(author, published_date || date);
       <img
         src={imgSrc}
         alt={normalizeText(title)}
-        class="bg-[url('/images/loading.jpg')] bg-cover w-full h-[169px] object-cover"
+        class={`bg-[url('/images/loading.jpg')] bg-cover w-full h-[169px] ${fit}`}
         loading="lazy"
       />
     </a>

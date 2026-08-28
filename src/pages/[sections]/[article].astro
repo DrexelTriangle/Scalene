@@ -13,6 +13,7 @@ import { getArticle, getArticleComments } from '../../utils/db';
 import { getCategoryHref } from "../../utils/taxonomyStore";
 import { LEGACY_ARTICLE_SLUGS } from '../../utils/legacySlugs';
 import { normalizeText } from "../../utils/data";
+import { isComicPost } from "../../utils/comics";
 import { expandShortcodes } from "../../utils/shortcodes";
 import { normalizeArticleHtml } from "../../utils/articleHtml";
 import DonateBlurb from "../../components/DonateBlurb.astro";
@@ -192,6 +193,14 @@ const articleHtml = describeLeadImage(stripDimensions(proxyWpContent(content)));
 // broken across lines still counts.
 const actualArticle = /<(p|div|blockquote|h[1-6])(\s[^>]*)?>\s*[^<\s][\s\S]*?<\/\1>/i.test(content);
 const primaryCategory = post.categories?.[0] ?? post.categories_list?.[0];
+
+// The lead image of a prose article is cropped to a uniform banner ratio (see
+// `#article figure:has(+ p) img` in global.css). That rule only fires on a
+// figure with a text sibling, so the comics it catches are exactly the ones
+// carrying a caption or an artist credit -- an image-only comic renders
+// untouched beside a mangled one. Tagging the body opts it out; see comics.ts
+// for why a comic must never be cropped in the first place.
+const uncroppedImages = isComicPost(post.categories ?? post.categories_list);
 // Most WordPress categories are not pages of their own. Link the kicker only
 // where the taxonomy says the label leads somewhere; otherwise plain text.
 const primaryCategoryHref = await getCategoryHref(primaryCategory);
@@ -224,7 +233,7 @@ const featuredImage =
         {actualArticle && <div class="grid grid-cols-[1fr] lg:grid-cols-[9fr_3fr] xl:grid-cols-[8fr_4fr] mt-2 divide-x divide-triangleBlue">
             <div id="main-left" class="main-side">
                 <div id="print-wrap">
-                <section id="article">
+                <section id="article" class:list={{ "uncropped-images": uncroppedImages }}>
                     {featuredImage && <figure><img src={featuredImage} alt={featuredImageAlt}/></figure>}
                     <Fragment set:html={authorPrint + articleHtml} />
                 </section>
@@ -241,7 +250,7 @@ const featuredImage =
                 <Social />
             </div>
         </div>}
-        {!actualArticle && <section id="article">
+        {!actualArticle && <section id="article" class:list={{ "uncropped-images": uncroppedImages }}>
                     {featuredImage && <figure><img src={featuredImage} alt={featuredImageAlt}/></figure>}
                     <Fragment set:html={articleHtml} />
                 </section>}

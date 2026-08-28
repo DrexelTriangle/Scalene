@@ -1,8 +1,12 @@
 ---
 import { normalizeText, buildByline, proxyMediaUrl } from '../utils/data';
 import { getCategoryHref } from '../utils/taxonomyStore';
+import { isComicPost } from '../utils/comics';
 
-const { title, excerpt, image, author, published_date, date, category, row, slug, breaking } = Astro.props;
+// `category` decides whether this card shows a kicker -- each layout passes it
+// only where it wants one -- so it cannot double as the card's taxonomy.
+// `categories` is the article's own list, passed everywhere, for the crop.
+const { title, excerpt, image, author, published_date, date, category, categories, row, slug, breaking } = Astro.props;
 
 const DEFAULT_IMGS = [
   '/proxy/wp-content/uploads/2024/12/IMG_2493-2048x1365.jpg',
@@ -25,9 +29,14 @@ const classes = row
   ? 'mb-[4px] md:mb-[0px] flex-1 sm:px-[16px] first:pl-0 sm:last:pr-0'
   : 'mb-[4px] md:mb-[0px] [.grid_&:not(:first-child)]:pt-[8px] pb-[8px] cursor-default [&:not(:last-child)]:border-b-[1px] border-solid border-triangleGray-400';
 
+// A photo fills its 4:3 box and loses whatever falls outside it. A comic can't
+// afford that -- see comics.ts -- so it is fitted whole inside the same box
+// instead, keeping the card's height and the row's alignment.
+const fit = isComicPost(categories ?? category) ? 'object-contain' : 'object-cover';
+
 const imgClass = row
-  ? 'aspect-[4/3] w-[100%] sm:h-[200px] object-cover'
-  : 'aspect-[4/3] object-cover w-[100%]';
+  ? `aspect-[4/3] w-[100%] sm:h-[200px] ${fit}`
+  : `aspect-[4/3] ${fit} w-[100%]`;
 ---
 
 <article class={classes}>
