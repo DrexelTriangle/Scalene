@@ -3,16 +3,15 @@ import type { Category } from "./types";
 /**
  * The sections whose art is drawn to its own frame.
  *
- * A photograph survives a crop -- that is what the uniform ratios on cards and
- * on the article lead image are for. A comic or a puzzle does not: its panels
- * run to the edge and the lettering inside them *is* the piece, so trimming the
- * sides takes the joke out with the margins. Posts filed under any of these opt
- * out of every crop the layout would otherwise apply.
+ * A photograph survives a crop -- that is what the uniform banner ratio on an
+ * article's lead image is for. A comic or a puzzle does not: its panels run to
+ * the edge and the lettering inside them *is* the piece, so trimming the sides
+ * takes the joke out with the margins.
  *
  * Slugs rather than names: the CMS taxonomy is keyed on them, and an editor
  * renaming a section's display label should not silently start cropping it.
  */
-export const COMIC_SECTIONS: ReadonlySet<string> = new Set([
+const COMIC_SECTIONS: ReadonlySet<string> = new Set([
   "comics",
   "comics-puzzles",
   "political-cartoons",
