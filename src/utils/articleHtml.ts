@@ -165,11 +165,26 @@ function splitParagraphs(inner: string, tag: string): string[] {
     .filter((part) => part !== "");
 }
 
+/**
+ * An element with nothing between its tags whose meaning lives in its
+ * attributes: `<div class="pm-embed-div" data-id=... data-set=...></div>`, the
+ * puzzle embed the ETL writes for a WordPress-era [puzzleme] post. Splitting an
+ * empty block yields no parts and so deleted it outright, which is why every
+ * migrated crossword and sudoku published before the CMS rendered as a headline
+ * with nothing under it. A genuinely blank block -- Trix's `<div></div>`, an
+ * emptied `<p>` -- carries no attributes and is still dropped.
+ */
+function isAttributeOnlyElement(open: string, inner: string): boolean {
+  if (inner.trim() !== "") return false;
+  return /^<[a-zA-Z][\w-]*\s[^>]*>$/.test(open);
+}
+
 export function normalizeArticleHtml(html: string): string {
   if (!html) return html;
 
   return mapTopLevel(html, ({ tag, open, inner }) => {
     if (tag !== "div" && tag !== "p") return undefined;
+    if (isAttributeOnlyElement(open, inner)) return undefined;
 
     const { figure, rest } = hoistLeadingFigure(inner);
     const close = `</${tag}>`;
