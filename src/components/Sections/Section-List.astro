@@ -15,11 +15,11 @@ const { articles } = Astro.props;
 <div class="pt-3 mt-3 mb-8">
     {articles.map(article => (
         <PhotoArticleLong title={article.title} 
-            category={article.categories}
             author={article.authors}
             published_date={article.published_date}
             excerpt={article.excerpt}
             image={article.featured_image}
+            categories={article.categories}
             slug={"article/"+article.slug}/>
     ))}
 </div>
