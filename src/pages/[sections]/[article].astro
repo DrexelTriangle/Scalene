@@ -208,7 +208,17 @@ const primaryCategoryHref = await getCategoryHref(primaryCategory);
 // Puzzle posts set a screenshot of the puzzle as their featured image so they
 // have a thumbnail in section lists and social cards, but on the article page
 // the playable embed sits right below it -- the still is pure duplication.
-const hasPuzzleEmbed = content.includes("pm-embed-div");
+//
+// Two shapes carry that embed. A [puzzleme] shortcode, from the CMS editor or
+// the ETL, becomes a pm-embed-div that the AmuseLabs script draws the puzzle
+// into. Crosswords published before the paper had that plugin hold the player
+// as a hand-written <iframe src="https://amuselabs.com/pmm/...">, pasted into a
+// wp:html block -- no div, and no script needed, since an iframe loads itself.
+// Both are the playable puzzle, so both make the still a duplicate; only the
+// div wants the script, which is why the two are tracked apart.
+const hasPuzzleScript = content.includes("pm-embed-div");
+const hasPuzzleIframe = /<iframe\b[^>]*\bsrc="[^"]*\bamuselabs\.com\//i.test(content);
+const hasPuzzleEmbed = hasPuzzleScript || hasPuzzleIframe;
 
 // Legacy WordPress bodies carry their lead image inline as a <figure>, so only
 // posts without any inline image need the featured image rendered for them --
@@ -256,7 +266,7 @@ const featuredImage =
                 </section>}
         {!actualArticle && <Comments comments={comments} slug={post.slug ?? article} commentsClosed={commentsClosed} />}
         {!actualArticle && <DonateBlurb/>}
-        {hasPuzzleEmbed && (
+        {hasPuzzleScript && (
         <script 
             is:inline 
             id="pm-script" 
