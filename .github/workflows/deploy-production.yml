@@ -65,6 +65,13 @@ jobs:
       # /sw.js is a root path, so a missing worker does not fail loudly: the
       # request falls through to the [sectionSlug] catch-all and comes back as
       # an HTML error page. Assert the content type, not just the status.
+      #
+      # The URL carries a cache buster because Cloudflare caches 404s for about
+      # three minutes: a request that lands in the window where the build has
+      # replaced dist/client but the app has not restarted gets that HTML 404
+      # cached, and this step then reads the cached copy for its whole retry
+      # window while the origin is serving the worker perfectly well. A unique
+      # query string is a distinct cache key, so this always asks the origin.
       - name: Verify service worker is served
         run: |
           content_type=$(
@@ -79,7 +86,7 @@ jobs:
               --retry-all-errors \
               --output /dev/null \
               --write-out '%{content_type}' \
-              https://www.thetriangle.org/sw.js
+              "https://www.thetriangle.org/sw.js?deploy=${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           )
           case "$content_type" in
             *javascript*)
