@@ -5,6 +5,7 @@ import Splash from "../components/Splash.astro";
 import { getSiteTitle } from "../utils/siteConfig";
 import { normalizeText } from "../utils/data";
 import { stripShortcodes } from "../utils/shortcodes";
+import { expandSeoVariables, hasSeoVariables } from "../utils/seoTemplate";
 const siteTitle = await getSiteTitle();
 
 const siteUrl = "https://www.thetriangle.org";
@@ -65,10 +66,25 @@ const normalizeTags = (raw: unknown): string[] => {
 };
 
 const fallbackTitle = cleanText(title || article?.title);
-const seoTitle = cleanText(article?.seo?.seo_title) || fallbackTitle;
+// WordPress-era rows hold a Yoast template rather than finished text, so the
+// stored title is expanded before it is judged: "%%title%% %%page%%" is not a
+// title, and taking it verbatim put the tokens themselves in the tab and on
+// every shared link. A template that expands to nothing falls back the same way
+// an absent SEO title does.
+const seoTitle = expandSeoVariables(cleanText(article?.seo?.seo_title), {
+  title: cleanText(article?.title),
+  sitename: siteTitle,
+  primary_category: cleanText(
+    (article?.categories ?? article?.categories_list ?? [])[0]?.name,
+  ),
+}) || fallbackTitle;
 const resolvedTitle = seoTitle.replaceAll("The Triangle", siteTitle);
+// The description has its own fallback chain -- excerpt, then body -- so a
+// template here is simply skipped rather than expanded: %%excerpt%% would only
+// rebuild what the next fallback already provides.
+const storedDescription = cleanText(article?.seo?.meta_description);
 const description = (
-  cleanText(article?.seo?.meta_description)
+  (hasSeoVariables(storedDescription) ? "" : storedDescription)
   || truncateDescription(article?.excerpt)
   || truncateDescription(article?.content)
 );
