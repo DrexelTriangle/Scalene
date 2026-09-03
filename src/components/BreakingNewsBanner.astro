@@ -1,43 +1,64 @@
 ---
-const {text, href} = Astro.props
-const repeats = 6
+import type { BreakingNewsItem } from "../utils/types";
+
+const { items = [] } = Astro.props as { items: BreakingNewsItem[] };
+
+// The strip loops by translating from -50% to 0 (see #bn-parent in global.css),
+// which is seamless only while its two halves are identical. So build one half
+// and render it twice; whatever changes here has to keep that property.
+//
+// Three slots per half is what fills a wide screen with one story. More stories
+// need fewer repeats to cover the same width, which also keeps the wait for any
+// one headline to come back around roughly constant as stories are added.
+const perHalf = Math.max(1, Math.ceil(3 / Math.max(items.length, 1)));
+const half = Array.from({ length: perHalf }, () => items).flat();
+const strip = [...half, ...half];
+
+// One story keeps the whole-band overlay below: a still target covering the
+// banner beats a headline that slides out from under the cursor. Several
+// stories cannot share one target, so each links itself instead and the marquee
+// pauses on hover or focus to hold them still long enough to click.
+const singleHref =
+  items.length === 1 && items[0].article_slug ? `/article/${items[0].article_slug}` : undefined;
 ---
 <!-- No vertical padding here: the box is a fixed 48px tall, so py-[16px] left
      only 16px of content height for 24px text and forced it to overflow.
      `items-center` handles the centring instead. -->
 <!-- mt-[-24px] cancels the nav's mb-[24px] so the red sits flush beneath it,
      the same trick the hero uses when it is the first block (see Banner.astro).
-     These are adjacent siblings, so the two margins COLLAPSE to 24 + -24 = 0 --
+     These are adjacent siblings, so the two margins COLLAPSE to 24 + -24 = 0:
      the banner never overlaps the nav, and nothing of it is painted over.
 
      This box was 72px tall with a matching pt-[24px], on the theory that the
      nav covered the top 24px. It does not: the measured gap between them is 0,
      so all 72px rendered and the padding showed as an empty red strip above the
-     headline -- 36px of clearance over it against 12px under. 48px with no
+     headline, 36px of clearance over it against 12px under. 48px with no
      padding is the band as designed, with `items-center` centring in it. -->
 <div id="bn-grandparent" class="relative flex items-center mb-[12px] sm:mb-[0px] mt-[-24px] h-[48px] w-[100%] text-white font-libre text-[24px] text-center font-bold bg-triangleDanger">
     <div id="bn-parent">
         <h1 id="bn">
-            {Array.from({length: repeats}).map((_, i) => (
+            {strip.map((item) => (
                 <>
-                    <span>BREAKING NEWS: {text}</span>
-                    {i < repeats - 1 && <>&nbsp;&bull;&nbsp;</>}
+                    {item.article_slug && !singleHref ? (
+                        <a href={`/article/${item.article_slug}`} class="hover:underline">BREAKING NEWS: {item.text}</a>
+                    ) : (
+                        <span>BREAKING NEWS: {item.text}</span>
+                    )}
+                    {/* After every item, the last one included: the strip wraps
+                        onto its own copy, so a separator that stopped short
+                        would run the final headline into the first. */}
+                    &nbsp;&bull;&nbsp;
                 </>
             ))}
         </h1>
     </div>
-    <!-- A still overlay rather than an anchor around the text: the headline is
-         scrolling, so wrapping it would hand the reader a click target that
-         slides out from under the cursor, six times over. This is one stable
-         target covering the band.
-
-         inset-0 now that the box is exactly the visible band. It was pinned to
+    <!-- inset-0 now that the box is exactly the visible band. It was pinned to
          the bottom 48px to stay clear of the strip the nav was believed to
          cover; with no such strip, that is just the whole box. -->
-    {href && (
+    {singleHref && (
         <a
-            href={href}
-            aria-label={`Breaking news: ${text}`}
+            href={singleHref}
+            aria-label={`Breaking news: ${items[0].text}`}
             class="absolute inset-0 z-[1]"
         ></a>
     )}

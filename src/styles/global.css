@@ -592,8 +592,17 @@ body {
 	animation: move-left-to-right linear 25s infinite;
 	/* Must stay in flow: the banner centres it with flex `items-center`, which an
 	   absolutely positioned child ignores. Don't add translateY to centre it
-	   either -- the marquee animation owns `transform`. */
+	   either: the marquee animation owns `transform`. */
 	position: relative;
+}
+/* With several breaking stories each headline carries its own link, so the
+   reader has to be able to hit one. Pausing on hover holds it still under the
+   cursor, and focus-within does the same for the keyboard, which would
+   otherwise focus a link that keeps sliding away. A single story links through
+   a still overlay instead and never needs this. */
+#bn-grandparent:hover #bn-parent,
+#bn-grandparent:focus-within #bn-parent {
+	animation-play-state: paused;
 }
 
 #article::file-selector-button {

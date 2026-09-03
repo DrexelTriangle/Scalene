@@ -102,9 +102,8 @@ export interface DevelopingStory {
   label?: Array<{ name: string }>;
 }
 
-/** triangle-cms: sitewide breaking-news banner served on /v1/homepage. */
-export interface BreakingNews {
-  enabled: boolean;
+/** triangle-cms: one story on the breaking-news banner. */
+export interface BreakingNewsItem {
   text: string;
   /**
    * Set when an editor raised the banner by flagging an article; absent for a
@@ -113,6 +112,20 @@ export interface BreakingNews {
    * stories.
    */
   article_slug?: string;
+}
+
+/** triangle-cms: sitewide breaking-news banner served on /v1/homepage. */
+export interface BreakingNews {
+  enabled: boolean;
+  /**
+   * `items` is the whole banner, newest story first. `text` and `article_slug`
+   * describe items[0] and predate it: a CMS that has not deployed multiple
+   * breaking stories yet sends only those two, so read them as the fallback
+   * rather than assuming `items` is there.
+   */
+  text: string;
+  article_slug?: string;
+  items?: BreakingNewsItem[];
 }
 
 /** triangle-cms: one item in the editable homepage Splide carousel. */
