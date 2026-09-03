@@ -5,14 +5,17 @@ const repeats = 6
 <!-- No vertical padding here: the box is a fixed 48px tall, so py-[16px] left
      only 16px of content height for 24px text and forced it to overflow.
      `items-center` handles the centring instead. -->
-<!-- Height is 24px taller than the visible band, with a matching pt-[24px].
-     #scrollnav above is `sticky top-0 z-[99]` with an opaque white background,
-     so the 24px this pulls up is painted over -- making the red flush with the
-     nav while the padding keeps the text inside the visible 48px. A bare
-     mt-[-24px] without the padding hides the text itself, and raising z-index
-     above 99 is not an option (the banner would then cover the nav on scroll).
-     `items-center` centres within the 48px content box. -->
-<div id="bn-grandparent" class="relative flex items-center mb-[12px] sm:mb-[0px] mt-[-24px] pt-[24px] h-[72px] w-[100%] text-white font-libre text-[24px] text-center font-bold bg-triangleDanger">
+<!-- mt-[-24px] cancels the nav's mb-[24px] so the red sits flush beneath it,
+     the same trick the hero uses when it is the first block (see Banner.astro).
+     These are adjacent siblings, so the two margins COLLAPSE to 24 + -24 = 0 --
+     the banner never overlaps the nav, and nothing of it is painted over.
+
+     This box was 72px tall with a matching pt-[24px], on the theory that the
+     nav covered the top 24px. It does not: the measured gap between them is 0,
+     so all 72px rendered and the padding showed as an empty red strip above the
+     headline -- 36px of clearance over it against 12px under. 48px with no
+     padding is the band as designed, with `items-center` centring in it. -->
+<div id="bn-grandparent" class="relative flex items-center mb-[12px] sm:mb-[0px] mt-[-24px] h-[48px] w-[100%] text-white font-libre text-[24px] text-center font-bold bg-triangleDanger">
     <div id="bn-parent">
         <h1 id="bn">
             {Array.from({length: repeats}).map((_, i) => (
@@ -28,14 +31,14 @@ const repeats = 6
          slides out from under the cursor, six times over. This is one stable
          target covering the band.
 
-         Bottom-anchored at the visible 48px, not inset-0, so it does not extend
-         into the 24px the nav paints over and start swallowing clicks meant for
-         the nav. -->
+         inset-0 now that the box is exactly the visible band. It was pinned to
+         the bottom 48px to stay clear of the strip the nav was believed to
+         cover; with no such strip, that is just the whole box. -->
     {href && (
         <a
             href={href}
             aria-label={`Breaking news: ${text}`}
-            class="absolute left-0 right-0 bottom-0 h-[48px] z-[1]"
+            class="absolute inset-0 z-[1]"
         ></a>
     )}
 </div>
