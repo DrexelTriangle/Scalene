@@ -106,6 +106,13 @@ export interface DevelopingStory {
 export interface BreakingNews {
   enabled: boolean;
   text: string;
+  /**
+   * Set when an editor raised the banner by flagging an article; absent for a
+   * banner an admin typed by hand, which links nowhere. The CMS sends the slug
+   * alone and leaves the /article/ prefix to us, as it does for developing
+   * stories.
+   */
+  article_slug?: string;
 }
 
 /** triangle-cms: one item in the editable homepage Splide carousel. */

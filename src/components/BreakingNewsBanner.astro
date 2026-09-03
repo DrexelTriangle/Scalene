@@ -1,5 +1,5 @@
 ---
-const {text} = Astro.props
+const {text, href} = Astro.props
 const repeats = 6
 ---
 <!-- No vertical padding here: the box is a fixed 48px tall, so py-[16px] left
@@ -23,4 +23,19 @@ const repeats = 6
             ))}
         </h1>
     </div>
+    <!-- A still overlay rather than an anchor around the text: the headline is
+         scrolling, so wrapping it would hand the reader a click target that
+         slides out from under the cursor, six times over. This is one stable
+         target covering the band.
+
+         Bottom-anchored at the visible 48px, not inset-0, so it does not extend
+         into the 24px the nav paints over and start swallowing clicks meant for
+         the nav. -->
+    {href && (
+        <a
+            href={href}
+            aria-label={`Breaking news: ${text}`}
+            class="absolute left-0 right-0 bottom-0 h-[48px] z-[1]"
+        ></a>
+    )}
 </div>
