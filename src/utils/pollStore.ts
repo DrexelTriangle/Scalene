@@ -174,25 +174,52 @@ function coerceArchivedPoll(value: unknown): ArchivedPoll | null {
 
 // Published polls, newest first, for the archive page. The CMS already excludes
 // drafts from this endpoint, so nothing unpublished can reach the public site.
+// /v1/polls answers 50 at a time unless asked otherwise and caps a request at
+// 200, so a single unparameterised fetch silently truncates the archive -- it
+// returned 50 of 179 polls. Page through instead of asking for one big number,
+// so the archive keeps working when it outgrows the cap too.
+const POLL_PAGE_SIZE = 200;
+const POLL_PAGE_LIMIT = 50;
+
 export async function getPolls(): Promise<ArchivedPoll[]> {
-  const response = await fetchCms(pollsUrl, {
-    method: 'GET',
-    headers: { Accept: 'application/json' },
-    cache: 'no-store'
-  });
+  const polls: ArchivedPoll[] = [];
 
-  if (!response) {
-    return [];
+  for (let page = 0; page < POLL_PAGE_LIMIT; page += 1) {
+    const offset = page * POLL_PAGE_SIZE;
+    const response = await fetchCms(
+      `${pollsUrl}?limit=${POLL_PAGE_SIZE}&offset=${offset}`,
+      {
+        method: 'GET',
+        headers: { Accept: 'application/json' },
+        cache: 'no-store'
+      }
+    );
+
+    // A failure part-way through would render a truncated archive as if it were
+    // the whole thing, so only the first page can fall back to empty; later
+    // ones keep what has already been read.
+    if (!response) {
+      return page === 0 ? [] : polls;
+    }
+
+    const payload = await response.json() as { polls?: unknown };
+    if (!Array.isArray(payload?.polls)) {
+      return page === 0 ? [] : polls;
+    }
+
+    for (const poll of payload.polls.map(coerceArchivedPoll)) {
+      if (poll !== null) {
+        polls.push(poll);
+      }
+    }
+
+    // A short page is the last page.
+    if (payload.polls.length < POLL_PAGE_SIZE) {
+      break;
+    }
   }
 
-  const payload = await response.json() as { polls?: unknown };
-  if (!Array.isArray(payload?.polls)) {
-    return [];
-  }
-
-  return payload.polls
-    .map(coerceArchivedPoll)
-    .filter((poll): poll is ArchivedPoll => poll !== null);
+  return polls;
 }
 
 // Why this returns a reason instead of null: a vote can fail because the option
