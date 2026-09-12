@@ -402,7 +402,11 @@ body {
 	font-family: sans-serif; 
 	border-radius: 5px; 
 	padding: 5px 5px 10px;
-	font-size: 14px
+	font-size: 14px;
+	min-width: 0;
+}
+.staff-card a {
+	overflow-wrap: anywhere;
 }
 .staff-row-small .staff-card {
 	width: calc(12% - 15px);
