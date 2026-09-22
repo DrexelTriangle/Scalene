@@ -20,6 +20,7 @@ import DonateBlurb from "../../components/DonateBlurb.astro";
 import Section from "../../components/Sections/Section.astro";
 import SubscribeLink from "../../components/SubscribeLink.astro";
 import Comments from "../../components/Comments.astro";
+import Ad from "../../components/Ad.astro";
 
 // Canonicalise the bare production domain to www. Deliberately scoped to that
 // one host: this previously fired for ANY non-www, non-localhost host, so IP
@@ -254,6 +255,7 @@ const featuredImage =
             </div>
             <div id="main-right" class="hidden lg:block [&>*:not(:first-child)]:border-t-[1px] [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-triangleBlue main-side">
                 {/* <a href="https://go.gwu.edu/AIinDC"><img class="ad medium-rectangle" src="/images/ads/gwu_ad_032626_to_042226.png"/></a> */}
+                <Ad placement="sidebar" class="pt-[5px]"/>
                 <SubscribeLink/>
                 {/* <MostRead/> */}
                 <Poll />
