@@ -229,11 +229,77 @@ jobs:
                   .map((s) => ({ name: s.context })));
               }
 
+              // The earliest check run on this SHA started when the commit was
+              // pushed, which is the cutoff for a comment approval: one written
+              // before the latest push approved different code.
+              const startedAt = runs
+                .map((run) => Date.parse(run.started_at || run.created_at || ''))
+                .filter((t) => !Number.isNaN(t));
+
               return {
                 total: runs.length + combined.statuses.length,
+                firstSeenAt: startedAt.length ? Math.min(...startedAt) : null,
                 pending: pending.map((r) => r.name),
                 failed: failed.map((r) => r.name),
               };
+            };
+
+            // A scheduled release skips code review and the deploy gate, so it
+            // has to be pre-approved by an Admin (an org owner; only owners hold
+            // admin on this repo). Either counts, and only for the current head:
+            //   - an approving review whose commit is the head SHA, not
+            //     superseded by that reviewer's later changes-requested review;
+            //   - a comment with a line `Approved: yes` (or `Approved=yes`)
+            //     posted after the head commit was pushed.
+            // The PR author may approve their own release by comment if they
+            // are an Admin; GitHub itself does not allow self-reviews.
+            const APPROVAL_LINE = /^[ \t>*-]*approved[ \t]*[:=][ \t]*yes[ \t.!]*$/im;
+            const adminCache = new Map();
+            const isAdmin = async (login) => {
+              if (!login || login.endsWith('[bot]')) return false;
+              if (!adminCache.has(login)) {
+                let admin = false;
+                try {
+                  const { data } = await github.rest.repos.getCollaboratorPermissionLevel({
+                    owner, repo, username: login,
+                  });
+                  admin = data.permission === 'admin';
+                } catch (error) {
+                  if (error.status !== 404) throw error;
+                }
+                adminCache.set(login, admin);
+              }
+              return adminCache.get(login);
+            };
+
+            const findApproval = async (pr, pushedAt) => {
+              const reviews = await github.paginate(github.rest.pulls.listReviews, {
+                owner, repo, pull_number: pr.number, per_page: 100,
+              });
+              // Latest decisive review per reviewer; COMMENTED reviews don't
+              // override an earlier approval, DISMISSED and CHANGES_REQUESTED do.
+              const latest = new Map();
+              for (const review of reviews) {
+                if (review.state === 'COMMENTED' || !review.user) continue;
+                latest.set(review.user.login, review);
+              }
+              for (const [login, review] of latest) {
+                if (review.state === 'APPROVED' && review.commit_id === pr.head.sha && await isAdmin(login)) {
+                  return `approving review by @${login}`;
+                }
+              }
+
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                owner, repo, issue_number: pr.number, per_page: 100,
+              });
+              for (const c of comments.reverse()) {
+                if (!APPROVAL_LINE.test(c.body || '')) continue;
+                if (pushedAt !== null && Date.parse(c.created_at) < pushedAt) continue;
+                if (await isAdmin(c.user && c.user.login)) {
+                  return `\`Approved: yes\` comment by @${c.user.login}`;
+                }
+              }
+              return null;
             };
 
             // --- main ---------------------------------------------------------
@@ -323,6 +389,18 @@ jobs:
                 continue;
               }
 
+              const approval = await findApproval(pr, checks.firstSeenAt);
+              if (!approval) {
+                await block(number, [
+                  `No Admin has pre-approved \`${pr.head.sha.slice(0, 7)}\` for release.`,
+                  'A scheduled release skips review and the deploy gate, so an Admin (org owner) has to sign off on the current commit first:',
+                  'either an approving review, or a comment containing the line `Approved: yes`.',
+                  'Approvals given before the latest push do not count.',
+                ].join(' '));
+                continue;
+              }
+              core.info(`#${number} pre-approved by ${approval}.`);
+
               const methodLine = (pr.body || '').match(/^[ \t>*-]*merge-method[ \t]*:[ \t]*(merge|squash|rebase)[ \t]*$/im);
               const method = methodLine ? methodLine[1].toLowerCase() : DEFAULT_METHOD;
 
@@ -344,7 +422,7 @@ jobs:
               core.notice(`Merged #${number} as ${merged.sha}.`);
               await comment(number, [
                 '### Released on schedule', '',
-                `Merged into \`${pr.base.ref}\` as \`${merged.sha}\`, on the \`Merge-at:\` time of **${when.toISOString()}**.`,
+                `Merged into \`${pr.base.ref}\` as \`${merged.sha}\`, on the \`Merge-at:\` time of **${when.toISOString()}**, pre-approved by ${approval}.`,
                 'The usual deploy chain is running now.',
               ].join('\n'));
               await setLabels(number, { remove: [LABEL] });

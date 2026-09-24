@@ -27,6 +27,9 @@ To schedule a release:
    spring-forward jump skips over is rejected rather than guessed at.
 3. Add the `scheduled-merge` label. That label is the arming switch: no label,
    no automatic merge.
+4. Get an Admin to pre-approve the current commit, either with an approving
+   review or a comment containing the line `Approved: yes` (`Approved=yes`
+   works too). See [Pre-approval](#pre-approval) below.
 
 Optionally add `Merge-method: merge|squash|rebase` to the description. The
 default is `squash`.
@@ -36,8 +39,8 @@ default is `squash`.
 The workflow is woken once a minute by the release timer on Delta and, for each
 labelled pull request whose `Merge-at:` has passed, refuses to merge unless the
 pull request is open, not a draft, conflict-free, unblocked by branch
-protection, and every check run and commit status on its head commit has
-**finished and passed**. A pull request
+protection, every check run and commit status on its head commit has
+**finished and passed**, and an Admin has **pre-approved** that commit. A pull request
 with checks still running is left alone and reconsidered on the next tick; one
 with no checks at all is refused outright, so nothing unvalidated ships.
 
@@ -47,6 +50,33 @@ workflow comments with the reason, swaps the `scheduled-merge` label for
 means one explanatory comment instead of one per tick, and it means a broken
 release never merges later "by surprise" once the problem clears. Fix the
 problem and re-add the label to re-arm it.
+
+### Pre-approval
+
+A scheduled release skips code review and the deploy gate, so the label alone
+is not enough: an Admin has to sign off on the exact commit that will ship.
+Either of these counts:
+
+- an **approving review** from an Admin whose commit is the pull request's
+  current head, and which that Admin has not since overridden with a
+  changes-requested review (or had dismissed);
+- a **comment** from an Admin containing a line `Approved: yes` (or
+  `Approved=yes`), posted **after** the head commit was pushed.
+
+"Admin" means admin permission on this repository, which in practice is the
+org owners, i.e. the `admins` team. Checking the permission rather than the
+team keeps the release App off the org-level Members permission. The pull
+request's author can approve their own release by comment if they are an
+Admin (GitHub does not allow self-reviews, so it has to be the comment).
+
+Pushing a new commit invalidates every earlier approval. The push time is taken
+from when CI first started on the head commit, so an approval written before
+the latest push never carries over to code nobody signed off on.
+
+A release that reaches its `Merge-at:` time without an approval is cancelled
+like any other failed check: a comment says why, and the label swaps to
+`scheduled-merge-blocked`. Approve it and re-add the label; if the time has
+already passed it merges on the next tick.
 
 ### What drives it, and how close to `Merge-at:` it lands
 
@@ -170,8 +200,8 @@ itself (open, non-draft, conflict-free, every check finished and passing, at
 least one check present), and GitHub stays the final authority: if it genuinely
 refuses the merge, the error is reported rather than guessed at.
 
-What this does mean is that a scheduled release **skips code review by design**.
-The `scheduled-merge` label is the thing authorising that, so treat adding it as
-the approval.
+What this does mean is that a scheduled release **skips the normal review
+rule by design**. The Admin pre-approval above is what authorises that, so
+treat giving it as the code review.
 
 [tz]: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
