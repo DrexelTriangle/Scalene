@@ -1,4 +1,5 @@
 // Site-wide settings (title, footer) are read from the CMS at request time.
+// CMS_API_BASE_URL is set per environment; the fallback is only for local dev.
 const cmsBaseUrl = import.meta.env.CMS_API_BASE_URL ?? "https://localhost:8080/v1";
 const normalizedCmsBaseUrl = String(cmsBaseUrl).replace(/\/$/, "");
 const siteSettingsUrl = `${normalizedCmsBaseUrl}/settings/site`;
