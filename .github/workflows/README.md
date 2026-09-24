@@ -129,7 +129,8 @@ workflow picks its environment from who pushed the commit:
 
 ```yaml
 environment:
-  name: ${{ github.event.workflow_run.actor.login == 'tri-release-bot[bot]'
+  name: ${{ (github.event.workflow_run.actor.login == 'tri-release-bot[bot]'
+          && github.event.workflow_run.triggering_actor.login == 'tri-release-bot[bot]')
         && 'production-auto' || 'production' }}
 ```
 
@@ -139,7 +140,13 @@ the scheduled-merge workflow holds its key, so that environment is reachable
 only by a pull request that carried the `scheduled-merge` label. Everything a
 person merges still lands on `production` and still waits for a reviewer, and a
 manual `workflow_dispatch` has no `workflow_run` actor at all, so it also falls
-through to the gated environment.
+through to the gated environment. Both the original and the triggering actor
+must be the App: a person re-running CI on a scheduled merge's commit is the
+triggering actor of that re-run, so the redeploy waits for a reviewer.
+
+`production-auto` must keep **no required reviewers**. Adding the Admins team
+to it (as happened once when reviewers were set across every environment) makes
+scheduled releases merge on time and then sit unpublished at the gate.
 
 Two things to keep in mind:
 

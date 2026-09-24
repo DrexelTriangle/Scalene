@@ -42,10 +42,12 @@ jobs:
     # scheduled-merge workflow holds its key, so `production-auto` is
     # reachable only by a pull request that carried the `scheduled-merge`
     # label. Everything a person merges still lands on `production` and waits
-    # for a reviewer. Both environments carry the same branch policy, so
-    # neither can deploy anything but main.
+    # for a reviewer. The triggering actor is checked too, so a person
+    # re-running CI on a scheduled merge's commit still meets the gate. Both
+    # environments carry the same branch policy, so neither can deploy
+    # anything but main.
     environment:
-      name: ${{ github.event.workflow_run.actor.login == 'tri-release-bot[bot]' && 'production-auto' || 'production' }}
+      name: ${{ (github.event.workflow_run.actor.login == 'tri-release-bot[bot]' && github.event.workflow_run.triggering_actor.login == 'tri-release-bot[bot]') && 'production-auto' || 'production' }}
       url: https://www.thetriangle.org
 
     timeout-minutes: 15
