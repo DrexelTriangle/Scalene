@@ -1,6 +1,7 @@
 import type { MiddlewareHandler } from "astro";
 import { LEGACY_ARTICLE_SLUGS } from "./utils/legacySlugs";
 import { LEGACY_SECTION_SLUGS } from "./utils/legacySections";
+import { getArticle } from "./utils/db";
 
 // The WordPress archive and the CMS disagree on a handful of URLs, so addresses
 // Google already indexed would 404 after the cutover. A 301 hands the
@@ -47,7 +48,36 @@ const DEAD_ASSETS = new Set([
   "/sitemap_index.xml",
 ]);
 
-export const onRequest: MiddlewareHandler = (context, next) => {
+// WordPress permalinks were /YYYY/MM/DD/<slug>/; this site serves the same
+// articles at /article/<slug>. Without this, every old link and every indexed
+// result 404ed: over 400 a day across ~2,200 articles in the retained logs,
+// Google's crawler among them.
+//
+// An optional one-segment tail is a WordPress attachment page, the page for a
+// photo in the post (/2012/02/03/<slug>/wrestling_brophy_web-2/). It belongs to
+// the article, so it goes there too. Dots are excluded so probes like
+// /<slug>/auth.login keep their 404, and deeper paths are relative-link junk
+// from crawlers that stays a 404 as well.
+//
+// Like the /<category>/<slug> route, this resolves before redirecting rather
+// than firing on the path's shape: a dead slug stays a plain 404 instead of
+// becoming a redirect hop to one. See [sections]/[article].astro.
+const WORDPRESS_PERMALINK = /^\/\d{4}\/\d{2}\/\d{2}\/([^/]+)(?:\/[\w-]+)?\/?$/;
+
+// A renamed slug's replacement, looked up in both its raw and decoded form.
+const renamedArticleSlug = (slug: string): string | undefined => {
+  // A malformed escape ("%zz") throws rather than returning the input, and a
+  // bad URL should fall through to the normal 404, not crash the request.
+  let decoded = slug;
+  try {
+    decoded = decodeURIComponent(slug);
+  } catch {
+    /* keep the raw form */
+  }
+  return LEGACY_ARTICLE_SLUGS[slug] ?? LEGACY_ARTICLE_SLUGS[decoded];
+};
+
+export const onRequest: MiddlewareHandler = async (context, next) => {
   const { pathname } = context.url;
 
   // /feed is itself a real route and must not be folded into itself.
@@ -58,6 +88,16 @@ export const onRequest: MiddlewareHandler = (context, next) => {
 
   if (DEAD_ASSETS.has(pathname)) {
     return new Response(null, { status: 404 });
+  }
+
+  const permalink = WORDPRESS_PERMALINK.exec(pathname);
+  if (permalink) {
+    const slug = permalink[1];
+    // Straight to the replacement, so a renamed article is one hop, not two.
+    const renamed = renamedArticleSlug(slug);
+    if (renamed) return context.redirect(`/article/${renamed}`, 301);
+    if (await getArticle(slug)) return context.redirect(`/article/${slug}`, 301);
+    return next();
   }
 
   if (!pathname.startsWith("/article/")) {
@@ -72,16 +112,7 @@ export const onRequest: MiddlewareHandler = (context, next) => {
   }
 
   const slug = pathname.slice("/article/".length).replace(/\/+$/, "");
-  // A malformed escape ("%zz") throws rather than returning the input, and a
-  // bad URL should fall through to the normal 404, not crash the request.
-  let decoded = slug;
-  try {
-    decoded = decodeURIComponent(slug);
-  } catch {
-    /* keep the raw form */
-  }
-
-  const target = LEGACY_ARTICLE_SLUGS[slug] ?? LEGACY_ARTICLE_SLUGS[decoded];
+  const target = renamedArticleSlug(slug);
   if (!target || target === slug) return next();
 
   return context.redirect(`/article/${target}`, 301);
