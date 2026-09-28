@@ -1,0 +1,365 @@
+---
+export const prerender = true;
+import Header from "../components/Header.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import "../styles/global.css";
+
+// Shared by the header buttons and the dialogs' buttons.
+const buttonClass =
+  "font-roboto-slab text-[14px] bg-triangleBlue text-white border-[1px] border-solid border-triangleBlue rounded-[10px] px-3 py-1 hover:bg-white hover:text-triangleBlue disabled:opacity-40 disabled:pointer-events-none";
+const iconButtonClass =
+  "font-playfair font-bold text-[18px] leading-none w-[32px] h-[32px] text-triangleBlue bg-white border-[1px] border-solid border-triangleBlue rounded-[10px] hover:bg-triangleBlue hover:text-white";
+const dialogClass =
+  "triangdle-dialog w-[calc(100%-2rem)] max-w-[26rem] max-h-[calc(100vh-2rem)] overflow-auto rounded-[10px] border-[1px] border-solid border-triangleBlue bg-white px-6 pt-5 pb-4 font-roboto-slab text-[16px] text-black";
+---
+
+<BaseLayout
+  title="Triangdle - The Triangle"
+  description="Triangdle: a daily word puzzle from The Triangle. Guess the six-letter word with one guess of each length, spending as few letters as you can."
+  canonical="https://www.thetriangle.org/triangdle"
+>
+  <Header />
+  <section data-triangdle-root class="triangdle w-[min(28rem,calc(100%-2rem))] mx-auto pb-[40px]">
+    <div class="flex items-end justify-between gap-3 border-b-[1px] border-solid border-triangleBlue pb-[12px] mb-[12px]">
+      <div>
+        <h1 class="font-playfair text-[42px] leading-none">Triangdle</h1>
+        <p class="font-roboto-slab text-[13px] text-gray-600 mt-[6px]">A daily word puzzle from The Triangle</p>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <button data-triangdle="random" type="button" class={buttonClass} disabled>Random</button>
+        <button data-triangdle="help" type="button" class={iconButtonClass} aria-label="How to play">?</button>
+      </div>
+    </div>
+
+    <p class="flex justify-between font-roboto-slab text-[15px] mb-[16px]">
+      <span>Puzzle <strong data-triangdle="puzzle-id" class="font-playfair">&nbsp;</strong></span>
+      <span>Letters used <strong data-triangdle="score" class="font-playfair">0</strong></span>
+    </p>
+
+    <div data-triangdle="board" class="tr-board" aria-label="Guess board"></div>
+    <p data-triangdle="message" class="tr-message" role="status" aria-live="polite"></p>
+    <div data-triangdle="keyboard" class="tr-keyboard" aria-label="On-screen keyboard"></div>
+    <p class="flex justify-end">
+      <button data-triangdle="result" type="button" class={buttonClass} hidden>See result</button>
+    </p>
+
+    <p class="font-roboto-slab text-[12px] text-gray-500 mt-[24px]">
+      Created by <a class="underline hover:text-triangleBlue" href="https://github.com/rasen68/triangdle" target="_blank" rel="noopener noreferrer">rasen68</a>.
+      Guess dictionary from <a class="underline hover:text-triangleBlue" href="http://wordlist.aspell.net/" target="_blank" rel="noopener noreferrer">SCOWL</a> (<a class="underline hover:text-triangleBlue" href="/triangdle/SCOWL-Copyright.txt">copyright</a>).
+    </p>
+
+    <dialog data-triangdle="help-dialog" class={dialogClass}>
+      <form method="dialog" class="relative">
+        <button value="close" class={`${iconButtonClass} absolute top-[-6px] right-[-6px]`} aria-label="Close">×</button>
+        <h2 class="font-playfair text-[28px] mb-[12px]">How to play</h2>
+        <p>Guess a 6-letter word using up to one guess of each length 1 to 6, in any order.</p>
+        <p>A guess of length <em>n</em> is checked against the first <em>n</em> letters of the word. Each guess must be a real word, except the one-letter row, which can be any letter.</p>
+        <ul class="flex flex-col gap-[6px] mb-[12px]">
+          <li class="flex items-center gap-2"><span class="tr-swatch exact">G</span> In the word, in that spot.</li>
+          <li class="flex items-center gap-2"><span class="tr-swatch present">Y</span> In the word, in another spot.</li>
+          <li class="flex items-center gap-2"><span class="tr-swatch absent">X</span> Not in the word at all.</li>
+        </ul>
+        <p>Arrows on a tile point to other (unmatched) copies of that letter in the word.</p>
+        <p>Guessing the full six-letter row ends the game. Score is the number of letters you spent, so fewer is better.</p>
+        <p class="flex justify-end">
+          <button value="close" class={buttonClass} autofocus>Play</button>
+        </p>
+      </form>
+    </dialog>
+
+    <dialog data-triangdle="result-dialog" class={dialogClass}>
+      <form method="dialog" class="relative">
+        <button value="close" class={`${iconButtonClass} absolute top-[-6px] right-[-6px]`} aria-label="Close">×</button>
+        <h2 data-triangdle="result-title" class="font-playfair text-[28px] mb-[12px]">Result</h2>
+        <p data-triangdle="result-summary" class="font-playfair text-[18px]"></p>
+        <p data-triangdle="result-detail" class="font-libre text-[12px] uppercase tracking-[0.06em] text-gray-500"></p>
+        <p data-triangdle="result-note" class="italic text-triangleBlue min-h-[1.4em]" role="status" aria-live="polite"></p>
+        <p class="flex justify-end gap-2">
+          <button data-triangdle="share" type="button" class={buttonClass} autofocus>Share result</button>
+          <button value="close" class={buttonClass}>Close</button>
+        </p>
+      </form>
+    </dialog>
+  </section>
+</BaseLayout>
+
+<script>
+  import { mountTriangdle } from "../utils/triangdle/app";
+
+  // Bound on astro:page-load as well as DOM readiness, like Polls.astro: a
+  // bundled module script runs once per browser session, so a ClientRouter
+  // navigation back to this page needs the event to mount the game again.
+  // The abort on astro:before-swap drops the document keydown listener when
+  // the reader navigates away, so it never types into some other page.
+  let controller: AbortController | undefined;
+
+  function setupTriangdle() {
+    const root = document.querySelector<HTMLElement>("[data-triangdle-root]");
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = "1";
+    controller?.abort();
+    controller = new AbortController();
+    mountTriangdle(root, controller.signal);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupTriangdle);
+  } else {
+    setupTriangdle();
+  }
+
+  document.addEventListener("astro:page-load", setupTriangdle);
+  document.addEventListener("astro:before-swap", () => controller?.abort());
+</script>
+
+<style is:global>
+  /*
+   * Global because app.ts builds the board and keyboard at runtime, and those
+   * nodes never get Astro's scoping attribute. Everything is prefixed with
+   * .triangdle (or a tr- class) so none of it leaks into the rest of the site.
+   */
+  .triangdle {
+    --tr-blue: #2563eb;
+    --tr-gray: #e5e7eb;
+    --tr-dark: #1f2937;
+    --tr-danger: #b4041e;
+    --tr-exact: #538d4e;
+    --tr-present: #c9b458;
+    --tr-absent: #787c7e;
+    --tr-arrow: #e8c84a;
+  }
+
+  .triangdle-dialog p {
+    margin: 0 0 12px;
+    line-height: 1.45;
+  }
+
+  .triangdle-dialog::backdrop {
+    background: rgb(37 99 235 / 0.2);
+  }
+
+  .triangdle-dialog.won h2 {
+    color: var(--tr-exact);
+  }
+
+  .triangdle-dialog.lost h2 {
+    color: var(--tr-danger);
+  }
+
+  .triangdle .tr-board {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .triangdle .tr-row {
+    display: flex;
+    gap: 6px;
+    width: max-content;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .triangdle .tr-row.locked {
+    cursor: default;
+  }
+
+  .triangdle .tr-row.active {
+    outline: 2px solid var(--tr-blue);
+    outline-offset: 3px;
+  }
+
+  .triangdle .tr-row:focus-visible {
+    outline: 2px solid var(--tr-blue);
+    outline-offset: 3px;
+  }
+
+  .triangdle .tr-row.inert {
+    opacity: 0.4;
+  }
+
+  .triangdle .tr-tile,
+  .triangdle-dialog .tr-swatch {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--tr-gray);
+    border-radius: 5px;
+    background: white;
+    color: black;
+    font-family: "Roboto Slab", serif;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .triangdle .tr-tile {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+
+  .triangdle-dialog .tr-swatch {
+    width: 26px;
+    height: 26px;
+    font-size: 14px;
+    vertical-align: middle;
+  }
+
+  .triangdle .tr-tile.filled {
+    border-color: var(--tr-dark);
+  }
+
+  .triangdle .tr-tile.exact,
+  .triangdle .tr-key.exact,
+  .triangdle-dialog .tr-swatch.exact {
+    background: var(--tr-exact);
+    border-color: var(--tr-exact);
+    color: white;
+  }
+
+  .triangdle .tr-tile.present,
+  .triangdle .tr-key.present,
+  .triangdle-dialog .tr-swatch.present {
+    background: var(--tr-present);
+    border-color: var(--tr-present);
+    color: white;
+  }
+
+  .triangdle .tr-tile.absent,
+  .triangdle .tr-key.absent,
+  .triangdle-dialog .tr-swatch.absent {
+    background: var(--tr-absent);
+    border-color: var(--tr-absent);
+    color: white;
+  }
+
+  .triangdle .tr-tile-letter {
+    position: relative;
+    z-index: 0;
+  }
+
+  .triangdle .tr-arrows {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1px;
+    z-index: 1;
+    pointer-events: none;
+    font-size: 11px;
+  }
+
+  .triangdle .tr-arrows.left {
+    left: 3px;
+  }
+
+  .triangdle .tr-arrows.right {
+    right: 3px;
+  }
+
+  .triangdle .tr-arrow {
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 0.3em solid transparent;
+    border-bottom: 0.3em solid transparent;
+  }
+
+  .triangdle .tr-arrow.left {
+    border-right: 0.46em solid var(--tr-arrow);
+  }
+
+  .triangdle .tr-arrow.right {
+    border-left: 0.46em solid var(--tr-arrow);
+  }
+
+  /* Yellow arrows vanish on a yellow tile. */
+  .triangdle .tr-tile.present .tr-arrow.left {
+    border-right-color: #3f340c;
+  }
+
+  .triangdle .tr-tile.present .tr-arrow.right {
+    border-left-color: #3f340c;
+  }
+
+  .triangdle .tr-message {
+    min-height: 1.5em;
+    margin-bottom: 14px;
+    font-family: "Roboto Slab", serif;
+    font-size: 15px;
+    font-style: italic;
+  }
+
+  .triangdle .tr-message.bad {
+    color: var(--tr-danger);
+  }
+
+  .triangdle .tr-message.good {
+    color: var(--tr-blue);
+  }
+
+  .triangdle .tr-keyboard {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .triangdle .tr-keyboard-row {
+    display: flex;
+    gap: 5px;
+  }
+
+  .triangdle .tr-key {
+    flex: 1;
+    min-width: 0;
+    height: 48px;
+    padding: 0;
+    border: 1px solid var(--tr-gray);
+    border-radius: 5px;
+    background: var(--tr-gray);
+    color: black;
+    font-family: "Roboto Slab", serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .triangdle .tr-key.wide {
+    flex: 1.6;
+    font-family: "Libre Franklin", sans-serif;
+    font-size: 12px;
+  }
+
+  .triangdle .tr-key.enter {
+    background: var(--tr-blue);
+    border-color: var(--tr-blue);
+    color: white;
+  }
+
+  .triangdle .tr-key:disabled {
+    cursor: default;
+  }
+
+  .triangdle .tr-key:focus-visible {
+    outline: 2px solid var(--tr-blue);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 420px) {
+    .triangdle .tr-tile {
+      width: 38px;
+      height: 38px;
+      font-size: 17px;
+    }
+
+    .triangdle .tr-key {
+      height: 42px;
+    }
+  }
+</style>
