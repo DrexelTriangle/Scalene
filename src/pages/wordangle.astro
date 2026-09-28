@@ -10,45 +10,45 @@ const buttonClass =
 const iconButtonClass =
   "font-playfair font-bold text-[18px] leading-none w-[32px] h-[32px] text-triangleBlue bg-white border-[1px] border-solid border-triangleBlue rounded-[10px] hover:bg-triangleBlue hover:text-white";
 const dialogClass =
-  "triangdle-dialog w-[calc(100%-2rem)] max-w-[26rem] max-h-[calc(100vh-2rem)] overflow-auto rounded-[10px] border-[1px] border-solid border-triangleBlue bg-white px-6 pt-5 pb-4 font-roboto-slab text-[16px] text-black";
+  "wordangle-dialog w-[calc(100%-2rem)] max-w-[26rem] max-h-[calc(100vh-2rem)] overflow-auto rounded-[10px] border-[1px] border-solid border-triangleBlue bg-white px-6 pt-5 pb-4 font-roboto-slab text-[16px] text-black";
 ---
 
 <BaseLayout
-  title="Triangdle - The Triangle"
-  description="Triangdle: a daily word puzzle from The Triangle. Guess the six-letter word with one guess of each length, spending as few letters as you can."
-  canonical="https://www.thetriangle.org/triangdle"
+  title="Wordangle - The Triangle"
+  description="Wordangle: a daily word puzzle from The Triangle. Guess the six-letter word with one guess of each length, spending as few letters as you can."
+  canonical="https://www.thetriangle.org/wordangle"
 >
   <Header />
-  <section data-triangdle-root class="triangdle w-[min(28rem,calc(100%-2rem))] mx-auto pb-[40px]">
+  <section data-wordangle-root class="wordangle w-[min(28rem,calc(100%-2rem))] mx-auto pb-[40px]">
     <div class="flex items-end justify-between gap-3 border-b-[1px] border-solid border-triangleBlue pb-[12px] mb-[12px]">
       <div>
-        <h1 class="font-playfair text-[42px] leading-none">Triangdle</h1>
+        <h1 class="font-playfair text-[42px] leading-none">Wordangle</h1>
         <p class="font-roboto-slab text-[13px] text-gray-600 mt-[6px]">A daily word puzzle from The Triangle</p>
       </div>
       <div class="flex items-center gap-2 shrink-0">
-        <button data-triangdle="random" type="button" class={buttonClass} disabled>Random</button>
-        <button data-triangdle="help" type="button" class={iconButtonClass} aria-label="How to play">?</button>
+        <button data-wordangle="random" type="button" class={buttonClass} disabled>Random</button>
+        <button data-wordangle="help" type="button" class={iconButtonClass} aria-label="How to play">?</button>
       </div>
     </div>
 
     <p class="flex justify-between font-roboto-slab text-[15px] mb-[16px]">
-      <span>Puzzle <strong data-triangdle="puzzle-id" class="font-playfair">&nbsp;</strong></span>
-      <span>Letters used <strong data-triangdle="score" class="font-playfair">0</strong></span>
+      <span>Puzzle <strong data-wordangle="puzzle-id" class="font-playfair">&nbsp;</strong></span>
+      <span>Letters used <strong data-wordangle="score" class="font-playfair">0</strong></span>
     </p>
 
-    <div data-triangdle="board" class="tr-board" aria-label="Guess board"></div>
-    <p data-triangdle="message" class="tr-message" role="status" aria-live="polite"></p>
-    <div data-triangdle="keyboard" class="tr-keyboard" aria-label="On-screen keyboard"></div>
+    <div data-wordangle="board" class="tr-board" aria-label="Guess board"></div>
+    <p data-wordangle="message" class="tr-message" role="status" aria-live="polite"></p>
+    <div data-wordangle="keyboard" class="tr-keyboard" aria-label="On-screen keyboard"></div>
     <p class="flex justify-end">
-      <button data-triangdle="result" type="button" class={buttonClass} hidden>See result</button>
+      <button data-wordangle="result" type="button" class={buttonClass} hidden>See result</button>
     </p>
 
     <p class="font-roboto-slab text-[12px] text-gray-500 mt-[24px]">
-      Created by <a class="underline hover:text-triangleBlue" href="https://github.com/rasen68/triangdle" target="_blank" rel="noopener noreferrer">rasen68</a>.
-      Guess dictionary from <a class="underline hover:text-triangleBlue" href="http://wordlist.aspell.net/" target="_blank" rel="noopener noreferrer">SCOWL</a> (<a class="underline hover:text-triangleBlue" href="/triangdle/SCOWL-Copyright.txt">copyright</a>).
+      Based on <a class="underline hover:text-triangleBlue" href="https://github.com/rasen68/triangdle" target="_blank" rel="noopener noreferrer">Triangdle</a> by rasen68.
+      Guess dictionary from <a class="underline hover:text-triangleBlue" href="http://wordlist.aspell.net/" target="_blank" rel="noopener noreferrer">SCOWL</a> (<a class="underline hover:text-triangleBlue" href="/wordangle/SCOWL-Copyright.txt">copyright</a>).
     </p>
 
-    <dialog data-triangdle="help-dialog" class={dialogClass}>
+    <dialog data-wordangle="help-dialog" class={dialogClass}>
       <form method="dialog" class="relative">
         <button value="close" class={`${iconButtonClass} absolute top-[-6px] right-[-6px]`} aria-label="Close">×</button>
         <h2 class="font-playfair text-[28px] mb-[12px]">How to play</h2>
@@ -67,15 +67,15 @@ const dialogClass =
       </form>
     </dialog>
 
-    <dialog data-triangdle="result-dialog" class={dialogClass}>
+    <dialog data-wordangle="result-dialog" class={dialogClass}>
       <form method="dialog" class="relative">
         <button value="close" class={`${iconButtonClass} absolute top-[-6px] right-[-6px]`} aria-label="Close">×</button>
-        <h2 data-triangdle="result-title" class="font-playfair text-[28px] mb-[12px]">Result</h2>
-        <p data-triangdle="result-summary" class="font-playfair text-[18px]"></p>
-        <p data-triangdle="result-detail" class="font-libre text-[12px] uppercase tracking-[0.06em] text-gray-500"></p>
-        <p data-triangdle="result-note" class="italic text-triangleBlue min-h-[1.4em]" role="status" aria-live="polite"></p>
+        <h2 data-wordangle="result-title" class="font-playfair text-[28px] mb-[12px]">Result</h2>
+        <p data-wordangle="result-summary" class="font-playfair text-[18px]"></p>
+        <p data-wordangle="result-detail" class="font-libre text-[12px] uppercase tracking-[0.06em] text-gray-500"></p>
+        <p data-wordangle="result-note" class="italic text-triangleBlue min-h-[1.4em]" role="status" aria-live="polite"></p>
         <p class="flex justify-end gap-2">
-          <button data-triangdle="share" type="button" class={buttonClass} autofocus>Share result</button>
+          <button data-wordangle="share" type="button" class={buttonClass} autofocus>Share result</button>
           <button value="close" class={buttonClass}>Close</button>
         </p>
       </form>
@@ -84,7 +84,7 @@ const dialogClass =
 </BaseLayout>
 
 <script>
-  import { mountTriangdle } from "../utils/triangdle/app";
+  import { mountWordangle } from "../utils/wordangle/app";
 
   // Bound on astro:page-load as well as DOM readiness, like Polls.astro: a
   // bundled module script runs once per browser session, so a ClientRouter
@@ -93,22 +93,22 @@ const dialogClass =
   // the reader navigates away, so it never types into some other page.
   let controller: AbortController | undefined;
 
-  function setupTriangdle() {
-    const root = document.querySelector<HTMLElement>("[data-triangdle-root]");
+  function setupWordangle() {
+    const root = document.querySelector<HTMLElement>("[data-wordangle-root]");
     if (!root || root.dataset.bound) return;
     root.dataset.bound = "1";
     controller?.abort();
     controller = new AbortController();
-    mountTriangdle(root, controller.signal);
+    mountWordangle(root, controller.signal);
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", setupTriangdle);
+    document.addEventListener("DOMContentLoaded", setupWordangle);
   } else {
-    setupTriangdle();
+    setupWordangle();
   }
 
-  document.addEventListener("astro:page-load", setupTriangdle);
+  document.addEventListener("astro:page-load", setupWordangle);
   document.addEventListener("astro:before-swap", () => controller?.abort());
 </script>
 
@@ -116,9 +116,9 @@ const dialogClass =
   /*
    * Global because app.ts builds the board and keyboard at runtime, and those
    * nodes never get Astro's scoping attribute. Everything is prefixed with
-   * .triangdle (or a tr- class) so none of it leaks into the rest of the site.
+   * .wordangle (or a tr- class) so none of it leaks into the rest of the site.
    */
-  .triangdle {
+  .wordangle {
     --tr-blue: #2563eb;
     --tr-gray: #e5e7eb;
     --tr-dark: #1f2937;
@@ -129,24 +129,24 @@ const dialogClass =
     --tr-arrow: #e8c84a;
   }
 
-  .triangdle-dialog p {
+  .wordangle-dialog p {
     margin: 0 0 12px;
     line-height: 1.45;
   }
 
-  .triangdle-dialog::backdrop {
+  .wordangle-dialog::backdrop {
     background: rgb(37 99 235 / 0.2);
   }
 
-  .triangdle-dialog.won h2 {
+  .wordangle-dialog.won h2 {
     color: var(--tr-exact);
   }
 
-  .triangdle-dialog.lost h2 {
+  .wordangle-dialog.lost h2 {
     color: var(--tr-danger);
   }
 
-  .triangdle .tr-board {
+  .wordangle .tr-board {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -154,7 +154,7 @@ const dialogClass =
     margin-bottom: 14px;
   }
 
-  .triangdle .tr-row {
+  .wordangle .tr-row {
     display: flex;
     gap: 6px;
     width: max-content;
@@ -162,26 +162,26 @@ const dialogClass =
     cursor: pointer;
   }
 
-  .triangdle .tr-row.locked {
+  .wordangle .tr-row.locked {
     cursor: default;
   }
 
-  .triangdle .tr-row.active {
+  .wordangle .tr-row.active {
     outline: 2px solid var(--tr-blue);
     outline-offset: 3px;
   }
 
-  .triangdle .tr-row:focus-visible {
+  .wordangle .tr-row:focus-visible {
     outline: 2px solid var(--tr-blue);
     outline-offset: 3px;
   }
 
-  .triangdle .tr-row.inert {
+  .wordangle .tr-row.inert {
     opacity: 0.4;
   }
 
-  .triangdle .tr-tile,
-  .triangdle-dialog .tr-swatch {
+  .wordangle .tr-tile,
+  .wordangle-dialog .tr-swatch {
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -195,53 +195,53 @@ const dialogClass =
     text-transform: uppercase;
   }
 
-  .triangdle .tr-tile {
+  .wordangle .tr-tile {
     width: 44px;
     height: 44px;
     font-size: 20px;
   }
 
-  .triangdle-dialog .tr-swatch {
+  .wordangle-dialog .tr-swatch {
     width: 26px;
     height: 26px;
     font-size: 14px;
     vertical-align: middle;
   }
 
-  .triangdle .tr-tile.filled {
+  .wordangle .tr-tile.filled {
     border-color: var(--tr-dark);
   }
 
-  .triangdle .tr-tile.exact,
-  .triangdle .tr-key.exact,
-  .triangdle-dialog .tr-swatch.exact {
+  .wordangle .tr-tile.exact,
+  .wordangle .tr-key.exact,
+  .wordangle-dialog .tr-swatch.exact {
     background: var(--tr-exact);
     border-color: var(--tr-exact);
     color: white;
   }
 
-  .triangdle .tr-tile.present,
-  .triangdle .tr-key.present,
-  .triangdle-dialog .tr-swatch.present {
+  .wordangle .tr-tile.present,
+  .wordangle .tr-key.present,
+  .wordangle-dialog .tr-swatch.present {
     background: var(--tr-present);
     border-color: var(--tr-present);
     color: white;
   }
 
-  .triangdle .tr-tile.absent,
-  .triangdle .tr-key.absent,
-  .triangdle-dialog .tr-swatch.absent {
+  .wordangle .tr-tile.absent,
+  .wordangle .tr-key.absent,
+  .wordangle-dialog .tr-swatch.absent {
     background: var(--tr-absent);
     border-color: var(--tr-absent);
     color: white;
   }
 
-  .triangdle .tr-tile-letter {
+  .wordangle .tr-tile-letter {
     position: relative;
     z-index: 0;
   }
 
-  .triangdle .tr-arrows {
+  .wordangle .tr-arrows {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -254,15 +254,15 @@ const dialogClass =
     font-size: 11px;
   }
 
-  .triangdle .tr-arrows.left {
+  .wordangle .tr-arrows.left {
     left: 3px;
   }
 
-  .triangdle .tr-arrows.right {
+  .wordangle .tr-arrows.right {
     right: 3px;
   }
 
-  .triangdle .tr-arrow {
+  .wordangle .tr-arrow {
     display: block;
     width: 0;
     height: 0;
@@ -270,24 +270,24 @@ const dialogClass =
     border-bottom: 0.3em solid transparent;
   }
 
-  .triangdle .tr-arrow.left {
+  .wordangle .tr-arrow.left {
     border-right: 0.46em solid var(--tr-arrow);
   }
 
-  .triangdle .tr-arrow.right {
+  .wordangle .tr-arrow.right {
     border-left: 0.46em solid var(--tr-arrow);
   }
 
   /* Yellow arrows vanish on a yellow tile. */
-  .triangdle .tr-tile.present .tr-arrow.left {
+  .wordangle .tr-tile.present .tr-arrow.left {
     border-right-color: #3f340c;
   }
 
-  .triangdle .tr-tile.present .tr-arrow.right {
+  .wordangle .tr-tile.present .tr-arrow.right {
     border-left-color: #3f340c;
   }
 
-  .triangdle .tr-message {
+  .wordangle .tr-message {
     min-height: 1.5em;
     margin-bottom: 14px;
     font-family: "Roboto Slab", serif;
@@ -295,27 +295,27 @@ const dialogClass =
     font-style: italic;
   }
 
-  .triangdle .tr-message.bad {
+  .wordangle .tr-message.bad {
     color: var(--tr-danger);
   }
 
-  .triangdle .tr-message.good {
+  .wordangle .tr-message.good {
     color: var(--tr-blue);
   }
 
-  .triangdle .tr-keyboard {
+  .wordangle .tr-keyboard {
     display: flex;
     flex-direction: column;
     gap: 6px;
     margin-bottom: 14px;
   }
 
-  .triangdle .tr-keyboard-row {
+  .wordangle .tr-keyboard-row {
     display: flex;
     gap: 5px;
   }
 
-  .triangdle .tr-key {
+  .wordangle .tr-key {
     flex: 1;
     min-width: 0;
     height: 48px;
@@ -330,35 +330,35 @@ const dialogClass =
     cursor: pointer;
   }
 
-  .triangdle .tr-key.wide {
+  .wordangle .tr-key.wide {
     flex: 1.6;
     font-family: "Libre Franklin", sans-serif;
     font-size: 12px;
   }
 
-  .triangdle .tr-key.enter {
+  .wordangle .tr-key.enter {
     background: var(--tr-blue);
     border-color: var(--tr-blue);
     color: white;
   }
 
-  .triangdle .tr-key:disabled {
+  .wordangle .tr-key:disabled {
     cursor: default;
   }
 
-  .triangdle .tr-key:focus-visible {
+  .wordangle .tr-key:focus-visible {
     outline: 2px solid var(--tr-blue);
     outline-offset: 2px;
   }
 
   @media (max-width: 420px) {
-    .triangdle .tr-tile {
+    .wordangle .tr-tile {
       width: 38px;
       height: 38px;
       font-size: 17px;
     }
 
-    .triangdle .tr-key {
+    .wordangle .tr-key {
       height: 42px;
     }
   }

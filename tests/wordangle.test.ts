@@ -9,7 +9,7 @@ import {
   isWin,
   dailyNumber,
   seededIndex,
-} from '../src/utils/triangdle/game.ts';
+} from '../src/utils/wordangle/game.ts';
 
 test('short guesses compare against the full target', () => {
   assert.deepEqual(

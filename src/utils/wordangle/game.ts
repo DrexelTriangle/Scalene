@@ -1,5 +1,5 @@
-// Triangdle game rules, ported from https://github.com/rasen68/triangdle.
-// Pure functions only -- no DOM -- so tests/triangdle.test.ts can run them
+// Wordangle game rules, ported from Triangdle (https://github.com/rasen68/triangdle).
+// Pure functions only -- no DOM -- so tests/wordangle.test.ts can run them
 // under plain Node.
 
 export const ROW_LENGTHS = [1, 2, 3, 4, 5, 6];

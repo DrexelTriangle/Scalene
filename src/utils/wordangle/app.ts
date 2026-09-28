@@ -1,4 +1,4 @@
-// Browser side of /triangdle: board, keyboard, dialogs and sharing. Ported
+// Browser side of /wordangle: board, keyboard, dialogs and sharing. Ported
 // from https://github.com/rasen68/triangdle (src/main.js, src/data.js); the
 // rules themselves live in ./game.ts.
 import {
@@ -27,9 +27,9 @@ interface WordLists {
 
 const MAX_SCORE = ROW_LENGTHS.reduce((total, length) => total + length, 0);
 const KEYBOARD_ROWS = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
-const WORDS_BASE = "/triangdle";
-const HELP_SEEN_KEY = "triangdle-help-seen";
-const SHARE_URL = "thetriangle.org/triangdle";
+const WORDS_BASE = "/wordangle";
+const HELP_SEEN_KEY = "wordangle-help-seen";
+const SHARE_URL = "thetriangle.org/wordangle";
 
 // Module scope outlives ClientRouter navigations, so coming back to the page
 // reuses the lists already downloaded instead of fetching ~250 KB again.
@@ -85,14 +85,14 @@ function markHelpSeen() {
 }
 
 function part<T extends HTMLElement>(root: HTMLElement, name: string): T {
-  const el = root.querySelector<T>(`[data-triangdle="${name}"]`);
-  if (!el) throw new Error(`Triangdle markup is missing [data-triangdle="${name}"]`);
+  const el = root.querySelector<T>(`[data-wordangle="${name}"]`);
+  if (!el) throw new Error(`Wordangle markup is missing [data-wordangle="${name}"]`);
   return el;
 }
 
 // Wires one rendered page. Everything bound outside the root (the document
 // keydown listener) is tied to `signal`, which the page aborts on navigation.
-export function mountTriangdle(root: HTMLElement, signal: AbortSignal) {
+export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
   const els = {
     board: part(root, "board"),
     keyboard: part(root, "keyboard"),
@@ -357,7 +357,7 @@ export function mountTriangdle(root: HTMLElement, signal: AbortSignal) {
     els.resultDialog.classList.toggle("lost", !won);
     els.resultTitle.textContent = won ? "You got it" : "No match";
     els.resultSummary.textContent = summary;
-    els.resultDetail.textContent = state.randomGame ? "Random puzzle" : `Triangdle #${state.puzzleNumber}`;
+    els.resultDetail.textContent = state.randomGame ? "Random puzzle" : `Wordangle #${state.puzzleNumber}`;
     openResult();
   }
 
@@ -395,7 +395,7 @@ export function mountTriangdle(root: HTMLElement, signal: AbortSignal) {
 
   async function shareResult() {
     if (!state.gameOver) return;
-    const puzzleId = state.randomGame ? "Triangdle (random)" : `Triangdle #${state.puzzleNumber}`;
+    const puzzleId = state.randomGame ? "Wordangle (random)" : `Wordangle #${state.puzzleNumber}`;
     const score = state.won ? `${state.score} letters` : "Loss";
     const grid = state.rows
       .filter((row) => row.submitted)

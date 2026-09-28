@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-'''Download SCOWL and write Triangdle's guess dictionaries.
+'''Download SCOWL and write Wordangle's guess dictionaries.
 
-Writes public/triangdle/allowed-{2..6}.txt plus SCOWL's copyright notice,
+Writes public/wordangle/allowed-{2..6}.txt plus SCOWL's copyright notice,
 which its license requires to travel with the lists. targets.txt, the
 possible answers, is hand-maintained and left alone.
 
 The output is committed, so production never downloads anything; rerun
 this only to refresh the lists:
 
-    python3 scripts/build-triangdle-wordlists.py
+    python3 scripts/build-wordangle-wordlists.py
 '''
 
 from __future__ import annotations
@@ -22,7 +22,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DATA = ROOT / 'public' / 'triangdle'
+DATA = ROOT / 'public' / 'wordangle'
 
 SCOWL_URL = (
     'https://downloads.sourceforge.net/project/wordlist/'
@@ -36,7 +36,7 @@ SCOWL_WORDS_RE = re.compile(
     r'(?:^|/)final/(\w+)-words\.(\d\d)$'
 )
 
-USER_AGENT = 'triangdle-wordlist-builder/1.0'
+USER_AGENT = 'wordangle-wordlist-builder/1.0'
 ALLOWED_LENGTHS = (2, 3, 4, 5, 6)
 DOWNLOAD_ATTEMPTS = 5
 
