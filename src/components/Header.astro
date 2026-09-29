@@ -90,23 +90,25 @@
   /* A little wiggle every few seconds so the link gets noticed. It stops
      while the link is hovered or focused, so it never fights the flip. */
   .games-link:not(:hover):not(:focus-visible) {
-    animation: games-shake 5s ease-in-out 2s infinite;
+    animation: games-shake 5s ease-in-out infinite;
   }
 
+  /* The wiggle opens the cycle, so the first one plays as soon as the page
+     loads, then the link rests for the remaining ~4.3s. */
   @keyframes games-shake {
-    0%, 86%, 100% {
+    0%, 14%, 100% {
       transform: rotate(0deg);
     }
-    88% {
+    2% {
       transform: rotate(-6deg);
     }
-    91% {
+    5% {
       transform: rotate(5deg);
     }
-    94% {
+    8% {
       transform: rotate(-3deg);
     }
-    97% {
+    11% {
       transform: rotate(2deg);
     }
   }
