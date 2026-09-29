@@ -57,7 +57,8 @@
     <a class="hover:underline" href="/entertainment"> Entertainment </a>
     <a class="hover:underline" href="/comics-puzzles"> Comics </a>
     <a class="games-link" href="/wordangle" aria-label="Games"><span class="games-word" aria-hidden="true"><span style="--i:0">G</span><span style="--i:1">a</span><span style="--i:2">m</span><span style="--i:3">e</span><span style="--i:4">s</span></span><span class="games-tiles" aria-hidden="true"><span style="--i:0;--c:#538d4e">G</span><span style="--i:1;--c:#c9b458">A</span><span style="--i:2;--c:#787c7e">M</span><span style="--i:3;--c:#538d4e">E</span><span style="--i:4;--c:#c9b458">S</span></span></a>
-    <a class="hover:underline" href="/welcome-week"> Welcome Week </a>
+    <!-- Welcome Week is out of season; uncomment when it comes back around. -->
+    <!-- <a class="hover:underline" href="/welcome-week"> Welcome Week </a> -->
     <!-- Classifieds is a service, not a section, and this row is sections. It
          keeps its place in the utility nav above and in the side menu, which is
          where the side menu has always filed it -- with About and Contact
@@ -84,6 +85,30 @@
 
   .games-word span {
     display: inline-block;
+  }
+
+  /* A little wiggle every few seconds so the link gets noticed. It stops
+     while the link is hovered or focused, so it never fights the flip. */
+  .games-link:not(:hover):not(:focus-visible) {
+    animation: games-shake 5s ease-in-out 2s infinite;
+  }
+
+  @keyframes games-shake {
+    0%, 86%, 100% {
+      transform: rotate(0deg);
+    }
+    88% {
+      transform: rotate(-6deg);
+    }
+    91% {
+      transform: rotate(5deg);
+    }
+    94% {
+      transform: rotate(-3deg);
+    }
+    97% {
+      transform: rotate(2deg);
+    }
   }
 
   .games-tiles {
@@ -136,6 +161,10 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .games-link:not(:hover):not(:focus-visible) {
+      animation: none;
+    }
+
     .games-link:hover .games-word span,
     .games-link:focus-visible .games-word span {
       animation: none;
