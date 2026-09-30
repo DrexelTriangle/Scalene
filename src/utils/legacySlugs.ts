@@ -383,4 +383,14 @@ export const LEGACY_ARTICLE_SLUGS: Record<string, string> = {
   "young-leads-sixers-on-road-trip": "sixers-spectrum-jan-10",
   "yung-leans-stardust-tour": "yung-lean-stardust-tour",
   "yung-leans-stardust-tour-omits-new-tracks-in-favor-of-old-hits": "yung-lean-stardust-tour",
+
+  // Addresses that changed inside the CMS after publication. There is no slug
+  // history there, so a withdrawn duplicate or an edited slug breaks whatever
+  // was already shared, until it is listed here.
+  //   flip-flops-...: a 2026 re-post of the 2025 article, archived as a
+  //     duplicate; its links belong to the original.
+  //   ...-odysseys-...: shared under this form; the article's slug is
+  //     ...-odyssey-s-....
+  "flip-flops-are-the-worst-footwear": "why-flip-flops-are-the-worst-footwear",
+  "how-the-culture-industry-ruined-the-odysseys-film-debut": "how-the-culture-industry-ruined-the-odyssey-s-film-debut",
 }
