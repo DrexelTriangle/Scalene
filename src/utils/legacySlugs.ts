@@ -391,6 +391,9 @@ export const LEGACY_ARTICLE_SLUGS: Record<string, string> = {
   //     duplicate; its links belong to the original.
   //   ...-odysseys-...: shared under this form; the article's slug is
   //     ...-odyssey-s-....
+  //   drexel-researchers-create-mxenes-...: a WordPress draft copy the ETL
+  //     published (id 8), archived 2026-09-30; the published copy is -4954.
   "flip-flops-are-the-worst-footwear": "why-flip-flops-are-the-worst-footwear",
+  "drexel-researchers-create-mxenes-to-fight-pollution": "drexel-researchers-create-mxenes-to-fight-pollution-4954",
   "how-the-culture-industry-ruined-the-odysseys-film-debut": "how-the-culture-industry-ruined-the-odyssey-s-film-debut",
 }
