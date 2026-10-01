@@ -105,6 +105,13 @@ export interface Article {
    * articles, which never had anywhere to put one.
    */
   featured_image_alt?: string;
+  /**
+   * triangle-cms: resized copies of the images inside `content`, keyed by each
+   * image's wp-content path as `content` references it
+   * ("wp-content/uploads/2026/08/photo-1024x683.jpg": URL-decoded, no host, no
+   * query). Images without renditions are absent.
+   */
+  content_image_variants?: Record<string, ImageVariant[]>;
   categories_list: Category[];
   seo: Seo;
   related: RelatedArticle[];
