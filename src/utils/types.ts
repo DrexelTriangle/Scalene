@@ -267,6 +267,8 @@ export interface GalleryImage {
   width?: number;
   height?: number;
   alt_text?: string;
+  /** triangle-cms: resized copies, narrowest first. Absent until rendered. */
+  variants?: ImageVariant[];
 }
 
 /** triangle-cms: /v1/sitemap/slugs — every live article, for the year-partitioned sitemaps. */
