@@ -1,0 +1,69 @@
+name: Sync dev with main
+
+# Keeps `dev` (the staging branch dev.thetriangle.org serves) from falling
+# behind production: every push to main is merged into dev. The dev server
+# polls dev and rebuilds on its own, so nothing here deploys anything.
+#
+# This never forces dev. If the merge conflicts, or the push is refused, it
+# opens (or reuses) a main -> dev pull request for a person to merge instead.
+# The push is refused whenever main's new commits touch .github/workflows/:
+# GITHUB_TOKEN cannot be granted the `workflows` permission.
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write # push the merge to dev (never main)
+  pull-requests: write # open the fallback main -> dev PR
+
+concurrency:
+  group: sync-dev
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Merge main into dev
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out dev
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+          # Full history: the merge needs the common ancestor.
+          fetch-depth: 0
+
+      - name: Merge main into dev
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if git merge-base --is-ancestor origin/main HEAD; then
+            echo "dev already contains main. Nothing to do."
+            exit 0
+          fi
+
+          if git merge --no-edit -m "Merge main into dev" origin/main \
+            && git push origin HEAD:dev; then
+            echo "dev is now at $(git rev-parse --short HEAD)."
+            exit 0
+          fi
+          git merge --abort 2>/dev/null || true
+
+          existing=$(gh pr list --base dev --head main --state open --json url -q '.[0].url')
+          if [ -n "$existing" ]; then
+            echo "::warning::main could not be merged into dev automatically. Merge $existing by hand."
+            exit 0
+          fi
+
+          url=$(gh pr create --base dev --head main \
+            --title "Merge main into dev" \
+            --body "The automatic main -> dev sync could not complete: either the merge conflicts or main's new commits change \`.github/workflows/\`, which \`GITHUB_TOKEN\` may not push. Merge this PR with a **merge commit** (not squash) to bring staging up to date. See [the run](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}).")
+          echo "::warning::main could not be merged into dev automatically. Opened $url."
