@@ -8,6 +8,16 @@
  * backend while the cutover is in progress.
  */
 
+/**
+ * triangle-cms: one resized WebP rendition of a library image, made by the CMS
+ * imaging sidecar. Lists of these come narrowest first.
+ */
+export interface ImageVariant {
+  url: string;
+  width: number;
+  height: number;
+}
+
 export interface Author {
   id: string;
   name: string;
@@ -42,6 +52,11 @@ export interface ArticleSummary {
   authors: Author[];
   excerpt: string;
   featured_image: string;
+  /**
+   * triangle-cms: resized copies of `featured_image` for a srcset. Absent until
+   * the CMS has rendered them; `featured_image` stays the src either way.
+   */
+  featured_image_variants?: ImageVariant[];
   categories_list: Category[];
   breaking_news?: boolean;
   /** triangle-cms: an editor pinned this story to lead the homepage. */
@@ -62,6 +77,11 @@ export interface RelatedArticle {
   url: string;
   date: string;
   featured_image: string;
+  /**
+   * triangle-cms: resized copies of `featured_image` for a srcset. Absent until
+   * the CMS has rendered them; `featured_image` stays the src either way.
+   */
+  featured_image_variants?: ImageVariant[];
   shared_tags: number;
   authors: Author[];
 }
@@ -74,6 +94,11 @@ export interface Article {
   authors: Author[];
   content: string;
   featured_image: string;
+  /**
+   * triangle-cms: resized copies of `featured_image` for a srcset. Absent until
+   * the CMS has rendered them; `featured_image` stays the src either way.
+   */
+  featured_image_variants?: ImageVariant[];
   /**
    * triangle-cms: the editor's description of `featured_image`, written on the
    * article rather than on the library record. Absent on WordPress-era
@@ -206,6 +231,11 @@ export interface SectionCardArticle {
   date: string;
   authors: Author[];
   featured_image: string;
+  /**
+   * triangle-cms: resized copies of `featured_image` for a srcset. Absent until
+   * the CMS has rendered them; `featured_image` stays the src either way.
+   */
+  featured_image_variants?: ImageVariant[];
   excerpt?: string;
   categories_list?: Category[];
   breaking_news?: boolean;
