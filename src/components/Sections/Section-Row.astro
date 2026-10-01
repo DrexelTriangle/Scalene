@@ -17,6 +17,7 @@ const rowSizeClass = "sm:grid-cols-" + rowSize;
         <PhotoArticle row title={article.title} 
         category={article.categories}
         image={article.featured_image}
+        variants={article.featured_image_variants}
         author={article.authors}
         published_date={article.published_date}
         slug={"article/"+article.slug}/>

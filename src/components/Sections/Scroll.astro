@@ -13,6 +13,22 @@
         const articleLoader = document.getElementById("article-loader");
         const articlesGrid = document.getElementById("main-left");
 
+        // Inline copy of imageSrcset (utils/data.js): this script is
+        // is:inline and cannot import. The attribute values are quoted
+        // because a srcset contains spaces, unlike the bare src above it.
+        const srcsetAttrs = (article) => {
+            const variants = article.featured_image
+                ? article.featured_image_variants
+                : undefined;
+            if (!Array.isArray(variants) || variants.length === 0) return "";
+            const srcset = variants
+                .filter((variant) => variant && variant.url && variant.width > 0)
+                .map((variant) => `${variant.url.replaceAll('"', "%22")} ${variant.width}w`)
+                .join(", ");
+            if (!srcset) return "";
+            return `srcset="${srcset}" sizes="(min-width: 1280px) 300px, (min-width: 640px) 23vw, 35vw"`;
+        };
+
         const fetchMoreArticles = async () => {
             if (isLoading || !localHasMore) return;
 
@@ -87,7 +103,7 @@
                                     <div id="byline" class="font-roboto-slab text-[12px] mb-[8px]">${authorList}</div>
                                     <div class="text-[14px]"> ${article.excerpt} </div>
                                 </div>
-                                <img src=${article.featured_image ? article.featured_image : "/proxy/wp-content/uploads/2024/12/IMG_2493-2048x1365.jpg"} alt="article image" class="ml-[12px] bg-[url('/images/loading.jpg')] bg-cover w-[calc(100%-12px)] h-[169px] object-cover"/>
+                                <img src=${article.featured_image ? article.featured_image : "/proxy/wp-content/uploads/2024/12/IMG_2493-2048x1365.jpg"} ${srcsetAttrs(article)} alt="article image" class="ml-[12px] bg-[url('/images/loading.jpg')] bg-cover w-[calc(100%-12px)] h-[169px] object-cover"/>
                             </article>
                         `;
                         articlesGrid.insertBefore(
