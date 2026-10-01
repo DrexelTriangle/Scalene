@@ -6,8 +6,14 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import '../styles/global.css';
 
 import { gallery } from '../utils/db';
+import { imageSrcset } from '../utils/data';
 
 const images = (await gallery()) ?? [];
+
+// One tile of the masonry grid below: a quarter of the 1200px/900px container
+// at md and up, a third at sm, half below that (of the 90vw container).
+const tileSizes =
+  "(min-width: 1280px) 300px, (min-width: 1024px) 225px, (min-width: 768px) 23vw, (min-width: 640px) 30vw, 45vw";
 ---
 <BaseLayout title="Photo Gallery - The Triangle">
   <Header />
@@ -19,6 +25,8 @@ const images = (await gallery()) ?? [];
       {images.map((img) => (
         <img
           src={img.url}
+          srcset={imageSrcset(img.variants)}
+          sizes={img.variants?.length ? tileSizes : undefined}
           alt={img.alt_text ?? ""}
           class="mb-4 w-full rounded-lg break-inside-avoid"
           loading="lazy"
