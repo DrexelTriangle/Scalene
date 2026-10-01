@@ -1,7 +1,7 @@
 ---
-import { normalizeText, buildByline, proxyMediaUrl } from '../utils/data';
+import { normalizeText, buildByline, proxyMediaUrl, imageSrcset } from '../utils/data';
 
-const { title, excerpt, image, author, published_date, date, slug } = Astro.props;
+const { title, excerpt, image, variants, author, published_date, date, slug } = Astro.props;
 
 const DEFAULT_IMGS = [
   '/proxy/wp-content/uploads/2024/12/IMG_2493-2048x1365.jpg',
@@ -13,6 +13,8 @@ let imgSrc = image || DEFAULT_IMGS[Math.floor(Math.random() * DEFAULT_IMGS.lengt
 if (image !== undefined) {
   imgSrc = proxyMediaUrl(imgSrc);
 }
+
+const srcset = image ? imageSrcset(variants) : undefined;
 
 const byline = buildByline(author, published_date || date);
 ---
@@ -31,6 +33,8 @@ const byline = buildByline(author, published_date || date);
     <a href={`/${slug}`} class="pl-[12px]">
       <img
         src={imgSrc}
+        srcset={srcset}
+        sizes={srcset && '(min-width: 1280px) 300px, (min-width: 640px) 23vw, 35vw'}
         alt={normalizeText(title)}
         class="bg-[url('/images/loading.jpg')] bg-cover w-full h-[169px] object-cover"
         loading="lazy"

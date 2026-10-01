@@ -12,7 +12,7 @@ import Poll from '../../components/Polls.astro';
 import { getArticle, getArticleComments } from '../../utils/db';
 import { getCategoryHref } from "../../utils/taxonomyStore";
 import { LEGACY_ARTICLE_SLUGS } from '../../utils/legacySlugs';
-import { normalizeText } from "../../utils/data";
+import { normalizeText, imageSrcset } from "../../utils/data";
 import { isComicPost } from "../../utils/comics";
 import { expandShortcodes } from "../../utils/shortcodes";
 import { normalizeArticleHtml } from "../../utils/articleHtml";
@@ -228,6 +228,7 @@ const featuredImage =
   post.featured_image && !/<img\b/i.test(content) && !hasPuzzleEmbed
     ? proxyWpContent(post.featured_image)
     : undefined;
+const featuredSrcset = featuredImage ? imageSrcset(post.featured_image_variants) : undefined;
 
 ---
 <ArticleLayout title={normalizeText(post.title) + " - The Triangle"} article={post}>
@@ -245,7 +246,7 @@ const featuredImage =
             <div id="main-left" class="main-side">
                 <div id="print-wrap">
                 <section id="article" class:list={{ "uncropped-images": uncroppedImages }}>
-                    {featuredImage && <figure><img src={featuredImage} alt={featuredImageAlt}/></figure>}
+                    {featuredImage && <figure><img src={featuredImage} srcset={featuredSrcset} sizes={featuredSrcset && "(min-width: 1280px) 800px, (min-width: 1024px) 750px, 90vw"} alt={featuredImageAlt}/></figure>}
                     <Fragment set:html={authorPrint + articleHtml} />
                 </section>
                 </div>
@@ -263,7 +264,7 @@ const featuredImage =
             </div>
         </div>}
         {!actualArticle && <section id="article" class:list={{ "uncropped-images": uncroppedImages }}>
-                    {featuredImage && <figure><img src={featuredImage} alt={featuredImageAlt}/></figure>}
+                    {featuredImage && <figure><img src={featuredImage} srcset={featuredSrcset} sizes={featuredSrcset && "(min-width: 1280px) 800px, (min-width: 1024px) 750px, 90vw"} alt={featuredImageAlt}/></figure>}
                     <Fragment set:html={articleHtml} />
                 </section>}
         {!actualArticle && <Comments comments={comments} slug={post.slug ?? article} commentsClosed={commentsClosed} />}
