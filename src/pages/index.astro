@@ -11,11 +11,25 @@ import BreakingNewsBanner from '../components/BreakingNewsBanner.astro'
 import Developing from '../components/Developing.astro'
 import '../styles/global.css';
 import { getHomepageArticles } from '../utils/db';
+import { rotateSection } from '../utils/homepageRotation';
 import SubscribeLink from "../components/SubscribeLink.astro";
 import Banner from "../components/Banner.astro";
 import Ad from "../components/Ad.astro";
 
 const posts = await getHomepageArticles();
+
+// Rotate the stories within each section on every load so the page doesn't
+// sit unchanged for days between new posts. Pinned and breaking stories stay
+// put, and so does the news lead (the centre card): with nothing pinned it is
+// simply the newest story, and an older one in the biggest slot on the page
+// would read as a mistake rather than as freshness. Each section rotates over
+// its whole list before it is sliced below, so stories move between a
+// section's top block and its row as well as within them.
+posts.news = rotateSection(posts.news, 1);
+posts.opinion = rotateSection(posts.opinion);
+posts.sports = rotateSection(posts.sports);
+posts.entertainment = rotateSection(posts.entertainment);
+posts.candp = rotateSection(posts.candp);
 
 // `items` carries every story on the banner. A CMS that predates it sends only
 // `text`/`article_slug`, so fall back to that pair rather than showing nothing:
