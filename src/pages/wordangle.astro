@@ -3,7 +3,7 @@ export const prerender = true;
 import Header from "../components/Header.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import "../styles/global.css";
-import { ROW_LENGTHS, evaluateGuess } from "../utils/wordangle/game";
+import { evaluateGuess } from "../utils/wordangle/game";
 
 // The help's worked example, scored by the game's own rules at build time so
 // the colours and arrows can't drift from what a reader will see.
@@ -63,22 +63,13 @@ const dialogClass =
         <button value="close" class={`${iconButtonClass} absolute top-[-6px] right-[-6px]`} aria-label="Close">×</button>
         <h2 class="font-playfair text-[28px] mb-[12px]">How to play</h2>
         <p>Guess a 6-letter word using up to one guess of each length 1 to 6, in any order.</p>
-        <div class="tr-steps" aria-hidden="true">
-          {ROW_LENGTHS.map((length) => (
-            <div class:list={["tr-steps-row", { required: length === 6 }]}>
-              {Array.from({ length }, () => <span class="tr-step" />)}
-              {length === 6 && <span class="tr-steps-label">required</span>}
-            </div>
-          ))}
-        </div>
-        <p>The six-letter row is the only required guess. Guessing the full six-letter row ends the game. An incorrect six-letter guess is a loss. A correct six-letter guess is a win.</p>
-        <p>Except the one-letter row, each guess must be a real word.</p>
+        <p>Each guess must be a real word, except the one-letter row, which can be any letter.</p>
         <ul class="flex flex-col gap-[6px] mb-[12px]">
           <li class="flex items-center gap-2"><span class="tr-swatch exact">G</span> In the word, in that spot.</li>
           <li class="flex items-center gap-2"><span class="tr-swatch present">Y</span> In the word, in another spot.</li>
           <li class="flex items-center gap-2"><span class="tr-swatch absent">X</span> Not in the word at all.</li>
         </ul>
-        <p>Arrows on a yellow or green letter point to other copies of that letter in the word.</p>
+        <p>Arrows on a tile point to other (unmatched) copies of that letter in the word.</p>
         <figure class="tr-example">
           <figcaption>If the word is <strong>{exampleAnswer.toUpperCase()}</strong> and you guess:</figcaption>
           <div class="tr-example-row" role="img" aria-label={`${exampleGuess.toUpperCase()}: P green with an arrow right, L yellow with an arrow right, A and Y gray`}>
@@ -95,7 +86,7 @@ const dialogClass =
           </div>
           <p class="tr-example-note">P is right, and its arrow points to the other P later on. L is in the word, further right. A and Y aren't in it.</p>
         </figure>
-        <p>Your score is the number of letters you spent, so fewer is better.</p>
+        <p>Guessing the full six-letter row ends the game. Score is the number of letters you spent, so fewer is better.</p>
         <p class="flex justify-end">
           <button value="close" class={buttonClass} autofocus>Play</button>
         </p>
@@ -171,37 +162,6 @@ const dialogClass =
 
   .wordangle-dialog::backdrop {
     background: rgb(37 99 235 / 0.06);
-  }
-
-  .wordangle-dialog .tr-steps {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    margin: 0 0 12px;
-  }
-
-  .wordangle-dialog .tr-steps-row {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-  }
-
-  .wordangle-dialog .tr-step {
-    width: 16px;
-    height: 16px;
-    border: 2px solid var(--tr-gray);
-    border-radius: 3px;
-  }
-
-  .wordangle-dialog .tr-steps-row.required .tr-step {
-    border-color: var(--tr-blue);
-  }
-
-  .wordangle-dialog .tr-steps-label {
-    margin-left: 6px;
-    font-size: 12px;
-    font-style: italic;
-    color: var(--tr-blue);
   }
 
   .wordangle-dialog .tr-example {
