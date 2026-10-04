@@ -56,16 +56,15 @@ const dialogClass =
         <button value="close" class={`${iconButtonClass} absolute top-[-6px] right-[-6px]`} aria-label="Close">×</button>
         <h2 class="font-playfair text-[28px] mb-[12px]">How to play</h2>
         <p>Guess a 6-letter word using up to one guess of each length 1 to 6, in any order.</p>
-        <p>A guess of length <em>n</em> is checked against the first <em>n</em> letters of the word. Each guess must be a real word, except the one-letter row, which can be any letter.</p>
+        <p>The six-letter row is the only required guess. Guessing the full six-letter row ends the game. An incorrect six-letter guess is a loss. A correct six-letter guess is a win.</p>
+        <p>Except the one-letter row, each guess must be a real word.</p>
         <ul class="flex flex-col gap-[6px] mb-[12px]">
           <li class="flex items-center gap-2"><span class="tr-swatch exact">G</span> In the word, in that spot.</li>
           <li class="flex items-center gap-2"><span class="tr-swatch present">Y</span> In the word, in another spot.</li>
           <li class="flex items-center gap-2"><span class="tr-swatch absent">X</span> Not in the word at all.</li>
         </ul>
-        <p>Arrows on a tile point to other (unmatched) copies of that letter in the word.</p>
-        <p>The ▲ and ▼ beside the selected row mean there are open rows above or below it. Tap a row, tap an arrow, or use the arrow keys to switch.</p>
-        <p><strong>Daily</strong> is the same word for everyone today. <strong>Random</strong> is unlimited practice with a new word each time; your daily game is kept while you play.</p>
-        <p>Guessing the full six-letter row ends the game. Score is the number of letters you spent, so fewer is better.</p>
+        <p>Arrows on a yellow letter point to where the letter is in the word.</p>
+        <p>Your score is the number of letters you spent, so fewer is better.</p>
         <p class="flex justify-end">
           <button value="close" class={buttonClass} autofocus>Play</button>
         </p>
