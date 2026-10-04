@@ -8,7 +8,6 @@ import {
   mergeKeyboardStatuses,
   isGameOver,
   isWin,
-  chooseDailyTarget,
   dailyDate,
   chooseRandomTarget,
   type Dictionaries,
@@ -29,7 +28,8 @@ interface WordLists {
 
 const MAX_SCORE = ROW_LENGTHS.reduce((total, length) => total + length, 0);
 const KEYBOARD_ROWS = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
-const WORDS_BASE = "/wordangle";
+// The lists live in the CMS; Scalene proxies them (src/pages/api/wordangle).
+const WORDS_BASE = "/api/wordangle/lists";
 const HELP_SEEN_KEY = "wordangle-help-seen";
 const SHARE_URL = "thetriangle.org/wordangle";
 
@@ -63,17 +63,17 @@ async function fetchWordLists(): Promise<WordLists> {
   return { dictionaries, targets: targets.filter((word) => word.length === 6) };
 }
 
-// Today's word from the CMS queue, via Scalene's /api/wordangle proxy.
-// Anything short of a clean answer resolves to undefined, and the game falls
-// back to its own pick rather than failing to load.
+// Today's word from the CMS queue. There is no local pick to fall back on:
+// undefined means the daily puzzle is unavailable, and only Random plays.
 async function fetchScheduledWord(): Promise<ScheduledWord | undefined> {
   const date = dailyDate();
   try {
-    const response = await fetch(`/api/wordangle?date=${date}`);
+    const response = await fetch(`/api/wordangle/today?date=${date}`);
     if (!response.ok) return undefined;
     const body = await response.json();
     const word = typeof body?.word === "string" ? body.word.trim().toLowerCase() : "";
-    return word ? { date, word } : undefined;
+    const number = typeof body?.number === "number" ? body.number : NaN;
+    return word && Number.isFinite(number) ? { date, number, word } : undefined;
   } catch {
     return undefined;
   }
@@ -169,10 +169,14 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
       if (signal.aborted) return;
       state.dictionaries = data.dictionaries;
       state.targets = data.targets;
-      // Only a word the game can accept as a guess; the CMS checks the same
-      // dictionary, but a stale copy on either side shouldn't strand a reader.
       if (scheduled && data.dictionaries[6]?.has(scheduled.word)) state.scheduled = scheduled;
-      startGame(false);
+      if (state.scheduled) {
+        startGame(false);
+      } else {
+        els.modeDaily.disabled = true;
+        startGame(true);
+        setMessage("Today's puzzle couldn't be loaded. Try Random, or refresh later.", true);
+      }
       document.addEventListener("keydown", onKeydown, { signal });
       els.modeRandom.addEventListener("click", () => switchMode(true));
       els.modeDaily.addEventListener("click", () => switchMode(false));
@@ -189,7 +193,8 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
   function startGame(randomGame: boolean) {
     const selection = randomGame
       ? chooseRandomTarget(state.targets)
-      : chooseDailyTarget(state.targets, new Date(), state.scheduled);
+      : state.scheduled && { target: state.scheduled.word, number: state.scheduled.number };
+    if (!selection) return; // no daily word; the Daily button is disabled
     Object.assign(state, newGame(), {
       target: selection.target,
       puzzleNumber: selection.number,

@@ -7,10 +7,7 @@ import {
   mergeKeyboardStatuses,
   isGameOver,
   isWin,
-  dailyNumber,
-  seededIndex,
   dailyDate,
-  chooseDailyTarget,
 } from '../src/utils/wordangle/game.ts';
 
 test('short guesses compare against the full target', () => {
@@ -79,46 +76,6 @@ test('keyboard status only improves', () => {
   assert.equal(second.i, 'exact');
 });
 
-test('daily numbering uses Philly date', () => {
-  // 2026-01-01 00:00 EST = 05:00 UTC → puzzle 1
-  assert.equal(
-    dailyNumber(new Date('2026-01-01T05:00:00.000Z')),
-    1,
-  );
-  // 23:00 EST Jan 1 is already Jan 2 UTC; still puzzle 1
-  assert.equal(
-    dailyNumber(new Date('2026-01-02T04:00:00.000Z')),
-    1,
-  );
-  // 2026-01-02 00:00 EST = 05:00 UTC → puzzle 2
-  assert.equal(
-    dailyNumber(new Date('2026-01-02T05:00:00.000Z')),
-    2,
-  );
-});
-
-test('daily numbering follows EDT after the spring-forward', () => {
-  // 2026-07-01 00:00 EDT = 04:00 UTC
-  const july1 = dailyNumber(new Date('2026-07-01T04:00:00.000Z'));
-  // 23:00 EDT July 1 is already July 2 UTC; still July 1 in NY
-  assert.equal(
-    dailyNumber(new Date('2026-07-02T03:00:00.000Z')),
-    july1,
-  );
-  // 2026-07-02 00:00 EDT = 04:00 UTC → next puzzle
-  assert.equal(
-    dailyNumber(new Date('2026-07-02T04:00:00.000Z')),
-    july1 + 1,
-  );
-});
-
-test('seeded index is deterministic and in range', () => {
-  const a = seededIndex(42, 40);
-  const b = seededIndex(42, 40);
-  assert.equal(a, b);
-  assert.ok(a >= 0 && a < 40);
-});
-
 const board = (...entries: [number, string?][]) => entries.map(([length, guess]) => ({
   length,
   guess: guess ?? '',
@@ -154,16 +111,12 @@ test("dailyDate uses the Philadelphia calendar day", () => {
   assert.equal(dailyDate(new Date("2026-10-05T03:30:00Z")), "2026-10-04");
 });
 
-test("chooseDailyTarget prefers a word scheduled for the same day", () => {
-  const date = new Date("2026-10-04T16:00:00Z");
-  const scheduled = { date: "2026-10-04", word: "abacus" };
-  assert.deepEqual(chooseDailyTarget(["planet", "garden"], date, scheduled), { number: 277, target: "abacus" });
-});
 
-test("chooseDailyTarget ignores a scheduled word for another day", () => {
-  const date = new Date("2026-10-05T16:00:00Z");
-  const scheduled = { date: "2026-10-04", word: "abacus" };
-  const pick = chooseDailyTarget(["planet", "garden"], date, scheduled);
-  assert.notEqual(pick.target, "abacus");
-  assert.equal(pick.number, 278);
+test("dailyDate rolls over at midnight in both EST and EDT", () => {
+  // EST (UTC-5): 04:30 UTC on Mar 8 is 23:30 on Mar 7.
+  assert.equal(dailyDate(new Date("2026-03-08T04:30:00Z")), "2026-03-07");
+  assert.equal(dailyDate(new Date("2026-03-08T05:00:00Z")), "2026-03-08");
+  // EDT (UTC-4): midnight is 04:00 UTC.
+  assert.equal(dailyDate(new Date("2026-07-02T03:59:00Z")), "2026-07-01");
+  assert.equal(dailyDate(new Date("2026-07-02T04:00:00Z")), "2026-07-02");
 });

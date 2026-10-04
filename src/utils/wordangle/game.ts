@@ -118,45 +118,18 @@ function civilDateInZone(date: Date, timeZone: string) {
   return { year: num("year"), month: num("month"), day: num("day") };
 }
 
-export function dailyNumber(date = new Date()): number {
-  const { year, month, day } = civilDateInZone(date, DAILY_TZ);
-  const start = Date.UTC(2026, 0, 1);
-  const utc = Date.UTC(year, month - 1, day);
-  return Math.floor((utc - start) / 86400000) + 1;
-}
-
-export function seededIndex(seed: number | string, length: number): number {
-  let hash = 2166136261 >>> 0;
-  for (const char of String(seed)) {
-    hash ^= char.charCodeAt(0);
-    hash = Math.imul(hash, 16777619) >>> 0;
-  }
-  return hash % length;
-}
-
 // The puzzle date as YYYY-MM-DD, the key the CMS schedules words under.
 export function dailyDate(date = new Date()): string {
   const { year, month, day } = civilDateInZone(date, DAILY_TZ);
   return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 }
 
+// The daily word, as the CMS queue serves it. Editors schedule it in Delta,
+// which also numbers the puzzles.
 export interface ScheduledWord {
   date: string;
+  number: number;
   word: string;
-}
-
-// Editors queue daily words in the CMS. A scheduled word wins when it is for
-// this very day; otherwise (nothing queued, CMS unreachable, or the page left
-// open past midnight) the day falls back to the seeded pick.
-export function chooseDailyTarget(
-  targets: string[],
-  date = new Date(),
-  scheduled?: ScheduledWord,
-): { number: number; target: string } {
-  const number = dailyNumber(date);
-  if (scheduled && scheduled.date === dailyDate(date)) return { number, target: scheduled.word };
-  if (!targets.length) throw new Error("No target words configured.");
-  return { number, target: targets[seededIndex(number, targets.length)] };
 }
 
 export function chooseRandomTarget(targets: string[]): { number: null; target: string } {
