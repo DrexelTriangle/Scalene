@@ -104,7 +104,6 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     modeDaily: part<HTMLButtonElement>(root, "mode-daily"),
     modeRandom: part<HTMLButtonElement>(root, "mode-random"),
     newRandom: part<HTMLButtonElement>(root, "new-random"),
-    tagline: part(root, "tagline"),
     help: part<HTMLButtonElement>(root, "help"),
     helpDialog: part<HTMLDialogElement>(root, "help-dialog"),
     resultDialog: part<HTMLDialogElement>(root, "result-dialog"),
@@ -170,7 +169,7 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     });
     if (els.resultDialog.open) els.resultDialog.close();
     render();
-    setMessage(randomGame ? "" : "Choose any row to begin.");
+    setMessage("");
   }
 
   function switchMode(randomGame: boolean) {
@@ -207,9 +206,6 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     els.modeDaily.setAttribute("aria-pressed", `${!state.randomGame}`);
     els.modeRandom.setAttribute("aria-pressed", `${state.randomGame}`);
     els.newRandom.hidden = !state.randomGame;
-    els.tagline.textContent = state.randomGame
-      ? "Random practice word — not today's puzzle"
-      : "A daily word puzzle from The Triangle";
     root.dataset.mode = state.randomGame ? "random" : "daily";
   }
 
