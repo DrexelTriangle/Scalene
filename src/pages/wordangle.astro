@@ -36,7 +36,7 @@ const dialogClass =
           <button data-wordangle="mode-daily" type="button" aria-pressed="true">Daily <span data-wordangle="puzzle-id"></span></button>
           <button data-wordangle="mode-random" type="button" aria-pressed="false" disabled>Random</button>
         </div>
-        <button data-wordangle="new-random" type="button" class="tr-new-random" hidden>New word</button>
+        <button data-wordangle="new-random" type="button" class={buttonClass} hidden>New word</button>
       </div>
       <span>Letters used <strong data-wordangle="score" class="font-playfair">0</strong></span>
     </div>
@@ -268,18 +268,9 @@ const dialogClass =
     cursor: default;
   }
 
-  .wordangle .tr-mode button:focus-visible,
-  .wordangle .tr-new-random:focus-visible {
+  .wordangle .tr-mode button:focus-visible {
     outline: 2px solid var(--tr-blue);
     outline-offset: 2px;
-  }
-
-  .wordangle .tr-new-random {
-    font-family: "Roboto Slab", serif;
-    font-size: 13px;
-    color: var(--tr-blue);
-    text-decoration: underline;
-    cursor: pointer;
   }
 
   .wordangle .tr-row.inert {
