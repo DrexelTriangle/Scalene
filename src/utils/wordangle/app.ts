@@ -9,10 +9,12 @@ import {
   isGameOver,
   isWin,
   chooseDailyTarget,
+  dailyDate,
   chooseRandomTarget,
   type Dictionaries,
   type KeyboardStatuses,
   type Row,
+  type ScheduledWord,
   type TileResult,
 } from "./game";
 
@@ -59,6 +61,22 @@ async function fetchWordLists(): Promise<WordLists> {
     dictionaries[length] = new Set(lists[i]);
   });
   return { dictionaries, targets: targets.filter((word) => word.length === 6) };
+}
+
+// Today's word from the CMS queue, via Scalene's /api/wordangle proxy.
+// Anything short of a clean answer resolves to undefined, and the game falls
+// back to its own pick rather than failing to load.
+async function fetchScheduledWord(): Promise<ScheduledWord | undefined> {
+  const date = dailyDate();
+  try {
+    const response = await fetch(`/api/wordangle?date=${date}`);
+    if (!response.ok) return undefined;
+    const body = await response.json();
+    const word = typeof body?.word === "string" ? body.word.trim().toLowerCase() : "";
+    return word ? { date, word } : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 function parseWords(text: string): string[] {
@@ -129,7 +147,12 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
   });
   type Game = ReturnType<typeof newGame>;
 
-  const state = { dictionaries: {} as Dictionaries, targets: [] as string[], ...newGame() };
+  const state = {
+    dictionaries: {} as Dictionaries,
+    targets: [] as string[],
+    scheduled: undefined as ScheduledWord | undefined,
+    ...newGame(),
+  };
   // The daily game, parked while the reader plays random words, so switching
   // back to Daily picks up where they left off instead of starting over.
   let parkedDaily: Game | undefined;
@@ -141,11 +164,14 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
   }
 
   setMessage("Loading words…");
-  loadWordLists()
-    .then((data) => {
+  Promise.all([loadWordLists(), fetchScheduledWord()])
+    .then(([data, scheduled]) => {
       if (signal.aborted) return;
       state.dictionaries = data.dictionaries;
       state.targets = data.targets;
+      // Only a word the game can accept as a guess; the CMS checks the same
+      // dictionary, but a stale copy on either side shouldn't strand a reader.
+      if (scheduled && data.dictionaries[6]?.has(scheduled.word)) state.scheduled = scheduled;
       startGame(false);
       document.addEventListener("keydown", onKeydown, { signal });
       els.modeRandom.addEventListener("click", () => switchMode(true));
@@ -161,7 +187,9 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     });
 
   function startGame(randomGame: boolean) {
-    const selection = randomGame ? chooseRandomTarget(state.targets) : chooseDailyTarget(state.targets);
+    const selection = randomGame
+      ? chooseRandomTarget(state.targets)
+      : chooseDailyTarget(state.targets, new Date(), state.scheduled);
     Object.assign(state, newGame(), {
       target: selection.target,
       puzzleNumber: selection.number,
@@ -175,7 +203,7 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
   function switchMode(randomGame: boolean) {
     if (randomGame === state.randomGame) return;
     if (randomGame) {
-      const { dictionaries: _d, targets: _t, ...daily } = state;
+      const { dictionaries: _d, targets: _t, scheduled: _s, ...daily } = state;
       parkedDaily = daily;
       startGame(true);
       return;

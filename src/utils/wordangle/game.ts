@@ -134,9 +134,28 @@ export function seededIndex(seed: number | string, length: number): number {
   return hash % length;
 }
 
-export function chooseDailyTarget(targets: string[], date = new Date()): { number: number; target: string } {
-  if (!targets.length) throw new Error("No target words configured.");
+// The puzzle date as YYYY-MM-DD, the key the CMS schedules words under.
+export function dailyDate(date = new Date()): string {
+  const { year, month, day } = civilDateInZone(date, DAILY_TZ);
+  return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+
+export interface ScheduledWord {
+  date: string;
+  word: string;
+}
+
+// Editors queue daily words in the CMS. A scheduled word wins when it is for
+// this very day; otherwise (nothing queued, CMS unreachable, or the page left
+// open past midnight) the day falls back to the seeded pick.
+export function chooseDailyTarget(
+  targets: string[],
+  date = new Date(),
+  scheduled?: ScheduledWord,
+): { number: number; target: string } {
   const number = dailyNumber(date);
+  if (scheduled && scheduled.date === dailyDate(date)) return { number, target: scheduled.word };
+  if (!targets.length) throw new Error("No target words configured.");
   return { number, target: targets[seededIndex(number, targets.length)] };
 }
 

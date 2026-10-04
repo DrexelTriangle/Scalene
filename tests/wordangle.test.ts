@@ -9,6 +9,8 @@ import {
   isWin,
   dailyNumber,
   seededIndex,
+  dailyDate,
+  chooseDailyTarget,
 } from '../src/utils/wordangle/game.ts';
 
 test('short guesses compare against the full target', () => {
@@ -145,4 +147,23 @@ test('spending every row ends the game even without a full-length row', () => {
   const rows = board([1, 'a'], [2, 'an'], [3, 'ant']);
   assert.equal(isGameOver(rows, 'silver'), true);
   assert.equal(isWin(rows, 'silver'), false);
+});
+
+test("dailyDate uses the Philadelphia calendar day", () => {
+  // 03:30 UTC on Oct 5 is still Oct 4 in New York.
+  assert.equal(dailyDate(new Date("2026-10-05T03:30:00Z")), "2026-10-04");
+});
+
+test("chooseDailyTarget prefers a word scheduled for the same day", () => {
+  const date = new Date("2026-10-04T16:00:00Z");
+  const scheduled = { date: "2026-10-04", word: "abacus" };
+  assert.deepEqual(chooseDailyTarget(["planet", "garden"], date, scheduled), { number: 277, target: "abacus" });
+});
+
+test("chooseDailyTarget ignores a scheduled word for another day", () => {
+  const date = new Date("2026-10-05T16:00:00Z");
+  const scheduled = { date: "2026-10-04", word: "abacus" };
+  const pick = chooseDailyTarget(["planet", "garden"], date, scheduled);
+  assert.notEqual(pick.target, "abacus");
+  assert.equal(pick.number, 278);
 });
