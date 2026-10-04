@@ -170,7 +170,7 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     });
     if (els.resultDialog.open) els.resultDialog.close();
     render();
-    setMessage(randomGame ? "Random word — practice as much as you like." : "Choose any row to begin.");
+    setMessage(randomGame ? "" : "Choose any row to begin.");
   }
 
   function switchMode(randomGame: boolean) {
@@ -189,7 +189,7 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     parkedDaily = undefined;
     if (els.resultDialog.open) els.resultDialog.close();
     render();
-    setMessage(state.gameOver ? resultSummary() : "Back to today's puzzle.", state.gameOver && !state.won, state.won);
+    setMessage(state.gameOver ? resultSummary() : "", state.gameOver && !state.won, state.won);
   }
 
   function render() {
