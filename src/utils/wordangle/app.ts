@@ -101,7 +101,10 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     message: part(root, "message"),
     share: part<HTMLButtonElement>(root, "share"),
     result: part<HTMLButtonElement>(root, "result"),
-    random: part<HTMLButtonElement>(root, "random"),
+    modeDaily: part<HTMLButtonElement>(root, "mode-daily"),
+    modeRandom: part<HTMLButtonElement>(root, "mode-random"),
+    newRandom: part<HTMLButtonElement>(root, "new-random"),
+    tagline: part(root, "tagline"),
     help: part<HTMLButtonElement>(root, "help"),
     helpDialog: part<HTMLDialogElement>(root, "help-dialog"),
     resultDialog: part<HTMLDialogElement>(root, "result-dialog"),
@@ -114,9 +117,7 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
   const newRows = (): GameRow[] =>
     ROW_LENGTHS.map((length) => ({ length, guess: "", submitted: false, evaluation: [] }));
 
-  const state = {
-    dictionaries: {} as Dictionaries,
-    targets: [] as string[],
+  const newGame = () => ({
     target: "",
     puzzleNumber: null as number | null,
     randomGame: false,
@@ -126,7 +127,13 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     gameOver: false,
     won: false,
     keyboard: {} as KeyboardStatuses,
-  };
+  });
+  type Game = ReturnType<typeof newGame>;
+
+  const state = { dictionaries: {} as Dictionaries, targets: [] as string[], ...newGame() };
+  // The daily game, parked while the reader plays random words, so switching
+  // back to Daily picks up where they left off instead of starting over.
+  let parkedDaily: Game | undefined;
 
   els.help.addEventListener("click", () => els.helpDialog.showModal());
   if (!readHelpSeen()) {
@@ -142,10 +149,12 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
       state.targets = data.targets;
       startGame(false);
       document.addEventListener("keydown", onKeydown, { signal });
-      els.random.addEventListener("click", () => startGame(true));
+      els.modeRandom.addEventListener("click", () => switchMode(true));
+      els.modeDaily.addEventListener("click", () => switchMode(false));
+      els.newRandom.addEventListener("click", () => startGame(true));
       els.result.addEventListener("click", openResult);
       els.share.addEventListener("click", shareResult);
-      els.random.disabled = false;
+      els.modeRandom.disabled = false;
     })
     .catch((error) => {
       console.error(error);
@@ -154,18 +163,33 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
 
   function startGame(randomGame: boolean) {
     const selection = randomGame ? chooseRandomTarget(state.targets) : chooseDailyTarget(state.targets);
-    state.target = selection.target;
-    state.puzzleNumber = selection.number;
-    state.randomGame = randomGame;
-    state.rows = newRows();
-    state.activeRow = 0;
-    state.score = 0;
-    state.gameOver = false;
-    state.won = false;
-    state.keyboard = {};
+    Object.assign(state, newGame(), {
+      target: selection.target,
+      puzzleNumber: selection.number,
+      randomGame,
+    });
     if (els.resultDialog.open) els.resultDialog.close();
     render();
-    setMessage(randomGame ? "Random puzzle — have fun." : "Choose any row to begin.");
+    setMessage(randomGame ? "Random word — practice as much as you like." : "Choose any row to begin.");
+  }
+
+  function switchMode(randomGame: boolean) {
+    if (randomGame === state.randomGame) return;
+    if (randomGame) {
+      const { dictionaries: _d, targets: _t, ...daily } = state;
+      parkedDaily = daily;
+      startGame(true);
+      return;
+    }
+    if (!parkedDaily) {
+      startGame(false);
+      return;
+    }
+    Object.assign(state, parkedDaily);
+    parkedDaily = undefined;
+    if (els.resultDialog.open) els.resultDialog.close();
+    render();
+    setMessage(state.gameOver ? resultSummary() : "Back to today's puzzle.", state.gameOver && !state.won, state.won);
   }
 
   function render() {
@@ -176,8 +200,17 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
   }
 
   function renderStats() {
-    els.puzzleId.textContent = state.randomGame ? "Random" : `#${state.puzzleNumber}`;
+    // The daily number stays on its button in random mode, from the parked game.
+    const dailyNumber = state.randomGame ? parkedDaily?.puzzleNumber : state.puzzleNumber;
+    els.puzzleId.textContent = dailyNumber == null ? "" : `#${dailyNumber}`;
     els.score.textContent = `${state.score}`;
+    els.modeDaily.setAttribute("aria-pressed", `${!state.randomGame}`);
+    els.modeRandom.setAttribute("aria-pressed", `${state.randomGame}`);
+    els.newRandom.hidden = !state.randomGame;
+    els.tagline.textContent = state.randomGame
+      ? "Random practice word — not today's puzzle"
+      : "A daily word puzzle from The Triangle";
+    root.dataset.mode = state.randomGame ? "random" : "daily";
   }
 
   function renderBoard() {
@@ -215,8 +248,40 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
         }
         rowEl.appendChild(tile);
       }
+      if (active) addRowNav(rowEl, index);
       els.board.appendChild(rowEl);
     });
+  }
+
+  // Decorative for screen readers: the rows themselves are focusable and the
+  // arrow keys move between them, so these are pointer shortcuts plus a hint.
+  function addRowNav(rowEl: HTMLElement, index: number) {
+    const nav = document.createElement("span");
+    nav.className = "tr-row-nav";
+    nav.setAttribute("aria-hidden", "true");
+    for (const [direction, delta] of [["up", -1], ["down", 1]] as const) {
+      const arrow = document.createElement("span");
+      const target = openRowFrom(index, delta);
+      arrow.className = `tr-row-nav-arrow ${direction}`;
+      arrow.classList.toggle("off", target === undefined);
+      arrow.title = direction === "up" ? "Previous open row" : "Next open row";
+      // Keep the mousedown from focusing the row: its focus handler rebuilds
+      // the board, which would drop this arrow before the click lands.
+      arrow.addEventListener("mousedown", (event) => event.preventDefault());
+      arrow.addEventListener("click", (event) => {
+        event.stopPropagation();
+        if (target !== undefined) selectRow(target);
+      });
+      nav.appendChild(arrow);
+    }
+    rowEl.appendChild(nav);
+  }
+
+  function openRowFrom(index: number, delta: number): number | undefined {
+    for (let i = index + delta; i >= 0 && i < state.rows.length; i += delta) {
+      if (!state.rows[i].submitted) return i;
+    }
+    return undefined;
   }
 
   function addArrowStack(tile: HTMLElement, direction: "left" | "right", count: number) {
@@ -257,7 +322,7 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
   }
 
   function selectRow(index: number) {
-    if (state.gameOver || state.rows[index].submitted) return;
+    if (state.gameOver || state.rows[index].submitted || index === state.activeRow) return;
     state.activeRow = index;
     renderBoard();
   }
@@ -282,16 +347,12 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     }
   }
 
+  // Stops at the ends rather than wrapping, so the arrow keys agree with
+  // the up/down hints drawn beside the row.
   function moveActiveRow(delta: number) {
     if (state.gameOver) return;
-    let index = state.activeRow;
-    for (let steps = 0; steps < state.rows.length; steps += 1) {
-      index = (index + delta + state.rows.length) % state.rows.length;
-      if (!state.rows[index].submitted) {
-        selectRow(index);
-        return;
-      }
-    }
+    const index = openRowFrom(state.activeRow, delta);
+    if (index !== undefined) selectRow(index);
   }
 
   function handleKey(key: string) {
@@ -347,22 +408,26 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
   function endGame(won: boolean) {
     state.gameOver = true;
     state.won = won;
-    const word = state.target.toUpperCase();
-    const spent = `${state.score}/${MAX_SCORE} letters`;
-    const summary = won ? `You found ${word} in ${spent}.` : `The word was ${word}. You spent ${spent}.`;
     render();
-    setMessage(summary, !won, won);
-
-    els.resultDialog.classList.toggle("won", won);
-    els.resultDialog.classList.toggle("lost", !won);
-    els.resultTitle.textContent = won ? "You got it" : "No match";
-    els.resultSummary.textContent = summary;
-    els.resultDetail.textContent = state.randomGame ? "Random puzzle" : `Wordangle #${state.puzzleNumber}`;
+    setMessage(resultSummary(), !won, won);
     openResult();
   }
 
+  function resultSummary() {
+    const word = state.target.toUpperCase();
+    const spent = `${state.score}/${MAX_SCORE} letters`;
+    return state.won ? `You found ${word} in ${spent}.` : `The word was ${word}. You spent ${spent}.`;
+  }
+
+  // Filled on every open, since a parked daily game can come back finished
+  // after the dialog last showed a random game's result.
   function openResult() {
     if (!state.gameOver || els.resultDialog.open) return;
+    els.resultDialog.classList.toggle("won", state.won);
+    els.resultDialog.classList.toggle("lost", !state.won);
+    els.resultTitle.textContent = state.won ? "You got it" : "No match";
+    els.resultSummary.textContent = resultSummary();
+    els.resultDetail.textContent = state.randomGame ? "Random practice word" : `Wordangle #${state.puzzleNumber}`;
     els.resultNote.textContent = "";
     els.resultDialog.showModal();
   }
