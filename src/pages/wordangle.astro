@@ -23,18 +23,23 @@ const dialogClass =
     <div class="flex items-end justify-between gap-3 border-b-[1px] border-solid border-triangleBlue pb-[12px] mb-[12px]">
       <div>
         <h1 class="font-playfair text-[42px] leading-none">Wordangle</h1>
-        <p class="font-roboto-slab text-[13px] text-gray-600 mt-[6px]">A daily word puzzle from The Triangle</p>
+        <p data-wordangle="tagline" class="font-roboto-slab text-[13px] text-gray-600 mt-[6px]">A daily word puzzle from The Triangle</p>
       </div>
       <div class="flex items-center gap-2 shrink-0">
-        <button data-wordangle="random" type="button" class={buttonClass} disabled>Random</button>
         <button data-wordangle="help" type="button" class={iconButtonClass} aria-label="How to play">?</button>
       </div>
     </div>
 
-    <p class="flex justify-between font-roboto-slab text-[15px] mb-[16px]">
-      <span>Puzzle <strong data-wordangle="puzzle-id" class="font-playfair">&nbsp;</strong></span>
+    <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 font-roboto-slab text-[15px] mb-[16px]">
+      <div class="flex items-center gap-2">
+        <div class="tr-mode" role="group" aria-label="Puzzle mode">
+          <button data-wordangle="mode-daily" type="button" aria-pressed="true">Daily <span data-wordangle="puzzle-id"></span></button>
+          <button data-wordangle="mode-random" type="button" aria-pressed="false" disabled>Random</button>
+        </div>
+        <button data-wordangle="new-random" type="button" class="tr-new-random" hidden>New word</button>
+      </div>
       <span>Letters used <strong data-wordangle="score" class="font-playfair">0</strong></span>
-    </p>
+    </div>
 
     <div data-wordangle="board" class="tr-board" aria-label="Guess board"></div>
     <p data-wordangle="message" class="tr-message" role="status" aria-live="polite"></p>
@@ -59,6 +64,8 @@ const dialogClass =
           <li class="flex items-center gap-2"><span class="tr-swatch absent">X</span> Not in the word at all.</li>
         </ul>
         <p>Arrows on a tile point to other (unmatched) copies of that letter in the word.</p>
+        <p>The ▲ and ▼ beside the selected row mean there are open rows above or below it. Tap a row, tap an arrow, or use the arrow keys to switch.</p>
+        <p><strong>Daily</strong> is the same word for everyone today. <strong>Random</strong> is unlimited practice with a new word each time; your daily game is kept while you play.</p>
         <p>Guessing the full six-letter row ends the game. Score is the number of letters you spent, so fewer is better.</p>
         <p class="flex justify-end">
           <button value="close" class={buttonClass} autofocus>Play</button>
@@ -173,6 +180,106 @@ const dialogClass =
   .wordangle .tr-row:focus-visible {
     outline: 2px solid var(--tr-blue);
     outline-offset: 3px;
+  }
+
+  /* Random games get a dashed outline so the mode reads at a glance. */
+  .wordangle[data-mode="random"] .tr-row.active {
+    outline-style: dashed;
+  }
+
+  .wordangle .tr-row {
+    position: relative;
+  }
+
+  /* Up/down hints beside the active row: which ways the arrow keys go. */
+  .wordangle .tr-row-nav {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(100% + 10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .wordangle .tr-row-nav-arrow {
+    display: block;
+    width: 22px;
+    height: 16px;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .wordangle .tr-row-nav-arrow::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+  }
+
+  .wordangle .tr-row-nav-arrow.up::before {
+    border-bottom: 9px solid var(--tr-blue);
+  }
+
+  .wordangle .tr-row-nav-arrow.down::before {
+    border-top: 9px solid var(--tr-blue);
+  }
+
+  .wordangle .tr-row-nav-arrow.off {
+    visibility: hidden;
+  }
+
+  .wordangle .tr-row-nav-arrow:hover::before {
+    filter: brightness(0.75);
+  }
+
+  .wordangle .tr-mode {
+    display: inline-flex;
+    border: 1px solid var(--tr-blue);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .wordangle .tr-mode button {
+    padding: 3px 12px;
+    font-family: "Roboto Slab", serif;
+    font-size: 14px;
+    color: var(--tr-blue);
+    background: white;
+    cursor: pointer;
+  }
+
+  .wordangle .tr-mode button + button {
+    border-left: 1px solid var(--tr-blue);
+  }
+
+  .wordangle .tr-mode button[aria-pressed="true"] {
+    background: var(--tr-blue);
+    color: white;
+    cursor: default;
+  }
+
+  .wordangle .tr-mode button:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  .wordangle .tr-mode button:focus-visible,
+  .wordangle .tr-new-random:focus-visible {
+    outline: 2px solid var(--tr-blue);
+    outline-offset: 2px;
+  }
+
+  .wordangle .tr-new-random {
+    font-family: "Roboto Slab", serif;
+    font-size: 13px;
+    color: var(--tr-blue);
+    text-decoration: underline;
+    cursor: pointer;
   }
 
   .wordangle .tr-row.inert {
