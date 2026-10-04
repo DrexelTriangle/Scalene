@@ -29,6 +29,23 @@ export function proxyMediaUrl(url) {
 }
 
 /**
+ * Build a srcset from the CMS's resized renditions of an image
+ * (`featured_image_variants`). Returns undefined when there are none, so Astro
+ * drops the attribute and the browser just loads the src.
+ *
+ * Every rendition is listed, not just the ones a given card might use: with
+ * `sizes` the browser picks the smallest that covers the slot at the screen's
+ * pixel density, which is the whole point.
+ */
+export function imageSrcset(variants) {
+  if (!Array.isArray(variants) || variants.length === 0) return undefined;
+  return variants
+    .filter((variant) => variant?.url && variant.width > 0)
+    .map((variant) => `${proxyMediaUrl(variant.url)} ${variant.width}w`)
+    .join(', ') || undefined;
+}
+
+/**
  * Replace absolute CMS image URLs with the local /proxy path,
  * and strip srcset attributes (not needed with proxy images).
  * Used in article pages to rewrite WordPress content HTML.

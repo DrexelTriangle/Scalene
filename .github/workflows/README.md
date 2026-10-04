@@ -6,6 +6,25 @@ push to `main`, on the self-hosted production runner, and calls the trusted
 root-owned `deploy-scalene` script; it never checks out repository code.
 `rollback-production.yml` and `restart-production.yml` are manual.
 
+## Staging: the `dev` branch
+
+`dev` is the staging branch. dev.thetriangle.org polls it every minute and
+rebuilds when it moves, so to preview a frontend change, push it to `dev` (or
+merge a PR into `dev`) and check the site a few minutes later. Nothing in this
+repo deploys staging: the server-side poller lives in triangle-infrastructure
+(`roles/scalene_host`, dev profile). It does not use GitHub Actions or the
+production runner.
+
+`sync-dev.yml` merges every push to `main` into `dev`, so staging never runs
+behind production. It never forces `dev`. If the merge conflicts, or if `main`
+changed `.github/workflows/` (`GITHUB_TOKEN` is not allowed to push that), it
+opens a `main` -> `dev` PR instead. Merge that PR with a merge commit, not a
+squash.
+
+Staging serves real data from the production CMS, but its Slack webhooks and
+email credentials are blank. The tipline, classifieds and guest-submission forms
+fail there on purpose.
+
 ## Scheduling a feature release
 
 `scheduled-merge.yml` merges a pull request at a time you pick, with nobody

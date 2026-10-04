@@ -1,12 +1,17 @@
 name: CI
 
+# dev is the staging branch dev.thetriangle.org serves. It gets the same checks,
+# but deploy-production.yml gates on head_branch == main, so a green dev run
+# never reaches production.
 on:
   pull_request:
     branches:
       - main
+      - dev
   push:
     branches:
       - main
+      - dev
 
 # Least privilege: CI only needs to read the repository contents.
 permissions:

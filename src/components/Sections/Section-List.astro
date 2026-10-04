@@ -20,6 +20,7 @@ const { articles } = Astro.props;
             published_date={article.published_date}
             excerpt={article.excerpt}
             image={article.featured_image}
+            variants={article.featured_image_variants}
             slug={"article/"+article.slug}/>
     ))}
 </div>

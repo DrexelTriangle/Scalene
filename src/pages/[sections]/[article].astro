@@ -12,7 +12,7 @@ import Poll from '../../components/Polls.astro';
 import { getArticle, getArticleComments } from '../../utils/db';
 import { getCategoryHref } from "../../utils/taxonomyStore";
 import { LEGACY_ARTICLE_SLUGS } from '../../utils/legacySlugs';
-import { normalizeText } from "../../utils/data";
+import { normalizeText, imageSrcset } from "../../utils/data";
 import { isComicPost } from "../../utils/comics";
 import { expandShortcodes } from "../../utils/shortcodes";
 import { normalizeArticleHtml } from "../../utils/articleHtml";
@@ -183,7 +183,43 @@ const describeLeadImage = (html: string): string => {
   });
 };
 
-const articleHtml = describeLeadImage(stripDimensions(proxyWpContent(content)));
+// The CMS's key for a body image: its wp-content path, decoded, with no host
+// (the src may be absolute, or already rewritten to /proxy/) and no query.
+const contentImageKey = (src: string): string | undefined => {
+  const path = src.replace(/&amp;/g, "&").split(/[?#]/)[0];
+  const at = path.indexOf("/wp-content/");
+  if (at < 0) return undefined;
+  try {
+    return decodeURIComponent(path.slice(at + 1));
+  } catch {
+    return path.slice(at + 1);
+  }
+};
+
+// Give body images back a srcset, now pointing at the CMS's renditions.
+// stripDimensions removes the ones WordPress wrote, which listed its own
+// derivatives; this runs after it, so only the CMS's survive. The lead photo
+// of nearly every article is one of these inline images, not the featured
+// image, so this is where an article page's weight actually goes.
+//
+// sizes is the article column: 800px at xl, 750px at lg, the 90vw container
+// below. Images floated or captioned narrower than that will fetch a bit more
+// than they need, which is still a small fraction of the original.
+const contentVariants = post.content_image_variants ?? {};
+const addBodySrcsets = (html: string) =>
+  html.replace(/<img\b[^>]*>/gi, (tag) => {
+    if (/\ssrcset\s*=/i.test(tag)) return tag;
+    const src = tag.match(/\ssrc\s*=\s*["']([^"']+)["']/i)?.[1];
+    const key = src ? contentImageKey(src) : undefined;
+    const srcset = key ? imageSrcset(contentVariants[key]) : undefined;
+    if (!srcset) return tag;
+    return tag.replace(
+      /<img\b/i,
+      `<img srcset="${escapeAttribute(srcset)}" sizes="(min-width: 1280px) 800px, (min-width: 1024px) 750px, 90vw"`,
+    );
+  });
+
+const articleHtml = describeLeadImage(addBodySrcsets(stripDimensions(proxyWpContent(content))));
 
 // "Does this body have prose?" -- comics and other image-only posts don't, and
 // they get the single-column treatment. This used to look for <p> alone, which
@@ -228,6 +264,7 @@ const featuredImage =
   post.featured_image && !/<img\b/i.test(content) && !hasPuzzleEmbed
     ? proxyWpContent(post.featured_image)
     : undefined;
+const featuredSrcset = featuredImage ? imageSrcset(post.featured_image_variants) : undefined;
 
 ---
 <ArticleLayout title={normalizeText(post.title) + " - The Triangle"} article={post}>
@@ -245,7 +282,7 @@ const featuredImage =
             <div id="main-left" class="main-side">
                 <div id="print-wrap">
                 <section id="article" class:list={{ "uncropped-images": uncroppedImages }}>
-                    {featuredImage && <figure><img src={featuredImage} alt={featuredImageAlt}/></figure>}
+                    {featuredImage && <figure><img src={featuredImage} srcset={featuredSrcset} sizes={featuredSrcset && "(min-width: 1280px) 800px, (min-width: 1024px) 750px, 90vw"} alt={featuredImageAlt}/></figure>}
                     <Fragment set:html={authorPrint + articleHtml} />
                 </section>
                 </div>
@@ -263,7 +300,7 @@ const featuredImage =
             </div>
         </div>}
         {!actualArticle && <section id="article" class:list={{ "uncropped-images": uncroppedImages }}>
-                    {featuredImage && <figure><img src={featuredImage} alt={featuredImageAlt}/></figure>}
+                    {featuredImage && <figure><img src={featuredImage} srcset={featuredSrcset} sizes={featuredSrcset && "(min-width: 1280px) 800px, (min-width: 1024px) 750px, 90vw"} alt={featuredImageAlt}/></figure>}
                     <Fragment set:html={articleHtml} />
                 </section>}
         {!actualArticle && <Comments comments={comments} slug={post.slug ?? article} commentsClosed={commentsClosed} />}
