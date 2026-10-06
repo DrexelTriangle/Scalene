@@ -1,0 +1,1146 @@
+{
+ "section": {
+  "slug": "entertainment",
+  "name": "Entertainment",
+  "canonical_title": "Entertainment"
+ },
+ "subsections": [
+  {
+   "slug": "movies",
+   "name": "Movies",
+   "canonical_title": "Movies"
+  },
+  {
+   "slug": "music",
+   "name": "Music",
+   "canonical_title": "Music"
+  },
+  {
+   "slug": "happening-in-philly",
+   "name": "Happening in Philly",
+   "canonical_title": "Happening in Philly"
+  },
+  {
+   "slug": "gaming",
+   "name": "Gaming",
+   "canonical_title": "Gaming"
+  },
+  {
+   "slug": "performing-arts",
+   "name": "Performing Arts",
+   "canonical_title": "Performing Arts"
+  },
+  {
+   "slug": "the-drawing-board",
+   "name": "The Drawing Board",
+   "canonical_title": "The Drawing Board"
+  },
+  {
+   "slug": "tv",
+   "name": "TV",
+   "canonical_title": "TV"
+  },
+  {
+   "slug": "food",
+   "name": "Food",
+   "canonical_title": "Food"
+  }
+ ],
+ "articles": [
+  {
+   "title": "Breakaway Music Festival brings big names and lackluster visuals",
+   "id": 10221,
+   "authors": [
+    {
+     "id": 871,
+     "name": "Sonya Kalianda",
+     "slug": "sonya-kalianda"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Music",
+     "slug": "music"
+    }
+   ],
+   "excerpt": "Spanning 14 cities over the course of 2026, the Breakaway Music Festival tour kicked off in Dallas, Texas, in mid-April, touring cross-country before it will conclude its run in Houston this November. Marketed as a premier fusion of electronic music icons and smaller regional talent, the festival aims to create…",
+   "slug": "breakaway-festival",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/copy-of-copy-of-breakaway-philly-2026-kursza-mb-43-1.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/copy-of-copy-of-breakaway-philly-2026-kursza-mb-43-1.jpg.480w.webp",
+     "width": 480,
+     "height": 600
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/copy-of-copy-of-breakaway-philly-2026-kursza-mb-43-1.jpg.960w.webp",
+     "width": 960,
+     "height": 1200
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/copy-of-copy-of-breakaway-philly-2026-kursza-mb-43-1.jpg.1600w.webp",
+     "width": 1600,
+     "height": 2000
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/copy-of-copy-of-breakaway-philly-2026-kursza-mb-43-1.jpg.2400w.webp",
+     "width": 2400,
+     "height": 3000
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-02T01:15:02Z"
+  },
+  {
+   "title": "The Overall Score: 'Wolverine' falls flat",
+   "id": 10220,
+   "authors": [
+    {
+     "id": 888,
+     "name": "Marek Reynolds",
+     "slug": "marek-reynolds"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Gaming",
+     "slug": "gaming"
+    },
+    {
+     "name": "The Overall Score",
+     "slug": "the-overall-score"
+    },
+    {
+     "name": "Columns",
+     "slug": "columns"
+    }
+   ],
+   "excerpt": "Insomniac Games has no trouble making a fun, interactive, and engaging superhero experience — “Spider-Man” (2018) and its following games were very popular. Once it was announced that they would be developing a “Wolverine” game, one of the most well-known X-Men from Marvel, people were very excited. After the trailers,…",
+   "slug": "the-overall-score-wolverine-falls-flat",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/rocco-fonseca-12.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-12.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-12.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-12.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-12.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-02T01:05:13Z"
+  },
+  {
+   "title": "The Overall Score: 'The Blood of Dawnwalker' revives the vampire genre",
+   "id": 10219,
+   "authors": [
+    {
+     "id": 888,
+     "name": "Marek Reynolds",
+     "slug": "marek-reynolds"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Gaming",
+     "slug": "gaming"
+    },
+    {
+     "name": "The Overall Score",
+     "slug": "the-overall-score"
+    },
+    {
+     "name": "Columns",
+     "slug": "columns"
+    }
+   ],
+   "excerpt": "“The Blood of Dawnwalker” is a vampire game for people who are fans of these monsters and have not been able to feel the power of one in an immense open-world setting. With the game, new studio Rebel Wolves breaks into the industry with their first game, meeting any fan’s…",
+   "slug": "the-overall-score-the-blood-of-dawnwalker-revives-the-vampire-genre",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/rocco-fonseca-11.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-11.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-11.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-11.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-11.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-02T01:04:31Z"
+  },
+  {
+   "title": "Green Halal cart: Quality chicken, saucy bowl",
+   "id": 10210,
+   "authors": [
+    {
+     "id": 579,
+     "name": "Bobby Saunders",
+     "slug": "bobby-saunders"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Food",
+     "slug": "food"
+    }
+   ],
+   "excerpt": "Address: Near the Mario statue (33rd St.) Item ordered: Chicken over rice (salad, white sauce, hot sauce) with a Sunkist orange soda Price range: Under $15 Overall score: ▲▲▲◭△ The Green Halal cart on 33rd St. offers a pretty solid chicken-over-rice for $10.80, including a Sunkist orange soda. The portion…",
+   "slug": "green-halal-cart-food-review",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/evie-seetoo-2.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/evie-seetoo-2.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/evie-seetoo-2.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/evie-seetoo-2.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/evie-seetoo-2.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:41:47Z"
+  },
+  {
+   "title": "Role Model performs for ‘Philly’s finest’ at the Highmark Mann",
+   "id": 10204,
+   "authors": [
+    {
+     "id": 859,
+     "name": "Izzy DeHayes",
+     "slug": "izzy-dehayes"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Music",
+     "slug": "music"
+    }
+   ],
+   "excerpt": "Role Model performed for a crowd of 7,500 people on Sept. 23 on the Skyline Stage at the Highmark Mann, with Samia as the opening act. After his debut studio album, “ Rx ,” Tucker Pillsbury, better known by his stage name, Role Model, has continued to establish himself in…",
+   "slug": "role-model-concert-review",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/evie-seetoo.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/evie-seetoo.jpg.480w.webp",
+     "width": 480,
+     "height": 384
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/evie-seetoo.jpg.960w.webp",
+     "width": 960,
+     "height": 768
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/evie-seetoo.jpg.1000w.webp",
+     "width": 1000,
+     "height": 800
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:18:27Z"
+  },
+  {
+   "title": "WKDU’s Electronic Music Marathon to return with a bang",
+   "id": 10202,
+   "authors": [
+    {
+     "id": 574,
+     "name": "Elliott Ruvalcaba",
+     "slug": "elliott-ruvalcaba"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    }
+   ],
+   "excerpt": "WKDU, Drexel University’s official radio station, is back once again for its annual Electronic Music Marathon, which will be held from Friday, Oct. 9 through Monday, Oct. 12. The event will feature four days of nonstop music programming with dozens of DJs aimed at promoting the electronic music of the…",
+   "slug": "wkdu-emm",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/lia-lora-2.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lia-lora-2.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lia-lora-2.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lia-lora-2.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lia-lora-2.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:16:49Z"
+  },
+  {
+   "title": "'Primetime' is 2026’s most thrilling film",
+   "id": 10201,
+   "authors": [
+    {
+     "id": 576,
+     "name": "Tegan Doherty",
+     "slug": "tegan-doherty"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Movies",
+     "slug": "movies"
+    }
+   ],
+   "excerpt": "“Primetime” is a very beautiful yet haunting film, and is like nothing audiences have ever seen before. “Primetime,” released on Sept. 25, serves as director Lance Oppenheim’s breakout movie, and it is definitely an outlier amongst all the other unique films released this year. This film is not without controversy,…",
+   "slug": "primetime-is-2026-s-most-thrilling-film",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/riley-beachell-4.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-4.jpg.480w.webp",
+     "width": 480,
+     "height": 720
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-4.jpg.960w.webp",
+     "width": 960,
+     "height": 1440
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-4.jpg.1600w.webp",
+     "width": 1600,
+     "height": 2400
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-4.jpg.2400w.webp",
+     "width": 2400,
+     "height": 3600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:16:02Z"
+  },
+  {
+   "title": "Brandon Flowers brings country to Franklin Music Hall",
+   "id": 10199,
+   "authors": [
+    {
+     "id": 576,
+     "name": "Tegan Doherty",
+     "slug": "tegan-doherty"
+    },
+    {
+     "id": 888,
+     "name": "Marek Reynolds",
+     "slug": "marek-reynolds"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Music",
+     "slug": "music"
+    }
+   ],
+   "excerpt": "Despite the very clear vibe that Brandon Flowers and his mainstream band, The Killers, have had since the 2000s, the Las Vegas performer has stepped away from alternative rock in his new album, “ THRASHER ,” and into the country genre. Despite having such an iconic voice and approach to…",
+   "slug": "brandon-flowers-brings-country-to-franklin-music-hall",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/courtesy-of-rob-loud.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/courtesy-of-rob-loud.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/courtesy-of-rob-loud.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/courtesy-of-rob-loud.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/courtesy-of-rob-loud.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:14:53Z"
+  },
+  {
+   "title": "Cucina Zapata: Asian-Mexican fusion done right",
+   "id": 10180,
+   "authors": [
+    {
+     "id": 575,
+     "name": "Subiksha Ganesh",
+     "slug": "subiksha-ganesh"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Food",
+     "slug": "food"
+    }
+   ],
+   "excerpt": "While an Asian-Mexican fusion cuisine may raise some eyebrows, Cucina Zapata blends the two seamlessly. They do not skimp on quality despite the extremely affordable prices and generous portion sizes, making it…",
+   "slug": "cucina-zapata-asian-mexican-fusion-done-right",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-17.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-17.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-17.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-17.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-17.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-08-28T01:19:07Z"
+  },
+  {
+   "title": "How to spend your first 48 hours in Philly",
+   "id": 10170,
+   "authors": [
+    {
+     "id": 569,
+     "name": "Janine Gin",
+     "slug": "janine-gin"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Happening in Philly",
+     "slug": "happening-in-philly"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "First time in Philadelphia? Here is a full two-day itinerary to introduce you to the City of Brotherly Love and give you a glimpse of everything it has to offer. This itinerary covers a lot of ground, so feel free to pick and choose the spots that are the most…",
+   "slug": "48-hours-in-philly",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/kaseyshamis-1.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/kaseyshamis-1.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/kaseyshamis-1.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/kaseyshamis-1.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/kaseyshamis-1.jpg.2048w.webp",
+     "width": 2048,
+     "height": 1366
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-28T00:33:22Z"
+  },
+  {
+   "title": "Explore these affordable restaurants around Philadelphia",
+   "id": 10164,
+   "authors": [
+    {
+     "id": 880,
+     "name": "Sophie Fang",
+     "slug": "sophie-fang"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Food",
+     "slug": "food"
+    },
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "As freshmen arrive on campus and into the Philadelphia community, it is important to explore the city’s vibrant culinary scene. However, despite the high quality of Philly’s food, dining out does not necessarily have to break the bank. Here is a short list of affordable restaurants all around Philly, full…",
+   "slug": "affordable-restaurants",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-4-5.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-4-5.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-4-5.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-4-5.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-4-5.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-28T00:24:21Z"
+  },
+  {
+   "title": "Food trucks: The heart of Drexel’s community",
+   "id": 10163,
+   "authors": [
+    {
+     "id": 928,
+     "name": "Emily Ernst",
+     "slug": "emily-ernst"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Food",
+     "slug": "food"
+    },
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "Food is powerful. It creates an avenue for people to connect across cultures and identities. For many international students, eating a meal from food trucks like West River — the traditional Chinese food truck parked outside of the Drexel library where Mother and Son duo Sue and Boronne make their…",
+   "slug": "food-trucks-the-heart-of-drexel-s-community",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/emily-ernst.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/emily-ernst.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/emily-ernst.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/emily-ernst.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/emily-ernst.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-28T00:10:37Z"
+  },
+  {
+   "title": "Intersection under the sun",
+   "id": 10147,
+   "authors": [
+    {
+     "id": 828,
+     "name": "Gerard Johnson",
+     "slug": "gerard-johnson"
+    }
+   ],
+   "categories": [
+    {
+     "name": "The Drawing Board",
+     "slug": "the-drawing-board"
+    },
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "",
+   "slug": "intersection-under-the-sun",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/intesection-under-the-sun.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/intesection-under-the-sun.jpg.480w.webp",
+     "width": 480,
+     "height": 168
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/intesection-under-the-sun.jpg.960w.webp",
+     "width": 960,
+     "height": 337
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/intesection-under-the-sun.jpg.1600w.webp",
+     "width": 1600,
+     "height": 562
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/intesection-under-the-sun.jpg.2400w.webp",
+     "width": 2400,
+     "height": 843
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-27T22:40:58Z"
+  },
+  {
+   "title": "33rd and Market in the midday",
+   "id": 10146,
+   "authors": [
+    {
+     "id": 828,
+     "name": "Gerard Johnson",
+     "slug": "gerard-johnson"
+    }
+   ],
+   "categories": [
+    {
+     "name": "The Drawing Board",
+     "slug": "the-drawing-board"
+    },
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "",
+   "slug": "33rd-and-market-in-the-midday",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/33rd-and-market-in-the-midday.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/33rd-and-market-in-the-midday.jpg.480w.webp",
+     "width": 480,
+     "height": 173
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/33rd-and-market-in-the-midday.jpg.960w.webp",
+     "width": 960,
+     "height": 346
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/33rd-and-market-in-the-midday.jpg.1600w.webp",
+     "width": 1600,
+     "height": 576
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/33rd-and-market-in-the-midday.jpg.2400w.webp",
+     "width": 2400,
+     "height": 864
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-27T22:34:23Z"
+  },
+  {
+   "title": "Rico Nasty to headline DragonFly 2026",
+   "id": 10183,
+   "authors": [
+    {
+     "id": 42,
+     "name": "Audrey Scott",
+     "slug": "audrey-scott"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    }
+   ],
+   "excerpt": "The headliner of this year’s DragonFly concert is Rico Nasty, Dragon Music Collective announced via Instagram on Sep. 3. The “ Smack A Bitch ” star will take the stage in front of undergraduate students, graduate students, and community members at the DAC on Saturday, Oct. 17 at 7 p.m.…",
+   "slug": "dragonfly-lineup",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/kaseyshamis-02-04.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/kaseyshamis-02-04.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/kaseyshamis-02-04.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/kaseyshamis-02-04.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/kaseyshamis-02-04.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1601
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-03T15:00:00Z",
+   "creation_date": "2026-08-28T01:27:19Z"
+  },
+  {
+   "title": "Coco's Cookies and Creamery: The best ice cream at Drexel",
+   "id": 10179,
+   "authors": [
+    {
+     "id": 569,
+     "name": "Janine Gin",
+     "slug": "janine-gin"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Food",
+     "slug": "food"
+    }
+   ],
+   "excerpt": "It is 9 p.m. Your roommate suggests that you guys should get a sweet treat. Where do you go? Coco’s Cookies and Creamery is the answer. Located at the edge of campus, this corner shop is the perfect place to get soft serve ice cream and other desserts year-round. Coco’s",
+   "slug": "coco-s-cookies-and-creamery-the-best-ice-cream-at-drexel",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-16.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-16.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-16.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-16.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-16.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-28T13:00:00Z",
+   "creation_date": "2026-08-28T01:17:12Z"
+  },
+  {
+   "title": "The Good Jawn Fest: Philadelphia’s premier underground hip-hop show",
+   "id": 10178,
+   "authors": [
+    {
+     "id": 828,
+     "name": "Gerard Johnson",
+     "slug": "gerard-johnson"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Music",
+     "slug": "music"
+    }
+   ],
+   "excerpt": "On Saturday, Aug. 22, The Good Jawn Music Festival took place at The Lawn on 3701 Filbert St., behind the Drexel University Health Sciences Building. It featured an extraordinary roster of hip-hop artists. The sun was shining brightly, and there was not a cloud in sight. A cool breeze flowed…",
+   "slug": "the-good-jawn-fest-philadelphia-s-premier-underground-hip-hop-show",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/gerard-johnson.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/gerard-johnson.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/gerard-johnson.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/gerard-johnson.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/gerard-johnson.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-28T13:00:00Z",
+   "creation_date": "2026-08-28T01:09:20Z"
+  },
+  {
+   "title": "Worth it",
+   "id": 10128,
+   "authors": [
+    {
+     "id": 570,
+     "name": "Maddie Dort",
+     "slug": "maddie-dort"
+    }
+   ],
+   "categories": [
+    {
+     "name": "The Drawing Board",
+     "slug": "the-drawing-board"
+    },
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    }
+   ],
+   "excerpt": "",
+   "slug": "worth-it",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/final-tv-head.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/final-tv-head.jpg.480w.webp",
+     "width": 480,
+     "height": 691
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/final-tv-head.jpg.960w.webp",
+     "width": 960,
+     "height": 1381
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/final-tv-head.jpg.1600w.webp",
+     "width": 1600,
+     "height": 2302
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/final-tv-head.jpg.1640w.webp",
+     "width": 1640,
+     "height": 2360
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-21T13:00:00Z",
+   "creation_date": "2026-08-20T22:51:47Z"
+  },
+  {
+   "title": "Best gluten-free spots on campus",
+   "id": 10124,
+   "authors": [
+    {
+     "id": 894,
+     "name": "Leah Seidman",
+     "slug": "leah-seidman"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Food",
+     "slug": "food"
+    }
+   ],
+   "excerpt": "As a college student with a gluten intolerance, finding safe places to eat within walking distance of campus can be a challenge. However, Drexel University’s campus happens to offer many gluten-free gems in University City. This list ranking also has cross-contamination in mind for readers with celiac disease. Bart’s Bagels…",
+   "slug": "best-gluten-free-spots-on-campus",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-3-3.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-3-3.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-3-3.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-3-3.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-3-3.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-21T13:00:00Z",
+   "creation_date": "2026-08-20T22:43:34Z"
+  },
+  {
+   "title": "Mai’s Oriental Food: Authentic and affordable Chinese food",
+   "id": 10123,
+   "authors": [
+    {
+     "id": 569,
+     "name": "Janine Gin",
+     "slug": "janine-gin"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Food",
+     "slug": "food"
+    }
+   ],
+   "excerpt": "Good Chinese food should be filling and tasty. The food at Mai’s Oriental is both of those things. Not only is the food here very affordable (you can get a meal for under $10), it is also some of the most authentic Chinese food available at Drexel. Located in Food",
+   "slug": "mai-s-oriental-food-authentic-and-affordable-chinese-food",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-2-2.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-2-2.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-2-2.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-2-2.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-2-2.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-21T13:00:00Z",
+   "creation_date": "2026-08-20T22:40:53Z"
+  }
+ ],
+ "pagination": {
+  "page": 1,
+  "limit": 20,
+  "offset": 0,
+  "has_more": true,
+  "total_count": 3072
+ }
+}

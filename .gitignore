@@ -157,3 +157,7 @@ dist
 
 # Poll runtime persistence
 data/poll-counts.json
+
+# Playwright
+test-results/
+playwright-report/
