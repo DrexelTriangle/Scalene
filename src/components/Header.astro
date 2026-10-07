@@ -1,6 +1,7 @@
 ---
   const {home} = Astro.props
-  import SideMenu from "./SideMenu.astro"
+import GamesLink from "./GamesLink.astro"
+import SideMenu from "./SideMenu.astro"
   import Weather from "./Weather.astro"
 
   const eventDate = new Date(); // Gets the current date/time
@@ -56,7 +57,7 @@
     <a class="hover:underline" href="/sports"> Sports </a>
     <a class="hover:underline" href="/entertainment"> Entertainment </a>
     <a class="hover:underline" href="/comics-puzzles"> Comics </a>
-    <a class="games-link" href="/wordangle" aria-label="Games"><span class="games-word" aria-hidden="true"><span style="--i:0">G</span><span style="--i:1">a</span><span style="--i:2">m</span><span style="--i:3">e</span><span style="--i:4">s</span></span><span class="games-tiles" aria-hidden="true"><span style="--i:0;--c:#538d4e">G</span><span style="--i:1;--c:#c9b458">A</span><span style="--i:2;--c:#787c7e">M</span><span style="--i:3;--c:#538d4e">E</span><span style="--i:4;--c:#c9b458">S</span></span></a>
+    <GamesLink />
     <!-- Welcome Week is out of season; uncomment when it comes back around. -->
     <!-- <a class="hover:underline" href="/welcome-week"> Welcome Week </a> -->
     <!-- Classifieds is a service, not a section, and this row is sections. It
@@ -68,118 +69,6 @@
   </nav>
   <SideMenu/>
 </div>
-
-<style>
-  /*
-   * On hover, each letter of "Games" flips away and a Wordangle tile flips in
-   * where it was, one after another (--i staggers them). The tiles are their
-   * own row laid over the word, positioned absolutely so they can be wider than
-   * the text without pushing the other links about; they spill into the gap
-   * between links. Tile colours (--c) are the game's exact / present / absent;
-   * keep in step with --tr-* in src/pages/wordangle.astro.
-   */
-  .games-link {
-    position: relative;
-    white-space: nowrap;
-  }
-
-  .games-word span {
-    display: inline-block;
-  }
-
-  /* A little wiggle every few seconds so the link gets noticed. It stops
-     while the link is hovered or focused, so it never fights the flip. */
-  .games-link:not(:hover):not(:focus-visible) {
-    animation: games-shake 5s ease-in-out infinite;
-  }
-
-  /* The wiggle opens the cycle, so the first one plays as soon as the page
-     loads, then the link rests for the remaining ~4.3s. */
-  @keyframes games-shake {
-    0%, 14%, 100% {
-      transform: rotate(0deg);
-    }
-    2% {
-      transform: rotate(-6deg);
-    }
-    5% {
-      transform: rotate(5deg);
-    }
-    8% {
-      transform: rotate(-3deg);
-    }
-    11% {
-      transform: rotate(2deg);
-    }
-  }
-
-  .games-tiles {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    display: flex;
-    gap: 2px;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
-
-  .games-tiles span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 16px;
-    height: 18px;
-    border-radius: 3px;
-    background: var(--c);
-    color: white;
-    font-size: 12px;
-    line-height: 1;
-    transform: rotateX(90deg);
-  }
-
-  .games-link:hover .games-word span,
-  .games-link:focus-visible .games-word span {
-    animation: games-letter-out 180ms ease-in calc(var(--i) * 90ms) forwards;
-  }
-
-  .games-link:hover .games-tiles span,
-  .games-link:focus-visible .games-tiles span {
-    animation: games-tile-in 180ms ease-out calc(var(--i) * 90ms + 180ms) both;
-  }
-
-  @keyframes games-letter-out {
-    to {
-      transform: rotateX(90deg);
-    }
-  }
-
-  @keyframes games-tile-in {
-    from {
-      transform: rotateX(-90deg);
-    }
-    to {
-      transform: rotateX(0deg);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .games-link:not(:hover):not(:focus-visible) {
-      animation: none;
-    }
-
-    .games-link:hover .games-word span,
-    .games-link:focus-visible .games-word span {
-      animation: none;
-      visibility: hidden;
-    }
-
-    .games-link:hover .games-tiles span,
-    .games-link:focus-visible .games-tiles span {
-      animation: none;
-      transform: none;
-    }
-  }
-</style>
 
 <script>
   function setupHeader() {

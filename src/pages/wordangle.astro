@@ -3,13 +3,6 @@ export const prerender = true;
 import Header from "../components/Header.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import "../styles/global.css";
-import { evaluateGuess } from "../utils/wordangle/game";
-
-// The help's worked example, scored by the game's own rules at build time so
-// the colours and arrows can't drift from what a reader will see.
-const exampleAnswer = "people";
-const exampleGuess = "play";
-const example = evaluateGuess(exampleGuess, exampleAnswer).map((result, i) => ({ ...result, letter: exampleGuess[i] }));
 
 // Shared by the header buttons and the dialogs' buttons.
 const buttonClass =
@@ -61,34 +54,19 @@ const dialogClass =
     <dialog data-wordangle="help-dialog" class={dialogClass}>
       <form method="dialog" class="relative">
         <button value="close" class={`${iconButtonClass} absolute top-[-6px] right-[-6px]`} aria-label="Close">×</button>
-        <h2 class="font-playfair text-[28px] mb-[12px]">How to play</h2>
-        <p>Guess a 6-letter word using up to one guess of each length 1 to 6, in any order.</p>
-        <p>Each guess must be a real word, except the one-letter row, which can be any letter.</p>
-        <ul class="flex flex-col gap-[6px] mb-[12px]">
-          <li class="flex items-center gap-2"><span class="tr-swatch exact">G</span> In the word, in that spot.</li>
-          <li class="flex items-center gap-2"><span class="tr-swatch present">Y</span> In the word, in another spot.</li>
-          <li class="flex items-center gap-2"><span class="tr-swatch absent">X</span> Not in the word at all.</li>
+        <h2 class="font-roboto-slab font-bold uppercase tracking-[0.04em] text-[22px] mb-[12px]">How to play</h2>
+        <p>Guess a 6-letter word using up to one guess of each length 1 to 6, <em>in any order</em>.</p>
+        <p>Each guess must be a valid word, except the first row, which can be any letter.</p>
+        <p>The colors of the tiles will show how close your guess was to the word.</p>
+        <ul class="flex flex-col gap-[10px] mb-[12px]">
+          <li class="flex items-center gap-3"><span class="tr-swatch exact">G</span> In the word once, in that spot.</li>
+          <li class="flex items-center gap-3"><span class="tr-swatch present">Y<span class="tr-arrows left"><span class="tr-arrow left" /></span></span> In the word once, but to the left of that spot.</li>
+          <li class="flex items-center gap-3"><span class="tr-swatch absent">X</span> Not in the word at all.</li>
+          <li class="flex items-center gap-3"><span class="tr-swatch exact">G<span class="tr-arrows right"><span class="tr-arrow right" /></span></span> In the word in that spot, and one more time to the right.</li>
         </ul>
-        <p>Arrows on a tile point to other (unmatched) copies of that letter in the word.</p>
-        <figure class="tr-example">
-          <figcaption>If the word is <strong>{exampleAnswer.toUpperCase()}</strong> and you guess:</figcaption>
-          <div class="tr-example-row" role="img" aria-label={`${exampleGuess.toUpperCase()}: P green with an arrow right, L yellow with an arrow right, A and Y gray`}>
-            {example.map(({ letter, status, arrows }) => (
-              <span class={`tr-swatch lg ${status}`}>
-                {letter.toUpperCase()}
-                {status !== "absent" && (["left", "right"] as const).map((side) => arrows[side] > 0 && (
-                  <span class={`tr-arrows ${side}`}>
-                    {Array.from({ length: Math.min(arrows[side], 4) }, () => <span class={`tr-arrow ${side}`} />)}
-                  </span>
-                ))}
-              </span>
-            ))}
-          </div>
-          <p class="tr-example-note">P is right, and its arrow points to the other P later on. L is in the word, further right. A and Y aren't in it.</p>
-        </figure>
-        <p>Guessing the full six-letter row ends the game. Score is the number of letters you spent, so fewer is better.</p>
+        <p>Click rows to choose the order of your guesses. Guessing the 6-letter row ends the game.</p>
         <p class="flex justify-end">
-          <button value="close" class={buttonClass} autofocus>Play</button>
+          <button value="close" class={buttonClass} autofocus>Close</button>
         </p>
       </form>
     </dialog>
@@ -162,40 +140,6 @@ const dialogClass =
 
   .wordangle-dialog::backdrop {
     background: rgb(37 99 235 / 0.06);
-  }
-
-  .wordangle-dialog .tr-example {
-    margin: 0 0 12px;
-    padding: 10px 12px;
-    border-radius: 8px;
-    background: #f3f4f6;
-  }
-
-  .wordangle-dialog .tr-example figcaption {
-    margin-bottom: 8px;
-    font-size: 14px;
-  }
-
-  .wordangle-dialog .tr-example-row {
-    display: flex;
-    gap: 5px;
-    margin-bottom: 8px;
-  }
-
-  .wordangle-dialog .tr-swatch.lg {
-    width: 42px;
-    height: 42px;
-    font-size: 17px;
-  }
-
-  .wordangle-dialog .tr-swatch.lg .tr-arrows {
-    font-size: 15px;
-  }
-
-  .wordangle-dialog .tr-example .tr-example-note {
-    margin: 0;
-    font-size: 13px;
-    color: #4b5563;
   }
 
   .wordangle-dialog.won h2 {
@@ -353,9 +297,10 @@ const dialogClass =
   }
 
   .wordangle-dialog .tr-swatch {
-    width: 26px;
-    height: 26px;
-    font-size: 14px;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    font-size: 15px;
     vertical-align: middle;
   }
 
