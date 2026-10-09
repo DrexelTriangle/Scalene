@@ -1,0 +1,463 @@
+---
+export const prerender = true;
+import Header from "../components/Header.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import "../styles/global.css";
+
+// Shared by the header buttons and the dialogs' buttons.
+const buttonClass =
+  "font-roboto-slab text-[14px] bg-triangleBlue text-white border-[1px] border-solid border-triangleBlue rounded-[10px] px-3 py-1 hover:bg-white hover:text-triangleBlue disabled:opacity-40 disabled:pointer-events-none";
+const iconButtonClass =
+  "font-playfair font-bold text-[18px] leading-none w-[32px] h-[32px] text-triangleBlue bg-white border-[1px] border-solid border-triangleBlue rounded-[10px] hover:bg-triangleBlue hover:text-white";
+const dialogClass =
+  "wordangle-dialog w-[calc(100%-2rem)] max-w-[26rem] max-h-[calc(100vh-2rem)] overflow-auto rounded-[10px] border-[1px] border-solid border-triangleBlue bg-white px-6 pt-5 pb-4 font-roboto-slab text-[16px] text-black";
+---
+
+<BaseLayout
+  title="Wordangle - The Triangle"
+  description="Wordangle: a daily word puzzle from The Triangle. Guess the six-letter word with one guess of each length, spending as few letters as you can."
+  canonical="https://www.thetriangle.org/wordangle"
+>
+  <Header />
+  <section data-wordangle-root class="wordangle w-[min(28rem,calc(100%-2rem))] mx-auto pb-[40px]">
+    <div class="flex items-center justify-between gap-3 border-b-[1px] border-solid border-triangleBlue pb-[12px] mb-[12px]">
+      <div>
+        <h1 class="leading-none"><img src="/wordangle/logo.svg" alt="Wordangle" width="270" height="30" class="block h-[30px] sm:h-[38px] w-auto" /></h1>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <button data-wordangle="help" type="button" class={iconButtonClass} aria-label="How to play">?</button>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 font-roboto-slab text-[15px] mb-[16px]">
+      <div class="flex items-center gap-2">
+        <div class="tr-mode" role="group" aria-label="Puzzle mode">
+          <button data-wordangle="mode-daily" type="button" aria-pressed="true">Daily <span data-wordangle="puzzle-id"></span></button>
+          <button data-wordangle="mode-random" type="button" aria-pressed="false" disabled>Random</button>
+        </div>
+        <button data-wordangle="new-random" type="button" class={buttonClass} hidden>New word</button>
+      </div>
+      <span>Letters used <strong data-wordangle="score" class="font-playfair">0</strong></span>
+    </div>
+
+    <div data-wordangle="board" class="tr-board" aria-label="Guess board"></div>
+    <p data-wordangle="message" class="tr-message" role="status" aria-live="polite"></p>
+    <div data-wordangle="keyboard" class="tr-keyboard" aria-label="On-screen keyboard"></div>
+    <p class="flex justify-end">
+      <button data-wordangle="result" type="button" class={buttonClass} hidden>See result</button>
+    </p>
+
+    <p class="font-roboto-slab text-[12px] text-gray-500 mt-[24px]">
+      Guess dictionary from <a class="underline hover:text-triangleBlue" href="http://wordlist.aspell.net/" target="_blank" rel="noopener noreferrer">SCOWL</a> (<a class="underline hover:text-triangleBlue" href="/api/wordangle/lists/SCOWL-Copyright.txt">copyright</a>).
+    </p>
+
+    <dialog data-wordangle="help-dialog" class={dialogClass}>
+      <form method="dialog" class="relative">
+        <button value="close" class={`${iconButtonClass} absolute top-[-6px] right-[-6px]`} aria-label="Close">×</button>
+        <h2 class="font-roboto-slab font-bold uppercase tracking-[0.04em] text-[22px] mb-[12px]">How to play</h2>
+        <p>Guess a 6-letter word using up to one guess of each length 1 to 6, <em>in any order</em>.</p>
+        <p>Each guess must be a valid word, except the first row, which can be any letter.</p>
+        <p>The colors of the tiles will show how close your guess was to the word.</p>
+        <ul class="flex flex-col gap-[10px] mb-[12px]">
+          <li class="flex items-center gap-3"><span class="tr-swatch exact">G</span> In the word once, in that spot.</li>
+          <li class="flex items-center gap-3"><span class="tr-swatch present">Y<span class="tr-arrows left"><span class="tr-arrow left" /></span></span> In the word once, but to the left of that spot.</li>
+          <li class="flex items-center gap-3"><span class="tr-swatch absent">X</span> Not in the word at all.</li>
+          <li class="flex items-center gap-3"><span class="tr-swatch exact">G<span class="tr-arrows right"><span class="tr-arrow right" /></span></span> In the word in that spot, and one more time to the right.</li>
+        </ul>
+        <p>Click rows to choose the order of your guesses. Guessing the 6-letter row ends the game.</p>
+        <p class="flex justify-end">
+          <button value="close" class={buttonClass} autofocus>Close</button>
+        </p>
+      </form>
+    </dialog>
+
+    <dialog data-wordangle="result-dialog" class={dialogClass}>
+      <form method="dialog" class="relative">
+        <button value="close" class={`${iconButtonClass} absolute top-[-6px] right-[-6px]`} aria-label="Close">×</button>
+        <h2 data-wordangle="result-title" class="font-playfair text-[28px] mb-[12px]">Result</h2>
+        <p data-wordangle="result-summary" class="font-playfair text-[18px]"></p>
+        <p data-wordangle="result-detail" class="font-libre text-[12px] uppercase tracking-[0.06em] text-gray-500"></p>
+        <p data-wordangle="result-note" class="italic text-triangleBlue min-h-[1.4em]" role="status" aria-live="polite"></p>
+        <p class="flex justify-end gap-2">
+          <button data-wordangle="share" type="button" class={buttonClass} autofocus>Share result</button>
+          <button value="close" class={buttonClass}>Close</button>
+        </p>
+      </form>
+    </dialog>
+  </section>
+</BaseLayout>
+
+<script>
+  import { mountWordangle } from "../utils/wordangle/app";
+
+  // Bound on astro:page-load as well as DOM readiness, like Polls.astro: a
+  // bundled module script runs once per browser session, so a ClientRouter
+  // navigation back to this page needs the event to mount the game again.
+  // The abort on astro:before-swap drops the document keydown listener when
+  // the reader navigates away, so it never types into some other page.
+  let controller: AbortController | undefined;
+
+  function setupWordangle() {
+    const root = document.querySelector<HTMLElement>("[data-wordangle-root]");
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = "1";
+    controller?.abort();
+    controller = new AbortController();
+    mountWordangle(root, controller.signal);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupWordangle);
+  } else {
+    setupWordangle();
+  }
+
+  document.addEventListener("astro:page-load", setupWordangle);
+  document.addEventListener("astro:before-swap", () => controller?.abort());
+</script>
+
+<style is:global>
+  /*
+   * Global because app.ts builds the board and keyboard at runtime, and those
+   * nodes never get Astro's scoping attribute. Everything is prefixed with
+   * .wordangle (or a tr- class) so none of it leaks into the rest of the site.
+   */
+  .wordangle {
+    --tr-blue: #2563eb;
+    --tr-gray: #e5e7eb;
+    --tr-dark: #1f2937;
+    --tr-danger: #b4041e;
+    --tr-exact: #538d4e;
+    --tr-present: #c9b458;
+    --tr-absent: #787c7e;
+    --tr-arrow: #e8c84a;
+  }
+
+  .wordangle-dialog p {
+    margin: 0 0 12px;
+    line-height: 1.45;
+  }
+
+  .wordangle-dialog::backdrop {
+    background: rgb(37 99 235 / 0.06);
+  }
+
+  .wordangle-dialog.won h2 {
+    color: var(--tr-exact);
+  }
+
+  .wordangle-dialog.lost h2 {
+    color: var(--tr-danger);
+  }
+
+  .wordangle .tr-board {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .wordangle .tr-row {
+    display: flex;
+    gap: 6px;
+    width: max-content;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .wordangle .tr-row.locked {
+    cursor: default;
+  }
+
+  .wordangle .tr-row.active {
+    outline: 2px solid var(--tr-blue);
+    outline-offset: 3px;
+  }
+
+  .wordangle .tr-row:focus-visible {
+    outline: 2px solid var(--tr-blue);
+    outline-offset: 3px;
+  }
+
+  /* Random games get a dashed outline so the mode reads at a glance. */
+  .wordangle[data-mode="random"] .tr-row.active {
+    outline-style: dashed;
+  }
+
+  .wordangle .tr-row {
+    position: relative;
+  }
+
+  /* Up/down hints beside the active row: which ways the arrow keys go. */
+  .wordangle .tr-row-nav {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(100% + 10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .wordangle .tr-row-nav-arrow {
+    display: block;
+    width: 22px;
+    height: 16px;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .wordangle .tr-row-nav-arrow::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+  }
+
+  .wordangle .tr-row-nav-arrow.up::before {
+    border-bottom: 9px solid var(--tr-blue);
+  }
+
+  .wordangle .tr-row-nav-arrow.down::before {
+    border-top: 9px solid var(--tr-blue);
+  }
+
+  .wordangle .tr-row-nav-arrow.off {
+    visibility: hidden;
+  }
+
+  .wordangle .tr-row-nav-arrow:hover::before {
+    filter: brightness(0.75);
+  }
+
+  .wordangle .tr-mode {
+    display: inline-flex;
+    border: 1px solid var(--tr-blue);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .wordangle .tr-mode button {
+    padding: 3px 12px;
+    font-family: "Roboto Slab", serif;
+    font-size: 14px;
+    color: var(--tr-blue);
+    background: white;
+    cursor: pointer;
+  }
+
+  .wordangle .tr-mode button + button {
+    border-left: 1px solid var(--tr-blue);
+  }
+
+  .wordangle .tr-mode button[aria-pressed="true"] {
+    background: var(--tr-blue);
+    color: white;
+    cursor: default;
+  }
+
+  .wordangle .tr-mode button:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  .wordangle .tr-mode button:focus-visible {
+    outline: 2px solid var(--tr-blue);
+    outline-offset: 2px;
+  }
+
+  .wordangle .tr-row.inert {
+    opacity: 0.4;
+  }
+
+  .wordangle .tr-tile,
+  .wordangle-dialog .tr-swatch {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--tr-gray);
+    border-radius: 5px;
+    background: white;
+    color: black;
+    font-family: "Roboto Slab", serif;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .wordangle .tr-tile {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+
+  .wordangle-dialog .tr-swatch {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    font-size: 15px;
+    vertical-align: middle;
+  }
+
+  .wordangle .tr-tile.filled {
+    border-color: var(--tr-dark);
+  }
+
+  .wordangle .tr-tile.exact,
+  .wordangle .tr-key.exact,
+  .wordangle-dialog .tr-swatch.exact {
+    background: var(--tr-exact);
+    border-color: var(--tr-exact);
+    color: white;
+  }
+
+  .wordangle .tr-tile.present,
+  .wordangle .tr-key.present,
+  .wordangle-dialog .tr-swatch.present {
+    background: var(--tr-present);
+    border-color: var(--tr-present);
+    color: white;
+  }
+
+  .wordangle .tr-tile.absent,
+  .wordangle .tr-key.absent,
+  .wordangle-dialog .tr-swatch.absent {
+    background: var(--tr-absent);
+    border-color: var(--tr-absent);
+    color: white;
+  }
+
+  .wordangle .tr-tile-letter {
+    position: relative;
+    z-index: 0;
+  }
+
+  .wordangle .tr-arrows {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1px;
+    z-index: 1;
+    pointer-events: none;
+    font-size: 11px;
+  }
+
+  .wordangle .tr-arrows.left {
+    left: 3px;
+  }
+
+  .wordangle .tr-arrows.right {
+    right: 3px;
+  }
+
+  .wordangle .tr-arrow {
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 0.3em solid transparent;
+    border-bottom: 0.3em solid transparent;
+  }
+
+  .wordangle .tr-arrow.left {
+    border-right: 0.46em solid var(--tr-arrow);
+  }
+
+  .wordangle .tr-arrow.right {
+    border-left: 0.46em solid var(--tr-arrow);
+  }
+
+  /* Yellow arrows vanish on a yellow tile. */
+  .wordangle .tr-tile.present .tr-arrow.left,
+  .wordangle-dialog .tr-swatch.present .tr-arrow.left {
+    border-right-color: #3f340c;
+  }
+
+  .wordangle .tr-tile.present .tr-arrow.right,
+  .wordangle-dialog .tr-swatch.present .tr-arrow.right {
+    border-left-color: #3f340c;
+  }
+
+  .wordangle .tr-message {
+    min-height: 1.5em;
+    margin-bottom: 14px;
+    font-family: "Roboto Slab", serif;
+    font-size: 15px;
+    font-style: italic;
+  }
+
+  .wordangle .tr-message.bad {
+    color: var(--tr-danger);
+  }
+
+  .wordangle .tr-message.good {
+    color: var(--tr-blue);
+  }
+
+  .wordangle .tr-keyboard {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .wordangle .tr-keyboard-row {
+    display: flex;
+    gap: 5px;
+  }
+
+  .wordangle .tr-key {
+    flex: 1;
+    min-width: 0;
+    height: 48px;
+    padding: 0;
+    border: 1px solid var(--tr-gray);
+    border-radius: 5px;
+    background: var(--tr-gray);
+    color: black;
+    font-family: "Roboto Slab", serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .wordangle .tr-key.wide {
+    flex: 1.6;
+    font-family: "Libre Franklin", sans-serif;
+    font-size: 12px;
+  }
+
+  .wordangle .tr-key.enter {
+    background: var(--tr-blue);
+    border-color: var(--tr-blue);
+    color: white;
+  }
+
+  .wordangle .tr-key:disabled {
+    cursor: default;
+  }
+
+  .wordangle .tr-key:focus-visible {
+    outline: 2px solid var(--tr-blue);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 420px) {
+    .wordangle .tr-tile {
+      width: 38px;
+      height: 38px;
+      font-size: 17px;
+    }
+
+    .wordangle .tr-key {
+      height: 42px;
+    }
+  }
+</style>

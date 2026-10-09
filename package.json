@@ -9,7 +9,8 @@
     "astro": "astro",
     "check": "astro check",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "test": "node --experimental-strip-types --test \"tests/*.test.ts\""
   },
   "engines": {
     "node": ">=22.12.0"
