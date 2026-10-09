@@ -1,0 +1,71 @@
+---
+export const prerender = false;
+
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import { NEWSLETTER_BASE_URL, parseKey, unsubscribe, type UnsubscribeResult } from "../utils/newsletter";
+import "../styles/global.css";
+
+// GET only shows a confirm button: mail scanners and link prefetchers open
+// every link in an email, so unsubscribing on page load would drop readers
+// who never clicked. The POST does the unsubscribe.
+let nk: string | null;
+let nek: string | null;
+let result: UnsubscribeResult | null = null;
+
+if (Astro.request.method === "POST") {
+  const form = await Astro.request.formData();
+  nk = parseKey(form.get("nk"));
+  nek = parseKey(form.get("nek"));
+  result = nk ? await unsubscribe(NEWSLETTER_BASE_URL, nk, nek) : "not-found";
+} else {
+  nk = parseKey(Astro.url.searchParams.get("nk"));
+  nek = parseKey(Astro.url.searchParams.get("nek"));
+}
+
+// Per-subscriber page: never let Cloudflare or the browser cache it.
+Astro.response.headers.set("Cache-Control", "private, no-store");
+if (result === "not-found" || (!result && !nk)) Astro.response.status = 404;
+if (result === "error") Astro.response.status = 502;
+---
+
+<BaseLayout title="Unsubscribe - The Triangle" noindex>
+  <Header />
+  <section class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] min-h-[60vh]">
+    {result === "ok" ? (
+      <div>
+        <h1 class="text-[36px] font-bold font-roboto-slab mb-2 mt-[48px]">You've been unsubscribed.</h1>
+        <p class="font-libre">You won't get The Triangle newsletter anymore. Changed your mind? You can{" "}
+          <a href="/subscribe" class="underline hover:text-triangleBlue">subscribe again</a> any time.</p>
+        <a href="/" class="text-[16px] mt-4 underline font-roboto-slab hover:text-triangleBlue block">Return to homepage.</a>
+      </div>
+    ) : result === "error" ? (
+      <div>
+        <h1 class="text-[36px] font-bold font-roboto-slab mb-2 mt-[48px]">Oh no! Something went wrong.</h1>
+        <p class="font-libre">We couldn't process your unsubscribe right now. Please try the link again in a few
+          minutes, or email <a href="mailto:editor@thetriangle.org" class="underline hover:text-triangleBlue">editor@thetriangle.org</a>{" "}
+          and we'll remove you.</p>
+      </div>
+    ) : !nk || result === "not-found" ? (
+      <div>
+        <h1 class="text-[36px] font-bold font-roboto-slab mb-2 mt-[48px]">This unsubscribe link didn't work.</h1>
+        <p class="font-libre">The link may be incomplete or from an old email. Use the unsubscribe link in your
+          most recent newsletter, or email <a href="mailto:editor@thetriangle.org" class="underline hover:text-triangleBlue">editor@thetriangle.org</a>{" "}
+          and we'll remove you.</p>
+      </div>
+    ) : (
+      <div>
+        <h1 class="text-[36px] font-bold font-roboto-slab mb-2 mt-[48px]">Unsubscribe from The Triangle newsletter?</h1>
+        <p class="font-libre">You'll stop getting The Triangle in your inbox.</p>
+        <form id="newsletter-unsubscribe-form" method="post" action="/unsubscribe" class="mt-[16px]">
+          <input type="hidden" name="nk" value={nk} />
+          {nek && <input type="hidden" name="nek" value={nek} />}
+          <button
+            type="submit"
+            class="flex font-roboto-slab bg-triangleBlue text-white p-3 w-[160px] justify-center rounded-[10px] border-[1px] border-solid hover:border-triangleBlue hover:bg-white hover:text-triangleBlue"
+          >Unsubscribe</button>
+        </form>
+      </div>
+    )}
+  </section>
+</BaseLayout>
