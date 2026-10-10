@@ -1,0 +1,2378 @@
+{
+ "breaking_news": {
+  "enabled": false,
+  "text": ""
+ },
+ "carousel": [
+  {
+   "enabled": true,
+   "title": "100 Years of The Triangle",
+   "link_url": "/one-hundred",
+   "image_url": "",
+   "background_color": "",
+   "text_color": "#ffffff",
+   "desktop_only": true
+  },
+  {
+   "enabled": true,
+   "title": "Podcast",
+   "link_url": "https://tr.ee/bqz8s-E4NK",
+   "image_url": "https://delta.thetriangle.org/wp-content/uploads/scalene/PodcastBanner.webp",
+   "background_color": "#acd4f4",
+   "text_color": "#ffffff",
+   "desktop_only": false
+  },
+  {
+   "enabled": true,
+   "title": "Classifieds",
+   "link_url": "/classifieds",
+   "image_url": "https://delta.thetriangle.org/wp-content/uploads/scalene/classifiedsBannerNew.webp",
+   "background_color": "#E5E7EB",
+   "text_color": "#ffffff",
+   "desktop_only": false
+  },
+  {
+   "enabled": true,
+   "title": "Apply to The Triangle",
+   "link_url": "https://docs.google.com/forms/d/e/1FAIpQLScra_6sUenvmpIuQ5FjmMyWO0a2sz9z36HkrqfnYQvJGH9BGQ/viewform",
+   "image_url": "https://delta.thetriangle.org/wp-content/uploads/scalene/applyBannerNew.webp",
+   "background_color": "#275997",
+   "text_color": "#ffffff",
+   "desktop_only": false
+  }
+ ],
+ "developingstories": [
+  {
+   "slug": "title-ix-coordinator-departs-suddenly",
+   "link": "",
+   "title": "Title IX Coordinator departs suddenly",
+   "excerpt": "Blaze Bowers departs the office after only nine months, raising questions of why the sudden turnaround.",
+   "show_in_news": false,
+   "label": []
+  }
+ ],
+ "news": [
+  {
+   "title": "‘A beacon to the world,’ faculty and students mourn Academy of Natural Sciences’ closure",
+   "id": 10214,
+   "authors": [
+    {
+     "id": 571,
+     "name": "Erik Heyman-Meltzer",
+     "slug": "erik-heyman-meltzer"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "City",
+     "slug": "city"
+    },
+    {
+     "name": "Administration",
+     "slug": "administration"
+    }
+   ],
+   "excerpt": "The Academy of Natural Sciences has officially closed, ending a chapter in both Drexel University's and Philadelphia’s history. ANS, a nonprofit with their own board of governance, became a subsidiary of Drexel after the latter's acquisition in 2011; this also spurred the creation of the Department of Biodiversity, Earth &",
+   "slug": "a-beacon-to-the-world-faculty-and-students-mourn-academy-of-natural-sciences-closure",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/rocco-fonseca-4.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-4.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-4.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-4.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-4.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": true,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-02T00:28:54Z"
+  },
+  {
+   "title": "Netanyahu’s UN visit sparks NYC protests",
+   "id": 10218,
+   "authors": [
+    {
+     "id": 880,
+     "name": "Sophie Fang",
+     "slug": "sophie-fang"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "National",
+     "slug": "national"
+    }
+   ],
+   "excerpt": "As of January, the Mayor of New York City, Zohran Mamdani, has publicly demanded that the U.S. federal government honor International Criminal Court warrants and arrest Netanyahu if he enters the country. In a video that was posted on his social media accounts, he publicly condemned Netanyahu for inciting genocide",
+   "slug": "netanyahu-s-un-visit-sparks-nyc-protests",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/navneeth-nalajala.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/navneeth-nalajala.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/navneeth-nalajala.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/navneeth-nalajala.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/navneeth-nalajala.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-02T01:02:29Z"
+  },
+  {
+   "title": "Lost neighborhood unearthed beneath Drexel",
+   "id": 10198,
+   "authors": [
+    {
+     "id": 575,
+     "name": "Subiksha Ganesh",
+     "slug": "subiksha-ganesh"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "Campus",
+     "slug": "campus"
+    }
+   ],
+   "excerpt": "This fall, students walking along Lancaster Walk may notice an unusual sight on campus: archaeologists digging beneath the ground in search of a neighborhood that no longer appears on Philadelphia’s maps.",
+   "slug": "lost-neighborhood-unearthed-beneath-drexel",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/lia-lora.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lia-lora.jpg.480w.webp",
+     "width": 480,
+     "height": 298
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lia-lora.jpg.960w.webp",
+     "width": 960,
+     "height": 597
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lia-lora.jpg.1600w.webp",
+     "width": 1600,
+     "height": 995
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lia-lora.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1492
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:12:59Z"
+  },
+  {
+   "title": "Temple cuts ties with 55 million dollar donor",
+   "id": 10197,
+   "authors": [
+    {
+     "id": 833,
+     "name": "Zarina Morgan",
+     "slug": "zarina-morgan"
+    }
+   ],
+   "categories": [
+    {
+     "name": "City",
+     "slug": "city"
+    },
+    {
+     "name": "News",
+     "slug": "news"
+    }
+   ],
+   "excerpt": "Temple University received a record-setting donation of $55 million last October, and just weeks ago, the historic deal was terminated after years of legal scrutiny with the donor, Christopher Barnett.",
+   "slug": "temple-cuts-ties-with-55-million-dollar-donor",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/riley-beachell-3.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-3.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-3.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-3.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-3.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:12:06Z"
+  },
+  {
+   "title": "Philly’s House of Horrors: What we know right now",
+   "id": 10196,
+   "authors": [
+    {
+     "id": 874,
+     "name": "Charlotte J. Nelson",
+     "slug": "charlotte-nelson"
+    }
+   ],
+   "categories": [
+    {
+     "name": "City",
+     "slug": "city"
+    },
+    {
+     "name": "News",
+     "slug": "news"
+    }
+   ],
+   "excerpt": "On June 19, 2026, a federal park ranger saw a black BMW parked illegally near Independence Hall. When addressing the occupants, the ranger heard a woman say to the driver, “You're going to hurt me.” Suspecting both occupants of illegal drug activity, and upon asking for identification, the driver, Eugene",
+   "slug": "philly-s-house-of-horrors-what-we-know-right-now",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/riley-beachell-2.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-2.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-2.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-2.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-2.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:11:07Z"
+  },
+  {
+   "title": "One blue cart, one dream, one woman who wants to change homelessness",
+   "id": 10195,
+   "authors": [
+    {
+     "id": 863,
+     "name": "Gabby Rodriguez",
+     "slug": "gabby-rodriguez"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "City",
+     "slug": "city"
+    }
+   ],
+   "excerpt": "Some people spend their Saturday partying; some go to the movies; some hang out with friends. But every Saturday, Angela Graves spends her time prepping, cooking, and serving people experiencing homelessness in Philadelphia. Graves was born and raised in West Philadelphia. From a young age, she had what most would…",
+   "slug": "one-blue-cart-one-dream-one-woman-who-wants-to-change-homelessness",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/gabbyrodriguez.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/gabbyrodriguez.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/gabbyrodriguez.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/gabbyrodriguez.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/gabbyrodriguez.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:10:06Z"
+  },
+  {
+   "title": "Faculty and students reflect on the upcoming academic transition",
+   "id": 10194,
+   "authors": [
+    {
+     "id": 897,
+     "name": "Joshua Fendyke",
+     "slug": "joshua-fendyke"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "Academic Transformation",
+     "slug": "academic-transformation"
+    },
+    {
+     "name": "Campus",
+     "slug": "campus"
+    }
+   ],
+   "excerpt": "Drexel University’s transition from quarters to semesters is approaching, and in the summer of 2027, a renovated curriculum, longer courses, as well as a new academic/co-op calendar will arrive.",
+   "slug": "faculty-and-students-reflect-on-the-upcoming-academic-transition",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/lialora1.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lialora1.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lialora1.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lialora1.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lialora1.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:09:11Z"
+  },
+  {
+   "title": "11th Street closure and the importance of accessibility",
+   "id": 10192,
+   "authors": [
+    {
+     "id": 897,
+     "name": "Joshua Fendyke",
+     "slug": "joshua-fendyke"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "City",
+     "slug": "city"
+    },
+    {
+     "name": "Transit",
+     "slug": "transit"
+    }
+   ],
+   "excerpt": "The year-long closure of SEPTA’s 11th Street Station will require Drexel University students traveling in Center City to adjust their commutes. However, for students with disabilities, changes to a familiar route can create additional barriers, beyond simply adding a few minutes to their journey.",
+   "slug": "11th-street-closure-and-the-importance-of-accessibility",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/nataliechinsepta7.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/nataliechinsepta7.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/nataliechinsepta7.jpg.960w.webp",
+     "width": 960,
+     "height": 720
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/nataliechinsepta7.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1200
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/nataliechinsepta7.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1800
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:08:01Z"
+  },
+  {
+   "title": "Sitting down with Dr. Eunice Santos, the new dean for Howley College",
+   "id": 10191,
+   "authors": [
+    {
+     "id": 534,
+     "name": "Sanjana Bandi",
+     "slug": "sanjana-bandi"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "Campus",
+     "slug": "campus"
+    }
+   ],
+   "excerpt": "This summer, Dr. Eunice E. Santos, Ph.D., became dean of Drexel’s newly formed College of Engineering and Computing, now the Nick Howley College of Engineering and Computing, following an unprecedented $112.6 million gift from the Howley Foundation. With three well-established schools — Engineering, Biomedical Engineering, and Computing and Informatics —…",
+   "slug": "sitting-down-with-dr-eunice-santos-the-new-dean-for-howley-college",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/courtesy-of-howley-college-of-engineering-and-computing.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/courtesy-of-howley-college-of-engineering-and-computing.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/courtesy-of-howley-college-of-engineering-and-computing.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/courtesy-of-howley-college-of-engineering-and-computing.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/courtesy-of-howley-college-of-engineering-and-computing.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:06:44Z"
+  },
+  {
+   "title": "Nature spots in West Philly you can’t miss",
+   "id": 10175,
+   "authors": [
+    {
+     "id": 571,
+     "name": "Erik Heyman-Meltzer",
+     "slug": "erik-heyman-meltzer"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "Finding green spaces in an urban setting can be difficult, but by no means is it impossible. Having one nearby is beneficial in many ways. According to the Environmental Protection Agency, close proximity to green spaces can help lower depression, enhance social ties in a community, and promote physical activity.…",
+   "slug": "nature-spots-in-west-philly-you-can-t-miss",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-5-4.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-5-4.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-5-4.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-5-4.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-5-4.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-28T01:01:44Z"
+  },
+  {
+   "title": "Essentials for staying safe on campus",
+   "id": 10168,
+   "authors": [
+    {
+     "id": 885,
+     "name": "Emma Yashinsky",
+     "slug": "emma-yashinsky"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Campus",
+     "slug": "campus"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "As freshmen start their school year on campus, it is important to have tips and resources for staying safe. Whether you are new to Philadelphia or from around here, it is essential to be aware and feel safe while on campus. Therefore, Drexel offers several resources, policies, and other safety…",
+   "slug": "essentials-for-staying-safe-on-campus",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/navneeth-nalajala-3.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/navneeth-nalajala-3.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/navneeth-nalajala-3.jpg.960w.webp",
+     "width": 960,
+     "height": 720
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/navneeth-nalajala-3.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1200
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/navneeth-nalajala-3.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1800
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-28T00:31:56Z"
+  },
+  {
+   "title": "Your co-op application crash course",
+   "id": 10167,
+   "authors": [
+    {
+     "id": 897,
+     "name": "Joshua Fendyke",
+     "slug": "joshua-fendyke"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "According to U.S. News & World Report, Drexel ranks second best in co-op and internship programs. As a result, incoming first-year students are bound to hear a lot of co-op-related buzzwords thrown around: rankings, interview requests, A-round, B-round, and so on. For these freshmen, and anyone who has yet to",
+   "slug": "your-co-op-application-crash-course",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-12-1.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-12-1.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-12-1.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-12-1.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-12-1.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-28T00:30:38Z"
+  },
+  {
+   "title": "What club should I join? A quick quiz.",
+   "id": 10166,
+   "authors": [
+    {
+     "id": 874,
+     "name": "Charlotte J. Nelson",
+     "slug": "charlotte-nelson"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "What are you most excited about for college? Making new friends Exploring the campus/city Learning new things What part of high school/living at home will you miss the most? Your friends The food The schedule What is the most iconic thing about Philly? Philly cheesesteaks The Eagles The Liberty Bell…",
+   "slug": "what-club-should-i-join-a-quick-quiz",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-11-1.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-11-1.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-11-1.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-11-1.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-11-1.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-28T00:29:55Z"
+  }
+ ],
+ "opinion": [
+  {
+   "title": "Reflecting on the Academy's last hours",
+   "id": 10217,
+   "authors": [
+    {
+     "id": 534,
+     "name": "Sanjana Bandi",
+     "slug": "sanjana-bandi"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Opinion",
+     "slug": "opinion"
+    }
+   ],
+   "excerpt": "On Sunday, Sept. 27, crowds surged through the halls of the Academy of Natural Sciences of Drexel University.",
+   "slug": "reflecting-on-the-academy-s-last-hours",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/rocco-fonseca-9.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-9.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-9.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-9.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-9.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-02T00:34:21Z"
+  },
+  {
+   "title": "What being Opinion Editor taught me about our education system",
+   "id": 10216,
+   "authors": [
+    {
+     "id": 52,
+     "name": "Chan Chung",
+     "slug": "chan-chung"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Opinion",
+     "slug": "opinion"
+    }
+   ],
+   "excerpt": "I previously had the privilege of serving as The Triangle’s opinion editor. It was an awesome position that gave me a say in the future of The Triangle and allowed me to give writers feedback on their logic and prose. To my surprise, for multiple writers, joining The Triangle was…",
+   "slug": "what-being-opinion-editor-taught-me-about-our-education-system",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/rocco-fonseca-3.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-3.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-3.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-3.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-3.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-02T00:31:48Z"
+  },
+  {
+   "title": "Advice from a second-year student",
+   "id": 10172,
+   "authors": [
+    {
+     "id": 929,
+     "name": "Lia Lora",
+     "slug": "lia-lora"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Opinion",
+     "slug": "opinion"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "Welcome to Drexel University! College is one of the most exciting times of your life — full of mixed emotions, from anxiety to excitement. It is where you will make lifelong friends and make tons of new memories, and it is full of the freedom and independence you do not…",
+   "slug": "advice-from-a-second-year-student",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-9-1.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-9-1.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-9-1.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-9-1.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-9-1.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-28T00:36:47Z"
+  },
+  {
+   "title": "Go anyway: Putting yourself out there during Welcome Week and beyond",
+   "id": 10161,
+   "authors": [
+    {
+     "id": 574,
+     "name": "Elliott Ruvalcaba",
+     "slug": "elliott-ruvalcaba"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Opinion",
+     "slug": "opinion"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "During Welcome Week last year, I walked into The Triangle’s office alone, not knowing anyone at all and feeling a bit nervous. I knew I wanted to get involved in some sort of club here at Drexel, and especially that I wanted to write for the student newspaper, but it…",
+   "slug": "go-anyway-putting-yourself-out-there-during-welcome-week-and-beyond",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-7-2.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-7-2.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-7-2.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-7-2.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-7-2.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-28T00:05:03Z"
+  },
+  {
+   "title": "Know your way around the Drexel frats",
+   "id": 10154,
+   "authors": [
+    {
+     "id": 874,
+     "name": "Charlotte J. Nelson",
+     "slug": "charlotte-nelson"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Opinion",
+     "slug": "opinion"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "How are you meant to spend your Friday and Saturday nights now that you are a college student? You may assume frat parties are the answer to that question, and even if you do not, almost inevitably freshmen will end up interacting with one or more of the fraternities on",
+   "slug": "know-your-way-around-the-drexel-frats",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/roccofonseca1-3.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/roccofonseca1-3.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/roccofonseca1-3.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/roccofonseca1-3.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/roccofonseca1-3.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-27T23:55:42Z"
+  }
+ ],
+ "sports": [
+  {
+   "title": "Drexel men’s and women’s basketball teams announce Big 5 schedules",
+   "id": 10213,
+   "authors": [
+    {
+     "id": 881,
+     "name": "Lillian Dempsey",
+     "slug": "lillian-dempsey"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    },
+    {
+     "name": "Men's Basketball",
+     "slug": "mens-basketball"
+    },
+    {
+     "name": "Big 5",
+     "slug": "big-5"
+    },
+    {
+     "name": "Women's Basketball",
+     "slug": "womens-basketball"
+    }
+   ],
+   "excerpt": "College basketball season is just around the corner! On Sept. 22, 2026, both the men's and women's basketball teams revealed their Big 5 Classic schedules for the 2026-27 season. The Big 5 tournament celebrates a long tradition between Philadelphia's finest basketball teams. The Big 5 is not actually five: it's…",
+   "slug": "drexel-men-s-and-women-s-basketball-teams-announce-big-5-schedules",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/navneeth-nalajala-21.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/navneeth-nalajala-21.jpg.480w.webp",
+     "width": 480,
+     "height": 384
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/navneeth-nalajala-21.jpg.960w.webp",
+     "width": 960,
+     "height": 768
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/navneeth-nalajala-21.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1280
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/navneeth-nalajala-21.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1920
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-02T00:28:47Z"
+  },
+  {
+   "title": "Harry Cohen wins first collegiate title in three-way playoff",
+   "id": 10212,
+   "authors": [
+    {
+     "id": 830,
+     "name": "Ryan Legg",
+     "slug": "ryan-legg"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    },
+    {
+     "name": "Golf",
+     "slug": "golf"
+    }
+   ],
+   "excerpt": "Drexel University men’s golfer Harry Cohen came out on top when it mattered most. The sophomore Rutgers transfer won a three-player playoff Tuesday, Sept. 22, at the John MacDonald Temple Invitational at The 1912 Club in Plymouth Meeting , earning his first collegiate tournament title as a Dragon. Cohen’s tournament…",
+   "slug": "harry-cohen-wins-first-collegiate-title-in-three-way-playoff",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/rocco-fonseca-10.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-10.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-10.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-10.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-10.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-02T00:14:44Z"
+  },
+  {
+   "title": "Catching up on Drexel fall sports",
+   "id": 10211,
+   "authors": [
+    {
+     "id": 569,
+     "name": "Janine Gin",
+     "slug": "janine-gin"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    },
+    {
+     "name": "Field Hockey",
+     "slug": "field-hockey"
+    },
+    {
+     "name": "Men's Soccer",
+     "slug": "mens-soccer"
+    },
+    {
+     "name": "Women's Soccer",
+     "slug": "womens-soccer"
+    }
+   ],
+   "excerpt": "As October begins and the cool weather is rapidly approaching, fall athletes are beginning to start conference play. Take a look at how the men’s and women’s soccer and women’s field hockey teams have been doing so far. Men’s soccer It has been a mixed bag of results for the…",
+   "slug": "catching-up-on-drexel-fall-sports",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/ily-raffaaaaaa-n.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/ily-raffaaaaaa-n.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/ily-raffaaaaaa-n.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/ily-raffaaaaaa-n.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/ily-raffaaaaaa-n.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-02T00:09:57Z"
+  },
+  {
+   "title": "An introduction to Philly sports",
+   "id": 10184,
+   "authors": [
+    {
+     "id": 515,
+     "name": "Jack Margolin",
+     "slug": "jack-margolin"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    },
+    {
+     "name": "Philly Sports",
+     "slug": "philly-sports"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "Welcome to the City of Brotherly Love! Among its many attractions, Philadelphia is home to arguably the most passionate and dedicated group of sports fans in the country. Whether you enjoy the excitement of a long home run or the chaos of a Sunday afternoon at Lincoln Financial Field, Philadelphia…",
+   "slug": "an-introduction-to-philly-sports",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-14-1.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-14-1.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-14-1.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-14-1.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-14-1.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-28T01:29:30Z"
+  },
+  {
+   "title": "The rising stars of the MLS",
+   "id": 10176,
+   "authors": [
+    {
+     "id": 555,
+     "name": "Raphael Bartell",
+     "slug": "raphael-bartell"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    }
+   ],
+   "excerpt": "It is the dream of thousands of American teenagers to make it to Major League Soccer. In reality, climbing the ladder from the youth academy to the first team is a difficult path.​ Every year, only a handful of talented youth soccer players receive a professional contract with the first…",
+   "slug": "the-rising-stars-of-the-mls",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/09/8-16-2026-nycfc-vs-philadelphia-union-1599-01.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/09/8-16-2026-nycfc-vs-philadelphia-union-1599-01.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/09/8-16-2026-nycfc-vs-philadelphia-union-1599-01.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/09/8-16-2026-nycfc-vs-philadelphia-union-1599-01.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/09/8-16-2026-nycfc-vs-philadelphia-union-1599-01.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-28T13:00:00Z",
+   "creation_date": "2026-08-28T01:06:21Z"
+  },
+  {
+   "title": "Congress takes action after Phillies’ Bryce Harper caught in gambling scandal",
+   "id": 10141,
+   "authors": [
+    {
+     "id": 830,
+     "name": "Ryan Legg",
+     "slug": "ryan-legg"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Philly Sports",
+     "slug": "philly-sports"
+    }
+   ],
+   "excerpt": "Philadelphia Phillies first baseman Bryce Harper has found himself at the center of another uncomfortable conversation surrounding Major League Baseball and sports gambling. Terry Thompson, a FanDuel user who lost roughly $1.5 million through his gambling , received a personalized video message from Harper in November 2024. Thompson had wagered…",
+   "slug": "congress-takes-action-after-phillies-bryce-harper-caught-in-gambling-scandal",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/navneeth-nalajala.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/navneeth-nalajala.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/navneeth-nalajala.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/navneeth-nalajala.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/navneeth-nalajala.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-21T13:00:00Z",
+   "creation_date": "2026-08-20T23:41:27Z"
+  }
+ ],
+ "entertainment": [
+  {
+   "title": "Breakaway Music Festival brings big names and lackluster visuals",
+   "id": 10221,
+   "authors": [
+    {
+     "id": 871,
+     "name": "Sonya Kalianda",
+     "slug": "sonya-kalianda"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Music",
+     "slug": "music"
+    }
+   ],
+   "excerpt": "Spanning 14 cities over the course of 2026, the Breakaway Music Festival tour kicked off in Dallas, Texas, in mid-April, touring cross-country before it will conclude its run in Houston this November. Marketed as a premier fusion of electronic music icons and smaller regional talent, the festival aims to create…",
+   "slug": "breakaway-festival",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/copy-of-copy-of-breakaway-philly-2026-kursza-mb-43-1.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/copy-of-copy-of-breakaway-philly-2026-kursza-mb-43-1.jpg.480w.webp",
+     "width": 480,
+     "height": 600
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/copy-of-copy-of-breakaway-philly-2026-kursza-mb-43-1.jpg.960w.webp",
+     "width": 960,
+     "height": 1200
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/copy-of-copy-of-breakaway-philly-2026-kursza-mb-43-1.jpg.1600w.webp",
+     "width": 1600,
+     "height": 2000
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/copy-of-copy-of-breakaway-philly-2026-kursza-mb-43-1.jpg.2400w.webp",
+     "width": 2400,
+     "height": 3000
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-02T01:15:02Z"
+  },
+  {
+   "title": "The Overall Score: 'Wolverine' falls flat",
+   "id": 10220,
+   "authors": [
+    {
+     "id": 888,
+     "name": "Marek Reynolds",
+     "slug": "marek-reynolds"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Gaming",
+     "slug": "gaming"
+    },
+    {
+     "name": "The Overall Score",
+     "slug": "the-overall-score"
+    },
+    {
+     "name": "Columns",
+     "slug": "columns"
+    }
+   ],
+   "excerpt": "Insomniac Games has no trouble making a fun, interactive, and engaging superhero experience — “Spider-Man” (2018) and its following games were very popular. Once it was announced that they would be developing a “Wolverine” game, one of the most well-known X-Men from Marvel, people were very excited. After the trailers,…",
+   "slug": "the-overall-score-wolverine-falls-flat",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/rocco-fonseca-12.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-12.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-12.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-12.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-12.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-02T01:05:13Z"
+  },
+  {
+   "title": "The Overall Score: 'The Blood of Dawnwalker' revives the vampire genre",
+   "id": 10219,
+   "authors": [
+    {
+     "id": 888,
+     "name": "Marek Reynolds",
+     "slug": "marek-reynolds"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Gaming",
+     "slug": "gaming"
+    },
+    {
+     "name": "The Overall Score",
+     "slug": "the-overall-score"
+    },
+    {
+     "name": "Columns",
+     "slug": "columns"
+    }
+   ],
+   "excerpt": "“The Blood of Dawnwalker” is a vampire game for people who are fans of these monsters and have not been able to feel the power of one in an immense open-world setting. With the game, new studio Rebel Wolves breaks into the industry with their first game, meeting any fan’s…",
+   "slug": "the-overall-score-the-blood-of-dawnwalker-revives-the-vampire-genre",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/rocco-fonseca-11.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-11.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-11.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-11.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-11.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-02T01:04:31Z"
+  },
+  {
+   "title": "Green Halal cart: Quality chicken, saucy bowl",
+   "id": 10210,
+   "authors": [
+    {
+     "id": 579,
+     "name": "Bobby Saunders",
+     "slug": "bobby-saunders"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Food",
+     "slug": "food"
+    }
+   ],
+   "excerpt": "Address: Near the Mario statue (33rd St.) Item ordered: Chicken over rice (salad, white sauce, hot sauce) with a Sunkist orange soda Price range: Under $15 Overall score: ▲▲▲◭△ The Green Halal cart on 33rd St. offers a pretty solid chicken-over-rice for $10.80, including a Sunkist orange soda. The portion…",
+   "slug": "green-halal-cart-food-review",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/evie-seetoo-2.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/evie-seetoo-2.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/evie-seetoo-2.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/evie-seetoo-2.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/evie-seetoo-2.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:41:47Z"
+  },
+  {
+   "title": "Role Model performs for ‘Philly’s finest’ at the Highmark Mann",
+   "id": 10204,
+   "authors": [
+    {
+     "id": 859,
+     "name": "Izzy DeHayes",
+     "slug": "izzy-dehayes"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Music",
+     "slug": "music"
+    }
+   ],
+   "excerpt": "Role Model performed for a crowd of 7,500 people on Sept. 23 on the Skyline Stage at the Highmark Mann, with Samia as the opening act. After his debut studio album, “ Rx ,” Tucker Pillsbury, better known by his stage name, Role Model, has continued to establish himself in…",
+   "slug": "role-model-concert-review",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/evie-seetoo.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/evie-seetoo.jpg.480w.webp",
+     "width": 480,
+     "height": 384
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/evie-seetoo.jpg.960w.webp",
+     "width": 960,
+     "height": 768
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/evie-seetoo.jpg.1000w.webp",
+     "width": 1000,
+     "height": 800
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:18:27Z"
+  },
+  {
+   "title": "WKDU’s Electronic Music Marathon to return with a bang",
+   "id": 10202,
+   "authors": [
+    {
+     "id": 574,
+     "name": "Elliott Ruvalcaba",
+     "slug": "elliott-ruvalcaba"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    }
+   ],
+   "excerpt": "WKDU, Drexel University’s official radio station, is back once again for its annual Electronic Music Marathon, which will be held from Friday, Oct. 9 through Monday, Oct. 12. The event will feature four days of nonstop music programming with dozens of DJs aimed at promoting the electronic music of the…",
+   "slug": "wkdu-emm",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/lia-lora-2.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lia-lora-2.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lia-lora-2.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lia-lora-2.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lia-lora-2.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:16:49Z"
+  },
+  {
+   "title": "'Primetime' is 2026’s most thrilling film",
+   "id": 10201,
+   "authors": [
+    {
+     "id": 576,
+     "name": "Tegan Doherty",
+     "slug": "tegan-doherty"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Movies",
+     "slug": "movies"
+    }
+   ],
+   "excerpt": "“Primetime” is a very beautiful yet haunting film, and is like nothing audiences have ever seen before. “Primetime,” released on Sept. 25, serves as director Lance Oppenheim’s breakout movie, and it is definitely an outlier amongst all the other unique films released this year. This film is not without controversy,…",
+   "slug": "primetime-is-2026-s-most-thrilling-film",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/riley-beachell-4.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-4.jpg.480w.webp",
+     "width": 480,
+     "height": 720
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-4.jpg.960w.webp",
+     "width": 960,
+     "height": 1440
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-4.jpg.1600w.webp",
+     "width": 1600,
+     "height": 2400
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-4.jpg.2400w.webp",
+     "width": 2400,
+     "height": 3600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:16:02Z"
+  },
+  {
+   "title": "Brandon Flowers brings country to Franklin Music Hall",
+   "id": 10199,
+   "authors": [
+    {
+     "id": 576,
+     "name": "Tegan Doherty",
+     "slug": "tegan-doherty"
+    },
+    {
+     "id": 888,
+     "name": "Marek Reynolds",
+     "slug": "marek-reynolds"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Music",
+     "slug": "music"
+    }
+   ],
+   "excerpt": "Despite the very clear vibe that Brandon Flowers and his mainstream band, The Killers, have had since the 2000s, the Las Vegas performer has stepped away from alternative rock in his new album, “ THRASHER ,” and into the country genre. Despite having such an iconic voice and approach to…",
+   "slug": "brandon-flowers-brings-country-to-franklin-music-hall",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/courtesy-of-rob-loud.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/courtesy-of-rob-loud.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/courtesy-of-rob-loud.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/courtesy-of-rob-loud.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/courtesy-of-rob-loud.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:14:53Z"
+  }
+ ],
+ "candp": [
+  {
+   "title": "Fall Mini",
+   "id": 10209,
+   "authors": [
+    {
+     "id": 54,
+     "name": "Rocco Fonseca",
+     "slug": "rocco-fonseca"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Crossword",
+     "slug": "crossword"
+    },
+    {
+     "name": "Comics & Puzzles",
+     "slug": "comics-puzzles"
+    }
+   ],
+   "excerpt": "",
+   "slug": "fall-mini",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/screenshot-2026-10-01-192909.png",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/screenshot-2026-10-01-192909.png.480w.webp",
+     "width": 480,
+     "height": 481
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/screenshot-2026-10-01-192909.png.960w.webp",
+     "width": 960,
+     "height": 962
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/screenshot-2026-10-01-192909.png.998w.webp",
+     "width": 998,
+     "height": 1000
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:34:22Z"
+  },
+  {
+   "title": "Engine Ears?",
+   "id": 10208,
+   "authors": [
+    {
+     "id": 900,
+     "name": "Rui Zhao",
+     "slug": "rui-zhao"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Crossword",
+     "slug": "crossword"
+    },
+    {
+     "name": "Comics & Puzzles",
+     "slug": "comics-puzzles"
+    }
+   ],
+   "excerpt": "",
+   "slug": "engine-ears",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/screenshot-2026-10-01-192806.png",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/screenshot-2026-10-01-192806.png.480w.webp",
+     "width": 480,
+     "height": 479
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/screenshot-2026-10-01-192806.png.960w.webp",
+     "width": 960,
+     "height": 958
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/screenshot-2026-10-01-192806.png.1206w.webp",
+     "width": 1206,
+     "height": 1204
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:31:01Z"
+  },
+  {
+   "title": "A gale",
+   "id": 10207,
+   "authors": [
+    {
+     "id": 54,
+     "name": "Rocco Fonseca",
+     "slug": "rocco-fonseca"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Comics",
+     "slug": "comics"
+    },
+    {
+     "name": "Comics & Puzzles",
+     "slug": "comics-puzzles"
+    }
+   ],
+   "excerpt": "",
+   "slug": "a-gale",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/untitled-2.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/untitled-2.jpg.480w.webp",
+     "width": 480,
+     "height": 232
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/untitled-2.jpg.960w.webp",
+     "width": 960,
+     "height": 464
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/untitled-2.jpg.1600w.webp",
+     "width": 1600,
+     "height": 773
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/untitled-2.jpg.2224w.webp",
+     "width": 2224,
+     "height": 1075
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:27:30Z"
+  },
+  {
+   "title": "Terms of membership",
+   "id": 10206,
+   "authors": [
+    {
+     "id": 573,
+     "name": "Coco Li",
+     "slug": "coco-li"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Comics",
+     "slug": "comics"
+    },
+    {
+     "name": "Comics & Puzzles",
+     "slug": "comics-puzzles"
+    }
+   ],
+   "excerpt": "",
+   "slug": "terms-of-membership",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/hazing.png",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/hazing.png.480w.webp",
+     "width": 480,
+     "height": 335
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/hazing.png.960w.webp",
+     "width": 960,
+     "height": 670
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/hazing.png.1600w.webp",
+     "width": 1600,
+     "height": 1117
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/hazing.png.2400w.webp",
+     "width": 2400,
+     "height": 1676
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:23:35Z"
+  },
+  {
+   "title": "Dinner's ready",
+   "id": 10205,
+   "authors": [
+    {
+     "id": 573,
+     "name": "Coco Li",
+     "slug": "coco-li"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Comics",
+     "slug": "comics"
+    },
+    {
+     "name": "Comics & Puzzles",
+     "slug": "comics-puzzles"
+    }
+   ],
+   "excerpt": "",
+   "slug": "dinner-s-ready",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/dinner-s-ready.png",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/dinner-s-ready.png.480w.webp",
+     "width": 480,
+     "height": 471
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/dinner-s-ready.png.960w.webp",
+     "width": 960,
+     "height": 942
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/dinner-s-ready.png.1600w.webp",
+     "width": 1600,
+     "height": 1570
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/dinner-s-ready.png.2032w.webp",
+     "width": 2032,
+     "height": 1994
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:21:04Z"
+  },
+  {
+   "title": "Nightmare fuel",
+   "id": 10203,
+   "authors": [
+    {
+     "id": 573,
+     "name": "Coco Li",
+     "slug": "coco-li"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Comics",
+     "slug": "comics"
+    },
+    {
+     "name": "Comics & Puzzles",
+     "slug": "comics-puzzles"
+    }
+   ],
+   "excerpt": "",
+   "slug": "nightmare-fuel",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/nightmare-fuel.png",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/nightmare-fuel.png.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/nightmare-fuel.png.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/nightmare-fuel.png.1536w.webp",
+     "width": 1536,
+     "height": 1024
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:17:33Z"
+  }
+ ],
+ "columns": [
+  {
+   "title": "The Overall Score: 'Wolverine' falls flat",
+   "id": 10220,
+   "authors": [
+    {
+     "id": 888,
+     "name": "Marek Reynolds",
+     "slug": "marek-reynolds"
+    }
+   ],
+   "categories": [
+    {
+     "name": "The Overall Score",
+     "slug": "the-overall-score"
+    },
+    {
+     "name": "Columns",
+     "slug": "columns"
+    },
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Gaming",
+     "slug": "gaming"
+    }
+   ],
+   "excerpt": "Insomniac Games has no trouble making a fun, interactive, and engaging superhero experience — “Spider-Man” (2018) and its following games were very popular. Once it was announced that they would be developing a “Wolverine” game, one of the most well-known X-Men from Marvel, people were very excited. After the trailers,…",
+   "slug": "the-overall-score-wolverine-falls-flat",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/rocco-fonseca-12.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-12.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-12.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-12.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-12.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-02T01:05:13Z"
+  },
+  {
+   "title": "The Overall Score: 'The Blood of Dawnwalker' revives the vampire genre",
+   "id": 10219,
+   "authors": [
+    {
+     "id": 888,
+     "name": "Marek Reynolds",
+     "slug": "marek-reynolds"
+    }
+   ],
+   "categories": [
+    {
+     "name": "The Overall Score",
+     "slug": "the-overall-score"
+    },
+    {
+     "name": "Columns",
+     "slug": "columns"
+    },
+    {
+     "name": "Entertainment",
+     "slug": "entertainment"
+    },
+    {
+     "name": "Gaming",
+     "slug": "gaming"
+    }
+   ],
+   "excerpt": "“The Blood of Dawnwalker” is a vampire game for people who are fans of these monsters and have not been able to feel the power of one in an immense open-world setting. With the game, new studio Rebel Wolves breaks into the industry with their first game, meeting any fan’s…",
+   "slug": "the-overall-score-the-blood-of-dawnwalker-revives-the-vampire-genre",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/rocco-fonseca-11.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-11.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-11.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-11.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-11.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-02T01:04:31Z"
+  },
+  {
+   "title": "Where's Mario?",
+   "id": 10152,
+   "authors": [
+    {
+     "id": 573,
+     "name": "Coco Li",
+     "slug": "coco-li"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Where's Mario",
+     "slug": "wheres-mario"
+    },
+    {
+     "name": "Columns",
+     "slug": "columns"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    },
+    {
+     "name": "Comics",
+     "slug": "comics"
+    },
+    {
+     "name": "Comics & Puzzles",
+     "slug": "comics-puzzles"
+    }
+   ],
+   "excerpt": "",
+   "slug": "where-s-mario",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/where-s-mario.png",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/where-s-mario.png.480w.webp",
+     "width": 480,
+     "height": 679
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/where-s-mario.png.960w.webp",
+     "width": 960,
+     "height": 1359
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/where-s-mario.png.1054w.webp",
+     "width": 1054,
+     "height": 1492
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-27T23:43:53Z"
+  },
+  {
+   "title": "Men's tennis prepares to start a new chapter",
+   "id": 10135,
+   "authors": [
+    {
+     "id": 569,
+     "name": "Janine Gin",
+     "slug": "janine-gin"
+    }
+   ],
+   "categories": [
+    {
+     "name": "From the Playbook",
+     "slug": "from-the-playbook"
+    },
+    {
+     "name": "Tennis",
+     "slug": "tennis"
+    }
+   ],
+   "excerpt": "Drexel’s men’s tennis team has a new coach . In June 2026, Eric Johnson was named the head coach of the team, making him the sixth coach in program history. This is also his first collegiate head coaching job. Becoming a tennis coach almost seemed inevitable for Johnson. After competing…",
+   "slug": "mens-tennis-prepares-to-start-a-new-chapter",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/raphael-bartell-1-1.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell-1-1.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell-1-1.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell-1-1.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell-1-1.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-21T13:00:00Z",
+   "creation_date": "2026-08-20T23:04:26Z"
+  },
+  {
+   "title": "What comes next for women's lacrosse?",
+   "id": 10101,
+   "authors": [
+    {
+     "id": 569,
+     "name": "Janine Gin",
+     "slug": "janine-gin"
+    }
+   ],
+   "categories": [
+    {
+     "name": "From the Playbook",
+     "slug": "from-the-playbook"
+    },
+    {
+     "name": "Columns",
+     "slug": "columns"
+    },
+    {
+     "name": "Sports",
+     "slug": "sports"
+    }
+   ],
+   "excerpt": "Not many coaches can say that they led their team to their first CAA championship in program history in their first season as head coach. Katie O’Donnell can. In 2022, after taking over as interim head coach of Drexel University’s women’s lacrosse program, O’Donnell led the team to their first…",
+   "slug": "what-comes-next-for-women-s-lacrosse",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/raphael-bartell.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-07T13:00:00Z",
+   "creation_date": "2026-08-06T23:58:52Z"
+  }
+ ]
+}

@@ -10,7 +10,9 @@
     "check": "astro check",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "node --experimental-strip-types --test \"tests/*.test.ts\""
+    "test": "node --experimental-strip-types --test \"tests/*.test.ts\"",
+    "test:e2e": "playwright test",
+    "test:e2e:build": "CMS_API_BASE_URL=http://127.0.0.1:4010/v1 MEDIA_BASE_URL=http://127.0.0.1:4010 SITE_ORIGIN=http://127.0.0.1:4321 npm run build"
   },
   "engines": {
     "node": ">=22.12.0"
@@ -30,6 +32,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.63.0",
     "@types/he": "^1.2.3",
     "@types/node": "^22.20.1",
     "@types/nodemailer": "^8.0.1",

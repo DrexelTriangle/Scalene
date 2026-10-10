@@ -1,0 +1,1151 @@
+[
+ {
+  "id": 1,
+  "type": "section",
+  "slug": "news",
+  "canonical_title": "News",
+  "article_count": 2490,
+  "category_aliases": [
+   "Paid Post"
+  ],
+  "is_visible": true
+ },
+ {
+  "id": 2,
+  "type": "section",
+  "slug": "sports",
+  "canonical_title": "Sports",
+  "article_count": 2198,
+  "category_aliases": [
+   "Men's Lacrosse",
+   "Women's Lacrosse",
+   "Tennis",
+   "Crew",
+   "Golf",
+   "Softball",
+   "Swimming & Diving",
+   "Running",
+   "Athlete of the Week"
+  ],
+  "is_visible": true
+ },
+ {
+  "id": 3,
+  "type": "section",
+  "slug": "opinion",
+  "canonical_title": "Opinion",
+  "article_count": 2104,
+  "category_aliases": [
+   "Editorial",
+   "Letters to the Editor",
+   "Commentary"
+  ],
+  "is_visible": true
+ },
+ {
+  "id": 4,
+  "type": "section",
+  "slug": "columns",
+  "canonical_title": "Columns",
+  "article_count": 263,
+  "category_aliases": [
+   "Podcasts",
+   "Mark and Jair Explain Sports",
+   "Ain't That Something With Brandon & Liz",
+   "You, Me, Buscemi",
+   "Polkadot Tea.Pot",
+   "Where's Mario",
+   "Student Snapshot"
+  ],
+  "is_visible": true
+ },
+ {
+  "id": 5,
+  "type": "section",
+  "slug": "entertainment",
+  "canonical_title": "Entertainment",
+  "article_count": 3072,
+  "category_aliases": [
+   "Arts & Entertainment",
+   "Style",
+   "Street Style",
+   "DIY",
+   "Inside Her Bag",
+   "Store Profile",
+   "Beauty Guide",
+   "Style Guide",
+   "Designer Profile",
+   "Fashion Week",
+   "TV",
+   "Exhibits",
+   "Reel2Reel",
+   "Features",
+   "Restaurant Reviews",
+   "Beer Reviews",
+   "Last Call"
+  ],
+  "is_visible": true
+ },
+ {
+  "id": 6,
+  "type": "section",
+  "slug": "comics-puzzles",
+  "canonical_title": "Comics & Puzzles",
+  "article_count": 392,
+  "category_aliases": [
+   "Word Search"
+  ],
+  "is_visible": true
+ },
+ {
+  "id": 7,
+  "type": "section",
+  "slug": "special-editions",
+  "canonical_title": "Special Editions",
+  "article_count": 92,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 37,
+  "type": "section",
+  "slug": "graduation",
+  "canonical_title": "Graduation",
+  "article_count": 32,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 8,
+  "type": "subsection",
+  "slug": "academic-transformation",
+  "canonical_title": "Academic Transformation",
+  "parent_slug": "news",
+  "article_count": 15,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 9,
+  "type": "subsection",
+  "slug": "politics",
+  "canonical_title": "Politics",
+  "parent_slug": "opinion",
+  "article_count": 25,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 10,
+  "type": "subsection",
+  "slug": "transit",
+  "canonical_title": "Transit",
+  "parent_slug": "news",
+  "article_count": 7,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 11,
+  "type": "subsection",
+  "slug": "public-safety",
+  "canonical_title": "Public Safety",
+  "parent_slug": "news",
+  "article_count": 110,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 12,
+  "type": "subsection",
+  "slug": "mens-basketball",
+  "canonical_title": "Men's Basketball",
+  "parent_slug": "sports",
+  "article_count": 255,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 13,
+  "type": "subsection",
+  "slug": "womens-basketball",
+  "canonical_title": "Women's Basketball",
+  "parent_slug": "sports",
+  "article_count": 158,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 14,
+  "type": "subsection",
+  "slug": "big-5",
+  "canonical_title": "Big 5",
+  "parent_slug": "sports",
+  "article_count": 5,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 15,
+  "type": "subsection",
+  "slug": "philly-sports",
+  "canonical_title": "Philly Sports",
+  "parent_slug": "sports",
+  "article_count": 24,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 16,
+  "type": "subsection",
+  "slug": "field-hockey",
+  "canonical_title": "Field Hockey",
+  "parent_slug": "sports",
+  "article_count": 93,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 17,
+  "type": "subsection",
+  "slug": "mens-soccer",
+  "canonical_title": "Men's Soccer",
+  "parent_slug": "sports",
+  "article_count": 100,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 18,
+  "type": "subsection",
+  "slug": "womens-soccer",
+  "canonical_title": "Women's Soccer",
+  "parent_slug": "sports",
+  "article_count": 96,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 19,
+  "type": "subsection",
+  "slug": "science-tech",
+  "canonical_title": "Science & Tech",
+  "parent_slug": "opinion",
+  "article_count": 22,
+  "category_aliases": [
+   "Science & Technology",
+   "Technically Speaking"
+  ],
+  "is_visible": true
+ },
+ {
+  "id": 20,
+  "type": "subsection",
+  "slug": "from-the-editor",
+  "canonical_title": "From the Editor",
+  "parent_slug": "opinion",
+  "article_count": 11,
+  "category_aliases": [
+   "From the Editor's Desk"
+  ],
+  "is_visible": true
+ },
+ {
+  "id": 21,
+  "type": "subsection",
+  "slug": "the-love-triangle",
+  "canonical_title": "The Love Triangle",
+  "parent_slug": "columns",
+  "article_count": 18,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 22,
+  "type": "subsection",
+  "slug": "tri-this-sweet-treat",
+  "canonical_title": "Tri This Sweet Treat",
+  "parent_slug": "columns",
+  "article_count": 10,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 23,
+  "type": "subsection",
+  "slug": "movies",
+  "canonical_title": "Movies",
+  "parent_slug": "entertainment",
+  "article_count": 440,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 24,
+  "type": "subsection",
+  "slug": "music",
+  "canonical_title": "Music",
+  "parent_slug": "entertainment",
+  "article_count": 955,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 25,
+  "type": "subsection",
+  "slug": "happening-in-philly",
+  "canonical_title": "Happening in Philly",
+  "parent_slug": "entertainment",
+  "article_count": 139,
+  "category_aliases": [
+   "What's Happening in Philly"
+  ],
+  "is_visible": true
+ },
+ {
+  "id": 26,
+  "type": "subsection",
+  "slug": "cooking",
+  "canonical_title": "Cooking",
+  "parent_slug": "food",
+  "article_count": 35,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 27,
+  "type": "subsection",
+  "slug": "books",
+  "canonical_title": "Books",
+  "parent_slug": "entertainment",
+  "article_count": 9,
+  "category_aliases": [],
+  "is_visible": false
+ },
+ {
+  "id": 28,
+  "type": "subsection",
+  "slug": "gaming",
+  "canonical_title": "Gaming",
+  "parent_slug": "entertainment",
+  "article_count": 30,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 29,
+  "type": "subsection",
+  "slug": "listicles",
+  "canonical_title": "Listicles",
+  "parent_slug": "entertainment",
+  "article_count": 9,
+  "category_aliases": [],
+  "is_visible": false
+ },
+ {
+  "id": 30,
+  "type": "subsection",
+  "slug": "political-cartoons",
+  "canonical_title": "Political Cartoons",
+  "parent_slug": "comics-puzzles",
+  "article_count": 15,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 31,
+  "type": "subsection",
+  "slug": "crossword",
+  "canonical_title": "Crossword",
+  "parent_slug": "comics-puzzles",
+  "article_count": 66,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 32,
+  "type": "subsection",
+  "slug": "sudoku",
+  "canonical_title": "Sudoku",
+  "parent_slug": "comics-puzzles",
+  "article_count": 22,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 33,
+  "type": "subsection",
+  "slug": "welcome-week",
+  "canonical_title": "Welcome Week",
+  "parent_slug": "special-editions",
+  "article_count": 62,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 34,
+  "type": "subsection",
+  "slug": "the-rectangle",
+  "canonical_title": "The Rectangle",
+  "parent_slug": "special-editions",
+  "article_count": 0,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 35,
+  "type": "subsection",
+  "slug": "100-year-anniversary",
+  "canonical_title": "100 Year Anniversary",
+  "parent_slug": "special-editions",
+  "article_count": 30,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 36,
+  "type": "subsection",
+  "slug": "comics",
+  "canonical_title": "Comics",
+  "parent_slug": "comics-puzzles",
+  "article_count": 192,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 38,
+  "type": "subsection",
+  "slug": "campus",
+  "canonical_title": "Campus",
+  "parent_slug": "news",
+  "article_count": 56,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 39,
+  "type": "subsection",
+  "slug": "city",
+  "canonical_title": "City",
+  "parent_slug": "news",
+  "article_count": 40,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 40,
+  "type": "subsection",
+  "slug": "national",
+  "canonical_title": "National",
+  "parent_slug": "news",
+  "article_count": 22,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 41,
+  "type": "subsection",
+  "slug": "world",
+  "canonical_title": "World",
+  "parent_slug": "news",
+  "article_count": 9,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 42,
+  "type": "subsection",
+  "slug": "lifestyle",
+  "canonical_title": "Lifestyle",
+  "parent_slug": "opinion",
+  "article_count": 7,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 43,
+  "type": "subsection",
+  "slug": "nil",
+  "canonical_title": "NIL",
+  "parent_slug": "sports",
+  "article_count": 3,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 44,
+  "type": "subsection",
+  "slug": "squash",
+  "canonical_title": "Squash",
+  "parent_slug": "sports",
+  "article_count": 86,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 45,
+  "type": "subsection",
+  "slug": "performing-arts",
+  "canonical_title": "Performing Arts",
+  "parent_slug": "entertainment",
+  "article_count": 130,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 46,
+  "type": "subsection",
+  "slug": "the-drawing-board",
+  "canonical_title": "The Drawing Board",
+  "parent_slug": "entertainment",
+  "article_count": 30,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 47,
+  "type": "subsection",
+  "slug": "puzzles",
+  "canonical_title": "Puzzles",
+  "parent_slug": "comics-puzzles",
+  "article_count": 18,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 48,
+  "type": "subsection",
+  "slug": "satire",
+  "canonical_title": "Satire",
+  "parent_slug": "comics-puzzles",
+  "article_count": 60,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 49,
+  "type": "subsection",
+  "slug": "from-the-playbook",
+  "canonical_title": "From the Playbook",
+  "parent_slug": "columns",
+  "article_count": 8,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 50,
+  "type": "subsection",
+  "slug": "jack-of-all-takes",
+  "canonical_title": "Jack of All Takes",
+  "parent_slug": "columns",
+  "article_count": 3,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 51,
+  "type": "subsection",
+  "slug": "the-green-angle",
+  "canonical_title": "The Green Angle",
+  "parent_slug": "columns",
+  "article_count": 1,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 52,
+  "type": "subsection",
+  "slug": "the-overall-score",
+  "canonical_title": "The Overall Score",
+  "parent_slug": "columns",
+  "article_count": 10,
+  "category_aliases": [],
+  "is_visible": true
+ },
+ {
+  "id": 53,
+  "type": "subsection",
+  "slug": "tennis",
+  "canonical_title": "Tennis",
+  "parent_slug": "sports",
+  "article_count": 115,
+  "category_aliases": [
+   "Tennis"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 54,
+  "type": "subsection",
+  "slug": "crew",
+  "canonical_title": "Crew",
+  "parent_slug": "sports",
+  "article_count": 109,
+  "category_aliases": [
+   "Crew"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 55,
+  "type": "subsection",
+  "slug": "mens-lacrosse",
+  "canonical_title": "Men's Lacrosse",
+  "parent_slug": "sports",
+  "article_count": 98,
+  "category_aliases": [
+   "Men's Lacrosse"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 56,
+  "type": "subsection",
+  "slug": "womens-lacrosse",
+  "canonical_title": "Women's Lacrosse",
+  "parent_slug": "sports",
+  "article_count": 79,
+  "category_aliases": [
+   "Women's Lacrosse"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 57,
+  "type": "subsection",
+  "slug": "golf",
+  "canonical_title": "Golf",
+  "parent_slug": "sports",
+  "article_count": 75,
+  "category_aliases": [
+   "Golf"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 58,
+  "type": "subsection",
+  "slug": "softball",
+  "canonical_title": "Softball",
+  "parent_slug": "sports",
+  "article_count": 66,
+  "category_aliases": [
+   "Softball"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 59,
+  "type": "subsection",
+  "slug": "swimming-diving",
+  "canonical_title": "Swimming & Diving",
+  "parent_slug": "sports",
+  "article_count": 63,
+  "category_aliases": [
+   "Swimming & Diving"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 60,
+  "type": "subsection",
+  "slug": "running",
+  "canonical_title": "Running",
+  "parent_slug": "sports",
+  "article_count": 1,
+  "category_aliases": [
+   "Running"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 61,
+  "type": "subsection",
+  "slug": "athlete-of-the-week",
+  "canonical_title": "Athlete of the Week",
+  "parent_slug": "sports",
+  "article_count": 23,
+  "category_aliases": [
+   "Athlete of the Week"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 62,
+  "type": "subsection",
+  "slug": "wrestling",
+  "canonical_title": "Wrestling",
+  "parent_slug": "sports",
+  "article_count": 103,
+  "category_aliases": [
+   "Wrestling"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 63,
+  "type": "subsection",
+  "slug": "features",
+  "canonical_title": "Features",
+  "parent_slug": "entertainment",
+  "article_count": 261,
+  "category_aliases": [
+   "Features"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 64,
+  "type": "subsection",
+  "slug": "style",
+  "canonical_title": "Style",
+  "parent_slug": "entertainment",
+  "article_count": 234,
+  "category_aliases": [
+   "Style"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 65,
+  "type": "subsection",
+  "slug": "tv",
+  "canonical_title": "TV",
+  "parent_slug": "entertainment",
+  "article_count": 135,
+  "category_aliases": [
+   "TV"
+  ],
+  "is_visible": true
+ },
+ {
+  "id": 66,
+  "type": "subsection",
+  "slug": "theater",
+  "canonical_title": "Theater",
+  "parent_slug": "entertainment",
+  "article_count": 28,
+  "category_aliases": [
+   "Theater"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 67,
+  "type": "subsection",
+  "slug": "beer-reviews",
+  "canonical_title": "Beer Reviews",
+  "parent_slug": "food",
+  "article_count": 128,
+  "category_aliases": [
+   "Beer Reviews"
+  ],
+  "is_visible": true
+ },
+ {
+  "id": 68,
+  "type": "subsection",
+  "slug": "wine-reviews",
+  "canonical_title": "Wine Reviews",
+  "parent_slug": "food",
+  "article_count": 12,
+  "category_aliases": [
+   "Wine Reviews"
+  ],
+  "is_visible": true
+ },
+ {
+  "id": 69,
+  "type": "subsection",
+  "slug": "restaurant-reviews",
+  "canonical_title": "Restaurant Reviews",
+  "parent_slug": "food",
+  "article_count": 93,
+  "category_aliases": [
+   "Restaurant Reviews"
+  ],
+  "is_visible": true
+ },
+ {
+  "id": 70,
+  "type": "subsection",
+  "slug": "last-call",
+  "canonical_title": "Last Call",
+  "parent_slug": "entertainment",
+  "article_count": 10,
+  "category_aliases": [
+   "Last Call"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 71,
+  "type": "subsection",
+  "slug": "exhibits",
+  "canonical_title": "Exhibits",
+  "parent_slug": "entertainment",
+  "article_count": 46,
+  "category_aliases": [
+   "Exhibits"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 72,
+  "type": "subsection",
+  "slug": "reel2reel",
+  "canonical_title": "Reel2Reel",
+  "parent_slug": "entertainment",
+  "article_count": 2,
+  "category_aliases": [
+   "Reel2Reel"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 73,
+  "type": "subsection",
+  "slug": "street-style",
+  "canonical_title": "Street Style",
+  "parent_slug": "entertainment",
+  "article_count": 42,
+  "category_aliases": [
+   "Street Style"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 74,
+  "type": "subsection",
+  "slug": "style-guide",
+  "canonical_title": "Style Guide",
+  "parent_slug": "entertainment",
+  "article_count": 5,
+  "category_aliases": [
+   "Style Guide"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 75,
+  "type": "subsection",
+  "slug": "beauty-guide",
+  "canonical_title": "Beauty Guide",
+  "parent_slug": "entertainment",
+  "article_count": 6,
+  "category_aliases": [
+   "Beauty Guide"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 76,
+  "type": "subsection",
+  "slug": "designer-profile",
+  "canonical_title": "Designer Profile",
+  "parent_slug": "entertainment",
+  "article_count": 7,
+  "category_aliases": [
+   "Designer Profile"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 77,
+  "type": "subsection",
+  "slug": "store-profile",
+  "canonical_title": "Store Profile",
+  "parent_slug": "entertainment",
+  "article_count": 16,
+  "category_aliases": [
+   "Store Profile"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 78,
+  "type": "subsection",
+  "slug": "inside-her-bag",
+  "canonical_title": "Inside Her Bag",
+  "parent_slug": "entertainment",
+  "article_count": 15,
+  "category_aliases": [
+   "Inside Her Bag"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 79,
+  "type": "subsection",
+  "slug": "fashion-week",
+  "canonical_title": "Fashion Week",
+  "parent_slug": "entertainment",
+  "article_count": 3,
+  "category_aliases": [
+   "Fashion Week"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 80,
+  "type": "subsection",
+  "slug": "diy",
+  "canonical_title": "DIY",
+  "parent_slug": "entertainment",
+  "article_count": 20,
+  "category_aliases": [
+   "DIY"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 81,
+  "type": "subsection",
+  "slug": "editorial",
+  "canonical_title": "Editorial",
+  "parent_slug": "opinion",
+  "article_count": 235,
+  "category_aliases": [
+   "Editorial"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 82,
+  "type": "subsection",
+  "slug": "letters-to-the-editor",
+  "canonical_title": "Letters to the Editor",
+  "parent_slug": "opinion",
+  "article_count": 29,
+  "category_aliases": [
+   "Letters to the Editor"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 83,
+  "type": "subsection",
+  "slug": "commentary",
+  "canonical_title": "Commentary",
+  "parent_slug": "opinion",
+  "article_count": 46,
+  "category_aliases": [
+   "Commentary"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 84,
+  "type": "subsection",
+  "slug": "podcasts",
+  "canonical_title": "Podcasts",
+  "parent_slug": "columns",
+  "article_count": 75,
+  "category_aliases": [
+   "Podcasts"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 85,
+  "type": "subsection",
+  "slug": "mark-and-jair-explain-sports",
+  "canonical_title": "Mark and Jair Explain Sports",
+  "parent_slug": "columns",
+  "article_count": 31,
+  "category_aliases": [
+   "Mark and Jair Explain Sports"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 86,
+  "type": "subsection",
+  "slug": "aint-that-something-with-brandon-liz",
+  "canonical_title": "Ain't That Something With Brandon & Liz",
+  "parent_slug": "columns",
+  "article_count": 24,
+  "category_aliases": [
+   "Ain't That Something With Brandon & Liz"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 87,
+  "type": "subsection",
+  "slug": "you-me-buscemi",
+  "canonical_title": "You, Me, Buscemi",
+  "parent_slug": "columns",
+  "article_count": 5,
+  "category_aliases": [
+   "You, Me, Buscemi"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 88,
+  "type": "subsection",
+  "slug": "polkadot-tea-pot",
+  "canonical_title": "Polkadot Tea.Pot",
+  "parent_slug": "columns",
+  "article_count": 3,
+  "category_aliases": [
+   "Polkadot Tea.Pot"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 89,
+  "type": "subsection",
+  "slug": "wheres-mario",
+  "canonical_title": "Where's Mario",
+  "parent_slug": "columns",
+  "article_count": 5,
+  "category_aliases": [
+   "Where's Mario"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 90,
+  "type": "subsection",
+  "slug": "student-snapshot",
+  "canonical_title": "Student Snapshot",
+  "parent_slug": "columns",
+  "article_count": 6,
+  "category_aliases": [
+   "Student Snapshot"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 91,
+  "type": "subsection",
+  "slug": "triangle-talks",
+  "canonical_title": "Triangle Talks",
+  "parent_slug": "columns",
+  "article_count": 73,
+  "category_aliases": [
+   "Triangle Talks"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 92,
+  "type": "subsection",
+  "slug": "triangle-sports-talk",
+  "canonical_title": "Triangle Sports Talk",
+  "parent_slug": "columns",
+  "article_count": 3,
+  "category_aliases": [
+   "Triangle Sports Talk"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 93,
+  "type": "subsection",
+  "slug": "sadie-says",
+  "canonical_title": "Sadie Says",
+  "parent_slug": "columns",
+  "article_count": 18,
+  "category_aliases": [
+   "Sadie Says"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 94,
+  "type": "subsection",
+  "slug": "tech-tuesday",
+  "canonical_title": "Tech Tuesday",
+  "parent_slug": "columns",
+  "article_count": 13,
+  "category_aliases": [
+   "Tech Tuesday"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 95,
+  "type": "subsection",
+  "slug": "dear-granny-and-eloise",
+  "canonical_title": "Dear Granny and Eloise",
+  "parent_slug": "columns",
+  "article_count": 11,
+  "category_aliases": [
+   "Dear Granny and Eloise"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 96,
+  "type": "subsection",
+  "slug": "movies-ive-seen",
+  "canonical_title": "Movies I've Seen",
+  "parent_slug": "columns",
+  "article_count": 4,
+  "category_aliases": [
+   "Movies I've Seen"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 97,
+  "type": "subsection",
+  "slug": "humans-of-drexel",
+  "canonical_title": "Humans of Drexel",
+  "parent_slug": "columns",
+  "article_count": 1,
+  "category_aliases": [
+   "Humans of Drexel"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 99,
+  "type": "subsection",
+  "slug": "administration",
+  "canonical_title": "Administration",
+  "parent_slug": "news",
+  "article_count": 13,
+  "category_aliases": [
+   "Administration"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 100,
+  "type": "subsection",
+  "slug": "sjn-grant",
+  "canonical_title": "SJN Grant",
+  "parent_slug": "news",
+  "article_count": 10,
+  "category_aliases": [
+   "SJN Grant"
+  ],
+  "is_visible": false
+ },
+ {
+  "id": 101,
+  "type": "subsection",
+  "slug": "food",
+  "canonical_title": "Food",
+  "parent_slug": "entertainment",
+  "article_count": 277,
+  "category_aliases": [
+   "Food"
+  ],
+  "is_visible": true
+ },
+ {
+  "id": 102,
+  "type": "subsection",
+  "slug": "horoscopes",
+  "canonical_title": "Horoscopes",
+  "parent_slug": "comics-puzzles",
+  "article_count": 19,
+  "category_aliases": [],
+  "is_visible": true
+ }
+]

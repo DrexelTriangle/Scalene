@@ -1,0 +1,1083 @@
+{
+ "section": {
+  "slug": "sports",
+  "name": "Sports",
+  "canonical_title": "Sports"
+ },
+ "subsections": [
+  {
+   "slug": "mens-basketball",
+   "name": "Men's Basketball",
+   "canonical_title": "Men's Basketball"
+  },
+  {
+   "slug": "womens-basketball",
+   "name": "Women's Basketball",
+   "canonical_title": "Women's Basketball"
+  },
+  {
+   "slug": "big-5",
+   "name": "Big 5",
+   "canonical_title": "Big 5"
+  },
+  {
+   "slug": "philly-sports",
+   "name": "Philly Sports",
+   "canonical_title": "Philly Sports"
+  },
+  {
+   "slug": "field-hockey",
+   "name": "Field Hockey",
+   "canonical_title": "Field Hockey"
+  },
+  {
+   "slug": "mens-soccer",
+   "name": "Men's Soccer",
+   "canonical_title": "Men's Soccer"
+  },
+  {
+   "slug": "womens-soccer",
+   "name": "Women's Soccer",
+   "canonical_title": "Women's Soccer"
+  },
+  {
+   "slug": "nil",
+   "name": "NIL",
+   "canonical_title": "NIL"
+  },
+  {
+   "slug": "squash",
+   "name": "Squash",
+   "canonical_title": "Squash"
+  }
+ ],
+ "articles": [
+  {
+   "title": "Drexel men’s and women’s basketball teams announce Big 5 schedules",
+   "id": 10213,
+   "authors": [
+    {
+     "id": 881,
+     "name": "Lillian Dempsey",
+     "slug": "lillian-dempsey"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    },
+    {
+     "name": "Men's Basketball",
+     "slug": "mens-basketball"
+    },
+    {
+     "name": "Big 5",
+     "slug": "big-5"
+    },
+    {
+     "name": "Women's Basketball",
+     "slug": "womens-basketball"
+    }
+   ],
+   "excerpt": "College basketball season is just around the corner! On Sept. 22, 2026, both the men's and women's basketball teams revealed their Big 5 Classic schedules for the 2026-27 season. The Big 5 tournament celebrates a long tradition between Philadelphia's finest basketball teams. The Big 5 is not actually five: it's…",
+   "slug": "drexel-men-s-and-women-s-basketball-teams-announce-big-5-schedules",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/navneeth-nalajala-21.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/navneeth-nalajala-21.jpg.480w.webp",
+     "width": 480,
+     "height": 384
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/navneeth-nalajala-21.jpg.960w.webp",
+     "width": 960,
+     "height": 768
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/navneeth-nalajala-21.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1280
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/navneeth-nalajala-21.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1920
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-02T00:28:47Z"
+  },
+  {
+   "title": "Harry Cohen wins first collegiate title in three-way playoff",
+   "id": 10212,
+   "authors": [
+    {
+     "id": 830,
+     "name": "Ryan Legg",
+     "slug": "ryan-legg"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    },
+    {
+     "name": "Golf",
+     "slug": "golf"
+    }
+   ],
+   "excerpt": "Drexel University men’s golfer Harry Cohen came out on top when it mattered most. The sophomore Rutgers transfer won a three-player playoff Tuesday, Sept. 22, at the John MacDonald Temple Invitational at The 1912 Club in Plymouth Meeting , earning his first collegiate tournament title as a Dragon. Cohen’s tournament…",
+   "slug": "harry-cohen-wins-first-collegiate-title-in-three-way-playoff",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/rocco-fonseca-10.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-10.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-10.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-10.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-10.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-02T00:14:44Z"
+  },
+  {
+   "title": "Catching up on Drexel fall sports",
+   "id": 10211,
+   "authors": [
+    {
+     "id": 569,
+     "name": "Janine Gin",
+     "slug": "janine-gin"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    },
+    {
+     "name": "Field Hockey",
+     "slug": "field-hockey"
+    },
+    {
+     "name": "Men's Soccer",
+     "slug": "mens-soccer"
+    },
+    {
+     "name": "Women's Soccer",
+     "slug": "womens-soccer"
+    }
+   ],
+   "excerpt": "As October begins and the cool weather is rapidly approaching, fall athletes are beginning to start conference play. Take a look at how the men’s and women’s soccer and women’s field hockey teams have been doing so far. Men’s soccer It has been a mixed bag of results for the…",
+   "slug": "catching-up-on-drexel-fall-sports",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/ily-raffaaaaaa-n.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/ily-raffaaaaaa-n.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/ily-raffaaaaaa-n.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/ily-raffaaaaaa-n.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/ily-raffaaaaaa-n.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-02T00:09:57Z"
+  },
+  {
+   "title": "An introduction to Philly sports",
+   "id": 10184,
+   "authors": [
+    {
+     "id": 515,
+     "name": "Jack Margolin",
+     "slug": "jack-margolin"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    },
+    {
+     "name": "Philly Sports",
+     "slug": "philly-sports"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "Welcome to the City of Brotherly Love! Among its many attractions, Philadelphia is home to arguably the most passionate and dedicated group of sports fans in the country. Whether you enjoy the excitement of a long home run or the chaos of a Sunday afternoon at Lincoln Financial Field, Philadelphia…",
+   "slug": "an-introduction-to-philly-sports",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-14-1.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-14-1.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-14-1.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-14-1.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-14-1.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-28T01:29:30Z"
+  },
+  {
+   "title": "The rising stars of the MLS",
+   "id": 10176,
+   "authors": [
+    {
+     "id": 555,
+     "name": "Raphael Bartell",
+     "slug": "raphael-bartell"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    }
+   ],
+   "excerpt": "It is the dream of thousands of American teenagers to make it to Major League Soccer. In reality, climbing the ladder from the youth academy to the first team is a difficult path.​ Every year, only a handful of talented youth soccer players receive a professional contract with the first…",
+   "slug": "the-rising-stars-of-the-mls",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/09/8-16-2026-nycfc-vs-philadelphia-union-1599-01.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/09/8-16-2026-nycfc-vs-philadelphia-union-1599-01.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/09/8-16-2026-nycfc-vs-philadelphia-union-1599-01.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/09/8-16-2026-nycfc-vs-philadelphia-union-1599-01.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/09/8-16-2026-nycfc-vs-philadelphia-union-1599-01.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-28T13:00:00Z",
+   "creation_date": "2026-08-28T01:06:21Z"
+  },
+  {
+   "title": "Congress takes action after Phillies’ Bryce Harper caught in gambling scandal",
+   "id": 10141,
+   "authors": [
+    {
+     "id": 830,
+     "name": "Ryan Legg",
+     "slug": "ryan-legg"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Philly Sports",
+     "slug": "philly-sports"
+    }
+   ],
+   "excerpt": "Philadelphia Phillies first baseman Bryce Harper has found himself at the center of another uncomfortable conversation surrounding Major League Baseball and sports gambling. Terry Thompson, a FanDuel user who lost roughly $1.5 million through his gambling , received a personalized video message from Harper in November 2024. Thompson had wagered…",
+   "slug": "congress-takes-action-after-phillies-bryce-harper-caught-in-gambling-scandal",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/navneeth-nalajala.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/navneeth-nalajala.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/navneeth-nalajala.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/navneeth-nalajala.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/navneeth-nalajala.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-21T13:00:00Z",
+   "creation_date": "2026-08-20T23:41:27Z"
+  },
+  {
+   "title": "Men's tennis prepares to start a new chapter",
+   "id": 10135,
+   "authors": [
+    {
+     "id": 569,
+     "name": "Janine Gin",
+     "slug": "janine-gin"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Tennis",
+     "slug": "tennis"
+    },
+    {
+     "name": "From the Playbook",
+     "slug": "from-the-playbook"
+    }
+   ],
+   "excerpt": "Drexel’s men’s tennis team has a new coach . In June 2026, Eric Johnson was named the head coach of the team, making him the sixth coach in program history. This is also his first collegiate head coaching job. Becoming a tennis coach almost seemed inevitable for Johnson. After competing…",
+   "slug": "mens-tennis-prepares-to-start-a-new-chapter",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/raphael-bartell-1-1.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell-1-1.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell-1-1.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell-1-1.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell-1-1.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-21T13:00:00Z",
+   "creation_date": "2026-08-20T23:04:26Z"
+  },
+  {
+   "title": "A recap of the 21st Danny Rumph Classic",
+   "id": 10134,
+   "authors": [
+    {
+     "id": 902,
+     "name": "Jack Clark",
+     "slug": "jack-clark"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    }
+   ],
+   "excerpt": "The Daskalakis Athletic Center, home of the Drexel Dragons, hosted the 21st annual Danny Rumph Classic . The tournament lasted a total of five days, running from Thursday, Aug. 6th through Monday, Aug. 10th. A total of eight teams competed against each other , consisting of current professional, college, high…",
+   "slug": "a-recap-of-the-21st-danny-rumph-classic",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-4-3.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-4-3.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-4-3.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-4-3.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-4-3.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-21T13:00:00Z",
+   "creation_date": "2026-08-20T23:03:15Z"
+  },
+  {
+   "title": "Philadelphia Union's Ryan Richter brings back playoff hope",
+   "id": 10133,
+   "authors": [
+    {
+     "id": 555,
+     "name": "Raphael Bartell",
+     "slug": "raphael-bartell"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    }
+   ],
+   "excerpt": "The Philadelphia Union are back in reach of the MLS playoffs after picking up four wins in their last five MLS games under new head coach Ryan Richter. The season started nothing like the Union expected after last season’s successes, when the team won the MLS Eastern Conference and the…",
+   "slug": "philadelphia-unions-ryan-richter-brings-back-playoff-hope",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/raphael-bartell-1.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell-1.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell-1.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell-1.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell-1.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-21T13:00:00Z",
+   "creation_date": "2026-08-20T23:02:28Z"
+  },
+  {
+   "title": "Phillies reinforce team at the trade deadline",
+   "id": 10105,
+   "authors": [
+    {
+     "id": 830,
+     "name": "Ryan Legg",
+     "slug": "ryan-legg"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    }
+   ],
+   "excerpt": "The Phillies made one thing clear at this year's trade deadline: they are trying to win a World Series. By acquiring three-time batting champion Luis Arraez along with relievers Brooks Raley and Caleb Kilian, President of Baseball Operations Dave Dombrowski addressed some of the club's biggest concerns — an inconsistent…",
+   "slug": "phillies-reinforce-team-at-the-trade-deadline",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/janine-gin.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/janine-gin.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/janine-gin.jpg.960w.webp",
+     "width": 960,
+     "height": 720
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/janine-gin.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1200
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/janine-gin.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1800
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-07T13:00:00Z",
+   "creation_date": "2026-08-07T00:02:30Z"
+  },
+  {
+   "title": "Romano and the illusion of journalism in the footballing world",
+   "id": 10104,
+   "authors": [
+    {
+     "id": 860,
+     "name": "Odote Ondiek",
+     "slug": "odote-ondiek"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    }
+   ],
+   "excerpt": "Fabrizio Romano is one of the most recognizable figures within the soccer world. His signature catchphrase, “Here we go,” has been etched into the minds of many fans around the world. However, what gets him this recognition isn’t the reporting, but the means by which he does it. During this…",
+   "slug": "romano-and-the-illusion-of-journalism-in-the-footballing-world",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/kasey-shamis-2.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/kasey-shamis-2.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/kasey-shamis-2.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/kasey-shamis-2.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/kasey-shamis-2.jpg.2048w.webp",
+     "width": 2048,
+     "height": 1366
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-07T13:00:00Z",
+   "creation_date": "2026-08-07T00:01:02Z"
+  },
+  {
+   "title": "FIFA experiences financial fiascos",
+   "id": 10103,
+   "authors": [
+    {
+     "id": 860,
+     "name": "Odote Ondiek",
+     "slug": "odote-ondiek"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    }
+   ],
+   "excerpt": "On July 28, 2026 it was reported that FIFA planned to sell stakes to investment groups as a means to funnel more money to the FIFA Forward Enterprise (FFE), which would be expected to oversee \"commercial and event operations.\" In a swift response, Union of European Football Associations (UEFA) President…",
+   "slug": "fifa-experiences-financial-fiascos",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/kasey-shamis.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/kasey-shamis.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/kasey-shamis.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/kasey-shamis.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/kasey-shamis.jpg.2048w.webp",
+     "width": 2048,
+     "height": 1366
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-07T13:00:00Z",
+   "creation_date": "2026-08-07T00:00:22Z"
+  },
+  {
+   "title": "How superstars improve the quality of the MLS",
+   "id": 10102,
+   "authors": [
+    {
+     "id": 555,
+     "name": "Raphael Bartell",
+     "slug": "raphael-bartell"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    }
+   ],
+   "excerpt": "Four months ago, Major League Soccer celebrated its 30th birthday. Three decades ago, American soccer started from nothing. Today, people both inside and outside the United States often smile when they hear about the MLS, calling it a retirement league. But perhaps this could change soon. So, where does the…",
+   "slug": "how-superstars-improve-the-quality-of-the-mls",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/raphael-bartell-2.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell-2.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell-2.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell-2.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell-2.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-07T13:00:00Z",
+   "creation_date": "2026-08-06T23:59:34Z"
+  },
+  {
+   "title": "What comes next for women's lacrosse?",
+   "id": 10101,
+   "authors": [
+    {
+     "id": 569,
+     "name": "Janine Gin",
+     "slug": "janine-gin"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    },
+    {
+     "name": "From the Playbook",
+     "slug": "from-the-playbook"
+    },
+    {
+     "name": "Columns",
+     "slug": "columns"
+    }
+   ],
+   "excerpt": "Not many coaches can say that they led their team to their first CAA championship in program history in their first season as head coach. Katie O’Donnell can. In 2022, after taking over as interim head coach of Drexel University’s women’s lacrosse program, O’Donnell led the team to their first…",
+   "slug": "what-comes-next-for-women-s-lacrosse",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/raphael-bartell.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-07T13:00:00Z",
+   "creation_date": "2026-08-06T23:58:52Z"
+  },
+  {
+   "title": "Getting ready for the 2026 fall sports season",
+   "id": 10100,
+   "authors": [
+    {
+     "id": 569,
+     "name": "Janine Gin",
+     "slug": "janine-gin"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    }
+   ],
+   "excerpt": "And just like that, summer is over – at least for fall sports athletes. As mid-August is fast approaching, Drexel’s women’s field hockey, women’s soccer, and men’s soccer teams prepare to take the field for their 2026 season. Here is what you need to know about all three of these…",
+   "slug": "getting-ready-for-the-2026-fall-sports-season",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/raphael-bartell-image.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell-image.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell-image.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell-image.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/raphael-bartell-image.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-07T13:00:00Z",
+   "creation_date": "2026-08-06T23:58:00Z"
+  },
+  {
+   "title": "Danny Rumph Classic basketball tournament returns to Drexel",
+   "id": 10099,
+   "authors": [
+    {
+     "id": 902,
+     "name": "Jack Clark",
+     "slug": "jack-clark"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    }
+   ],
+   "excerpt": "The Danny Rumph Classic began in 2005 after the passing of Daniel E. Rumph, a promising young basketball player who passed away from a heart condition on the court. The court, which was originally the Mallery Recreation Center, then became the Daniel E. Rumph II Recreation Center in East Germantown…",
+   "slug": "danny-rumph-classic-basketball-tournament-returns-to-drexel",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-8.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-8.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-8.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-8.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-8.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-07T13:00:00Z",
+   "creation_date": "2026-08-06T23:56:55Z"
+  },
+  {
+   "title": "LeBron James joins the 76ers",
+   "id": 10079,
+   "authors": [
+    {
+     "id": 515,
+     "name": "Jack Margolin",
+     "slug": "jack-margolin"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Philly Sports",
+     "slug": "philly-sports"
+    }
+   ],
+   "excerpt": "What was already one of the craziest Sixers off seasons in recent memory has now produced perhaps the biggest transaction in franchise history: the signing of LeBron James. The Sixers entered this offseason with one thing certain: there would be change. Former President of Basketball Operations Daryl Morey was replaced",
+   "slug": "lebron-james-joins-the-76ers",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/07/KaseyShamis4-1.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/07/KaseyShamis4-1.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/07/KaseyShamis4-1.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/07/KaseyShamis4-1.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/07/KaseyShamis4-1.jpg.2048w.webp",
+     "width": 2048,
+     "height": 1366
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-07-27T20:32:08Z",
+   "creation_date": "2026-07-27T20:32:08Z"
+  },
+  {
+   "title": "Continuing the momentum with men’s lacrosse",
+   "id": 10075,
+   "authors": [
+    {
+     "id": 569,
+     "name": "Janine Gin",
+     "slug": "janine-gin"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Men's Lacrosse",
+     "slug": "mens-lacrosse"
+    },
+    {
+     "name": "Sports",
+     "slug": "sports"
+    },
+    {
+     "name": "From the Playbook",
+     "slug": "from-the-playbook"
+    }
+   ],
+   "excerpt": "Drexel University’s men’s lacrosse team knows what success looks like. The team has not only advanced to the NCAA tournament twice since 2007, but has also reached the CAA semifinals , aside from two years, every year since then. When Steven Boyle took the field in 2025 as the head",
+   "slug": "continuing-the-momentum-with-mens-lacross",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/07/0H6A0063_02.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/07/0H6A0063_02.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/07/0H6A0063_02.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/07/0H6A0063_02.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/07/0H6A0063_02.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-07-24T13:00:00Z",
+   "creation_date": "2026-07-24T13:00:00Z"
+  },
+  {
+   "title": "A historic World Cup Final",
+   "id": 10074,
+   "authors": [
+    {
+     "id": 830,
+     "name": "Ryan Legg",
+     "slug": "ryan-legg"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    }
+   ],
+   "excerpt": "The World Cup final was expected to become another Lionel Messi masterpiece. It instead became a tactical clinic by Spain. Ferran Torres' 106th-minute winner finally broke the deadlock, giving Spain a 1-0 victory over Argentina and its second men's World Cup title. While the scoreline suggests a tightly contested match,",
+   "slug": "a-historic-world-cup-final",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/07/Rocco-Fonseca-10.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/07/Rocco-Fonseca-10.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/07/Rocco-Fonseca-10.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/07/Rocco-Fonseca-10.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/07/Rocco-Fonseca-10.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-07-24T13:00:00Z",
+   "creation_date": "2026-07-24T13:00:00Z"
+  },
+  {
+   "title": "From Division II to the NCAA Championships: How Cody Walsh fulfilled his lifelong dream",
+   "id": 10073,
+   "authors": [
+    {
+     "id": 555,
+     "name": "Raphael Bartell",
+     "slug": "raphael-bartell"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Sports",
+     "slug": "sports"
+    }
+   ],
+   "excerpt": "For as long as Cody Walsh can remember, his parents took him to the annual NCAA Division I wrestling championships. The atmosphere, the sweat, the dedication, and the triumph made Walsh immediately fall in love with wrestling. As a teenager, the tournament became more than just a fan experience for",
+   "slug": "from-division-ii-to-the-ncaa-championships",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/07/Raphael-Bartell-2-1.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/07/Raphael-Bartell-2-1.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/07/Raphael-Bartell-2-1.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/07/Raphael-Bartell-2-1.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/07/Raphael-Bartell-2-1.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-07-24T13:00:00Z",
+   "creation_date": "2026-07-24T13:00:00Z"
+  }
+ ],
+ "pagination": {
+  "page": 1,
+  "limit": 20,
+  "offset": 0,
+  "has_more": true,
+  "total_count": 2198
+ }
+}
