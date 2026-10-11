@@ -53,14 +53,8 @@ export async function getHomepageArticles() {
   //const url = 'https://cms.thetriangle.org/wp-json/triangle/v1/homepage';
   const url = normalizedCmsBaseUrl + '/homepage';
 
-  // Not force-cache, which is "reuse the stored response even when it is
-  // stale": on the one endpoint that carries the featured lead and the breaking
-  // banner that means an editor's change can sit invisible behind a cache entry
-  // with no expiry. 'default' honours the CMS's own Cache-Control (60s), so the
-  // homepage is still cached -- just never past the bound the CMS states.
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
-    cache: 'default',
   });
 
   if (!res.ok) throw new Error(String(res.status));
@@ -73,11 +67,9 @@ export async function getClassifieds() {
   const url = normalizedCmsBaseUrl + '/classifieds';
 
   // Approved-and-unexpired filtering happens in the CMS, so this is the list
-  // as-is. No-store because an approval should show up on the next page load,
-  // not whenever a cache decides.
+  // as-is.
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
-    cache: 'no-store',
   });
 
   if (!res.ok) return [];
@@ -98,7 +90,6 @@ export async function getSectionArticles(section, page) {
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
-    cache: 'force-cache',
   });
 
   if (!res.ok) return;
@@ -138,7 +129,6 @@ export async function getAllAuthors() {
     const url = `${normalizedCmsBaseUrl}/authors?limit=${limit}&offset=${offset}`;
     const res = await fetch(url, {
       headers: { Accept: 'application/json' },
-      cache: 'no-store',
     });
 
     if (!res.ok) return;
@@ -157,13 +147,9 @@ export async function getAllAuthors() {
 export async function getTaxonomy() {
   const url = normalizedCmsBaseUrl + '/taxonomy';
 
-  // no-store, unlike its neighbours: /v1/taxonomy states no Cache-Control, and
-  // force-cache with nothing to respect would pin the first response for the
-  // life of the process -- a new section would never appear. Freshness is
-  // taxonomyStore's job, where there is an explicit TTL.
+  // Freshness is taxonomyStore's job, where there is an explicit TTL.
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
-    cache: 'no-store',
   });
 
   if (!res.ok) return;
@@ -178,7 +164,6 @@ export async function getSubsectionArticles(subsection, page) {
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
-    cache: 'force-cache',
   });
 
   if (!res.ok) return;
@@ -198,7 +183,6 @@ export async function getAuthorArticles(author, page) {
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
-    cache: 'force-cache',
   });
 
   if (!res.ok) return;
@@ -215,7 +199,6 @@ export async function getArticle(article) {
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
-    cache: 'force-cache',
   });
 
   if (!res.ok) return;
@@ -232,7 +215,6 @@ export async function getArticleComments(article) {
   try {
     const res = await fetch(url, {
       headers: { Accept: 'application/json' },
-      cache: 'no-store',
     });
 
     if (!res.ok) return { comments: [], total_count: 0 };
@@ -249,7 +231,6 @@ export async function getRandomArticle() {
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
-    cache: 'force-cache',
   });
 
   if (!res.ok) return;
@@ -266,7 +247,6 @@ export async function search(search) {
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
-    cache: 'force-cache',
   });
 
   if (!res.ok) return;
@@ -279,7 +259,6 @@ export async function gallery() {
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
-    cache: 'force-cache',
   });
 
   if (!res.ok) return [];
@@ -297,7 +276,6 @@ export async function getRecentArticles(limit = 20) {
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
-    cache: 'force-cache',
   });
 
   if (!res.ok) return [];
@@ -316,7 +294,6 @@ export async function getSitemapSlugs() {
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
-    cache: 'force-cache',
   });
 
   if (!res.ok) return [];

@@ -51,10 +51,9 @@ Astro.response.headers.set(
     <!-- {!breaking && <a id="one-hundred" href="https://therectangle.org" class="flex px-[16px] justify-end items-end w-full mt-[-24px] mb-[24px] h-[200px] md:h-[300px] bg-center text-white text-wrap font-bold uppercase font-libre text-[32px] sm:text-[48px] lg:text-[48px] leading-[normal] relative">
         <span class="z-[10] text-right">100 Years of The Triangle</span>
     </a>} -->
-    <!-- {!breaking && <Banner server:defer/>} -->
      <!-- Only the first block after the nav may pull up 24px to close its
           margin; when the breaking banner renders it takes that role. -->
-     <Banner server:defer pullUp={!breaking} slides={posts.carousel ?? []}/>
+     <Banner pullUp={!breaking} slides={posts.carousel ?? []}/>
      <Ad placement="homepage-banner" class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] mt-[12px] mb-[8px] [&_img]:block [&_img]:mb-0 [&_img]:border [&_img]:border-solid [&_img]:border-[#d9d9d9]"/>
 
     <Section section="news" articles={posts.news?.slice(0, 9)} style="3-6-3"/>

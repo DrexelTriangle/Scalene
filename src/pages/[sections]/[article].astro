@@ -52,8 +52,7 @@ if (host === 'thetriangle.org') {
 // across 256 distinct slugs, nearly all of them tag archives.
 //
 // So resolve first and redirect only on a hit. The extra lookup lands only on the
-// legacy path and is a cheap one: the CMS marks article detail cacheable for a
-// minute and this fetch is force-cache, so the redirected request reads it warm.
+// legacy path.
 if (sections !== "article") {
   // A renamed slug resolves through the map rather than the CMS -- the middleware
   // only rewrites paths already under /article/, so without this a legacy slug

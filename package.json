@@ -17,7 +17,6 @@
   },
   "dependencies": {
     "@astrojs/node": "^11.0.3",
-    "@fortawesome/fontawesome-free": "^7.1.0",
     "@splidejs/splide": "^4.1.4",
     "astro": "^7.1.6",
     "autoprefixer": "^10.4.20",
