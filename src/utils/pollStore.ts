@@ -1,11 +1,17 @@
-type PollCounts = Record<string, number>;
+import { createPollWidgetStore, extractCounts, type PollCounts, type PollWidget } from './pollWidgetStore';
 
 const cmsBaseUrl = import.meta.env.CMS_API_BASE_URL ?? 'https://localhost:8080/v1';
 const normalizedCmsBaseUrl = String(cmsBaseUrl).replace(/\/$/, '');
 const pollUrl = `${normalizedCmsBaseUrl}/poll`;
-const pollOptionsUrl = `${normalizedCmsBaseUrl}/poll/options`;
-const pollTitleUrl = `${normalizedCmsBaseUrl}/poll/title`;
 const pollsUrl = `${normalizedCmsBaseUrl}/polls`;
+
+// The live poll's options, title and counts, cached in-process. See
+// utils/pollWidgetStore for the TTLs.
+const widgetStore = createPollWidgetStore({
+  baseUrl: normalizedCmsBaseUrl,
+  fetch: (input, init) => fetch(input, init),
+  onError: (err) => console.error('Poll: CMS fetch failed:', err instanceof Error ? err.message : err),
+});
 
 export type ArchivedPollOption = {
   option: string;
@@ -23,38 +29,6 @@ export type ArchivedPoll = {
   options: ArchivedPollOption[];
 };
 
-function coercePollCounts(value: unknown): PollCounts {
-  const nextCounts: PollCounts = {};
-  if (!value || typeof value !== 'object') {
-    return nextCounts;
-  }
-
-  for (const [option, maybeCount] of Object.entries(value as Record<string, unknown>)) {
-    const normalizedOption = option.trim();
-    if (!normalizedOption) {
-      continue;
-    }
-    if (typeof maybeCount === 'number' && Number.isFinite(maybeCount) && maybeCount >= 0) {
-      nextCounts[normalizedOption] = Math.floor(maybeCount);
-    }
-  }
-
-  return nextCounts;
-}
-
-function extractCounts(payload: unknown): PollCounts {
-  if (!payload || typeof payload !== 'object') {
-    return {};
-  }
-
-  const maybeCounts = (payload as Record<string, unknown>).counts;
-  if (maybeCounts && typeof maybeCounts === 'object') {
-    return coercePollCounts(maybeCounts);
-  }
-
-  return coercePollCounts(payload);
-}
-
 async function fetchCms(url: string, init: RequestInit): Promise<Response | null> {
   try {
     const response = await fetch(url, init);
@@ -64,67 +38,21 @@ async function fetchCms(url: string, init: RequestInit): Promise<Response | null
   }
 }
 
-function extractOptions(payload: unknown): string[] {
-  if (!payload || typeof payload !== 'object') {
-    return [];
-  }
-
-  const value = (payload as Record<string, unknown>).options;
-  if (!Array.isArray(value)) {
-    return [];
-  }
-
-  const options = value
-    .map((item) => (typeof item === 'string' ? item.trim() : ''))
-    .filter((item) => item.length > 0);
-
-  return options;
+export function getPollOptions(): Promise<string[]> {
+  return widgetStore.getOptions();
 }
 
-export async function getPollOptions(): Promise<string[]> {
-  const response = await fetchCms(pollOptionsUrl, {
-    method: 'GET',
-    headers: { Accept: 'application/json' },
-    cache: 'no-store'
-  });
-
-  if (!response) {
-    return [];
-  }
-
-  const payload = await response.json();
-  return extractOptions(payload);
+export function getPollTitle(): Promise<string> {
+  return widgetStore.getTitle();
 }
 
-export async function getPollTitle(): Promise<string> {
-  const response = await fetchCms(pollTitleUrl, {
-    method: 'GET',
-    headers: { Accept: 'application/json' },
-    cache: 'no-store'
-  });
-
-  if (!response) {
-    return "";
-  }
-
-  const payload = await response.json() as { title?: unknown };
-  const title = typeof payload?.title === 'string' ? payload.title.trim() : '';
-  return title;
+export function getPollCounts(): Promise<PollCounts> {
+  return widgetStore.getCounts();
 }
 
-export async function getPollCounts(): Promise<PollCounts> {
-  const response = await fetchCms(pollUrl, {
-    method: 'GET',
-    headers: { Accept: 'application/json' },
-    cache: 'no-store'
-  });
-
-  if (!response) {
-    return {};
-  }
-
-  const payload = await response.json();
-  return extractCounts(payload);
+/** Options, title and counts for the widget, fetched in parallel. Never rejects. */
+export function getPollWidget(): Promise<PollWidget> {
+  return widgetStore.load();
 }
 
 function coerceArchivedPoll(value: unknown): ArchivedPoll | null {
@@ -275,5 +203,10 @@ export async function incrementPollCount(option: string, clientAddress?: string)
   }
 
   const payload = await response.json();
-  return { ok: true, counts: extractCounts(payload) };
+  const counts = extractCounts(payload);
+  // These are the freshest counts there are; the next page render (the voter's
+  // own, most likely) should show them rather than a cached total without
+  // this vote.
+  if (Object.keys(counts).length > 0) widgetStore.primeCounts(counts);
+  return { ok: true, counts };
 }

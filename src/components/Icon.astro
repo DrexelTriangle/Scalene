@@ -1,0 +1,24 @@
+---
+import { icons, iconA11yAttributes, type IconName } from "../utils/icons";
+
+interface Props {
+  name: IconName;
+  /** Accessible name. Omit when the icon is decorative (a labelled button, text beside it). */
+  label?: string;
+  class?: string;
+}
+
+const { name, label, class: className } = Astro.props;
+const icon = icons[name];
+// 1.25em x 1em is the box Font Awesome 7 drew each glyph in, so the icon still
+// sizes off font-size and sits where the webfont glyph did.
+---
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox={icon.viewBox}
+  width="1.25em"
+  height="1em"
+  fill="currentColor"
+  class:list={["inline-block shrink-0", className]}
+  {...iconA11yAttributes(label)}
+><path d={icon.path} /></svg>

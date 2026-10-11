@@ -1,13 +1,15 @@
 ---
-import { getPollCounts, getPollOptions, getPollTitle } from '../utils/pollStore';
+import { getPollWidget } from '../utils/pollStore';
 
+// Options, counts and title are independent, so they are fetched in parallel
+// (and cached; see utils/pollWidgetStore) rather than one after another.
+const { options: pollOptions, counts: fetchedCounts, title: fetchedTitle } = await getPollWidget();
 // No options means nothing is on the site -- either no live poll at all, or one
 // with nothing to vote on. Either way the widget renders nothing rather than a
 // "Polls" heading over an empty form and a Vote button that cannot do anything.
-const pollOptions = await getPollOptions();
 const hasPoll = pollOptions.length > 0;
-const pollOptionCounts = hasPoll ? await getPollCounts() : {};
-const pollTitle = hasPoll ? await getPollTitle() : '';
+const pollOptionCounts = hasPoll ? fetchedCounts : {};
+const pollTitle = hasPoll ? fetchedTitle : '';
 const totalVotes = Object.values(pollOptionCounts).reduce((sum, count) => sum + count, 0);
 ---
 {hasPoll && (

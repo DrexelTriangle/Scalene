@@ -1,6 +1,7 @@
 ---
   const {home} = Astro.props
 import GamesLink from "./GamesLink.astro"
+import Icon from "./Icon.astro"
 import SideMenu from "./SideMenu.astro"
   import Weather from "./Weather.astro"
 
@@ -19,11 +20,20 @@ import SideMenu from "./SideMenu.astro"
 ---
 <header id="site-header" class="flex w-full relative p-[10px] justify-between items-center border-b-[1px] border-triangleGray border-solid">
   <div class="inline-flex items-center gap-x-[10px]" id="header-left">
-    <i id="search" class="fa-solid fa-magnifying-glass text-[12px] cursor-pointer"></i>
+    <!-- Both header buttons are 24x24 hit targets around a smaller glyph
+         (1.25em x 1em). The negative margin of (glyph - 24px) / 2 per side keeps
+         their footprint and the glyph's position what it was; it is in em so it
+         still fits when .scrollsticky* bumps the font size. -->
+    <button id="search" type="button" aria-label="Search" aria-controls="s" aria-expanded="false" class="inline-flex items-center justify-center min-w-[24px] min-h-[24px] m-[calc((1em-24px)/2)_calc((1.25em-24px)/2)] text-[12px] leading-none cursor-pointer">
+      <Icon name="magnifying-glass"/>
+    </button>
     <form action="/search" method="GET">
         <input id="s" name="s" type="text" placeholder="Search" class="relative hiddenSearch font-roboto-slab text-[12px] w-[200px] border-solid border-triangleBlue border-[1px] px-2 py-1 rounded-[10px] transition-[width] duration-[400ms] bg-white z-[99]"/>
     </form>
-  <Weather server:defer />
+  <!-- A prerendered page (about, contact, ...) is built once, so it fetches the
+       weather at runtime as a server island. Server-rendered pages render it
+       inline from the cache, with no extra request. -->
+  {Astro.isPrerendered ? <Weather server:defer island /> : <Weather />}
   </div>
   {!home && <a id="top-logo" href="/" class="absolute left-[calc(50%-100px)] md:left-[calc(50%-120px)] lg:left-[calc(50%-133px)]"><img class="w-[200px] md:w-[240px] lg:w-[266px]" src="/proxy/wp-content/uploads/2026/01/thetriangle.png"/></a>}
   <div id="header-right" class="inline-flex items-center gap-x-[10px] font-roboto-slab text-[12px] cursor-pointer">
@@ -34,7 +44,11 @@ import SideMenu from "./SideMenu.astro"
       <a class="hover:underline" target="_blank" rel="noopener noreferrer" href="https://alumni.drexel.edu/s/1683/form/16/form.aspx?sid=1683&gid=2&pgid=4355&content_id=4154"> Donate </a>
       <a class="hover:underline" href="/contact"> Contact </a>
     </nav>
-    <i id="hamburger" class="fa-solid fa-bars text-[16px]"></i>
+    <!-- aria-expanded is the menu's state; the bars/x swap is styled off it. -->
+    <button id="hamburger" type="button" aria-label="Menu" aria-controls="side-nav" aria-expanded="false" class="group inline-flex items-center justify-center min-w-[24px] min-h-[24px] m-[calc((1em-24px)/2)_calc((1.25em-24px)/2)] text-[16px] leading-none cursor-pointer">
+      <Icon name="bars" class="group-aria-expanded:hidden"/>
+      <Icon name="xmark" class="hidden group-aria-expanded:inline-block"/>
+    </button>
   </div>
 </header>
 {home && 
@@ -79,13 +93,14 @@ import SideMenu from "./SideMenu.astro"
     const mainNav = document.getElementById("main-nav");
     const subNav = document.getElementById("sub-nav");
 
-    // Toggle fa-bars and fa-close on hamburger click
+    // Open/close the side menu; the button's bars/x icon follows aria-expanded.
     if (hamburger && sideNav && mainNav && subNav && !hamburger.dataset.bound) {
       hamburger.dataset.bound = "1";
+      const isOpen = () => hamburger.getAttribute("aria-expanded") === "true";
       hamburger.addEventListener('click', () => {
-        if (hamburger.classList.contains('fa-bars')) {
-          hamburger.classList.remove('fa-bars');
-          hamburger.classList.add('fa-close');
+        const open = !isOpen();
+        hamburger.setAttribute("aria-expanded", String(open));
+        if (open) {
           sideNav.style.width = "200px";
           sideNav.style.borderLeft = "1px solid #2563EB";
           sideNav.style.padding = "0px 8px";
@@ -93,11 +108,11 @@ import SideMenu from "./SideMenu.astro"
           mainNav.style.display = "flex";
           subNav.style.display = "flex";
         } else {
-          hamburger.classList.remove('fa-close');
-          hamburger.classList.add('fa-bars');
           sideNav.style.width = "0px";
           sideNav.style.padding = "0px 0px";
           setTimeout(() => {
+            // Reopened before the close finished: leave the menu showing.
+            if (isOpen()) return;
             mainNav.style.display = "none";
             subNav.style.display = "none";
             sideNav.style.borderLeft = "none";
@@ -109,9 +124,23 @@ import SideMenu from "./SideMenu.astro"
     if (search && searchBar && !search.dataset.bound) {
       search.dataset.bound = "1";
       search.addEventListener('click', () => {
-        searchBar.classList.toggle("hiddenSearch");
+        const hidden = searchBar.classList.toggle("hiddenSearch");
+        search.setAttribute("aria-expanded", String(!hidden));
       });
     }
+  }
+
+  // Moves a header button between the header and the sticky nav. Skips the move
+  // when it is already in place (this runs on every scroll event), and puts
+  // keyboard focus back when moving a focused button, since re-inserting an
+  // element drops its focus.
+  function place(el: HTMLElement, parent: HTMLElement, at: "start" | "end") {
+    const inPlace = at === "start" ? parent.firstElementChild === el : parent.lastElementChild === el;
+    if (inPlace) return;
+    const hadFocus = document.activeElement === el;
+    if (at === "start") parent.prepend(el);
+    else parent.append(el);
+    if (hadFocus) el.focus({ preventScroll: true });
   }
 
   function onScroll() {
@@ -127,16 +156,16 @@ import SideMenu from "./SideMenu.astro"
     if (window.scrollY > 130) {
       search.classList.add("scrollstickyleft");
       hamburger.classList.add("scrollstickyright");
-      scrollnav.prepend(search);
-      scrollnav.append(hamburger);
+      place(search, scrollnav, "start");
+      place(hamburger, scrollnav, "end");
       if (isNarrow) {
         scrollnav.style.paddingTop = "40px";
       }
     } else {
       search.classList.remove("scrollstickyleft");
       hamburger.classList.remove("scrollstickyright");
-      hl.prepend(search);
-      hr.append(hamburger);
+      place(search, hl, "start");
+      place(hamburger, hr, "end");
       scrollnav.style.paddingTop = isNarrow ? "0px" : "8px";
     }
   }

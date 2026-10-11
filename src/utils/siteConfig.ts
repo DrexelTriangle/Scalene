@@ -1,31 +1,20 @@
 import { normalizeFooterColumns, spacer, type FooterColumn, type FooterEntry } from "./footer";
+import { createSiteTitleStore } from "./siteTitleStore";
 
 const cmsBaseUrl = import.meta.env.CMS_API_BASE_URL ?? "https://localhost:8080/v1";
 const normalizedCmsBaseUrl = String(cmsBaseUrl).replace(/\/$/, "");
 const siteSettingsUrl = `${normalizedCmsBaseUrl}/settings/site`;
 const footerSettingsUrl = `${normalizedCmsBaseUrl}/settings/footer`;
-const defaultSiteTitle = "The Triangle";
 
-type SiteSettingsResponse = {
-  site_title?: string;
-};
+const siteTitleStore = createSiteTitleStore({
+  url: siteSettingsUrl,
+  fetch: (input, init) => fetch(input, init),
+  onError: (err) => console.error("Site title: CMS fetch failed:", err instanceof Error ? err.message : err),
+});
 
-export async function getSiteTitle(): Promise<string> {
-  try {
-    const response = await fetch(siteSettingsUrl, {
-      method: "GET",
-      headers: { Accept: "application/json" },
-      cache: "no-store",
-    });
-    if (!response.ok) {
-      return defaultSiteTitle;
-    }
-    const payload = (await response.json()) as SiteSettingsResponse;
-    const title = String(payload.site_title ?? "").trim();
-    return title || defaultSiteTitle;
-  } catch {
-    return defaultSiteTitle;
-  }
+/** Cached for five minutes; never throws. See utils/siteTitleStore. */
+export function getSiteTitle(): Promise<string> {
+  return siteTitleStore.get();
 }
 
 export type { FooterColumn, FooterEntry, FooterEntryKind } from "./footer";
