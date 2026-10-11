@@ -1,10 +1,10 @@
 import { normalizeFooterColumns, spacer, type FooterColumn, type FooterEntry } from "./footer";
 import { createSiteTitleStore } from "./siteTitleStore";
+import { cms } from "./cmsClient";
 
 const cmsBaseUrl = import.meta.env.CMS_API_BASE_URL ?? "https://localhost:8080/v1";
 const normalizedCmsBaseUrl = String(cmsBaseUrl).replace(/\/$/, "");
 const siteSettingsUrl = `${normalizedCmsBaseUrl}/settings/site`;
-const footerSettingsUrl = `${normalizedCmsBaseUrl}/settings/footer`;
 
 const siteTitleStore = createSiteTitleStore({
   url: siteSettingsUrl,
@@ -120,15 +120,10 @@ export async function getFooterColumns(): Promise<FooterColumn[]> {
   }
 
   try {
-    const response = await fetch(footerSettingsUrl, {
-      method: "GET",
-      headers: { Accept: "application/json" },
-      cache: "no-store",
+    const payload = await cms.getJson<FooterSettingsResponse>({
+      endpoint: "footer_settings",
+      path: ["settings", "footer"],
     });
-    if (!response.ok) {
-      return defaultFooterColumns;
-    }
-    const payload = (await response.json()) as FooterSettingsResponse;
     const columns = normalizeFooterColumns(payload.columns, Date.now());
     const resolved = columns.length > 0 ? columns : defaultFooterColumns;
     // Only a good response is cached; a CMS blip falls back for this request

@@ -10,6 +10,7 @@ import '../../styles/global.css';
 import Social from '../../components/Social.astro';
 import Poll from '../../components/Polls.astro';
 import { getArticle, getArticleComments } from '../../utils/db';
+import { loadArticlePage } from '../../utils/articlePage';
 import { getCategoryHref } from "../../utils/taxonomyStore";
 import { LEGACY_ARTICLE_SLUGS } from '../../utils/legacySlugs';
 import { normalizeText, imageSrcset } from "../../utils/data";
@@ -71,14 +72,15 @@ if (sections !== "article") {
   return Astro.redirect('/article/' + article, 301);
 }
 
-const post = article ? await getArticle(article) : undefined;
+// Article and comments are read together; see utils/articlePage.
+const { post, comments } = article
+  ? await loadArticlePage(article, { getArticle, getArticleComments })
+  : { post: undefined, comments: [] };
 
 if (!post) {
   return Astro.rewrite('/404');
 }
 
-const commentsResponse = article ? await getArticleComments(article) : undefined;
-const comments = Array.isArray(commentsResponse?.comments) ? commentsResponse.comments : [];
 const commentsClosed = String(post.comment_status ?? "").trim().toLowerCase() === "closed";
 
 const authorListLinks: string[] = [];
