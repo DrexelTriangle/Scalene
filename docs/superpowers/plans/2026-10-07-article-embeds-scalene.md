@@ -1085,6 +1085,8 @@ The CMS editor cannot write these yet, so paste the body through the article API
 [youtube https://www.youtube.com/watch?v=dQw4w9WgXcQ]
 <p>SoundCloud share URL, not the legacy api form</p>
 <div>[soundcloud url="https://soundcloud.com/forss/flickermood" /]</div>
+<p>Uploaded MP3</p>
+<div>[audio src="<MEDIA_BASE_URL>/wp-content/uploads/<any existing mp3 or a test file you upload>" /]</div>
 ```
 
 - [ ] **Step 3: Check each item and record the result**
@@ -1092,6 +1094,8 @@ The CMS editor cannot write these yet, so paste the body through the article API
 - Spotify player renders at 152px, no horizontal scroll at 375px wide.
 - TikTok player renders inside a 325px-wide portrait box with no clipping. If the player is clipped, note it; the fix is to leave the query as is (no `description=1` is emitted) and adjust nothing else.
 - Instagram post renders after embed.js loads; with the network tab blocking `instagram.com`, the plain link shows instead.
+- The MP3 plays and seeking works (drag the scrubber); `MEDIA_BASE_URL` must be set in the dev server's environment or the block stays as text.
+- With `instagram.com` blocked in the network tab, the Instagram fallback link renders as a plain link, not as a quote.
 - Legacy YouTube renders exactly as on production for the same shortcode.
 - SoundCloud share URL plays through the existing expander. If it does not, the SoundCloud accept vector for `soundcloud.com/{user}/{track}` must be removed from `embed-vectors.json` in both repos before the CMS PR, and the spec's SoundCloud row updated.
 - Response headers on `www.thetriangle.org` (production, read only): record whether a `Content-Security-Policy` header exists. If it does, list the `frame-src`, `script-src` and `media-src` values for Sachin. Do not change anything.

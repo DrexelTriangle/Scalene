@@ -257,6 +257,12 @@ const hasPuzzleScript = content.includes("pm-embed-div");
 const hasPuzzleIframe = /<iframe\b[^>]*\bsrc="[^"]*\bamuselabs\.com\//i.test(content);
 const hasPuzzleEmbed = hasPuzzleScript || hasPuzzleIframe;
 
+// The Instagram expander emits exactly this opening tag; embed.js upgrades the
+// blockquote into the post. Keyed on the emitted tag rather than the class
+// name alone so prose or a code sample mentioning "instagram-media" does not
+// pull the script in. Same pattern as the puzzle script above.
+const hasInstagramEmbed = content.includes('<blockquote class="instagram-media"');
+
 // Legacy WordPress bodies carry their lead image inline as a <figure>, so only
 // posts without any inline image need the featured image rendered for them --
 // otherwise every imported article would show it twice.
@@ -310,6 +316,12 @@ const featuredSrcset = featuredImage ? imageSrcset(post.featured_image_variants)
             is:inline 
             id="pm-script" 
             src="https://puzzleme.amuselabs.com/pmm/js/puzzleme-embed.js"
+        ></script>)}
+        {hasInstagramEmbed && (
+        <script
+            is:inline
+            async
+            src="https://www.instagram.com/embed.js"
         ></script>)}
     </article>
 </ArticleLayout>
