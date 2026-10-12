@@ -30,9 +30,12 @@ interface Props {
     includeName?: boolean;
     style?: keyof typeof styles;
     slug?: string;
+    /** This section opens the page: its lead card's image is the LCP. Only the
+     *  "3-6-3" and "5-3-4" layouts have a lead card to act on. */
+    priority?: boolean;
 }
 
-const {section, articles, includeName, style, slug} = Astro.props
+const {section, articles, includeName, style, slug, priority} = Astro.props
 
 const Component = (style && styles[style]) || Section354;
 
@@ -42,6 +45,6 @@ export const prerender = true;
 
 <section class:list={["section md:mt-2 xl:max-w-[1200px] lg:max-w-[900px] xl:[:not(.main-side)>_&]:max-w-[1200px] lg:[:not(.main-side)>_&]:max-w-[900px] [:not(.main-side)>_&]:max-w-[90%] mx-[auto] mb-[8px]",  includeName && "border-t-[1px] border-solid border-triangleBlue"]}>
     {includeName && <div class="flex w-100 justify-between"><h1 class="font-roboto-slab uppercase font-extrabold"> {section} </h1> <a href={slug ?? section} class="font-roboto-slab text-[14px] underline">See More &gt;</a></div>}
-    <Component articles={articles}/>
+    <Component articles={articles} priority={priority}/>
 </section>
 

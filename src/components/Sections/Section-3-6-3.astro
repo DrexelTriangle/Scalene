@@ -4,9 +4,11 @@ import type { SectionCardArticle } from "../../utils/types";
 
 interface Props {
   articles: SectionCardArticle[];
+  /** Load the lead (centre) card's image eagerly; see PhotoArticle. */
+  priority?: boolean;
 }
 
-const { articles } = Astro.props;
+const { articles, priority = false } = Astro.props;
 
 ---
 <div class="grid grid-cols-[1fr] md:grid-cols-[3fr_6fr] lg:grid-cols-[3fr_6fr_3fr] lg:divide-x lg:divide-triangleGray-400 ">
@@ -37,7 +39,8 @@ const { articles } = Astro.props;
             published_date={article.published_date}
             excerpt={article.excerpt}
             slug={"article/"+article.slug}
-            breaking={article.breaking_news}/>
+            breaking={article.breaking_news}
+            priority={priority}/>
         ))}
     </div>
 

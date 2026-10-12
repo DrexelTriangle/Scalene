@@ -1,0 +1,91 @@
+/*
+ * Self-hosted web fonts, replacing the three render-blocking Google Fonts
+ * @imports that used to head global.css (removing them took ~100ms off FCP).
+ *
+ * The files come from the pinned @fontsource packages (license and provenance
+ * travel with them in node_modules), and Vite fingerprints and emits each one
+ * into _astro/. The faces mirror what Google served: Roboto Slab and Playfair
+ * Display at their default 400 upright, Libre Franklin's whole 100-900 weight
+ * axis upright and italic.
+ *
+ * Why not just @import the packages' own CSS: the static packages add a .woff
+ * fallback to every face and bring every subset -- files no current browser
+ * would fetch, but each one more emitted asset. This keeps woff2 and the
+ * latin + latin-ext subsets only -- anything else falls back to the stack
+ * behind the family. The service worker deliberately does not precache these
+ * (see astro.config.mjs): unicode-range picks per page what to download. Each unicode-range is copied verbatim from the package
+ * (tests/renderPath.test.ts checks it still matches after an upgrade).
+ */
+
+@font-face {
+  font-family: 'Roboto Slab';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('@fontsource/roboto-slab/files/roboto-slab-latin-ext-400-normal.woff2') format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Roboto Slab';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('@fontsource/roboto-slab/files/roboto-slab-latin-400-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('@fontsource/playfair-display/files/playfair-display-latin-ext-400-normal.woff2') format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('@fontsource/playfair-display/files/playfair-display-latin-400-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* The package names this family 'Libre Franklin Variable'; keep Google's name. */
+@font-face {
+  font-family: 'Libre Franklin';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/libre-franklin/files/libre-franklin-latin-ext-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Libre Franklin';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/libre-franklin/files/libre-franklin-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: 'Libre Franklin';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/libre-franklin/files/libre-franklin-latin-ext-wght-italic.woff2') format('woff2-variations');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Libre Franklin';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/libre-franklin/files/libre-franklin-latin-wght-italic.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}

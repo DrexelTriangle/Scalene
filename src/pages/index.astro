@@ -13,6 +13,7 @@ import '../styles/global.css';
 import { getHomepageArticles } from '../utils/db';
 import SubscribeLink from "../components/SubscribeLink.astro";
 import Banner from "../components/Banner.astro";
+import HeroBackgroundPreload from "../components/HeroBackgroundPreload.astro";
 import Ad from "../components/Ad.astro";
 
 const posts = await getHomepageArticles();
@@ -46,6 +47,7 @@ Astro.response.headers.set(
 ---
 
 <BaseLayout title="The Triangle">
+    <HeroBackgroundPreload slot="head" slides={posts.carousel ?? []}/>
     <Header home/>
     {breaking && <BreakingNewsBanner items={breakingItems}/> }
     <!-- {!breaking && <a id="one-hundred" href="https://therectangle.org" class="flex px-[16px] justify-end items-end w-full mt-[-24px] mb-[24px] h-[200px] md:h-[300px] bg-center text-white text-wrap font-bold uppercase font-libre text-[32px] sm:text-[48px] lg:text-[48px] leading-[normal] relative">

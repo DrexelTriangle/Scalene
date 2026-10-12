@@ -58,9 +58,8 @@ const websiteJSON = {
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
      <link rel="me" href="https://github.com/Gilugali">
 
-    <!-- Performance: preconnect to font and CMS origins -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Performance: warm up the CMS, analytics and ad origins (fonts are
+         self-hosted, see src/styles/fonts.css) -->
     <link rel="dns-prefetch" href="https://cms.thetriangle.org" />
     <link rel="dns-prefetch" href="https://stats.thetriangle.org" />
     <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
