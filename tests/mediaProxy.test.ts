@@ -59,12 +59,14 @@ test('streams the upstream body before it has finished arriving', async () => {
   assert.equal((await reader.read()).done, true);
 });
 
-test('forwards representation and cache headers but not the rest', async () => {
+const BROWSER_CACHE = 'public, max-age=14400';
+
+test('forwards representation headers and validators but sets its own cache policy', async () => {
   const { fetchImpl } = mockFetch(new Response('png', {
     headers: {
       'content-type': 'image/png',
       'content-length': '3',
-      'cache-control': 'public, max-age=2592000',
+      'cache-control': 'public, max-age=2592000, immutable',
       expires: 'Thu, 01 Jan 2099 00:00:00 GMT',
       etag: '"abc"',
       'last-modified': 'Wed, 01 Jan 2025 00:00:00 GMT',
@@ -79,8 +81,8 @@ test('forwards representation and cache headers but not the rest', async () => {
   const res = await run(fetchImpl);
   assert.equal(res.headers.get('content-type'), 'image/png');
   assert.equal(res.headers.get('content-length'), '3');
-  assert.equal(res.headers.get('cache-control'), 'public, max-age=2592000');
-  assert.equal(res.headers.get('expires'), 'Thu, 01 Jan 2099 00:00:00 GMT');
+  assert.equal(res.headers.get('cache-control'), BROWSER_CACHE);
+  assert.equal(res.headers.get('expires'), null);
   assert.equal(res.headers.get('etag'), '"abc"');
   assert.equal(res.headers.get('last-modified'), 'Wed, 01 Jan 2025 00:00:00 GMT');
   assert.equal(res.headers.get('accept-ranges'), 'bytes');
@@ -184,13 +186,21 @@ test('forwards conditional and range request headers only', async () => {
 test('passes a 304 through with validators and no body', async () => {
   const { fetchImpl } = mockFetch(new Response(null, {
     status: 304,
-    headers: { etag: '"abc"', 'cache-control': 'public, max-age=60', 'set-cookie': 'a=b' },
+    headers: {
+      etag: '"abc"',
+      'last-modified': 'Wed, 01 Jan 2025 00:00:00 GMT',
+      'cache-control': 'public, max-age=2592000, immutable',
+      expires: 'Thu, 01 Jan 2099 00:00:00 GMT',
+      'set-cookie': 'a=b',
+    },
   }));
   const res = await run(fetchImpl, { requestHeaders: new Headers({ 'if-none-match': '"abc"' }) });
   assert.equal(res.status, 304);
   assert.equal(res.body, null);
   assert.equal(res.headers.get('etag'), '"abc"');
-  assert.equal(res.headers.get('cache-control'), 'public, max-age=60');
+  assert.equal(res.headers.get('last-modified'), 'Wed, 01 Jan 2025 00:00:00 GMT');
+  assert.equal(res.headers.get('cache-control'), BROWSER_CACHE);
+  assert.equal(res.headers.get('expires'), null);
   assert.equal(res.headers.get('set-cookie'), null);
   assert.equal(res.headers.get('content-type'), null);
 });
@@ -220,6 +230,50 @@ test('keeps the content range on a 416', async () => {
   const res = await run(fetchImpl, { requestHeaders: new Headers({ range: 'bytes=5000-' }) });
   assert.equal(res.status, 416);
   assert.equal(res.headers.get('content-range'), 'bytes */1000');
+  assert.equal(res.headers.get('cache-control'), 'no-store');
+});
+
+// The proxy owns the browser cache policy: successes get a fixed 4 hours
+// whatever the origin said, and nothing else may be kept at all.
+test('every response carries the proxy cache policy', async (t) => {
+  t.mock.method(console, 'error', () => {});
+  // The origin's own policy, which must never reach the browser.
+  const origin = { 'cache-control': 'public, max-age=2592000, immutable', expires: 'Thu, 01 Jan 2099 00:00:00 GMT' };
+  const hang = ((_input: string | URL | Request, init?: RequestInit) =>
+    new Promise<Response>((_resolve, reject) => {
+      init?.signal?.addEventListener('abort', () => reject(init.signal!.reason));
+    })) as typeof fetch;
+
+  const cases: Array<[string, number, string, () => Promise<Response>]> = [
+    ['200', 200, BROWSER_CACHE, () => run(mockFetch(new Response('x', { headers: origin })).fetchImpl)],
+    ['206', 206, BROWSER_CACHE, () => run(mockFetch(new Response('x', {
+      status: 206, headers: { ...origin, 'content-range': 'bytes 0-0/10' },
+    })).fetchImpl)],
+    ['304', 304, BROWSER_CACHE, () => run(mockFetch(new Response(null, { status: 304, headers: origin })).fetchImpl)],
+    ['200 after 404 retry', 200, BROWSER_CACHE, () => run(mockFetch(
+      new Response('stale', { status: 404, headers: origin }),
+      new Response('x', { headers: origin }),
+    ).fetchImpl)],
+    ['404 after retry', 404, 'no-store', () => run(mockFetch(
+      new Response('missing', { status: 404, headers: origin }),
+      new Response('missing', { status: 404, headers: origin }),
+    ).fetchImpl)],
+    ['416', 416, 'no-store', () => run(mockFetch(new Response('', {
+      status: 416, headers: { ...origin, 'content-range': 'bytes */10' },
+    })).fetchImpl)],
+    ['403', 403, 'no-store', () => run(mockFetch(new Response('', { status: 403, headers: origin })).fetchImpl)],
+    ['503', 503, 'no-store', () => run(mockFetch(new Response('', { status: 503, headers: origin })).fetchImpl)],
+    ['proxy 400', 400, 'no-store', () => run(mockFetch().fetchImpl, { path: 'wp-login.php' })],
+    ['proxy 404 (no path)', 404, 'no-store', () => run(mockFetch().fetchImpl, { path: undefined })],
+    ['proxy 502', 502, 'no-store', () => run(mockFetch(new TypeError('fetch failed')).fetchImpl)],
+    ['proxy 504', 504, 'no-store', () => run(hang, { timeoutMs: 5 })],
+  ];
+  for (const [name, status, cacheControl, request] of cases) {
+    const res = await request();
+    assert.equal(res.status, status, name);
+    assert.equal(res.headers.get('cache-control'), cacheControl, name);
+    assert.equal(res.headers.get('expires'), null, name);
+  }
 });
 
 test('retries a 404 exactly once with a cache-buster', async () => {
@@ -250,7 +304,7 @@ test('a 404 without a query string gets ?cb= and a real miss stays 404', async (
   );
   const res = await run(fetchImpl);
   assert.equal(res.status, 404);
-  assert.equal(res.headers.get('cache-control'), null);
+  assert.equal(res.headers.get('cache-control'), 'no-store');
   assert.equal(calls.length, 2);
   assert.match(calls[1].url, new RegExp(`^${BASE}/${PATH}\\?cb=\\d+$`));
 });

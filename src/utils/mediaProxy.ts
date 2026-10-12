@@ -16,8 +16,16 @@ export const UPSTREAM_TIMEOUT_MS = 10_000;
 // Authorization, which belong to this site and not the media origin.
 const FORWARDED_REQUEST_HEADERS = ["if-none-match", "if-modified-since", "range", "if-range"];
 
-// Representation and caching headers worth passing back. Everything else the
-// origin sends (Set-Cookie, Server, Connection and the other hop-by-hop
+// How long a browser may keep a proxied file. The origin says 30 days and
+// immutable, but legacy upload URLs are not content-addressed: a file replaced
+// in place keeps its URL, and while a CDN purge clears the edge it cannot reach
+// copies already in browsers. Four hours bounds how stale those can get.
+export const BROWSER_MAX_AGE_SECONDS = 14_400;
+const SUCCESS_CACHE_CONTROL = `public, max-age=${BROWSER_MAX_AGE_SECONDS}`;
+
+// Representation headers and validators worth passing back. The origin's
+// Cache-Control and Expires are replaced by the policy above. Everything else
+// the origin sends (Set-Cookie, Server, Connection and the other hop-by-hop
 // headers, HSTS and other security policy meant for the origin's own host)
 // stays behind.
 const FORWARDED_RESPONSE_HEADERS = [
@@ -25,15 +33,13 @@ const FORWARDED_RESPONSE_HEADERS = [
   "content-length",
   "content-range",
   "accept-ranges",
-  "cache-control",
-  "expires",
   "etag",
   "last-modified",
 ];
 
-// The subset a 304 carries: the validators and freshness a cache needs to
-// refresh its stored copy, and no description of a body it does not have.
-const NOT_MODIFIED_HEADERS = ["cache-control", "expires", "etag", "last-modified"];
+// The subset a 304 carries: the validators a cache needs to refresh its stored
+// copy, and no description of a body it does not have.
+const NOT_MODIFIED_HEADERS = ["etag", "last-modified"];
 
 export interface ProxyMediaOptions {
   // MEDIA_BASE_URL with no trailing slash.
@@ -63,6 +69,13 @@ const copyHeaders = (from: Headers, names: string[]): Headers => {
 // failure to cancel changes nothing about the answer, so it is not an error.
 const discard = (res: Response): Promise<void> =>
   res.body ? res.body.cancel().catch(() => {}) : Promise.resolve();
+
+// Any answer other than the file itself. no-store, so a browser never pins a
+// miss or an outage the way a cached success would be pinned.
+const failure = (body: string, status: number, headers = new Headers()): Response => {
+  headers.set("cache-control", "no-store");
+  return new Response(body, { status, headers });
+};
 
 // The URL to fetch, or null if the path is outside <base>/wp-content/. new URL()
 // resolves "..", "%2e%2e" and backslashes the same way fetch would, so checking
@@ -112,10 +125,10 @@ export async function proxyMedia({
   fetchImpl = fetch,
   timeoutMs = UPSTREAM_TIMEOUT_MS,
 }: ProxyMediaOptions): Promise<Response> {
-  if (!path) return new Response("Not found", { status: 404 });
+  if (!path) return failure("Not found", 404);
 
   const url = upstreamUrl(baseUrl, path, search);
-  if (!url) return new Response("Bad request", { status: 400 });
+  if (!url) return failure("Bad request", 400);
 
   const headers = copyHeaders(requestHeaders, FORWARDED_REQUEST_HEADERS);
   headers.set("User-Agent", "Mozilla/5.0");
@@ -153,11 +166,11 @@ export async function proxyMedia({
     }
   } catch (err) {
     if (timeout.signal.aborted) {
-      return new Response("Upstream timed out", { status: 504 });
+      return failure("Upstream timed out", 504);
     }
     // A client that hung up is not a proxy fault and nobody reads the answer.
     if (!signal?.aborted) console.error(err);
-    return new Response("Proxy error", { status: 502 });
+    return failure("Proxy error", 502);
   } finally {
     // Headers are in (or the fetch failed); from here the body streams without
     // a deadline, still cancelled if the client disconnects.
@@ -166,10 +179,9 @@ export async function proxyMedia({
 
   if (res.status === 304) {
     await discard(res);
-    return new Response(null, {
-      status: 304,
-      headers: copyHeaders(res.headers, NOT_MODIFIED_HEADERS),
-    });
+    const notModifiedHeaders = copyHeaders(res.headers, NOT_MODIFIED_HEADERS);
+    notModifiedHeaders.set("cache-control", SUCCESS_CACHE_CONTROL);
+    return new Response(null, { status: 304, headers: notModifiedHeaders });
   }
 
   if (!res.ok) {
@@ -177,13 +189,11 @@ export async function proxyMedia({
     // A 416 is only useful to the client with the "bytes */<length>" telling it
     // what range it could have asked for.
     const errorHeaders = copyHeaders(res.headers, res.status === 416 ? ["content-range"] : []);
-    return new Response(`Failed to fetch image: ${res.status}`, {
-      status: res.status,
-      headers: errorHeaders,
-    });
+    return failure(`Failed to fetch image: ${res.status}`, res.status, errorHeaders);
   }
 
   const responseHeaders = copyHeaders(res.headers, FORWARDED_RESPONSE_HEADERS);
+  responseHeaders.set("cache-control", SUCCESS_CACHE_CONTROL);
   if (!responseHeaders.has("content-type")) {
     responseHeaders.set("content-type", "application/octet-stream");
   }

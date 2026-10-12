@@ -19,8 +19,9 @@ const mediaBaseUrl = String(
 ).replace(/\/$/, "");
 
 // Streams the upstream body through rather than buffering it, forwards the
-// conditional/range request headers and the representation/cache response
-// headers, and retries a 404 once past the edge cache. See utils/mediaProxy.
+// conditional/range request headers and the representation response headers,
+// sets the browser cache policy itself, and retries a 404 once past the edge
+// cache. See utils/mediaProxy.
 export const GET: APIRoute = ({ params, request }) =>
   proxyMedia({
     baseUrl: mediaBaseUrl,
