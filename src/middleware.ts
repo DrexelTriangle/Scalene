@@ -1,7 +1,8 @@
-import type { MiddlewareHandler } from "astro";
+import type { APIContext, MiddlewareHandler, MiddlewareNext } from "astro";
 import { LEGACY_ARTICLE_SLUGS } from "./utils/legacySlugs";
 import { LEGACY_SECTION_SLUGS } from "./utils/legacySections";
 import { getArticle } from "./utils/db";
+import { withCmsServerTiming } from "./utils/cmsTiming";
 
 // The WordPress archive and the CMS disagree on a handful of URLs, so addresses
 // Google already indexed would 404 after the cutover. A 301 hands the
@@ -77,7 +78,12 @@ const renamedArticleSlug = (slug: string): string | undefined => {
   return LEGACY_ARTICLE_SLUGS[slug] ?? LEGACY_ARTICLE_SLUGS[decoded];
 };
 
-export const onRequest: MiddlewareHandler = async (context, next) => {
+// Every request runs in a CMS timing scope, so the CMS calls it made -- here
+// or in the page -- come back as a Server-Timing header. See utils/cmsTiming.
+export const onRequest: MiddlewareHandler = (context, next) =>
+  withCmsServerTiming(() => route(context, next));
+
+const route = async (context: APIContext, next: MiddlewareNext): Promise<Response> => {
   const { pathname } = context.url;
 
   // /feed is itself a real route and must not be folded into itself.

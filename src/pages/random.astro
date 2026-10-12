@@ -5,8 +5,6 @@ import { getRandomArticle } from '../utils/db';
 
 const post = await getRandomArticle();
 
-console.log(post)
-
 if (!post) {
   return Astro.rewrite('/404');
 }

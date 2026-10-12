@@ -2,7 +2,13 @@
 import { normalizeText, buildByline, proxyMediaUrl, imageSrcset } from '../utils/data';
 import { getCategoryHref } from '../utils/taxonomyStore';
 
-const { title, excerpt, image, variants, author, published_date, date, category, row, slug, breaking } = Astro.props;
+const { title, excerpt, image, variants, author, published_date, date, category, row, slug, breaking, priority = false } = Astro.props;
+
+// Cards load lazily. `priority` is for the one lead card a layout knows sits
+// above the fold -- the page's LCP image -- so the browser fetches it at once
+// instead of waiting for layout to prove it visible.
+const loading = priority ? 'eager' : 'lazy';
+const fetchpriority = priority ? 'high' : undefined;
 
 const DEFAULT_IMGS = [
   '/proxy/wp-content/uploads/2024/12/IMG_2493-2048x1365.jpg',
@@ -44,7 +50,7 @@ const imgClass = row
 <article class={classes}>
   {image !== undefined && (
     <a href={`/${slug}`}>
-      <img class={imgClass} loading="lazy" src={imgSrc} srcset={srcset} sizes={srcset && sizes} alt={title || 'Article image'} />
+      <img class={imgClass} loading={loading} fetchpriority={fetchpriority} src={imgSrc} srcset={srcset} sizes={srcset && sizes} alt={title || 'Article image'} />
     </a>
   )}
   {category && (

@@ -1,5 +1,6 @@
 export const prerender = false;
 import type { APIRoute } from 'astro';
+import { proxyMedia } from '../../utils/mediaProxy';
 
 // Origin that actually stores the uploads. This used to be hardcoded to the
 // WordPress host; media now lives on CephFS behind the CMS host's nginx, so the
@@ -17,46 +18,14 @@ const mediaBaseUrl = String(
   import.meta.env.MEDIA_BASE_URL ?? "https://cms.thetriangle.org",
 ).replace(/\/$/, "");
 
-export const GET: APIRoute = async ({ params, request }) => {
-  try {
-    const queryString = new URL(request.url).search; // preserves ?ver=...
-    const url = `${mediaBaseUrl}/${params.image}${queryString}`;
-
-    const headers = { "User-Agent": "Mozilla/5.0" };
-    let res = await fetch(url, { redirect: "follow", headers });
-
-    // A 404 here is not proof the file is missing. The media origin sits behind
-    // Cloudflare and (until the nginx `always` fix ships everywhere) stamped
-    // 30-day immutable Cache-Control onto its OWN 404s, so the edge pins "does
-    // not exist" for a month. Every file added to the corpus after something
-    // first requested it then stays invisible -- provably on disk, served fine
-    // by the origin, still 404 through the edge.
-    //
-    // A different query string is a different cache key, so one retry with a
-    // cache-buster reaches the origin and returns the real answer. Costs a
-    // second upstream fetch only on 404s, and a genuinely missing file just
-    // 404s twice. Retry exactly once -- never loop, or a real miss becomes a
-    // hot spin against the origin.
-    if (res.status === 404) {
-      // `url` already carries queryString -- append to it, do not re-add it.
-      const bust = queryString ? "&" : "?";
-      res = await fetch(`${url}${bust}cb=${Date.now()}`, { redirect: "follow", headers });
-    }
-
-    if (!res.ok) {
-      return new Response(`Failed to fetch image: ${res.status}`, { status: res.status });
-    }
-
-    // Forward content-type header safely
-    const contentType = res.headers.get("content-type") || "application/octet-stream";
-
-    const buffer = await res.arrayBuffer();
-    return new Response(Buffer.from(buffer), {
-      headers: { "Content-Type": contentType }
-    });
-
-  } catch (err) {
-    console.error(err);
-    return new Response("Proxy error", { status: 500 });
-  }
-};
+// Streams the upstream body through rather than buffering it, forwards the
+// conditional/range request headers and the representation/cache response
+// headers, and retries a 404 once past the edge cache. See utils/mediaProxy.
+export const GET: APIRoute = ({ params, request }) =>
+  proxyMedia({
+    baseUrl: mediaBaseUrl,
+    path: params.image,
+    search: new URL(request.url).search, // preserves ?ver=...
+    requestHeaders: request.headers,
+    signal: request.signal,
+  });
