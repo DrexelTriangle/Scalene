@@ -84,7 +84,7 @@ const subsectionLinks: Subsection[] = posts.subsections ?? [];
             ))
         }
     </div>
-    <Section articles={posts.articles?.slice(0, 9)} style="5-3-4" />
+    <Section articles={posts.articles?.slice(0, 9)} style="5-3-4" priority />
     <Section articles={posts.articles?.slice(9, 13)} style="row" />
     {
         posts.articles?.length > 13 && (

@@ -1,6 +1,7 @@
 ---
 import "@splidejs/splide/dist/css/splide.min.css";
 import type { HomepageCarouselSlide } from "../utils/types";
+import { showsAnniversaryBackground, visibleCarouselSlides } from "../utils/homeCarousel";
 
 // The nav (#scrollnav) carries mb-[24px], and whichever block comes first after
 // it pulls itself up by 24px to sit flush. That is normally this hero -- but when
@@ -11,51 +12,14 @@ const { pullUp = true, slides = [] } = Astro.props as {
   slides?: HomepageCarouselSlide[];
 };
 
-const defaultSlides: HomepageCarouselSlide[] = [
-  {
-    enabled: true,
-    title: "100 Years of The Triangle",
-    link_url: "/one-hundred",
-    image_url: "",
-    background_color: "",
-    text_color: "#ffffff",
-    desktop_only: true,
-  },
-  {
-    enabled: true,
-    title: "Podcast",
-    link_url: "https://tr.ee/bqz8s-E4NK",
-    image_url: "/images/PodcastBanner.webp",
-    background_color: "#acd4f4",
-    text_color: "#ffffff",
-    desktop_only: false,
-  },
-  {
-    enabled: true,
-    title: "Classifieds",
-    link_url: "/classifieds",
-    image_url: "/images/classifiedsBannerNew.webp",
-    background_color: "#E5E7EB",
-    text_color: "#ffffff",
-    desktop_only: false,
-  },
-  {
-    enabled: true,
-    title: "Apply to The Triangle",
-    link_url: "https://docs.google.com/forms/d/e/1FAIpQLScra_6sUenvmpIuQ5FjmMyWO0a2sz9z36HkrqfnYQvJGH9BGQ/viewform",
-    image_url: "/images/applyBannerNew.webp",
-    background_color: "#275997",
-    text_color: "#ffffff",
-    desktop_only: false,
-  },
-];
-
-const carouselSlides = (slides.length > 0 ? slides : defaultSlides).filter((slide) => slide.enabled);
+const carouselSlides = visibleCarouselSlides(slides);
+// HeroBackgroundPreload asks the same question to hint this image from <head>.
+const showBackground = showsAnniversaryBackground(slides);
 ---
 
 <section class:list={["home-hero-wrap relative mb-[16px] md:mb-[0px]", pullUp && "mt-[-24px]"]}>
   {
-    carouselSlides.some((slide) => !slide.image_url) && (
+    showBackground && (
       <div class="one-hundred-bg hidden md:block" aria-hidden="true"></div>
     )
   }

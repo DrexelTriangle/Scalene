@@ -1,6 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap');
+@import './fonts.css';
 
 
 @tailwind base;
@@ -14,10 +12,10 @@
 
 /*
  * This said "Crimson Text", serif -- but nothing ever loaded Crimson Text (the
- * @font-face imports above cover Roboto Slab, Playfair Display and Libre
+ * @font-face rules in fonts.css cover Roboto Slab, Playfair Display and Libre
  * Franklin only), so every page has always rendered the generic serif behind
  * it. Naming the family we actually get keeps the stylesheet honest; if we ever
- * want Crimson Text for real, it needs an @import first. The matching
+ * want Crimson Text for real, it needs an @font-face there first. The matching
  * `font-crimson` Tailwind token was dropped for the same reason.
  */
 body {
