@@ -270,8 +270,10 @@ test('only the first, above-the-fold Section on section and author pages asks fo
     assert.equal(prioritized[0], tags[0], `${page}: priority must be on the first Section`);
     assert.match(prioritized[0], new RegExp(`style="${style}"`), page);
   }
-  // The homepage's LCP is the anniversary background (see below); its news
-  // section sits under the carousel and the banner ad.
+  // The homepage's desktop LCP is the anniversary background (see below). On
+  // phones it is the news lead image, but that is requested early and raised
+  // to high priority by layout anyway: measured, `priority` there bought
+  // nothing, and on desktop it would race the background.
   for (const page of ['src/pages/index.astro', 'src/pages/search.astro', 'src/pages/[sections]/[article].astro']) {
     assert.ok(sectionTags(page).every((tag) => !/\spriority\b/.test(tag)), page);
   }
@@ -351,11 +353,28 @@ test('anniversary homepage has exactly one high-priority image resource: the bac
   assert.deepEqual(rest, [], 'nothing may compete with the LCP background');
   assert.equal(attr(only, 'href'), ANNIVERSARY);
 
-  // The news lead card sits below the carousel and the banner ad: lazy.
+  // No card asks for priority either, the lead included (see above).
   const cardImgs = storyImgs(html);
   assert.ok(cardImgs.length > 1);
   assert.equal(attr(cardImgs.find((img) => attr(img, 'src') === cards[0].featured_image), 'loading'), 'lazy');
   assert.ok(cardImgs.every((img) => attr(img, 'loading') === 'lazy' && attr(img, 'fetchpriority') === undefined));
+});
+
+// Phones hide the sidebar, but an eager <img> under display:none still
+// downloads. The subscribe image (~340 KB) was the biggest download competing
+// with the phone LCP; lazy, a hidden sidebar fetches nothing.
+test('the sidebar subscribe image is lazy, so phones that hide the sidebar never fetch it', async () => {
+  const [img, ...rest] = imgTags(await render('/src/components/SubscribeLink.astro'));
+  assert.equal(rest.length, 0);
+  assert.equal(attr(img, 'src'), '/images/subscribe.webp');
+  assert.equal(attr(img, 'loading'), 'lazy');
+
+  const html = await renderHomepage([]);
+  const sidebar = html.slice(html.indexOf('id="main-right"'));
+  assert.match(html, /id="main-right" class="hidden sm:block/);
+  const subscribe = imgTags(sidebar).filter((tag) => attr(tag, 'src') === '/images/subscribe.webp');
+  assert.equal(subscribe.length, 1);
+  assert.equal(attr(subscribe[0], 'loading'), 'lazy');
 });
 
 for (const [name, page, params] of [
