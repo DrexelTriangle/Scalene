@@ -52,6 +52,10 @@ if (!authorData) {
 
 const hasMore = authorData.pagination.has_more;
 const name = authorData.author?.display_name
+
+// An author's article list changes only when they publish. Five minutes keeps
+// it reasonably fresh at the edge without a purge.
+Astro.response.headers.set("Cache-Control", "public, max-age=300, s-maxage=300");
 ---
 <BaseLayout title={name + " - The Triangle"}>
     <Header/>
