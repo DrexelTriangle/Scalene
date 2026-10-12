@@ -1,7 +1,10 @@
 ---
+// Lazy: this sits in the sidebar, which phones hide (display:none). An eager
+// image downloads anyway, and on the homepage this one (~340 KB) was the
+// largest thing competing with the phone LCP, the news lead image.
 ---
 <div class="mb-[8px] overflow-hidden pt-[5px]">
     <a href="/subscribe">
-        <img src="/images/subscribe.webp"/>
+        <img src="/images/subscribe.webp" loading="lazy"/>
     </a>
 </div>
