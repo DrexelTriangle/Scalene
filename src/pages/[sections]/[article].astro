@@ -22,6 +22,8 @@ import Section from "../../components/Sections/Section.astro";
 import SubscribeLink from "../../components/SubscribeLink.astro";
 import Comments from "../../components/Comments.astro";
 import Ad from "../../components/Ad.astro";
+import QuizSegments from "../../components/QuizSegments.astro";
+import { fetchQuizzesByIds, splitAtQuizSlots } from "../../utils/quizzes";
 
 // Canonicalise the bare production domain to www. Deliberately scoped to that
 // one host: this previously fired for ANY non-www, non-localhost host, so IP
@@ -222,6 +224,11 @@ const addBodySrcsets = (html: string) =>
 
 const articleHtml = describeLeadImage(addBodySrcsets(stripDimensions(proxyWpContent(content))));
 
+// The body is rendered in pieces so each quiz is a real component with its
+// script, not a string. Articles without a quiz get one html segment.
+const { segments: bodySegments, ids: quizIds } = splitAtQuizSlots(articleHtml);
+const quizzes = quizIds.length > 0 ? await fetchQuizzesByIds(quizIds) : {};
+
 // "Does this body have prose?" -- comics and other image-only posts don't, and
 // they get the single-column treatment. This used to look for <p> alone, which
 // missed every Trix-authored body (Trix wraps blocks in <div>) and dropped
@@ -290,7 +297,8 @@ const featuredSrcset = featuredImage ? imageSrcset(post.featured_image_variants)
                 <div id="print-wrap">
                 <section id="article" class:list={{ "uncropped-images": uncroppedImages }}>
                     {featuredImage && <figure><img src={featuredImage} srcset={featuredSrcset} sizes={featuredSrcset && "(min-width: 1280px) 800px, (min-width: 1024px) 750px, 90vw"} alt={featuredImageAlt}/></figure>}
-                    <Fragment set:html={authorPrint + articleHtml} />
+                    <Fragment set:html={authorPrint} />
+                    <QuizSegments segments={bodySegments} quizzes={quizzes} />
                 </section>
                 </div>
                 <Comments comments={comments} slug={post.slug ?? article} commentsClosed={commentsClosed} />
@@ -308,7 +316,7 @@ const featuredSrcset = featuredImage ? imageSrcset(post.featured_image_variants)
         </div>}
         {!actualArticle && <section id="article" class:list={{ "uncropped-images": uncroppedImages }}>
                     {featuredImage && <figure><img src={featuredImage} srcset={featuredSrcset} sizes={featuredSrcset && "(min-width: 1280px) 800px, (min-width: 1024px) 750px, 90vw"} alt={featuredImageAlt}/></figure>}
-                    <Fragment set:html={articleHtml} />
+                    <QuizSegments segments={bodySegments} quizzes={quizzes} />
                 </section>}
         {!actualArticle && <Comments comments={comments} slug={post.slug ?? article} commentsClosed={commentsClosed} />}
         {!actualArticle && <DonateBlurb/>}

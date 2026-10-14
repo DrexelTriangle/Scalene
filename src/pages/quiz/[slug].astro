@@ -1,0 +1,42 @@
+---
+export const prerender = false;
+
+import Header from "../../components/Header.astro";
+import Quiz from "../../components/Quiz.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ServerError from "../500.astro";
+import "../../styles/global.css";
+import { fetchQuizBySlug } from "../../utils/quizzes";
+
+const slug = Astro.params.slug ?? "";
+const quiz = await fetchQuizBySlug(slug);
+
+if (quiz === null) {
+  return Astro.rewrite("/404");
+}
+// The CMS did not answer. The reader gets the page the site shows for any
+// server failure (500.astro); the 503 and Retry-After tell crawlers the
+// outage is temporary, so they do not index the error under this URL.
+if (quiz === "unavailable") {
+  Astro.response.status = 503;
+  Astro.response.headers.set("Retry-After", "30");
+}
+
+const siteUrl = "https://www.thetriangle.org";
+const shortDescription = (intro: string) => (intro.length > 160 ? `${intro.slice(0, 157).trim()}...` : intro);
+---
+{quiz === "unavailable" ? (
+  <ServerError />
+) : (
+  <BaseLayout
+    title={`${quiz.title} - The Triangle`}
+    description={shortDescription(quiz.intro) || undefined}
+    canonical={`${siteUrl}/quiz/${quiz.slug}`}
+    ogImage={quiz.cover_url ?? undefined}
+  >
+    <Header />
+    <main id="article" class="xl:max-w-[1200px] lg:max-w-[1000px] max-w-[90%] mx-[auto] mt-[24px]">
+      <Quiz quiz={quiz} />
+    </main>
+  </BaseLayout>
+)}

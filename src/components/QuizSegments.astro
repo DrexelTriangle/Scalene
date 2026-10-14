@@ -1,0 +1,23 @@
+---
+import type { PublicQuiz, QuizSegment } from "../utils/quizzes";
+import Quiz from "./Quiz.astro";
+
+interface Props {
+  segments: QuizSegment[];
+  // null means the CMS did not answer; a missing id means it is not published.
+  quizzes: Record<number, PublicQuiz> | null;
+}
+
+const { segments, quizzes } = Astro.props;
+---
+{segments.map((segment) =>
+  "html" in segment ? (
+    <Fragment set:html={segment.html} />
+  ) : quizzes === null || segment.overflow ? (
+    <div class="tr-quiz tr-quiz-unavailable">This quiz is unavailable right now.</div>
+  ) : quizzes[segment.quizId] ? (
+    <Quiz quiz={quizzes[segment.quizId]} />
+  ) : (
+    <div class="tr-quiz tr-quiz-unavailable">This quiz is no longer available.</div>
+  ),
+)}
