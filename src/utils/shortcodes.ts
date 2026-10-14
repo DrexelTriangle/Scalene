@@ -15,8 +15,8 @@
 
 import he from "he";
 
-import { mapTopLevel } from "./articleHtml";
-import { parseAudioUrl, parseEmbedUrl } from "./embedUrl";
+import { mapTopLevel } from "./articleHtml.ts";
+import { parseAudioUrl, parseEmbedUrl } from "./embedUrl.ts";
 
 /** Attributes are single-quoted in practice, but accept double quotes too. */
 function parseAttributes(raw: string): Record<string, string> {
@@ -273,8 +273,10 @@ export function expandShortcodesWith(
 }
 
 // Inlined at build time like the proxy's copy of this variable; unset means
-// [audio] shortcodes stay as text, never that the build fails.
-const MEDIA_BASE_URL = String(import.meta.env.MEDIA_BASE_URL ?? "");
+// [audio] shortcodes stay as text, never that the build fails. Optional
+// chaining because tests/ run this module under plain node, where
+// import.meta.env does not exist.
+const MEDIA_BASE_URL = String(import.meta.env?.MEDIA_BASE_URL ?? "");
 
 export function expandShortcodes(content: string): string {
   return expandShortcodesWith(content, { mediaBaseUrl: MEDIA_BASE_URL });
