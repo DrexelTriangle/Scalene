@@ -1,7 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap');
-@import "@fortawesome/fontawesome-free/css/all.min.css";
+@import './fonts.css';
 
 
 @tailwind base;
@@ -15,10 +12,10 @@
 
 /*
  * This said "Crimson Text", serif -- but nothing ever loaded Crimson Text (the
- * @font-face imports above cover Roboto Slab, Playfair Display and Libre
+ * @font-face rules in fonts.css cover Roboto Slab, Playfair Display and Libre
  * Franklin only), so every page has always rendered the generic serif behind
  * it. Naming the family we actually get keeps the stylesheet honest; if we ever
- * want Crimson Text for real, it needs an @import first. The matching
+ * want Crimson Text for real, it needs an @font-face there first. The matching
  * `font-crimson` Tailwind token was dropped for the same reason.
  */
 body {
@@ -365,40 +362,28 @@ body {
   @apply font-roboto-slab
 }
 
-.staff-row{
-	display: flex; 
-	gap: 12px;
-	margin-bottom: 20px;
-	flex-wrap: wrap;
-	justify-content: space-between;
-}
-
-
+/* The grid itself (2 / 3 / 5 columns) is utility classes on .staff-row in
+   pages/staff.astro, next to the `sizes` math in utils/staff.ts that depends on it. */
 .staff-card {
-	display: flex; 
-	flex-direction: column; 
-	width: calc(20% - 20px);
-	text-align: center; 
+	display: flex;
+	flex-direction: column;
+	text-align: center;
 	gap: 5px;
-	font-family: sans-serif; 
-	border-radius: 5px; 
+	font-family: sans-serif;
+	border-radius: 5px;
 	padding: 5px 5px 10px;
 	font-size: 14px;
-  justify-content: start;
+	/* Lets a long address wrap instead of widening its grid column. */
+	min-width: 0;
 }
 .staff-card b {
   @apply text-triangleBlue
 }
-.staff-row-small .staff-card {
-	width: calc(12% - 15px);
-	font-size: 14px;
-}
-.staff-row-small .staff-card b{
-	font-weight: normal;
-	font-size: 12px;
-	font-style: italic;
+.staff-card a {
+	overflow-wrap: anywhere;
 }
 
+/* aspect-ratio overrides whatever ratio the width/height attributes give. */
 .staff-card img {
 	width: 100%;
 	aspect-ratio:1;
@@ -426,45 +411,6 @@ body {
   width: 0px; 
   padding: 0px; 
   border: 0px
-}
-
-.staff-row{
-	display: flex; 
-	gap: 12px;
-	margin-bottom: 20px;
-	flex-wrap: wrap;
-	justify-content: start;
-}
-
-.staff-card {
-	display: flex; 
-	flex-direction: column; 
-	width: calc(20% - 20px);
-	text-align: center; 
-	gap: 5px;
-	font-family: sans-serif; 
-	border-radius: 5px; 
-	padding: 5px 5px 10px;
-	font-size: 14px;
-	min-width: 0;
-}
-.staff-card a {
-	overflow-wrap: anywhere;
-}
-.staff-row-small .staff-card {
-	width: calc(12% - 15px);
-	font-size: 14px;
-}
-.staff-row-small .staff-card b{
-	font-weight: normal;
-	font-size: 12px;
-	font-style: italic;
-}
-
-.staff-card img {
-	width: 100%;
-	aspect-ratio:1;
-	object-fit:cover;
 }
 
 .material-icons {vertical-align:-14%}
@@ -544,47 +490,7 @@ body {
 	width: 100%;
 }
 
-@media (max-width: 1280px) {
-	.staff-row {
-		flex-wrap: wrap;
-		justify-content: start;
-		margin-bottom: 0px;
-	}
-  .staff-card {
-    width: calc(25% - 20px)
-  }
-}
-
-@media (max-width: 960px) {
-	.staff-row {
-		flex-wrap: wrap;
-		justify-content: center;
-		margin-bottom: 0px;
-	}
-  .staff-card {
-    width: calc(50% - 20px)
-  }
-	.staff-row-small .staff-card {
-		width: calc(33% - 20px);
-		font-size: 14px;
-	}
-}
-
-
 @media (max-width: 640px) {
-	.staff-row {
-		flex-wrap: wrap;
-		justify-content: center;
-		margin-bottom: 0px;
-	}
-  .staff-card {
-    width: calc(75%);
-		font-size: 14px
-  }
-	.staff-row-small .staff-card {
-		width: calc(50% - 20px);
-		font-size: 14px;
-	}
 	.team-container{
 		gap: 5px;
 	}

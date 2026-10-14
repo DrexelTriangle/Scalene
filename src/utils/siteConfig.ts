@@ -1,48 +1,23 @@
+import { normalizeFooterColumns, spacer, type FooterColumn, type FooterEntry } from "./footer";
+import { createSiteTitleStore } from "./siteTitleStore";
+import { cms } from "./cmsClient";
+
 const cmsBaseUrl = import.meta.env.CMS_API_BASE_URL ?? "https://localhost:8080/v1";
 const normalizedCmsBaseUrl = String(cmsBaseUrl).replace(/\/$/, "");
 const siteSettingsUrl = `${normalizedCmsBaseUrl}/settings/site`;
-const footerSettingsUrl = `${normalizedCmsBaseUrl}/settings/footer`;
-const defaultSiteTitle = "The Triangle";
 
-type SiteSettingsResponse = {
-  site_title?: string;
-};
+const siteTitleStore = createSiteTitleStore({
+  url: siteSettingsUrl,
+  fetch: (input, init) => fetch(input, init),
+  onError: (err) => console.error("Site title: CMS fetch failed:", err instanceof Error ? err.message : err),
+});
 
-export async function getSiteTitle(): Promise<string> {
-  try {
-    const response = await fetch(siteSettingsUrl, {
-      method: "GET",
-      headers: { Accept: "application/json" },
-      cache: "no-store",
-    });
-    if (!response.ok) {
-      return defaultSiteTitle;
-    }
-    const payload = (await response.json()) as SiteSettingsResponse;
-    const title = String(payload.site_title ?? "").trim();
-    return title || defaultSiteTitle;
-  } catch {
-    return defaultSiteTitle;
-  }
+/** Cached for five minutes; never throws. See utils/siteTitleStore. */
+export function getSiteTitle(): Promise<string> {
+  return siteTitleStore.get();
 }
 
-/**
- * A footer column is a flat ordered list, not a heading with children: two of
- * the columns stack a second bolded group under a blank line ("Columns" under
- * "Opinion", "Special Editions" under "Comics & Puzzles").
- */
-export type FooterEntryKind = "link" | "heading" | "spacer";
-
-export type FooterEntry = {
-  kind: FooterEntryKind;
-  label: string;
-  href: string;
-  new_tab: boolean;
-};
-
-export type FooterColumn = {
-  entries: FooterEntry[];
-};
+export type { FooterColumn, FooterEntry, FooterEntryKind } from "./footer";
 
 type FooterSettingsResponse = {
   columns?: unknown;
@@ -51,7 +26,6 @@ type FooterSettingsResponse = {
 const link = (label: string, href: string): FooterEntry => ({ kind: "link", label, href, new_tab: false });
 const external = (label: string, href: string): FooterEntry => ({ kind: "link", label, href, new_tab: true });
 const heading = (label: string, href: string): FooterEntry => ({ kind: "heading", label, href, new_tab: false });
-const spacer: FooterEntry = { kind: "spacer", label: "", href: "", new_tab: false };
 
 /**
  * The footer this site shipped before the menu moved into the CMS. Kept as the
@@ -133,43 +107,10 @@ export const defaultFooterColumns: FooterColumn[] = [
   },
 ];
 
-function normalizeColumns(raw: unknown): FooterColumn[] {
-  if (!Array.isArray(raw)) return [];
-
-  const columns: FooterColumn[] = [];
-  for (const rawColumn of raw) {
-    const rawEntries = (rawColumn as FooterColumn | undefined)?.entries;
-    if (!Array.isArray(rawEntries)) continue;
-
-    const entries: FooterEntry[] = [];
-    for (const rawEntry of rawEntries) {
-      const entry = (rawEntry ?? {}) as Partial<FooterEntry>;
-      const kind: FooterEntryKind =
-        entry.kind === "heading" || entry.kind === "spacer" ? entry.kind : "link";
-      if (kind === "spacer") {
-        entries.push(spacer);
-        continue;
-      }
-      const label = String(entry.label ?? "").trim();
-      if (!label) continue;
-      entries.push({
-        kind,
-        label,
-        href: String(entry.href ?? "").trim(),
-        new_tab: Boolean(entry.new_tab),
-      });
-    }
-
-    if (entries.some((entry) => entry.kind !== "spacer")) {
-      columns.push({ entries });
-    }
-  }
-  return columns;
-}
-
 // The footer renders on every page, and this site is SSR — without a memo that
 // is one CMS round trip per request. 60s is short enough that an editor's save
-// shows up on the next reload or two.
+// shows up on the next reload or two. Scheduled entries (`visible_from`) are
+// filtered before caching, so one can appear up to 60s after its instant.
 const FOOTER_TTL_MS = 60_000;
 let footerCache: { columns: FooterColumn[]; fetchedAt: number } | null = null;
 
@@ -179,16 +120,11 @@ export async function getFooterColumns(): Promise<FooterColumn[]> {
   }
 
   try {
-    const response = await fetch(footerSettingsUrl, {
-      method: "GET",
-      headers: { Accept: "application/json" },
-      cache: "no-store",
+    const payload = await cms.getJson<FooterSettingsResponse>({
+      endpoint: "footer_settings",
+      path: ["settings", "footer"],
     });
-    if (!response.ok) {
-      return defaultFooterColumns;
-    }
-    const payload = (await response.json()) as FooterSettingsResponse;
-    const columns = normalizeColumns(payload.columns);
+    const columns = normalizeFooterColumns(payload.columns, Date.now());
     const resolved = columns.length > 0 ? columns : defaultFooterColumns;
     // Only a good response is cached; a CMS blip falls back for this request
     // and is retried on the next one.

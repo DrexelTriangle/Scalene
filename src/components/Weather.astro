@@ -1,7 +1,25 @@
 ---
-import { getWeatherLabel } from "../utils/weatherStore";
+import { peekWeatherLabel, readWeatherLabel, refreshWeatherLabel } from "../utils/weatherStore";
 
-const temp = await getWeatherLabel();
+interface Props {
+  /**
+   * Set when rendered as a server island (server:defer on a prerendered page).
+   * That request can wait on a cold cache without holding a page open; inline
+   * renders must not.
+   */
+  island?: boolean;
+}
+
+const { island = false } = Astro.props;
+
+let temp: string;
+if (island) {
+  temp = await readWeatherLabel();
+} else {
+  // Render whatever the cache holds now; a due refresh runs in the background.
+  temp = peekWeatherLabel();
+  void refreshWeatherLabel();
+}
 ---
 
 <div id="temp" class="font-roboto-slab text-[12px] font-thin hidden sm:block">{temp}</div>

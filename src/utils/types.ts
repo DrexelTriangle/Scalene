@@ -59,8 +59,6 @@ export interface ArticleSummary {
   featured_image_variants?: ImageVariant[];
   categories_list: Category[];
   breaking_news?: boolean;
-  /** triangle-cms: an editor pinned this story to lead the homepage. */
-  is_featured?: boolean;
   /** triangle-cms: ISO timestamp; preferred over `date` when present. */
   published_date?: string;
   /** triangle-cms: replaces `categories_list`. */

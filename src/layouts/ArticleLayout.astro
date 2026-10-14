@@ -2,6 +2,7 @@
 const { title, article } = Astro.props;
 import Footer from "../components/Footer.astro";
 import Splash from "../components/Splash.astro";
+import Matomo from "../components/Matomo.astro";
 import { getSiteTitle } from "../utils/siteConfig";
 import { normalizeText } from "../utils/data";
 import { stripShortcodes } from "../utils/shortcodes";
@@ -134,7 +135,7 @@ const newsArticleJSON = {
 
 Astro.response.headers.set(
   "Cache-Control",
-  "public, max-age=600, s-maxage=3600",
+  "public, max-age=600, s-maxage=1800",
 );
 ---
 
@@ -204,55 +205,6 @@ Astro.response.headers.set(
       <slot />
     </main>
     <Footer />
-
-    <script is:inline>
-      // Initialize Matomo.
-      // `var` is required, not a style slip: matomo.js reassigns the global
-      // _paq once it loads. `var` puts _paq on `window`, which that assignment
-      // updates. A const/let binding here would shadow the window property and
-      // make matomo.js throw "Assignment to constant variable".
-      // eslint-disable-next-line no-var
-      var _paq = (window._paq = window._paq || []);
-      _paq.push(["trackPageView"]); // first page load
-      _paq.push(["enableLinkTracking"]); // track clicks automatically
-
-      (function () {
-        const u = "https://stats.thetriangle.org/"; // your Matomo server
-        _paq.push(["setTrackerUrl", u + "matomo.php"]);
-        _paq.push(["setSiteId", "1"]); // keep same ID as WP or use new Site ID
-        const d = document,
-          g = d.createElement("script"),
-          s = d.getElementsByTagName("script")[0];
-        g.async = true;
-        g.src = u + "matomo.js";
-        s.parentNode.insertBefore(g, s);
-      })();
-
-      // Track Astro client-side navigation
-      function trackPage() {
-        if (window._paq) {
-          _paq.push(["setCustomUrl", window.location.href]);
-          _paq.push(["setDocumentTitle", document.title]);
-          _paq.push(["trackPageView"]);
-        }
-      }
-
-      // Track initial load
-      document.addEventListener("DOMContentLoaded", trackPage);
-
-      // Track SPA-like navigations
-      document.addEventListener("astro:page-load", trackPage);
-    </script>
-
-    <noscript>
-      <p>
-        <img
-          referrerpolicy="no-referrer-when-downgrade"
-          src="//stats.thetriangle.org/matomo.php?idsite=1&rec=1"
-          style="border:0;"
-          alt=""
-        />
-      </p>
-    </noscript>
+    <Matomo />
   </body>
 </html>

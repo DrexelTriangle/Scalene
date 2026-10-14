@@ -3,6 +3,43 @@ import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
 import { VitePWA } from "vite-plugin-pwa";
 
+// Exported so tests/renderPath.test.ts can run workbox's own glob over a build.
+/** @type {Partial<import('workbox-build').GenerateSWOptions>} */
+export const workbox = {
+  // This is an SSR site (output: 'server'). Only precache static
+  // build assets -- never HTML pages, which are dynamic and would
+  // otherwise be served stale from the cache.
+  //
+  // Scoped to the hashed build output rather than all of dist/client: a
+  // blanket **/*.{png,webp,...} sweeps in splash_screens/ (3.1 MB, only ever
+  // used by an installed iOS app), old_logos/ (1.7 MB, one page) and per-page
+  // art like images/stand_locations.png (991 KB) -- 7.65 MB that every
+  // first-time visitor would download in the background. The icons the
+  // manifest and includeAssets reference are precached regardless of this.
+  //
+  // No fonts either: src/styles/fonts.css splits each family by unicode-range
+  // so a page downloads only the faces and subsets it actually renders, and
+  // precaching would fetch all of them up front. They are hashed _astro/ files,
+  // so ordinary immutable HTTP caching covers repeat visits.
+  globPatterns: ["_astro/**/*.{js,css}"],
+  // Hashed build assets are already immutable; same reasoning as the
+  // plugin's default, pinned here because that default is derived from
+  // whichever Vite environment resolved last.
+  dontCacheBustURLsMatching: /^_astro\//,
+  // MPA/SSR site: do NOT serve a cached shell for page navigations.
+  // Navigations must always hit the network so pages are never stale.
+  navigateFallback: null,
+  // Never let the service worker intercept or fall back API calls
+  // (form submissions, etc.); always send them straight to network.
+  navigateFallbackDenylist: [/^\/api\//],
+  runtimeCaching: [
+    {
+      urlPattern: ({ url }) => url.pathname.startsWith("/api/"),
+      handler: "NetworkOnly",
+    },
+  ],
+};
+
 // vite-plugin-pwa writes the service worker from a Vite `closeBundle` hook that
 // it skips whenever `build.ssr` is set. Astro marks *every* build environment
 // SSR -- including the client one that writes dist/client -- so that hook never
@@ -53,35 +90,7 @@ const pwaPlugins = VitePWA({
       }
     ]
   },
-  workbox: {
-    // This is an SSR site (output: 'server'). Only precache static
-    // build assets -- never HTML pages, which are dynamic and would
-    // otherwise be served stale from the cache.
-    //
-    // Scoped to the hashed build output rather than all of dist/client: a
-    // blanket **/*.{png,webp,...} sweeps in splash_screens/ (3.1 MB, only ever
-    // used by an installed iOS app), old_logos/ (1.7 MB, one page) and per-page
-    // art like images/stand_locations.png (991 KB) -- 7.65 MB that every
-    // first-time visitor would download in the background. The icons the
-    // manifest and includeAssets reference are precached regardless of this.
-    globPatterns: ["_astro/**/*.{js,css,woff,woff2}"],
-    // Hashed build assets are already immutable; same reasoning as the
-    // plugin's default, pinned here because that default is derived from
-    // whichever Vite environment resolved last.
-    dontCacheBustURLsMatching: /^_astro\//,
-    // MPA/SSR site: do NOT serve a cached shell for page navigations.
-    // Navigations must always hit the network so pages are never stale.
-    navigateFallback: null,
-    // Never let the service worker intercept or fall back API calls
-    // (form submissions, etc.); always send them straight to network.
-    navigateFallbackDenylist: [/^\/api\//],
-    runtimeCaching: [
-      {
-        urlPattern: ({ url }) => url.pathname.startsWith("/api/"),
-        handler: "NetworkOnly",
-      },
-    ],
-  },
+  workbox,
 });
 
 const pwaApi = pwaPlugins.find((plugin) => plugin.name === "vite-plugin-pwa")?.api;
