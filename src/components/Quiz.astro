@@ -1,0 +1,282 @@
+---
+import type { PublicQuiz } from "../utils/quizzes";
+
+interface Props {
+  quiz: PublicQuiz;
+}
+
+const { quiz } = Astro.props;
+const { questions, results } = quiz.definition;
+
+// The script reads the definition from this block rather than from the DOM, so
+// correct answers never sit in visible markup. Escaping the three characters
+// is what keeps a question containing </script> inside the block.
+const definitionJson = JSON.stringify({
+  id: quiz.id,
+  kind: quiz.kind,
+  version: quiz.definition_version,
+  definition: quiz.definition,
+  counts: quiz.counts,
+})
+  .replace(/</g, "\\u003c")
+  .replace(/>/g, "\\u003e")
+  .replace(/&/g, "\\u0026");
+
+const total = questions.length;
+---
+<div class="tr-quiz" data-quiz-id={quiz.id} data-quiz-slug={quiz.slug} data-version={quiz.definition_version}>
+  <header class="tr-quiz-head">
+    {quiz.cover_url && <img class="tr-quiz-cover" src={quiz.cover_url} alt="" loading="lazy" />}
+    <h2 class="tr-quiz-title font-playfair">{quiz.title}</h2>
+    {quiz.intro && <p class="tr-quiz-intro">{quiz.intro}</p>}
+  </header>
+
+  <ol class="tr-quiz-questions">
+    {questions.map((question, i) => (
+      <li class="tr-quiz-question" data-question={i}>
+        <p class="tr-quiz-progress">Question {i + 1} of {total}</p>
+        <p class="tr-quiz-qtext">{question.text}</p>
+        {question.image_url && <img class="tr-quiz-qimage" src={question.image_url} alt="" loading="lazy" />}
+        <div class="tr-quiz-answers">
+          {question.answers.map((answer, j) => (
+            <button type="button" class="tr-quiz-answer" data-answer={j}>{answer.text}</button>
+          ))}
+        </div>
+        {question.explanation && <p class="tr-quiz-explanation" hidden>{question.explanation}</p>}
+        <p class="tr-quiz-stat" hidden aria-live="polite"></p>
+        <button type="button" class="tr-quiz-next" hidden>{i + 1 < total ? "Next" : "See your result"}</button>
+      </li>
+    ))}
+  </ol>
+
+  <section class="tr-quiz-results">
+    {results.map((result) => (
+      <div class="tr-quiz-result" data-result-key={result.key}>
+        {result.image_url && <img class="tr-quiz-rimage" src={result.image_url} alt="" loading="lazy" />}
+        <h3 class="tr-quiz-rtitle font-playfair">{result.title}</h3>
+        {result.body && <p class="tr-quiz-rbody">{result.body}</p>}
+      </div>
+    ))}
+    <p class="tr-quiz-score" hidden></p>
+    <p class="tr-quiz-stale" hidden>This quiz was updated. Reload to play the current version.</p>
+    <div class="tr-quiz-actions" hidden>
+      <button type="button" class="tr-quiz-share">Share</button>
+      <span class="tr-quiz-share-note" hidden>Link copied</span>
+      <button type="button" class="tr-quiz-again">Play again</button>
+    </div>
+  </section>
+
+  <script type="application/json" data-quiz-def="1" set:html={definitionJson}></script>
+</div>
+
+<script>
+  import { bandFor, scoreTrivia, tallyPersonality } from "../utils/quizzes/scoring";
+  import { claimPost, clearChosen, isCurrentPlay, loadChosen, saveChosen, startPlay } from "../utils/quizzes/playState";
+  import type { Play, QuizStorage } from "../utils/quizzes/playState";
+  import type { PublicQuiz } from "../utils/quizzes";
+
+  type Def = {
+    id: number;
+    kind: PublicQuiz["kind"];
+    version: number;
+    definition: PublicQuiz["definition"];
+    counts: number[][];
+  };
+
+  // Touching window.localStorage itself throws when site data is blocked.
+  const storage: QuizStorage | null = (() => {
+    try {
+      return window.localStorage;
+    } catch {
+      return null;
+    }
+  })();
+
+  const setupQuiz = (root: HTMLElement) => {
+    // Bound once per element. Article pages have no ClientRouter, so only
+    // DOMContentLoaded fires there; BaseLayout pages fire astro:page-load too.
+    if (root.dataset.bound) return;
+    root.dataset.bound = "1";
+
+    const defNode = root.querySelector<HTMLScriptElement>("[data-quiz-def]");
+    if (!defNode?.textContent) return;
+    const def = JSON.parse(defNode.textContent) as Def;
+    const { questions, results } = def.definition;
+    if (questions.length === 0) return;
+
+    const questionNodes = Array.from(root.querySelectorAll<HTMLElement>(".tr-quiz-question"));
+    const resultsNode = root.querySelector<HTMLElement>(".tr-quiz-results")!;
+    const scoreNode = root.querySelector<HTMLElement>(".tr-quiz-score")!;
+    const staleNode = root.querySelector<HTMLElement>(".tr-quiz-stale")!;
+    const actionsNode = root.querySelector<HTMLElement>(".tr-quiz-actions")!;
+
+    let chosen: number[] = [];
+    let stale = false;
+    // Null until the first answer of a play; Play again sets it back.
+    let play: Play | null = null;
+
+    const showQuestion = (i: number) => {
+      questionNodes.forEach((node, index) => node.classList.toggle("is-current", index === i));
+      resultsNode.classList.remove("is-done");
+    };
+
+    const finish = () => {
+      questionNodes.forEach((node) => node.classList.remove("is-current"));
+      const result =
+        def.kind === "trivia"
+          ? bandFor(results, scoreTrivia(def.definition, chosen))
+          : tallyPersonality(def.definition, chosen);
+      resultsNode.querySelectorAll<HTMLElement>(".tr-quiz-result").forEach((node) => {
+        node.classList.toggle("is-chosen", node.dataset.resultKey === result?.key);
+      });
+      if (def.kind === "trivia") {
+        scoreNode.textContent = `You got ${scoreTrivia(def.definition, chosen)} of ${questions.length}`;
+        scoreNode.hidden = false;
+      }
+      staleNode.hidden = !stale;
+      actionsNode.hidden = false;
+      resultsNode.classList.add("is-done");
+    };
+
+    // The token stays in the browser: the CMS answer route has no field for
+    // it. It only tells a reply from an earlier play to stand down.
+    const postAnswer = async (token: string, questionIndex: number, answerIndex: number) => {
+      let response: Response;
+      try {
+        response = await fetch("/api/quiz-answer", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            quiz_id: def.id,
+            definition_version: def.version,
+            question_index: questionIndex,
+            answer_index: answerIndex,
+          }),
+        });
+      } catch {
+        return;
+      }
+      if (!isCurrentPlay(play, token)) return;
+      if (response.status === 409) {
+        stale = true;
+        staleNode.hidden = !resultsNode.classList.contains("is-done");
+        return;
+      }
+      if (!response.ok || def.kind !== "trivia") return;
+      const payload = (await response.json().catch(() => null)) as { counts?: number[] } | null;
+      const counts = payload?.counts;
+      if (!counts) return;
+      // Paint onto the question the answer belonged to, never the current one.
+      const node = questionNodes[questionIndex];
+      const correctIndex = questions[questionIndex].answers.findIndex((a) => a.correct);
+      const sum = counts.reduce((acc, n) => acc + n, 0);
+      if (!node || correctIndex < 0 || sum === 0) return;
+      const stat = node.querySelector<HTMLElement>(".tr-quiz-stat")!;
+      stat.textContent = `${Math.round((counts[correctIndex] / sum) * 100)}% of readers got this right`;
+      stat.hidden = false;
+    };
+
+    const reveal = (i: number, j: number) => {
+      const node = questionNodes[i];
+      const buttons = Array.from(node.querySelectorAll<HTMLButtonElement>(".tr-quiz-answer"));
+      buttons.forEach((button) => (button.disabled = true));
+      if (def.kind === "trivia") {
+        const correctIndex = questions[i].answers.findIndex((a) => a.correct);
+        buttons[j].classList.add(j === correctIndex ? "is-right" : "is-wrong");
+        if (correctIndex >= 0) buttons[correctIndex].classList.add("is-right");
+        const explanation = node.querySelector<HTMLElement>(".tr-quiz-explanation");
+        if (explanation) explanation.hidden = false;
+        node.querySelector<HTMLElement>(".tr-quiz-next")!.hidden = false;
+      }
+    };
+
+    const choose = (i: number, j: number) => {
+      if (chosen.length !== i) return;
+      play ??= startPlay(storage, def.id, def.version);
+      chosen = [...chosen, j];
+      saveChosen(storage, def.id, def.version, chosen);
+      reveal(i, j);
+      if (claimPost(play, i)) void postAnswer(play.token, i, j);
+      if (def.kind === "personality") {
+        if (i + 1 < questions.length) showQuestion(i + 1);
+        else finish();
+      }
+    };
+
+    questionNodes.forEach((node, i) => {
+      node.querySelectorAll<HTMLButtonElement>(".tr-quiz-answer").forEach((button, j) => {
+        button.addEventListener("click", () => choose(i, j));
+      });
+      node.querySelector<HTMLElement>(".tr-quiz-next")?.addEventListener("click", () => {
+        if (i + 1 < questions.length) showQuestion(i + 1);
+        else finish();
+      });
+    });
+
+    root.querySelector<HTMLElement>(".tr-quiz-again")?.addEventListener("click", () => {
+      clearChosen(storage, def.id);
+      chosen = [];
+      play = null;
+      questionNodes.forEach((node) => {
+        node.querySelectorAll<HTMLButtonElement>(".tr-quiz-answer").forEach((button) => {
+          button.disabled = false;
+          button.classList.remove("is-right", "is-wrong");
+        });
+        node.querySelectorAll<HTMLElement>(".tr-quiz-explanation, .tr-quiz-stat, .tr-quiz-next").forEach((el) => {
+          el.hidden = true;
+        });
+      });
+      scoreNode.hidden = true;
+      actionsNode.hidden = true;
+      showQuestion(0);
+    });
+
+    const shareNote = root.querySelector<HTMLElement>(".tr-quiz-share-note")!;
+    root.querySelector<HTMLElement>(".tr-quiz-share")?.addEventListener("click", async () => {
+      const url = `${location.origin}/quiz/${root.dataset.quizSlug}`;
+      const title = root.querySelector(".tr-quiz-title")?.textContent ?? "";
+      const chosenResult = resultsNode.querySelector<HTMLElement>(".tr-quiz-result.is-chosen .tr-quiz-rtitle")?.textContent ?? "";
+      const text = chosenResult ? `I got ${chosenResult} on ${title}` : title;
+      if (navigator.share) {
+        try {
+          await navigator.share({ title, text, url });
+        } catch {
+          // The reader closed the sheet.
+        }
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(url);
+        shareNote.hidden = false;
+      } catch {
+        // Clipboard blocked: nothing to say.
+      }
+    });
+
+    root.classList.add("js-quiz");
+
+    // Resume a finished or half-finished play of this exact version. The
+    // resumed play finds the counted marker on its next answer and stays
+    // silent, so a reload never counts the same play twice.
+    const saved = loadChosen(storage, def.id, def.version, def.definition);
+    if (saved) {
+      chosen = saved;
+      chosen.forEach((j, i) => reveal(i, j));
+      if (chosen.length === questions.length) finish();
+      else showQuestion(chosen.length);
+    } else {
+      showQuestion(0);
+    }
+  };
+
+  const setupAll = () => {
+    document.querySelectorAll<HTMLElement>(".tr-quiz").forEach(setupQuiz);
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupAll);
+  } else {
+    setupAll();
+  }
+  document.addEventListener("astro:page-load", setupAll);
+</script>
