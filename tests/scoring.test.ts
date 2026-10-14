@@ -2,7 +2,7 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 
 import type { PublicResult } from "../src/utils/quizzes.ts";
-import { bandFor, isValidChosen, scoreTrivia, tallyPersonality } from "../src/utils/quizzes/scoring.ts";
+import { bandFor, isValidChosen, percentCorrect, scoreTrivia, tallyPersonality } from "../src/utils/quizzes/scoring.ts";
 
 // Trivia bands carry min and max; personality results do not, as the CMS sends them.
 const band = (key: string, min: number, max: number): PublicResult => ({ key, min, max, title: key, body: "" });
@@ -65,5 +65,26 @@ describe("isValidChosen", () => {
     assert.equal(isValidChosen(trivia, [0, 5]), false);
     assert.equal(isValidChosen(trivia, [0.5]), false);
     assert.equal(isValidChosen(trivia, [0, 0, 0, 0]), false);
+  });
+});
+
+describe("percentCorrect", () => {
+  it("is 100 when the only reader is correct and counts are empty", () => {
+    assert.equal(percentCorrect([0, 0], 0, 0), 100);
+  });
+  it("is 0 when the only reader is wrong and counts are empty", () => {
+    assert.equal(percentCorrect([0, 0], 0, 1), 0);
+  });
+  it("shifts existing counts by the reader's answer", () => {
+    assert.equal(percentCorrect([1, 2], 0, 0), 50);
+  });
+  it("leaves counts that already include the reader unchanged", () => {
+    assert.equal(percentCorrect([1, 3], 0), 25);
+  });
+  it("is null with no readers and no reader answer", () => {
+    assert.equal(percentCorrect([0, 0], 0), null);
+  });
+  it("is null without a correct answer", () => {
+    assert.equal(percentCorrect([1, 1], -1, 0), null);
   });
 });

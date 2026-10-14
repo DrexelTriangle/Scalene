@@ -46,3 +46,16 @@ export function isValidChosen(def: Definition, chosen: unknown): chosen is numbe
     (value, i) => Number.isInteger(value) && value >= 0 && value < def.questions[i].answers.length,
   );
 }
+
+/**
+ * Whole-number percent of readers who chose the correct answer, or null when
+ * there is nothing to measure. readerAnswer adds this reader to counts that do
+ * not include them yet.
+ */
+export function percentCorrect(counts: number[], correctIndex: number, readerAnswer?: number): number | null {
+  if (correctIndex < 0) return null;
+  const all = [...counts];
+  if (readerAnswer !== undefined) all[readerAnswer] = (all[readerAnswer] ?? 0) + 1;
+  const sum = all.reduce((acc, n) => acc + n, 0);
+  return sum === 0 ? null : Math.round(((all[correctIndex] ?? 0) / sum) * 100);
+}

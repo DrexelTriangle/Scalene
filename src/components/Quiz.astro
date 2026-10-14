@@ -70,7 +70,7 @@ const total = questions.length;
 </div>
 
 <script>
-  import { bandFor, scoreTrivia, tallyPersonality } from "../utils/quizzes/scoring";
+  import { bandFor, percentCorrect, scoreTrivia, tallyPersonality } from "../utils/quizzes/scoring";
   import { claimPost, clearChosen, isCurrentPlay, loadChosen, saveChosen, startPlay } from "../utils/quizzes/playState";
   import type { Play, QuizStorage } from "../utils/quizzes/playState";
   import type { PublicQuiz } from "../utils/quizzes";
@@ -156,24 +156,40 @@ const total = questions.length;
       } catch {
         return;
       }
-      if (!isCurrentPlay(play, token)) return;
       if (response.status === 409) {
+        if (!isCurrentPlay(play, token)) return;
         stale = true;
         staleNode.hidden = !resultsNode.classList.contains("is-done");
         return;
       }
       if (!response.ok || def.kind !== "trivia") return;
+      // Read the body before the play check: Play again can land while it
+      // streams, and the old play's percentage must not paint on the reset page.
       const payload = (await response.json().catch(() => null)) as { counts?: number[] } | null;
+      if (!isCurrentPlay(play, token)) return;
       const counts = payload?.counts;
       if (!counts) return;
-      // Paint onto the question the answer belonged to, never the current one.
+      // The reply already includes this reader's answer.
+      paintStat(questionIndex, counts);
+    };
+
+    // Paint onto the question the answer belonged to, never the current one.
+    // readerAnswer is set only when the counts do not yet include this reader.
+    const paintStat = (questionIndex: number, counts: number[], readerAnswer?: number) => {
       const node = questionNodes[questionIndex];
       const correctIndex = questions[questionIndex].answers.findIndex((a) => a.correct);
-      const sum = counts.reduce((acc, n) => acc + n, 0);
-      if (!node || correctIndex < 0 || sum === 0) return;
+      const percent = percentCorrect(counts, correctIndex, readerAnswer);
+      if (!node || percent === null) return;
       const stat = node.querySelector<HTMLElement>(".tr-quiz-stat")!;
-      stat.textContent = `${Math.round((counts[correctIndex] / sum) * 100)}% of readers got this right`;
+      stat.textContent = `${percent}% of readers got this right`;
       stat.hidden = false;
+    };
+
+    // A play that does not post has no reply, so it uses the counts served with
+    // the page plus this reader's answer.
+    const paintServedStat = (questionIndex: number, answerIndex: number) => {
+      const served = def.counts?.[questionIndex];
+      if (def.kind === "trivia" && served) paintStat(questionIndex, served, answerIndex);
     };
 
     const reveal = (i: number, j: number) => {
@@ -197,6 +213,7 @@ const total = questions.length;
       saveChosen(storage, def.id, def.version, chosen);
       reveal(i, j);
       if (claimPost(play, i)) void postAnswer(play.token, i, j);
+      else paintServedStat(i, j);
       if (def.kind === "personality") {
         if (i + 1 < questions.length) showQuestion(i + 1);
         else finish();
@@ -261,7 +278,10 @@ const total = questions.length;
     const saved = loadChosen(storage, def.id, def.version, def.definition);
     if (saved) {
       chosen = saved;
-      chosen.forEach((j, i) => reveal(i, j));
+      chosen.forEach((j, i) => {
+        reveal(i, j);
+        paintServedStat(i, j);
+      });
       if (chosen.length === questions.length) finish();
       else showQuestion(chosen.length);
     } else {
