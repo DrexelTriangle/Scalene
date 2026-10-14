@@ -14,6 +14,7 @@ import { getHomepageArticles } from '../utils/db';
 import SubscribeLink from "../components/SubscribeLink.astro";
 import Banner from "../components/Banner.astro";
 import Ad from "../components/Ad.astro";
+import ExhibitSpotlight from "../components/ExhibitSpotlight.astro";
 
 const posts = await getHomepageArticles();
 
@@ -32,6 +33,9 @@ if (breakingItems.length === 0 && (breakingNews?.text?.trim() ?? "") !== "") {
   });
 }
 const breaking = (breakingNews?.enabled ?? false) && breakingItems.length > 0;
+
+// Picture-only card at the top of the sidebar; absent when nothing is scheduled.
+const spotlight = posts.exhibit_spotlight?.image_url ? posts.exhibit_spotlight : undefined;
 
 // Far shorter than an article page's hour (see ArticleLayout): an article is
 // finished once it publishes, but the homepage is the editors' live control
@@ -70,6 +74,7 @@ Astro.response.headers.set(
         </div>
         <div id="main-right" class="hidden sm:block [&>*:not(:first-child)]:border-t-[1px] [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-triangleBlue main-side">
             <!-- <a href="https://go.gwu.edu/AIinDC"><img class="ad medium-rectangle" src="/images/ads/gwu_ad_032626_to_042226.png"/></a> -->
+            {spotlight && <ExhibitSpotlight spotlight={spotlight}/>}
             <Ad placement="sidebar" class="pt-[5px]"/>
             <SubscribeLink/>
             {posts.developingstories?.length > 0 && <Developing stories={posts.developingstories}/>}
