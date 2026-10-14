@@ -1,6 +1,7 @@
 ---
 import PhotoArticle from "../PhotoArticle.astro";
 import type { SectionCardArticle } from "../../utils/types";
+import { slotSizes } from "../../utils/imageSizes";
 
 interface Props {
   articles: SectionCardArticle[];
@@ -9,6 +10,11 @@ interface Props {
 }
 
 const { articles, priority = false } = Astro.props;
+
+// Always a full-width section. One column on phones; 3fr_6fr from md (the
+// side column has no padding until lg); 3fr_6fr_3fr from lg.
+const sideSizes = slotSizes("full", { md: { share: 3 / 9 }, lg: { share: 3 / 12, gutter: 12 } });
+const leadSizes = slotSizes("full", { md: { share: 6 / 9, gutter: 24 }, lg: { share: 6 / 12, gutter: 24 } });
 
 ---
 <div class="grid grid-cols-[1fr] md:grid-cols-[3fr_6fr] lg:grid-cols-[3fr_6fr_3fr] lg:divide-x lg:divide-triangleGray-400 ">
@@ -25,7 +31,8 @@ const { articles, priority = false } = Astro.props;
             author={article.authors}
             published_date={article.published_date}
             slug={"article/"+article.slug}
-            breaking={article.breaking_news}/>
+            breaking={article.breaking_news}
+            sizes={sideSizes}/>
         ))}
     </div>
 
@@ -40,7 +47,8 @@ const { articles, priority = false } = Astro.props;
             excerpt={article.excerpt}
             slug={"article/"+article.slug}
             breaking={article.breaking_news}
-            priority={priority}/>
+            priority={priority}
+            sizes={leadSizes}/>
         ))}
     </div>
 

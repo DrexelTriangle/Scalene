@@ -31,8 +31,16 @@ before(async () => {
     const articles = cards.map((c) => ({ ...c, categories: [{ id: 1, name: 'News', slug: 'news' }] }));
     const pagination = { has_more: false };
     if (/\/homepage\b/.test(url)) {
+      // Every homepage layout gets its own stories (9 for the 3-6-3, 4 for
+      // its row; opinion's 6-6; sports' 3-5 and row) so a test can tell
+      // which slot an image came from.
+      const tag = (list: ReturnType<typeof card>[]) =>
+        list.map((c) => ({ ...c, categories: [{ id: 1, name: 'News', slug: 'news' }] }));
       return Response.json({
-        news: articles, opinion: [], sports: [], entertainment: [], candp: [], columns: [], developingstories: [],
+        news: tag([...cards, ...[9, 10, 11, 12].map(card)]),
+        opinion: tag([20, 21, 22].map(card)),
+        sports: tag([30, 31, 32, 33, 34, 35].map(card)),
+        entertainment: [], candp: [], columns: [], developingstories: [],
         carousel: homepageCarousel,
       });
     }
@@ -77,6 +85,7 @@ function card(n: number) {
     title: `Story ${n}`,
     authors: [],
     featured_image: `/images/story-${n}.jpg`,
+    featured_image_variants: [480, 960, 1440].map((width) => ({ url: `/images/story-${n}-${width}.jpg`, width })),
     published_date: '2026-10-01T12:00:00Z',
     excerpt: `Excerpt ${n}`,
   };
@@ -259,8 +268,9 @@ for (const style of ['5-3-4', '3-6-3']) {
 
 const sectionTags = (path: string) => read(path).match(/<Section\b[^>]*\/>/g) ?? [];
 
-test('only the first, above-the-fold Section on section and author pages asks for priority', () => {
+test('only the first, above-the-fold Section on the homepage, section and author pages asks for priority', () => {
   for (const [page, style] of [
+    ['src/pages/index.astro', '3-6-3'],
     ['src/pages/[sectionSlug].astro', '5-3-4'],
     ['src/pages/author/[author].astro', '5-3-4'],
   ]) {
@@ -270,11 +280,7 @@ test('only the first, above-the-fold Section on section and author pages asks fo
     assert.equal(prioritized[0], tags[0], `${page}: priority must be on the first Section`);
     assert.match(prioritized[0], new RegExp(`style="${style}"`), page);
   }
-  // The homepage's desktop LCP is the anniversary background (see below). On
-  // phones it is the news lead image, but that is requested early and raised
-  // to high priority by layout anyway: measured, `priority` there bought
-  // nothing, and on desktop it would race the background.
-  for (const page of ['src/pages/index.astro', 'src/pages/search.astro', 'src/pages/[sections]/[article].astro']) {
+  for (const page of ['src/pages/search.astro', 'src/pages/[sections]/[article].astro']) {
     assert.ok(sectionTags(page).every((tag) => !/\spriority\b/.test(tag)), page);
   }
 });
@@ -347,32 +353,135 @@ function priorityImageResources(html: string): string[] {
 
 const storyImgs = (html: string) => imgTags(html).filter((img) => attr(img, 'src')?.startsWith('/images/story-'));
 
-test('anniversary homepage has exactly one high-priority image resource: the background preload', async () => {
-  const html = await renderHomepage([]);
-  const [only, ...rest] = priorityImageResources(html);
-  assert.deepEqual(rest, [], 'nothing may compete with the LCP background');
-  assert.equal(attr(only, 'href'), ANNIVERSARY);
+const storyImg = (html: string, n: number) => {
+  const found = storyImgs(html).filter((img) => attr(img, 'src') === `/images/story-${n}.jpg`);
+  assert.equal(found.length, 1, `story-${n} image`);
+  return found[0];
+};
 
-  // No card asks for priority either, the lead included (see above).
-  const cardImgs = storyImgs(html);
-  assert.ok(cardImgs.length > 1);
-  assert.equal(attr(cardImgs.find((img) => attr(img, 'src') === cards[0].featured_image), 'loading'), 'lazy');
-  assert.ok(cardImgs.every((img) => attr(img, 'loading') === 'lazy' && attr(img, 'fetchpriority') === undefined));
+// The news lead is the phone LCP and sits right under the carousel on desktop:
+// lazy, it waits for layout before it is even requested.
+for (const [name, carousel] of [
+  ['anniversary', []],
+  ['image-only carousel', imageOnlySlides],
+] as const) {
+  test(`${name} homepage: the news lead is the one eager, high-priority card`, async () => {
+    const html = await renderHomepage([...carousel]);
+    const lead = storyImg(html, 0);
+    assert.equal(attr(lead, 'loading'), 'eager');
+    assert.equal(attr(lead, 'fetchpriority'), 'high');
+
+    const expected = name === 'anniversary' ? [ANNIVERSARY, cards[0].featured_image] : [cards[0].featured_image];
+    assert.deepEqual(
+      priorityImageResources(html).map((tag) => attr(tag, 'href') ?? attr(tag, 'src')).sort(),
+      expected.sort(),
+    );
+
+    const others = storyImgs(html).filter((img) => img !== lead);
+    assert.ok(others.length > 10);
+    assert.ok(others.every((img) => attr(img, 'loading') === 'lazy' && attr(img, 'fetchpriority') === undefined));
+  });
+}
+
+// --- 4. Card image sizes ------------------------------------------------------
+
+const SIZES = {
+  lead363: '(min-width: 1280px) 576px, (min-width: 1024px) 426px, (min-width: 768px) 60vw, 90vw',
+  side363: '(min-width: 1280px) 288px, (min-width: 1024px) 213px, (min-width: 768px) 30vw, 90vw',
+  lead66: '(min-width: 1280px) 388px, (min-width: 1024px) 288px, (min-width: 768px) 30vw, (min-width: 640px) 60vw, 90vw',
+  rowFull4: '(min-width: 1280px) 276px, (min-width: 1024px) 201px, (min-width: 640px) 23vw, 90vw',
+  rowMain3: '(min-width: 1280px) 246px, (min-width: 1024px) 179px, (min-width: 640px) 20vw, 90vw',
+};
+
+test('homepage cards advertise the width of the slot they are drawn in', async () => {
+  const html = await renderHomepage([]);
+  const sizes = (n: number) => attr(storyImg(html, n), 'sizes');
+  assert.equal(sizes(0), SIZES.lead363);
+  assert.equal(sizes(1), SIZES.side363);
+  assert.equal(sizes(2), SIZES.side363);
+  for (const n of [9, 10, 11, 12]) assert.equal(sizes(n), SIZES.rowFull4, `news row story-${n}`);
+  assert.equal(sizes(20), SIZES.lead66);
+  for (const n of [33, 34, 35]) assert.equal(sizes(n), SIZES.rowMain3, `sports row story-${n}`);
+  assert.match(attr(storyImg(html, 0), 'srcset') ?? '', /story-0-480\.jpg 480w/);
 });
 
+test('Section 3-6-3 sizes its lead and side cards without the homepage', async () => {
+  const imgs = imgTags(await render('/src/components/Sections/Section.astro', { articles: cards, style: '3-6-3' }));
+  const bySrc = (n: number) => imgs.find((img) => attr(img, 'src') === cards[n].featured_image);
+  assert.equal(attr(bySrc(0), 'sizes'), SIZES.lead363);
+  assert.equal(attr(bySrc(1), 'sizes'), SIZES.side363);
+  assert.equal(attr(bySrc(2), 'sizes'), SIZES.side363);
+});
+
+test('Section 6-6 and row take their column from the Section', async () => {
+  const [lead] = imgTags(
+    await render('/src/components/Sections/Section.astro', { articles: cards.slice(0, 5), style: '6-6', column: 'main' }),
+  );
+  assert.equal(attr(lead, 'sizes'), SIZES.lead66);
+
+  const row = (articles: typeof cards, column?: string) =>
+    render('/src/components/Sections/Section.astro', { articles, style: 'row', column }).then(imgTags);
+  assert.ok((await row(cards.slice(0, 4))).every((img) => attr(img, 'sizes') === SIZES.rowFull4));
+  assert.ok((await row(cards.slice(0, 3), 'main')).every((img) => attr(img, 'sizes') === SIZES.rowMain3));
+});
+
+test('PhotoArticle keeps its default sizes when a layout gives none', async () => {
+  const props = { title: 'T', image: '/x.jpg', slug: 'article/x', variants: cards[0].featured_image_variants };
+  const [card] = imgTags(await render('/src/components/PhotoArticle.astro', props));
+  assert.equal(attr(card, 'sizes'), '(min-width: 1280px) 500px, (min-width: 1024px) 380px, (min-width: 640px) 60vw, 90vw');
+  const [rowCard] = imgTags(await render('/src/components/PhotoArticle.astro', { ...props, row: true }));
+  assert.equal(attr(rowCard, 'sizes'), '(min-width: 1280px) 400px, (min-width: 640px) 33vw, 90vw');
+  const [given] = imgTags(await render('/src/components/PhotoArticle.astro', { ...props, sizes: '300px' }));
+  assert.equal(attr(given, 'sizes'), '300px');
+});
+
+// --- 5. Sidebar subscribe image -----------------------------------------------
+
+/** Pixel size from a WebP file's header (VP8, VP8L or VP8X). */
+function webpSize(path: string): { width: number; height: number } {
+  const b = readFileSync(join(root, path));
+  assert.equal(b.toString('ascii', 0, 4), 'RIFF', path);
+  assert.equal(b.toString('ascii', 8, 12), 'WEBP', path);
+  const chunk = b.toString('ascii', 12, 16);
+  if (chunk === 'VP8X') return { width: 1 + b.readUIntLE(24, 3), height: 1 + b.readUIntLE(27, 3) };
+  if (chunk === 'VP8L') {
+    const bits = b.readUInt32LE(21);
+    return { width: 1 + (bits & 0x3fff), height: 1 + ((bits >> 14) & 0x3fff) };
+  }
+  assert.equal(chunk, 'VP8 ', path);
+  return { width: b.readUInt16LE(26) & 0x3fff, height: b.readUInt16LE(28) & 0x3fff };
+}
+
+const SUBSCRIBE = { '1x': '/images/subscribe-400.webp', '2x': '/images/subscribe-800.webp' };
+
 // Phones hide the sidebar, but an eager <img> under display:none still
-// downloads. The subscribe image (~340 KB) was the biggest download competing
-// with the phone LCP; lazy, a hidden sidebar fetches nothing.
-test('the sidebar subscribe image is lazy, so phones that hide the sidebar never fetch it', async () => {
+// downloads; lazy, a hidden sidebar fetches nothing. Where it does show, the
+// slot is at most ~387px wide, so a 400px rendition (800px at 2x) replaces the
+// 1080px, 340 KB original.
+test('the sidebar subscribe image is lazy, described, and sized for its slot', async () => {
   const [img, ...rest] = imgTags(await render('/src/components/SubscribeLink.astro'));
   assert.equal(rest.length, 0);
-  assert.equal(attr(img, 'src'), '/images/subscribe.webp');
   assert.equal(attr(img, 'loading'), 'lazy');
+  assert.equal(attr(img, 'decoding'), 'async');
+  assert.match(attr(img, 'alt') ?? '', /subscribe.*newsletter|newsletter.*subscribe/i);
+  assert.equal(attr(img, 'src'), SUBSCRIBE['1x']);
+  assert.equal(attr(img, 'srcset'), `${SUBSCRIBE['1x']} 400w, ${SUBSCRIBE['2x']} 800w`);
+  assert.equal(attr(img, 'sizes'), '(min-width: 1280px) 387px, (min-width: 1024px) 300px, (min-width: 640px) 30vw, 100vw');
+
+  // Intrinsic dimensions match the 1x file, so the slot is reserved before it loads.
+  const oneX = webpSize(`public${SUBSCRIBE['1x']}`);
+  assert.deepEqual({ width: Number(attr(img, 'width')), height: Number(attr(img, 'height')) }, oneX);
+  assert.deepEqual(oneX, { width: 400, height: 451 });
+  assert.deepEqual(webpSize(`public${SUBSCRIBE['2x']}`), { width: 800, height: 902 });
+
+  // Same artwork, far fewer bytes than the 340 KB original.
+  assert.ok(statSync(join(root, `public${SUBSCRIBE['1x']}`)).size < 50_000);
+  assert.ok(statSync(join(root, `public${SUBSCRIBE['2x']}`)).size < 100_000);
 
   const html = await renderHomepage([]);
   const sidebar = html.slice(html.indexOf('id="main-right"'));
   assert.match(html, /id="main-right" class="hidden sm:block/);
-  const subscribe = imgTags(sidebar).filter((tag) => attr(tag, 'src') === '/images/subscribe.webp');
+  const subscribe = imgTags(sidebar).filter((tag) => attr(tag, 'src') === SUBSCRIBE['1x']);
   assert.equal(subscribe.length, 1);
   assert.equal(attr(subscribe[0], 'loading'), 'lazy');
 });
