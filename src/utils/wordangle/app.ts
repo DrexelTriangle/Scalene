@@ -10,6 +10,8 @@ import {
   isWin,
   dailyDate,
   chooseRandomTarget,
+  typeLetter,
+  eraseLetter,
   type Dictionaries,
   type KeyboardStatuses,
   type Row,
@@ -19,6 +21,13 @@ import {
 
 interface GameRow extends Row {
   evaluation: TileResult[];
+  // One entry per tile ("" when empty); `guess` is these joined, kept for the
+  // rules in game.ts. `caret` is the tile the next letter lands on.
+  letters: string[];
+  caret: number;
+  // True when a click or arrow key put the caret here, so backspace clears
+  // the tile under it rather than the one before it.
+  caretPlaced: boolean;
 }
 
 interface WordLists {
@@ -31,6 +40,8 @@ const KEYBOARD_ROWS = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
 // The lists live in the CMS; Scalene proxies them (src/pages/api/wordangle).
 const WORDS_BASE = "/api/wordangle/lists";
 const HELP_SEEN_KEY = "wordangle-help-seen";
+// "triangle" centres the rows into a pyramid; anything else is the left-aligned board.
+const LAYOUT_KEY = "wordangle-layout";
 const SHARE_URL = "thetriangle.org/wordangle";
 
 // Module scope outlives ClientRouter navigations, so coming back to the page
@@ -102,6 +113,23 @@ function markHelpSeen() {
   }
 }
 
+function readTriangleLayout(): boolean {
+  try {
+    return localStorage.getItem(LAYOUT_KEY) === "triangle";
+  } catch {
+    return false;
+  }
+}
+
+function writeTriangleLayout(on: boolean) {
+  try {
+    if (on) localStorage.setItem(LAYOUT_KEY, "triangle");
+    else localStorage.removeItem(LAYOUT_KEY);
+  } catch {
+    // Blocked storage: the switch still works for this page view.
+  }
+}
+
 function part<T extends HTMLElement>(root: HTMLElement, name: string): T {
   const el = root.querySelector<T>(`[data-wordangle="${name}"]`);
   if (!el) throw new Error(`Wordangle markup is missing [data-wordangle="${name}"]`);
@@ -123,6 +151,7 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     modeRandom: part<HTMLButtonElement>(root, "mode-random"),
     newRandom: part<HTMLButtonElement>(root, "new-random"),
     help: part<HTMLButtonElement>(root, "help"),
+    triangleMode: part<HTMLInputElement>(root, "triangle-mode"),
     helpDialog: part<HTMLDialogElement>(root, "help-dialog"),
     resultDialog: part<HTMLDialogElement>(root, "result-dialog"),
     resultTitle: part(root, "result-title"),
@@ -131,8 +160,27 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     resultNote: part(root, "result-note"),
   };
 
+  const applyLayout = (on: boolean) => {
+    els.triangleMode.checked = on;
+    if (on) root.dataset.layout = "triangle";
+    else delete root.dataset.layout;
+  };
+  applyLayout(readTriangleLayout());
+  els.triangleMode.addEventListener("change", () => {
+    applyLayout(els.triangleMode.checked);
+    writeTriangleLayout(els.triangleMode.checked);
+  });
+
   const newRows = (): GameRow[] =>
-    ROW_LENGTHS.map((length) => ({ length, guess: "", submitted: false, evaluation: [] }));
+    ROW_LENGTHS.map((length) => ({
+      length,
+      guess: "",
+      submitted: false,
+      evaluation: [],
+      letters: Array.from({ length }, () => ""),
+      caret: 0,
+      caretPlaced: false,
+    }));
 
   const newGame = () => ({
     target: "",
@@ -261,11 +309,24 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
 
       for (let tileIndex = 0; tileIndex < row.length; tileIndex += 1) {
         const tile = document.createElement("div");
-        const letter = row.guess[tileIndex] ?? "";
+        const letter = row.letters[tileIndex];
         const evaluation = row.evaluation[tileIndex];
         tile.className = "tr-tile";
         if (letter) tile.classList.add("filled");
         if (evaluation) tile.classList.add(evaluation.status);
+        if (active) {
+          // Marked only after a click (or arrow key) put the caret here. While
+          // typing, the next tile is obvious and the mark would just follow along.
+          tile.classList.toggle("caret", row.caretPlaced && tileIndex === row.caret);
+          // Put the caret on this tile so the next letter replaces it. The row
+          // click would only re-select the already active row.
+          tile.addEventListener("click", (event) => {
+            event.stopPropagation();
+            row.caret = tileIndex;
+            row.caretPlaced = true;
+            renderBoard();
+          });
+        }
         const glyph = document.createElement("span");
         glyph.className = "tr-tile-letter";
         glyph.textContent = letter.toUpperCase();
@@ -370,6 +431,11 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
       moveActiveRow(key === "arrowup" ? -1 : 1);
       return;
     }
+    if (key === "arrowleft" || key === "arrowright") {
+      event.preventDefault();
+      moveCaret(key === "arrowleft" ? -1 : 1);
+      return;
+    }
     if (key === "enter" || key === "backspace" || /^[a-z]$/.test(key)) {
       event.preventDefault();
       handleKey(key);
@@ -384,26 +450,40 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     if (index !== undefined) selectRow(index);
   }
 
+  // The keyboard moves the caret too, for anyone who cannot click a tile.
+  function moveCaret(delta: number) {
+    if (state.gameOver) return;
+    const row = state.rows[state.activeRow];
+    if (row.submitted) return;
+    // `length` is the position past the last tile, where typing a full row leaves it.
+    row.caret = Math.max(0, Math.min(row.length, row.caret + delta));
+    row.caretPlaced = true;
+    renderBoard();
+  }
+
   function handleKey(key: string) {
     if (state.gameOver) return;
     const row = state.rows[state.activeRow];
     if (row.submitted) return;
-
-    if (key === "backspace") {
-      row.guess = row.guess.slice(0, -1);
-      renderBoard();
-      return;
-    }
 
     if (key === "enter") {
       submitActiveRow();
       return;
     }
 
-    if (/^[a-z]$/.test(key) && row.guess.length < row.length) {
-      row.guess += key;
-      renderBoard();
+    if (key === "backspace") {
+      editRow(row, eraseLetter(row.letters, row.caret, row.caretPlaced));
+    } else if (/^[a-z]$/.test(key)) {
+      editRow(row, typeLetter(row.letters, row.caret, key));
     }
+  }
+
+  function editRow(row: GameRow, edit: { letters: string[]; caret: number }) {
+    row.letters = edit.letters;
+    row.caret = edit.caret;
+    row.caretPlaced = false;
+    row.guess = row.letters.join("");
+    renderBoard();
   }
 
   function submitActiveRow() {

@@ -137,3 +137,34 @@ export function chooseRandomTarget(targets: string[]): { number: null; target: s
   const index = Math.floor(Math.random() * targets.length);
   return { number: null, target: targets[index] };
 }
+
+// Editing a row in place. A row is a fixed-length array of tiles ("" when
+// empty) plus a caret, the tile the next letter lands on. The caret moves
+// right as letters are typed and can be put on any tile by clicking it, so a
+// letter in the middle of a guess can be changed without retyping the rest.
+export interface RowEdit {
+  letters: string[];
+  caret: number;
+}
+
+export function typeLetter(letters: string[], caret: number, letter: string): RowEdit {
+  if (caret >= letters.length) return { letters, caret };
+  const next = letters.slice();
+  next[caret] = letter;
+  return { letters: next, caret: caret + 1 };
+}
+
+// Backspace clears the tile under the caret when the player put the caret
+// there (a click or an arrow key) and it holds a letter. Otherwise it clears
+// the tile before the caret, which is what typing expects, including right
+// after a typed letter advanced the caret onto an existing one.
+export function eraseLetter(letters: string[], caret: number, placed: boolean): RowEdit {
+  const next = letters.slice();
+  if (placed && caret < letters.length && letters[caret]) {
+    next[caret] = "";
+    return { letters: next, caret };
+  }
+  if (caret === 0) return { letters, caret };
+  next[caret - 1] = "";
+  return { letters: next, caret: caret - 1 };
+}

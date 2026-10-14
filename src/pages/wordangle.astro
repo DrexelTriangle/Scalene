@@ -29,15 +29,24 @@ const dialogClass =
       </div>
     </div>
 
-    <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 font-roboto-slab text-[15px] mb-[16px]">
-      <div class="flex items-center gap-2">
+    <!-- No wrapping: the switch and the counter stay top right on a phone,
+         and the mode buttons shrink instead of pushing them to a new line. -->
+    <div class="flex flex-nowrap items-start justify-between gap-x-3 font-roboto-slab text-[15px] mb-[16px]">
+      <div class="flex flex-wrap items-center gap-2 min-w-0">
         <div class="tr-mode" role="group" aria-label="Puzzle mode">
           <button data-wordangle="mode-daily" type="button" aria-pressed="true">Daily <span data-wordangle="puzzle-id"></span></button>
           <button data-wordangle="mode-random" type="button" aria-pressed="false" disabled>Random</button>
         </div>
         <button data-wordangle="new-random" type="button" class={buttonClass} hidden>New word</button>
       </div>
-      <span>Letters used <strong data-wordangle="score" class="font-playfair">0</strong></span>
+      <div class="flex flex-col items-end gap-y-1 shrink-0 text-right">
+        <label class="tr-switch">
+          <span>Triangle mode</span>
+          <input data-wordangle="triangle-mode" type="checkbox" class="sr-only" />
+          <span class="tr-switch-track" aria-hidden="true"></span>
+        </label>
+        <span>Letters used <strong data-wordangle="score" class="font-playfair">0</strong></span>
+      </div>
     </div>
 
     <div data-wordangle="board" class="tr-board" aria-label="Guess board"></div>
@@ -158,6 +167,57 @@ const dialogClass =
     align-items: flex-start;
     gap: 6px;
     margin-bottom: 14px;
+  }
+
+  /* Triangle mode: rows centre into a pyramid instead of hugging the left. */
+  .wordangle[data-layout="triangle"] .tr-board {
+    align-items: center;
+  }
+
+  /* The Triangle mode switch: a 36x20 track, grey off and blue on. */
+  .wordangle .tr-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "Roboto Slab", serif;
+    font-size: 13px;
+    color: var(--tr-blue);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .wordangle .tr-switch-track {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    border-radius: 10px;
+    background: #c7c7c7;
+    transition: background 150ms;
+  }
+
+  .wordangle .tr-switch-track::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: white;
+    transition: transform 150ms;
+  }
+
+  .wordangle .tr-switch input:checked + .tr-switch-track {
+    background: var(--tr-blue);
+  }
+
+  .wordangle .tr-switch input:checked + .tr-switch-track::after {
+    transform: translateX(16px);
+  }
+
+  .wordangle .tr-switch input:focus-visible + .tr-switch-track {
+    outline: 2px solid var(--tr-blue);
+    outline-offset: 2px;
   }
 
   .wordangle .tr-row {
@@ -308,6 +368,16 @@ const dialogClass =
 
   .wordangle .tr-tile.filled {
     border-color: var(--tr-dark);
+  }
+
+  /* The tile the next letter lands on. Tiles in the active row take a click
+     to move the caret, so a letter can be changed without retyping the row. */
+  .wordangle .tr-row.active .tr-tile {
+    cursor: text;
+  }
+
+  .wordangle .tr-tile.caret {
+    box-shadow: inset 0 -4px 0 var(--tr-blue);
   }
 
   .wordangle .tr-tile.exact,
