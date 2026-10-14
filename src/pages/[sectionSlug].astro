@@ -63,6 +63,11 @@ let hasMore = posts.pagination.has_more;
 // or empty for the leaf subsections, which is most of them, and the strip then
 // renders as nothing exactly as it did before.
 const subsectionLinks: Subsection[] = posts.subsections ?? [];
+
+// A section listing changes only when something publishes into it. Five
+// minutes is enough to keep new articles off every page view but short enough
+// that the edge shows a new article within minutes without a purge.
+Astro.response.headers.set("Cache-Control", "public, max-age=300, s-maxage=300");
 ---
 
 <BaseLayout title={sectionName + " - The Triangle"}>
@@ -84,7 +89,7 @@ const subsectionLinks: Subsection[] = posts.subsections ?? [];
             ))
         }
     </div>
-    <Section articles={posts.articles?.slice(0, 9)} style="5-3-4" />
+    <Section articles={posts.articles?.slice(0, 9)} style="5-3-4" priority />
     <Section articles={posts.articles?.slice(9, 13)} style="row" />
     {
         posts.articles?.length > 13 && (

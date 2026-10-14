@@ -1,6 +1,16 @@
 ---
-// Matomo analytics — loaded once in BaseLayout, tracks both initial page loads
-// and Astro's client-side navigations via the astro:page-load event.
+// Matomo analytics — the one tracker snippet, rendered by both BaseLayout and
+// ArticleLayout. Counts exactly one page view per document: the initial load
+// and each Astro ClientRouter navigation (which swaps in a new <body>).
+//
+// Several things can ask for a page view on the same page — this script on
+// first parse, astro:page-load (which ClientRouter also fires on the initial
+// window load), and a possible re-run of this script after a swap — so the
+// view is keyed to the <body> element: whichever trigger comes first counts it,
+// the rest see the marker and do nothing. ArticleLayout has no ClientRouter, so
+// there only the first trigger ever fires.
+//
+// tests/matomo.test.ts runs this script against a fake DOM and counts views.
 ---
 
 <script is:inline>
@@ -10,29 +20,31 @@
   // matomo.js throw "Assignment to constant variable", killing analytics.
   // eslint-disable-next-line no-var
   var _paq = window._paq = window._paq || [];
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
 
   (function() {
-    const u = "https://stats.thetriangle.org/";
-    _paq.push(['setTrackerUrl', u + 'matomo.php']);
-    _paq.push(['setSiteId', '1']);
-    const d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
-    g.async = true; g.src = u + 'matomo.js';
-    s.parentNode.insertBefore(g, s);
-  })();
-</script>
-
-<script>
-  // Re-track on Astro view transitions navigations
-  function trackPage() {
-    if (window._paq) {
+    function trackPageView() {
+      const body = document.body;
+      if (!body || body.hasAttribute('data-matomo-tracked')) return;
+      body.setAttribute('data-matomo-tracked', '');
       window._paq.push(['setCustomUrl', window.location.href]);
       window._paq.push(['setDocumentTitle', document.title]);
       window._paq.push(['trackPageView']);
     }
-  }
-  document.addEventListener('astro:page-load', trackPage);
+
+    if (!window.__triangleMatomo) {
+      window.__triangleMatomo = true;
+      const u = "https://stats.thetriangle.org/";
+      _paq.push(['enableLinkTracking']);
+      _paq.push(['setTrackerUrl', u + 'matomo.php']);
+      _paq.push(['setSiteId', '1']);
+      const d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+      g.async = true; g.src = u + 'matomo.js';
+      s.parentNode.insertBefore(g, s);
+      document.addEventListener('astro:page-load', trackPageView);
+    }
+
+    trackPageView();
+  })();
 </script>
 
 <noscript>

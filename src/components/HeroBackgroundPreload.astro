@@ -1,0 +1,26 @@
+---
+// Lets the browser start on the homepage LCP -- the anniversary art Banner draws
+// as a CSS background -- straight from <head>, instead of after global.css has
+// downloaded and the .one-hundred-bg rule matched. Render it into BaseLayout's
+// "head" slot with the same slides as the Banner; it emits nothing when the
+// Banner will not draw the background.
+//
+// `media` matches the background's `hidden md:block`: phones never paint it,
+// so they must not download it either.
+import type { HomepageCarouselSlide } from "../utils/types";
+import { ANNIVERSARY_BACKGROUND_URL, showsAnniversaryBackground } from "../utils/homeCarousel";
+
+const { slides = [] } = Astro.props as { slides?: HomepageCarouselSlide[] };
+---
+
+{
+  showsAnniversaryBackground(slides) && (
+    <link
+      rel="preload"
+      as="image"
+      href={ANNIVERSARY_BACKGROUND_URL}
+      media="(min-width: 768px)"
+      fetchpriority="high"
+    />
+  )
+}

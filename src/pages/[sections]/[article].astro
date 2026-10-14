@@ -10,6 +10,7 @@ import '../../styles/global.css';
 import Social from '../../components/Social.astro';
 import Poll from '../../components/Polls.astro';
 import { getArticle, getArticleComments } from '../../utils/db';
+import { loadArticlePage } from '../../utils/articlePage';
 import { getCategoryHref } from "../../utils/taxonomyStore";
 import { LEGACY_ARTICLE_SLUGS } from '../../utils/legacySlugs';
 import { normalizeText, imageSrcset } from "../../utils/data";
@@ -52,8 +53,7 @@ if (host === 'thetriangle.org') {
 // across 256 distinct slugs, nearly all of them tag archives.
 //
 // So resolve first and redirect only on a hit. The extra lookup lands only on the
-// legacy path and is a cheap one: the CMS marks article detail cacheable for a
-// minute and this fetch is force-cache, so the redirected request reads it warm.
+// legacy path.
 if (sections !== "article") {
   // A renamed slug resolves through the map rather than the CMS -- the middleware
   // only rewrites paths already under /article/, so without this a legacy slug
@@ -72,14 +72,15 @@ if (sections !== "article") {
   return Astro.redirect('/article/' + article, 301);
 }
 
-const post = article ? await getArticle(article) : undefined;
+// Article and comments are read together; see utils/articlePage.
+const { post, comments } = article
+  ? await loadArticlePage(article, { getArticle, getArticleComments })
+  : { post: undefined, comments: [] };
 
 if (!post) {
   return Astro.rewrite('/404');
 }
 
-const commentsResponse = article ? await getArticleComments(article) : undefined;
-const comments = Array.isArray(commentsResponse?.comments) ? commentsResponse.comments : [];
 const commentsClosed = String(post.comment_status ?? "").trim().toLowerCase() === "closed";
 
 const authorListLinks: string[] = [];

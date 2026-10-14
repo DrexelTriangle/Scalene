@@ -2,7 +2,13 @@
 import { normalizeText, buildByline, proxyMediaUrl, imageSrcset } from '../utils/data';
 import { getCategoryHref } from '../utils/taxonomyStore';
 
-const { title, excerpt, image, variants, author, published_date, date, category, row, slug, breaking } = Astro.props;
+const { title, excerpt, image, variants, author, published_date, date, category, row, slug, breaking, priority = false, sizes: slotSizes } = Astro.props;
+
+// Cards load lazily. `priority` is for the one lead card a layout knows sits
+// above the fold -- the page's LCP image -- so the browser fetches it at once
+// instead of waiting for layout to prove it visible.
+const loading = priority ? 'eager' : 'lazy';
+const fetchpriority = priority ? 'high' : undefined;
 
 const DEFAULT_IMGS = [
   '/proxy/wp-content/uploads/2024/12/IMG_2493-2048x1365.jpg',
@@ -19,12 +25,12 @@ if (image !== undefined) {
 const srcset = image ? imageSrcset(variants) : undefined;
 
 // How wide the card's image is drawn, so the browser can pick a rendition
-// before layout. Derived from the homepage grid: a 1200px container (900px at
-// lg, 90vw below), its 8fr main column, and the section splits inside that.
+// before layout. A section layout that knows its slot passes `sizes` (see
+// utils/imageSizes); otherwise these generous defaults apply.
 // Overestimating only costs a slightly larger download; underestimating blurs.
-const sizes = row
+const sizes = slotSizes ?? (row
   ? '(min-width: 1280px) 400px, (min-width: 640px) 33vw, 90vw'
-  : '(min-width: 1280px) 500px, (min-width: 1024px) 380px, (min-width: 640px) 60vw, 90vw';
+  : '(min-width: 1280px) 500px, (min-width: 1024px) 380px, (min-width: 640px) 60vw, 90vw');
 
 const byline = buildByline(author, published_date || date);
 
@@ -44,7 +50,7 @@ const imgClass = row
 <article class={classes}>
   {image !== undefined && (
     <a href={`/${slug}`}>
-      <img class={imgClass} loading="lazy" src={imgSrc} srcset={srcset} sizes={srcset && sizes} alt={title || 'Article image'} />
+      <img class={imgClass} loading={loading} fetchpriority={fetchpriority} src={imgSrc} srcset={srcset} sizes={srcset && sizes} alt={title || 'Article image'} />
     </a>
   )}
   {category && (

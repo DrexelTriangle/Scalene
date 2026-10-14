@@ -1,0 +1,135 @@
+---
+// The animated "Games" link, shared by the header's section row and the side
+// menu. `side` sizes it for the side menu.
+interface Props {
+  side?: boolean;
+}
+const { side = false } = Astro.props;
+---
+<a class:list={["games-link", { side }]} href="/wordangle" aria-label="Games"><span class="games-word" aria-hidden="true"><span style="--i:0">G</span><span style="--i:1">a</span><span style="--i:2">m</span><span style="--i:3">e</span><span style="--i:4">s</span></span><span class="games-tiles" aria-hidden="true"><span style="--i:0;--c:#538d4e">G</span><span style="--i:1;--c:#c9b458">A</span><span style="--i:2;--c:#787c7e">M</span><span style="--i:3;--c:#538d4e">E</span><span style="--i:4;--c:#c9b458">S</span></span></a>
+
+<style>
+  /*
+   * On hover, each letter of "Games" flips away and a Wordangle tile flips in
+   * where it was, one after another (--i staggers them). The tiles are their
+   * own row laid over the word, positioned absolutely so they can be wider than
+   * the text without pushing the other links about; they spill into the gap
+   * between links. Tile colours (--c) are the game's exact / present / absent;
+   * keep in step with --tr-* in src/pages/wordangle.astro.
+   *
+   * The side menu's variant has bigger tiles to suit its bigger text, and
+   * anchors them to the left edge, since the menu's links are left-aligned.
+   */
+  .games-link {
+    position: relative;
+    white-space: nowrap;
+  }
+
+  .games-word span {
+    display: inline-block;
+  }
+
+  /* A little wiggle every few seconds so the link gets noticed. It stops
+     while the link is hovered or focused, so it never fights the flip. */
+  .games-link:not(:hover):not(:focus-visible) {
+    animation: games-shake 5s ease-in-out infinite;
+  }
+
+  /* The wiggle opens the cycle, so the first one plays as soon as the page
+     loads, then the link rests for the remaining ~4.3s. */
+  @keyframes games-shake {
+    0%, 14%, 100% {
+      transform: rotate(0deg);
+    }
+    2% {
+      transform: rotate(-6deg);
+    }
+    5% {
+      transform: rotate(5deg);
+    }
+    8% {
+      transform: rotate(-3deg);
+    }
+    11% {
+      transform: rotate(2deg);
+    }
+  }
+
+  .games-tiles {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    gap: 2px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .games-link.side .games-tiles {
+    left: 0;
+    transform: translateY(-50%);
+  }
+
+  .games-tiles span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 18px;
+    border-radius: 3px;
+    background: var(--c);
+    color: white;
+    font-size: 12px;
+    line-height: 1;
+    transform: rotateX(90deg);
+  }
+
+  .games-link.side .games-tiles span {
+    width: 20px;
+    height: 22px;
+    font-size: 14px;
+  }
+
+  .games-link:hover .games-word span,
+  .games-link:focus-visible .games-word span {
+    animation: games-letter-out 180ms ease-in calc(var(--i) * 90ms) forwards;
+  }
+
+  .games-link:hover .games-tiles span,
+  .games-link:focus-visible .games-tiles span {
+    animation: games-tile-in 180ms ease-out calc(var(--i) * 90ms + 180ms) both;
+  }
+
+  @keyframes games-letter-out {
+    to {
+      transform: rotateX(90deg);
+    }
+  }
+
+  @keyframes games-tile-in {
+    from {
+      transform: rotateX(-90deg);
+    }
+    to {
+      transform: rotateX(0deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .games-link:not(:hover):not(:focus-visible) {
+      animation: none;
+    }
+
+    .games-link:hover .games-word span,
+    .games-link:focus-visible .games-word span {
+      animation: none;
+      visibility: hidden;
+    }
+
+    .games-link:hover .games-tiles span,
+    .games-link:focus-visible .games-tiles span {
+      animation: none;
+      transform: none;
+    }
+  }
+</style>
