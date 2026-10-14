@@ -345,9 +345,16 @@ body {
 .tr-quiz-answer.is-wrong {
   @apply border-red-700 text-red-700;
 }
-.tr-quiz-explanation, .tr-quiz-stat,
-#article .tr-quiz .tr-quiz-explanation, #article .tr-quiz .tr-quiz-stat {
-  @apply text-[14px] max-w-none mx-0 mt-[8px] mb-0;
+/* After an answer: the explanation sits in a tinted bubble and the readers
+   stat in an outlined pill, so neither reads as a stray line of prose. */
+.tr-quiz-explanation,
+#article .tr-quiz .tr-quiz-explanation {
+  @apply text-[14px] max-w-none mx-0 mt-[8px] mb-0 rounded-[5px] p-[12px];
+  background: rgba(37, 99, 235, 0.08);
+}
+.tr-quiz-stat,
+#article .tr-quiz .tr-quiz-stat {
+  @apply inline-block text-[12px] uppercase font-extrabold text-triangleBlue max-w-none mx-0 mt-[8px] mb-0 rounded-full border-solid border-[1px] border-triangleBlue px-[10px] py-[2px] leading-[normal];
 }
 .tr-quiz-next, .tr-quiz-share, .tr-quiz-again {
   @apply mt-[12px] bg-triangleBlue text-white rounded-[5px] px-4 py-1 border-[1px] border-triangleBlue hover:bg-white hover:text-triangleBlue;
