@@ -1,10 +1,25 @@
 ---
 // Lazy: this sits in the sidebar, which phones hide (display:none). An eager
-// image downloads anyway, and on the homepage this one (~340 KB) was the
-// largest thing competing with the phone LCP, the news lead image.
+// image downloads anyway, and on the homepage this one was the largest thing
+// competing with the phone LCP, the news lead image.
+//
+// The sidebar is at most ~387px wide (the 4fr of the 1200px grid), so it gets
+// 400px and 800px (2x) renditions of the 1080px original (subscribe.webp,
+// ~340 KB, kept for anything linking to it directly). width/height are the 1x
+// file's, so the slot is reserved before the image arrives.
 ---
 <div class="mb-[8px] overflow-hidden pt-[5px]">
     <a href="/subscribe">
-        <img src="/images/subscribe.webp" loading="lazy"/>
+        <img
+            class="w-full h-auto"
+            src="/images/subscribe-400.webp"
+            srcset="/images/subscribe-400.webp 400w, /images/subscribe-800.webp 800w"
+            sizes="(min-width: 1280px) 387px, (min-width: 1024px) 300px, (min-width: 640px) 30vw, 100vw"
+            width="400"
+            height="451"
+            loading="lazy"
+            decoding="async"
+            alt="Subscribe to The Triangle newsletter: get Drexel news straight to your inbox"
+        />
     </a>
 </div>

@@ -1,15 +1,21 @@
 ---
 import PhotoArticle from "../PhotoArticle.astro";
 import type { SectionCardArticle } from "../../utils/types";
+import { slotSizes, type Column } from "../../utils/imageSizes";
 
 interface Props {
   articles: SectionCardArticle[];
+  column?: Column;
 }
 
-const { articles } = Astro.props;
+const { articles, column = "full" } = Astro.props;
 
 const rowSize = articles.length
 const rowSizeClass = "sm:grid-cols-" + rowSize;
+// Equal shares from sm, less the 16px either side of each inner divider.
+const sizes = rowSize > 0
+  ? slotSizes(column, { sm: { share: 1 / rowSize, gutter: (32 * (rowSize - 1)) / rowSize } })
+  : undefined;
 ---
 
 <div class={"grid grid-cols-1 sm:divide-x sm:divide-triangleGray-400 pt-3 mt-3 d:mb-8 border-t-[1px] border-solid border-triangleGray-400 " + rowSizeClass}>
@@ -20,6 +26,7 @@ const rowSizeClass = "sm:grid-cols-" + rowSize;
         variants={article.featured_image_variants}
         author={article.authors}
         published_date={article.published_date}
-        slug={"article/"+article.slug}/>
+        slug={"article/"+article.slug}
+        sizes={sizes}/>
     ))}
 </div>

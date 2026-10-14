@@ -1,12 +1,16 @@
 ---
 import PhotoArticle from "../PhotoArticle.astro";
 import type { SectionCardArticle } from "../../utils/types";
+import { slotSizes, type Column } from "../../utils/imageSizes";
 
 interface Props {
   articles: SectionCardArticle[];
+  column?: Column;
 }
 
-const { articles } = Astro.props;
+const { articles, column = "full" } = Astro.props;
+
+const sizes = slotSizes(column, { md: { share: 1 / 2, gutter: 12 } });
 ---
 <div class="grid grid-cols-[1fr] md:grid-cols-[4fr_4fr] md:divide-x md:divide-triangleGray-400 ">
     <!-- Column 1: 2 blocks -->
@@ -17,7 +21,8 @@ const { articles } = Astro.props;
             variants={article.featured_image_variants}
             author={article.authors}
             published_date={article.published_date}
-            slug={"article/"+article.slug}/>
+            slug={"article/"+article.slug}
+            sizes={sizes}/>
         ))}
     </div>
 
