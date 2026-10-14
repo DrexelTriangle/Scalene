@@ -293,9 +293,10 @@ body {
 /*
  * Quiz block. The root is a top-level div that holds divs, so the prose rule
  * above skips it; the width is set here instead. Every text, heading and list
- * rule is written twice: bare, for a page without #article, and under
- * #article .tr-quiz, which outranks #article p, #article h2 and h3,
- * #article ol and #article li inside an article body. Everything after
+ * rule is written twice: bare, and under #article .tr-quiz, which outranks
+ * #article p, #article h2 and h3, #article ol and #article li. The standalone
+ * quiz page wraps the quiz in <main id="article">, so the twins apply there
+ * as well as inside an article body. Everything after
  * .js-quiz is only applied once the player script has started, so a reader
  * with scripts off gets the whole quiz as a readable list.
  */

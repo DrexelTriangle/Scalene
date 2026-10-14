@@ -26,7 +26,7 @@ function isSameOrigin(origin: string | null, requestUrl: string): boolean {
   }
 }
 
-// Same shape as api/poll.ts. The reader's address goes to the CMS in
+// Forwarding pattern as in pollStore.ts. The reader's address goes to the CMS in
 // X-Forwarded-For so its per-reader rate limit is per reader, not per site;
 // the CMS keys on the first entry and this is the only proxy in front of it.
 export const POST: APIRoute = async ({ request, clientAddress }) => {
@@ -38,11 +38,19 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     return jsonResponse({ error: "Wrong origin" }, 403);
   }
 
+  // The CMS caps the body at 4096; the node adapter's own limit is far larger.
+  if (Number(request.headers.get("content-length") ?? 0) > 1024) {
+    return jsonResponse({ error: "Body too large" }, 413);
+  }
+
   let body: Record<string, unknown>;
   try {
     body = await request.json();
   } catch {
     return jsonResponse({ error: "Bad JSON" }, 400);
+  }
+  if (typeof body !== "object" || body === null) {
+    return jsonResponse({ error: "Bad answer" }, 400);
   }
   const quizId = body.quiz_id;
   const version = body.definition_version;
