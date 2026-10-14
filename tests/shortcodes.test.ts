@@ -45,7 +45,7 @@ describe("block shortcodes expand only as the whole content of a top-level block
     const out = expand(`<p>Before</p><p>${spotify}</p><p>After</p>`);
     assert.equal(
       out,
-      `<p>Before</p><div class="article-embed article-embed-audio"><iframe src="https://open.spotify.com/embed/episode/7makk4oTQel546B0PZlDM5" width="100%" height="152" loading="lazy" allow="encrypted-media" title="Spotify player"></iframe></div><p>After</p>`,
+      `<p>Before</p><div class="article-embed article-embed-audio"><p class="article-embed-label">Spotify</p><iframe src="https://open.spotify.com/embed/episode/7makk4oTQel546B0PZlDM5" width="100%" height="152" loading="lazy" allow="encrypted-media" title="Spotify player"></iframe></div><p>After</p>`,
     );
   });
 
@@ -120,23 +120,53 @@ describe("tiktok", () => {
     const out = expand(`<p>[tiktok url="https://www.tiktok.com/@scout2015/video/6718335390845095173?is_from_webapp=1" /]</p>`);
     assert.equal(
       out,
-      `<div class="article-embed article-embed-video article-embed-portrait"><iframe src="https://www.tiktok.com/player/v1/6718335390845095173" loading="lazy" allow="fullscreen" title="TikTok video"></iframe></div>`,
+      `<div class="article-embed article-embed-video article-embed-portrait"><p class="article-embed-label">TikTok</p><div class="article-embed-player"><iframe src="https://www.tiktok.com/player/v1/6718335390845095173" loading="lazy" allow="fullscreen" title="TikTok video"></iframe></div></div>`,
     );
   });
 });
 
 describe("instagram", () => {
-  it("emits the official blockquote with a plain link fallback", () => {
+  const one = "/wp-content/uploads/scalene/instagram/Cabc123_-x/1.webp";
+  const two = "/wp-content/uploads/scalene/instagram/Cabc123_-x/2.webp";
+
+  it("renders only the link when the shortcode carries no media", () => {
     const out = expand(`<p>[instagram url="https://www.instagram.com/p/Cabc123_-x/?igsh=t" /]</p>`);
     assert.equal(
       out,
-      `<div class="article-embed article-embed-social"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/Cabc123_-x/" data-instgrm-version="14"><a href="https://www.instagram.com/p/Cabc123_-x/">View this post on Instagram</a></blockquote></div>`,
+      `<div class="article-embed article-embed-social"><p class="article-embed-label">Instagram</p><a class="article-embed-link" href="https://www.instagram.com/p/Cabc123_-x/">View on Instagram</a></div>`,
     );
   });
 
-  it("keeps a valid permalink free of quotes inside the attribute", () => {
-    const out = expand(`<p>[instagram url="https://www.instagram.com/p/Cabc123_-x/" /]</p>`);
-    includes(out, 'data-instgrm-permalink="https://www.instagram.com/p/Cabc123_-x/" data-instgrm-version');
+  it("renders one image in the holder with no arrows", () => {
+    const out = expand(`<p>[instagram url="https://www.instagram.com/p/Cabc123_-x/" media="${one}" /]</p>`);
+    assert.equal(
+      out,
+      `<div class="article-embed article-embed-social tr-ig" data-count="1"><p class="article-embed-label">Instagram</p><div class="tr-ig-frame"><img src="${MEDIA}${one}" alt="" loading="lazy"></div><a class="article-embed-link" href="https://www.instagram.com/p/Cabc123_-x/">View on Instagram</a></div>`,
+    );
+  });
+
+  it("renders a carousel with the later images hidden and the arrows present", () => {
+    const out = expand(`<p>[instagram url="https://www.instagram.com/p/Cabc123_-x/" media="${one},${two}" /]</p>`);
+    includes(out, 'data-count="2"');
+    includes(out, `<img src="${MEDIA}${one}" alt="" loading="lazy"><img src="${MEDIA}${two}" alt="" loading="lazy" hidden>`);
+    includes(out, '<button type="button" class="tr-ig-prev" aria-label="Previous image" hidden>');
+  });
+
+  it("drops the whole list when one path is off our origin", () => {
+    const out = expand(`<p>[instagram url="https://www.instagram.com/p/Cabc123_-x/" media="${one},https://evil.test/x.webp" /]</p>`);
+    excludes(out, "tr-ig-frame");
+    includes(out, "View on Instagram");
+  });
+
+  it("drops a list that climbs out of the uploads folder", () => {
+    const out = expand(`<p>[instagram url="https://www.instagram.com/p/Cabc123_-x/" media="/wp-content/uploads/../../etc/passwd.png" /]</p>`);
+    excludes(out, "tr-ig-frame");
+  });
+
+  it("renders the link alone when the media base URL is unset", () => {
+    const out = expandShortcodesWith(`<p>[instagram url="https://www.instagram.com/p/Cabc123_-x/" media="${one}" /]</p>`, { mediaBaseUrl: "" });
+    excludes(out, "tr-ig-frame");
+    includes(out, "View on Instagram");
   });
 
   it("stays as text when the hostile characters sit in the path", () => {
@@ -151,27 +181,43 @@ describe("audio", () => {
   it("expands a src on a ported media origin", () => {
     const ported = "https://media.example.test:8443/wp-content/uploads/2026/10/ep1.mp3";
     const out = expandShortcodesWith(`<div>[audio src="${ported}" /]</div>`, { mediaBaseUrl: "https://media.example.test:8443" });
-    includes(out, `<audio controls preload="metadata" src="${ported}"`);
+    includes(out, `<audio preload="metadata" src="${ported}"`);
   });
 
   it("decodes a CMS-saved &amp; once and escapes it once", () => {
     const out = expand(`<div>[audio src="${MEDIA}/wp-content/uploads/2026/10/a&amp;b.mp3" /]</div>`);
-    includes(out, `<audio controls preload="metadata" src="${MEDIA}/wp-content/uploads/2026/10/a&amp;b.mp3"`);
+    includes(out, `<audio preload="metadata" src="${MEDIA}/wp-content/uploads/2026/10/a&amp;b.mp3"`);
     excludes(out, "&amp;amp;");
   });
 
   it("decodes a numeric &#038; the same way", () => {
     const out = expand(`<div>[audio src="${MEDIA}/wp-content/uploads/2026/10/a&#038;b.mp3" /]</div>`);
-    includes(out, `<audio controls preload="metadata" src="${MEDIA}/wp-content/uploads/2026/10/a&amp;b.mp3"`);
+    includes(out, `<audio preload="metadata" src="${MEDIA}/wp-content/uploads/2026/10/a&amp;b.mp3"`);
     excludes(out, "&amp;amp;");
   });
 
-  it("emits a native player and an open link", () => {
+  const PLAYER = `<audio preload="metadata" src="${src}"></audio><div class="tr-audio-row"><button type="button" class="tr-audio-play" aria-label="Play"><span class="tr-audio-tri" aria-hidden="true"></span></button><div class="tr-audio-track" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0"><div class="tr-audio-fill"></div></div><span class="tr-audio-time">0:00 / 0:00</span></div><a class="article-embed-link" href="${src}">Open MP3</a>`;
+
+  it("emits our player and an open link", () => {
     const out = expand(`<div>[audio src="${src}" /]</div>`);
-    assert.equal(
-      out,
-      `<div class="article-embed article-embed-audio"><audio controls preload="metadata" src="${src}" aria-label="Audio player"></audio><a class="article-embed-link" href="${src}">Open MP3</a></div>`,
-    );
+    assert.equal(out, `<div class="article-embed article-embed-audio tr-audio"><p class="article-embed-label">Audio</p>${PLAYER}</div>`);
+  });
+
+  it("names the source in the label", () => {
+    const out = expand(`<div>[audio src="${src}" source="WKDU%2091.7%20FM" /]</div>`);
+    includes(out, '<p class="article-embed-label">Audio from WKDU 91.7 FM</p>');
+  });
+
+  it("escapes a source holding markup and a quote", () => {
+    const out = expand(`<div>[audio src="${src}" source="%3Cb%3EWKDU%3C%2Fb%3E%20%22live%22" /]</div>`);
+    includes(out, "Audio from &lt;b&gt;WKDU&lt;/b&gt; &quot;live&quot;</p>");
+  });
+
+  it("cuts a source over 120 characters", () => {
+    const long = "x".repeat(121);
+    const out = expand(`<div>[audio src="${src}" source="${long}" /]</div>`);
+    includes(out, `Audio from ${"x".repeat(120)}</p>`);
+    excludes(out, "x".repeat(121));
   });
 
   it("accepts an uppercase extension", () => {
@@ -222,7 +268,7 @@ describe("pipeline with normalizeArticleHtml", () => {
   });
 
   it("passes an expanded [instagram] block through unchanged", () => {
-    const expanded = expand(`<p>[instagram url="https://www.instagram.com/p/Cabc123_-x/" /]</p>`);
+    const expanded = expand(`<p>[instagram url="https://www.instagram.com/p/Cabc123_-x/" media="/wp-content/uploads/scalene/instagram/Cabc123_-x/1.webp" /]</p>`);
     assert.equal(normalizeArticleHtml(expanded), expanded);
   });
 });

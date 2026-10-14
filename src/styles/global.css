@@ -225,8 +225,25 @@ body {
  * every pixel it can get.
  */
 #article .article-embed-video,
-#article .article-embed-audio {
-  @apply my-[16px] mx-[auto] max-w-[700px];
+#article .article-embed-audio,
+#article .article-embed-social {
+  @apply my-[24px] mx-[auto] max-w-[700px] border-solid border-[1px] border-triangleBlue rounded-[5px];
+}
+
+/*
+ * The frame matches the quiz block (.tr-quiz) so the two read as the same
+ * kind of thing inside an article. Players sized by the wrapper's own
+ * aspect ratio (YouTube, the legacy 16:9 box) get no padding, since the
+ * iframe fills the wrapper edge to edge and the corners are clipped instead.
+ */
+#article .article-embed-audio,
+#article .article-embed-social,
+#article .article-embed-portrait {
+  @apply p-[16px];
+}
+
+#article .article-embed-video {
+  overflow: hidden;
 }
 
 #article .article-embed-video {
@@ -249,25 +266,31 @@ body {
 
 /*
  * Embeds the CMS editor writes: Spotify (audio box, sized by its own height
- * attribute), TikTok (portrait), Instagram (sizes its own blockquote) and an
- * uploaded MP3 in a native <audio>. Same rule as above: no inline sizes.
+ * attribute), TikTok (portrait), the Instagram holder and our MP3 player.
+ * Same rule as above: no inline sizes.
+ *
+ * Portrait frames (TikTok, Instagram) hug their player instead of spanning
+ * the 700px column: a 325px player in a 700px frame read as empty space.
  */
-#article .article-embed-social {
-  @apply my-[16px] mx-[auto] max-w-[700px];
-}
-
-#article .article-embed-social blockquote {
-  border: 0;
-  padding: 0;
-  margin: 0;
-  font-style: normal;
-}
-
 #article .article-embed-portrait {
+  position: static;
+  aspect-ratio: auto;
+  overflow: visible;
+}
+
+#article .article-embed-portrait,
+#article .tr-ig {
+  width: fit-content;
+  max-width: 100%;
+}
+
+#article .article-embed-portrait .article-embed-player {
   position: relative;
-  width: 100%;
-  max-width: 325px;
+  width: 325px;
+  max-width: 100%;
   aspect-ratio: 9 / 16;
+  border-radius: 5px;
+  overflow: hidden;
 }
 
 #article .article-embed-portrait iframe {
@@ -281,6 +304,103 @@ body {
 #article .article-embed-audio audio {
   display: block;
   width: 100%;
+}
+
+/*
+ * Provider label, the quiz's "Question 1 of 5" eyebrow at one size smaller.
+ * Written as a <p> so a reader with styles off still gets a line of text;
+ * the twin selector outranks the #article p prose rule.
+ */
+#article .article-embed-label,
+#article .article-embed p.article-embed-label {
+  @apply font-roboto-slab text-[11px] uppercase font-extrabold text-triangleBlue leading-[normal] max-w-none mx-0 mt-0 mb-[8px];
+}
+
+/*
+ * Instagram holder: the frame takes the first image's own shape. Later
+ * carousel images are hidden until the arrows swap them in.
+ */
+#article .tr-ig-frame {
+  position: relative;
+  width: 325px;
+  max-width: 100%;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+#article .tr-ig-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+}
+
+#article .tr-ig-prev,
+#article .tr-ig-next {
+  @apply absolute top-1/2 -translate-y-1/2 w-[32px] h-[32px] rounded-full bg-white/90 text-triangleBlue text-[22px] leading-[32px] text-center border-solid border-[1px] border-triangleBlue;
+}
+#article .tr-ig-prev { left: 8px; }
+#article .tr-ig-next { right: 8px; }
+
+/*
+ * MP3 player. The native element is hidden; the article page script drives
+ * it from these controls. The play button is the Wordangle triangle.
+ */
+#article .tr-audio audio {
+  display: none;
+}
+
+#article .tr-audio-row {
+  @apply flex items-center gap-x-[12px];
+}
+
+#article .tr-audio-play {
+  @apply shrink-0 w-[44px] h-[44px] rounded-full bg-white border-solid border-[1px] border-triangleBlue flex items-center justify-center;
+}
+
+/* The Wordangle triangle, borders only, pointing right. Nudged 2px right so
+   its visual centre sits in the circle. */
+#article .tr-audio-tri {
+  display: block;
+  width: 0;
+  height: 0;
+  margin-left: 3px;
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  border-left: 15px solid theme("colors.triangleBlue");
+}
+
+#article .tr-audio.is-playing .tr-audio-tri {
+  /* A stop square replaces the triangle while playing. */
+  display: none;
+}
+
+#article .tr-audio.is-playing .tr-audio-play::after {
+  content: "";
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  background: theme("colors.triangleBlue");
+}
+
+#article .tr-audio-track {
+  @apply relative grow h-[8px] rounded-full cursor-pointer;
+  background: rgba(37, 99, 235, 0.15);
+}
+
+#article .tr-audio-track:focus-visible {
+  outline: 2px solid theme("colors.triangleBlue");
+  outline-offset: 4px;
+}
+
+#article .tr-audio-fill {
+  @apply absolute inset-y-0 left-0 rounded-full bg-triangleBlue;
+  width: 0;
+}
+
+#article .tr-audio-time {
+  @apply font-roboto-slab text-[13px] text-triangleBlue shrink-0 tabular-nums;
 }
 
 #article .article-embed-link {

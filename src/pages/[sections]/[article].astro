@@ -258,11 +258,11 @@ const hasPuzzleScript = content.includes("pm-embed-div");
 const hasPuzzleIframe = /<iframe\b[^>]*\bsrc="[^"]*\bamuselabs\.com\//i.test(content);
 const hasPuzzleEmbed = hasPuzzleScript || hasPuzzleIframe;
 
-// The Instagram expander emits exactly this opening tag; embed.js upgrades the
-// blockquote into the post. Keyed on the emitted tag rather than the class
-// name alone so prose or a code sample mentioning "instagram-media" does not
-// pull the script in. Same pattern as the puzzle script above.
-const hasInstagramEmbed = content.includes('<blockquote class="instagram-media"');
+// Our own players: the MP3 player and the Instagram carousel arrows need a
+// few lines of script, pulled in only when the expander emitted them. Keyed
+// on the exact opening tags, same pattern as the puzzle script above.
+const hasAudioPlayer = content.includes('<div class="article-embed article-embed-audio tr-audio">');
+const hasInstagramCarousel = content.includes('<div class="article-embed article-embed-social tr-ig" data-count="') && !content.includes('data-count="1">');
 
 // Legacy WordPress bodies carry their lead image inline as a <figure>, so only
 // posts without any inline image need the featured image rendered for them --
@@ -318,11 +318,69 @@ const featuredSrcset = featuredImage ? imageSrcset(post.featured_image_variants)
             id="pm-script" 
             src="https://puzzleme.amuselabs.com/pmm/js/puzzleme-embed.js"
         ></script>)}
-        {hasInstagramEmbed && (
-        <script
-            is:inline
-            async
-            src="https://www.instagram.com/embed.js"
-        ></script>)}
+        {hasAudioPlayer && (
+        <script is:inline>
+          // MP3 player: one native <audio> per .tr-audio, driven by our controls.
+          document.querySelectorAll(".tr-audio").forEach((box) => {
+            const audio = box.querySelector("audio");
+            const play = box.querySelector(".tr-audio-play");
+            const track = box.querySelector(".tr-audio-track");
+            const fill = box.querySelector(".tr-audio-fill");
+            const time = box.querySelector(".tr-audio-time");
+            if (!audio || !play || !track || !fill || !time) return;
+            const clock = (s) => {
+              if (!isFinite(s)) return "0:00";
+              const m = Math.floor(s / 60);
+              const r = Math.floor(s % 60);
+              return m + ":" + (r < 10 ? "0" : "") + r;
+            };
+            const paint = () => {
+              const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+              fill.style.width = pct + "%";
+              track.setAttribute("aria-valuenow", String(Math.round(pct)));
+              time.textContent = clock(audio.currentTime) + " / " + clock(audio.duration);
+            };
+            const seek = (frac) => {
+              if (!audio.duration) return;
+              audio.currentTime = Math.max(0, Math.min(1, frac)) * audio.duration;
+              paint();
+            };
+            play.addEventListener("click", () => { audio.paused ? audio.play() : audio.pause(); });
+            audio.addEventListener("play", () => { box.classList.add("is-playing"); play.setAttribute("aria-label", "Pause"); });
+            audio.addEventListener("pause", () => { box.classList.remove("is-playing"); play.setAttribute("aria-label", "Play"); });
+            audio.addEventListener("timeupdate", paint);
+            audio.addEventListener("loadedmetadata", paint);
+            audio.addEventListener("ended", () => { audio.currentTime = 0; paint(); });
+            track.addEventListener("click", (e) => {
+              const r = track.getBoundingClientRect();
+              seek((e.clientX - r.left) / r.width);
+            });
+            track.addEventListener("keydown", (e) => {
+              if (e.key === "ArrowLeft") { e.preventDefault(); seek((audio.currentTime - 5) / audio.duration); }
+              if (e.key === "ArrowRight") { e.preventDefault(); seek((audio.currentTime + 5) / audio.duration); }
+              if (e.key === " " || e.key === "Enter") { e.preventDefault(); play.click(); }
+            });
+            paint();
+          });
+        </script>)}
+        {hasInstagramCarousel && (
+        <script is:inline>
+          // Instagram carousel: the arrows swap which image is visible.
+          document.querySelectorAll(".tr-ig").forEach((box) => {
+            const imgs = Array.from(box.querySelectorAll(".tr-ig-frame img"));
+            const prev = box.querySelector(".tr-ig-prev");
+            const next = box.querySelector(".tr-ig-next");
+            if (imgs.length < 2 || !prev || !next) return;
+            let i = 0;
+            const show = (n) => {
+              i = (n + imgs.length) % imgs.length;
+              imgs.forEach((img, k) => { img.hidden = k !== i; });
+            };
+            prev.hidden = false;
+            next.hidden = false;
+            prev.addEventListener("click", () => show(i - 1));
+            next.addEventListener("click", () => show(i + 1));
+          });
+        </script>)}
     </article>
 </ArticleLayout>
