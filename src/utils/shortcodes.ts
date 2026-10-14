@@ -16,7 +16,7 @@
 import he from "he";
 
 import { mapTopLevel } from "./articleHtml.ts";
-import { parseAudioUrl, parseEmbedUrl } from "./embedUrl.ts";
+import { parseAudioUrl, parseEmbedUrl, shortcodeToQuizId } from "./embedUrl.ts";
 
 /** Attributes are single-quoted in practice, but accept double quotes too. */
 function parseAttributes(raw: string): Record<string, string> {
@@ -199,6 +199,16 @@ function audioEmbed(src: string, mediaBaseUrl: string): string | null {
   return `<div class="article-embed article-embed-audio"><audio controls preload="metadata" src="${safe}" aria-label="Audio player"></audio><a class="article-embed-link" href="${safe}">Open MP3</a></div>`;
 }
 
+/**
+ * [quiz id="N"] becomes an empty slot rather than markup. The article page
+ * splits the body at these and renders Quiz.astro into each one, because a
+ * component rendered as a string through set:html ships no script. The id is
+ * read by the shared parser, so this site accepts exactly what the CMS writes.
+ */
+function quizSlot(id: number): string {
+  return `<div class="tr-quiz-slot" data-quiz-id="${id}"></div>`;
+}
+
 /** The new shortcodes, each matched only as the entire content of a block. */
 const BLOCK_SHORTCODE = /^\[(spotify|tiktok|instagram|audio)(?=\s)([^\]]*?)\s*\/?\]$/i;
 const URL_ATTRIBUTE = /(?:^|\s)(url|src)\s*=\s*(?:"([^"]*)"|'([^']*)')/i;
@@ -213,6 +223,8 @@ const URL_ATTRIBUTE = /(?:^|\s)(url|src)\s*=\s*(?:"([^"]*)"|'([^']*)')/i;
 function expandBlockShortcode(inner: string, mediaBaseUrl: string): string | undefined {
   const text = inner.trim();
   if (!text.startsWith("[")) return undefined;
+  const quizId = shortcodeToQuizId(text);
+  if (quizId !== null) return quizSlot(quizId);
   const m = BLOCK_SHORTCODE.exec(text);
   if (!m) return undefined;
   const attr = URL_ATTRIBUTE.exec(m[2]);
@@ -290,7 +302,7 @@ export function expandShortcodes(content: string): string {
  * database/http_models.go, which keeps them out of newly derived excerpts.
  */
 const shortcodePattern =
-  /\[\/?(?:puzzleme|caption|gallery|embed|playlist|audio|video)\b[^\]]*\]|\[[a-z][a-z0-9_-]*\s+[^\]]*=[^\]]*\]/gis;
+  /\[\/?(?:puzzleme|caption|gallery|embed|playlist|audio|video|quiz)\b[^\]]*\]|\[[a-z][a-z0-9_-]*\s+[^\]]*=[^\]]*\]/gis;
 
 /**
  * Remove shortcodes rather than expand them, for the places that show article
