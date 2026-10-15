@@ -352,9 +352,17 @@ body {
   @apply text-[14px] max-w-none mx-0 mt-[8px] mb-0 rounded-[5px] p-[12px];
   background: rgba(37, 99, 235, 0.08);
 }
+/* Its own line, sized to its text, with the buttons' corners and type size
+   so it reads as part of the same set rather than a stray badge. */
 .tr-quiz-stat,
 #article .tr-quiz .tr-quiz-stat {
-  @apply inline-block text-[12px] uppercase font-extrabold text-triangleBlue max-w-none mx-0 mt-[8px] mb-0 rounded-full border-solid border-[1px] border-triangleBlue px-[10px] py-[2px] leading-[normal];
+  @apply block w-fit text-[14px] font-bold text-triangleBlue max-w-none mx-0 mt-[8px] mb-0 rounded-[5px] border-solid border-[1px] border-triangleBlue px-3 py-1 leading-[normal];
+}
+/* The display values above would otherwise beat the hidden attribute the
+   player sets until a reader answers (and keeps on personality quizzes). */
+.tr-quiz-stat[hidden], .tr-quiz-explanation[hidden],
+#article .tr-quiz .tr-quiz-stat[hidden], #article .tr-quiz .tr-quiz-explanation[hidden] {
+  display: none;
 }
 .tr-quiz-next, .tr-quiz-share, .tr-quiz-again {
   @apply mt-[12px] bg-triangleBlue text-white rounded-[5px] px-4 py-1 border-[1px] border-triangleBlue hover:bg-white hover:text-triangleBlue;
