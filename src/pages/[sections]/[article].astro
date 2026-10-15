@@ -372,7 +372,10 @@ const featuredSrcset = featuredImage ? imageSrcset(post.featured_image_variants)
                 if (!state.duration) return;
                 deck.seek(Math.max(0, Math.min(1, frac)) * state.duration);
               };
-              play.addEventListener("click", () => { state.playing ? deck.pause() : deck.play(); });
+              play.addEventListener("click", () => {
+                if (state.playing) deck.pause();
+                else deck.play();
+              });
               track.addEventListener("click", (e) => {
                 const r = track.getBoundingClientRect();
                 seekFrac((e.clientX - r.left) / r.width);
