@@ -246,6 +246,12 @@ body {
   overflow: hidden;
 }
 
+/* YouTube has no padding, so its edge is only the border; a touch thicker
+   than the padded frames or it reads as thinner next to them. */
+#article .article-embed-video:not(.article-embed-portrait) {
+  border-width: 2px;
+}
+
 #article .article-embed-video {
   position: relative;
   width: 100%;
@@ -335,18 +341,69 @@ body {
   margin: 0;
 }
 
+/* display: block above would otherwise beat the hidden attribute. */
+#article .tr-ig-frame img[hidden] {
+  display: none;
+}
+
+/* Chevrons drawn with borders, not a text glyph, so they sit dead centre. */
 #article .tr-ig-prev,
 #article .tr-ig-next {
-  @apply absolute top-1/2 -translate-y-1/2 w-[32px] h-[32px] rounded-full bg-white/90 text-triangleBlue text-[22px] leading-[32px] text-center border-solid border-[1px] border-triangleBlue;
+  @apply absolute top-1/2 -translate-y-1/2 w-[32px] h-[32px] rounded-full bg-white/90 border-solid border-[1px] border-triangleBlue flex items-center justify-center;
 }
 #article .tr-ig-prev { left: 8px; }
 #article .tr-ig-next { right: 8px; }
+#article .tr-ig-prev::before,
+#article .tr-ig-next::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid theme("colors.triangleBlue");
+  border-bottom: 2px solid theme("colors.triangleBlue");
+}
+#article .tr-ig-next::before { transform: translateX(-2px) rotate(-45deg); }
+#article .tr-ig-prev::before { transform: translateX(2px) rotate(135deg); }
 
 /*
  * MP3 player. The native element is hidden; the article page script drives
  * it from these controls. The play button is the Wordangle triangle.
  */
 #article .tr-audio audio {
+  display: none;
+}
+
+/* Provider iframes (SoundCloud, Spotify) are the fallback player until the
+   provider's API answers; then they move off screen and our row takes over.
+   They stay in the document, not display: none, so playback keeps working. */
+#article .tr-audio.is-ready .tr-audio-host {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#article .tr-audio {
+  position: relative;
+}
+
+#article .tr-audio-host iframe {
+  display: block;
+  border: 0;
+}
+
+#article .tr-audio-row[hidden] {
+  display: none;
+}
+
+/* The track or episode name, from the provider, under the small label. */
+#article .tr-audio-title,
+#article .tr-audio p.tr-audio-title {
+  @apply font-roboto-slab text-[16px] font-bold leading-[normal] max-w-none mx-0 mt-0 mb-[10px];
+}
+
+#article .tr-audio-title[hidden] {
   display: none;
 }
 

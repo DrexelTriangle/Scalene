@@ -9,7 +9,7 @@ import {
   parseAudioShortcode,
   parseAudioUrl,
   parseEmbedUrl,
-  parseMediaPaths,
+  validMediaPaths,
   shortcodeToAudio,
   shortcodeToEmbed,
 } from "../src/utils/embedUrl.ts";
@@ -112,13 +112,12 @@ describe("encodeShortcodeUrl", () => {
   });
 });
 
-describe("parseMediaPaths", () => {
-  const base = "https://media.example.test";
+describe("validMediaPaths", () => {
   const one = "/wp-content/uploads/scalene/instagram/abc/1.webp";
-  it("returns absolute URLs on the media origin", () => {
-    assert.deepEqual(parseMediaPaths(`${one}, /wp-content/uploads/scalene/instagram/abc/2.jpg`, base), [
-      `${base}${one}`,
-      `${base}/wp-content/uploads/scalene/instagram/abc/2.jpg`,
+  it("returns the trimmed paths", () => {
+    assert.deepEqual(validMediaPaths(`${one}, /wp-content/uploads/scalene/instagram/abc/2.jpg`), [
+      one,
+      "/wp-content/uploads/scalene/instagram/abc/2.jpg",
     ]);
   });
   for (const bad of [
@@ -131,11 +130,10 @@ describe("parseMediaPaths", () => {
     `${one},/wp-content/uploads/x.gif`,
   ]) {
     it(`rejects the whole list for ${bad}`, () => {
-      assert.deepEqual(parseMediaPaths(bad, base), []);
+      assert.deepEqual(validMediaPaths(bad), []);
     });
   }
-  it("returns nothing for an empty list or an unset base", () => {
-    assert.deepEqual(parseMediaPaths("", base), []);
-    assert.deepEqual(parseMediaPaths(one, ""), []);
+  it("returns nothing for an empty list", () => {
+    assert.deepEqual(validMediaPaths("", ), []);
   });
 });

@@ -214,18 +214,12 @@ export function shortcodeToAudio(text: string, mediaBaseUrl: string): string | n
 }
 
 /**
- * Instagram images the CMS copied onto our media origin: site-relative paths
+ * Instagram images the CMS copied into the media library: site-relative paths
  * under the uploads prefix, comma separated. Anything else in the list drops
  * the whole list, so a hand-edited shortcode cannot point the holder off our
- * origin. Returns absolute URLs on the media origin.
+ * media tree.
  */
-export function parseMediaPaths(list: string, mediaBaseUrl: string): string[] {
-  let origin: string;
-  try {
-    origin = new URL(mediaBaseUrl).origin;
-  } catch {
-    return [];
-  }
+export function validMediaPaths(list: string): string[] {
   const paths = list.split(",").map((p) => p.trim()).filter(Boolean);
   if (paths.length === 0) return [];
   for (const path of paths) {
@@ -233,5 +227,6 @@ export function parseMediaPaths(list: string, mediaBaseUrl: string): string[] {
     if (path.includes("..") || path.includes("//") || /[?#\s]/.test(path)) return [];
     if (!/\.(webp|jpe?g|png)$/i.test(path)) return [];
   }
-  return paths.map((path) => `${origin}${path}`);
+  return paths;
 }
+
