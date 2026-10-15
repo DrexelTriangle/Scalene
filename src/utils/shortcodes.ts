@@ -15,6 +15,9 @@
 
 import he from "he";
 
+import { mapTopLevel } from "./articleHtml.ts";
+import { parseAudioUrl, parseEmbedUrl, shortcodeToQuizId } from "./embedUrl.ts";
+
 /** Attributes are single-quoted in practice, but accept double quotes too. */
 function parseAttributes(raw: string): Record<string, string> {
   const attributes: Record<string, string> = {};
@@ -139,13 +142,137 @@ function youtubeEmbed(rawUrl: string): string {
 }
 
 /**
+ * Spotify's embed URL is the share URL with /embed/ inserted. Episodes and
+ * tracks use the compact 152px player; shows, albums and playlists list their
+ * contents and need the 352px one. Heights are attributes, not inline style:
+ * the article page strips width and height out of inline styles.
+ * Source: developer.spotify.com/documentation/embeds/tutorials/creating-an-embed
+ */
+function spotifyEmbed(url: string): string | null {
+  const parsed = parseEmbedUrl(url);
+  if (!parsed.ok || parsed.embed.provider !== "spotify") return null;
+  const m = /^https:\/\/open\.spotify\.com\/(\w+)\/(\w+)$/.exec(parsed.embed.url);
+  if (!m) return null;
+  const height = m[1] === "episode" || m[1] === "track" ? "152" : "352";
+  return `<div class="article-embed article-embed-audio"><iframe src="${escapeAttribute(`https://open.spotify.com/embed/${m[1]}/${m[2]}`)}" width="100%" height="${height}" loading="lazy" allow="encrypted-media" title="Spotify player"></iframe></div>`;
+}
+
+/**
+ * TikTok's documented script-free Embed Player. The box is a portrait class
+ * in global.css; the player is vertical and the 16:9 video box would letterbox
+ * it. No description or music parameters until a browser check confirms the
+ * player fits 9:16 with them (spec section 5).
+ * Source: developers.tiktok.com/doc/embed-player
+ */
+function tiktokEmbed(url: string): string | null {
+  const parsed = parseEmbedUrl(url);
+  if (!parsed.ok || parsed.embed.provider !== "tiktok") return null;
+  const m = /\/video\/(\d+)$/.exec(parsed.embed.url);
+  if (!m) return null;
+  return `<div class="article-embed article-embed-video article-embed-portrait"><iframe src="${escapeAttribute(`https://www.tiktok.com/player/v1/${m[1]}`)}" loading="lazy" allow="fullscreen" title="TikTok video"></iframe></div>`;
+}
+
+/**
+ * Instagram has no documented script-free embed. This is the official
+ * blockquote; embed.js, injected by the article page only when this markup is
+ * present, upgrades it into the post. Until then, and if the script never
+ * loads, the reader sees the link.
+ * Source: developers.facebook.com/docs/instagram-platform/oembed
+ */
+function instagramEmbed(url: string): string | null {
+  const parsed = parseEmbedUrl(url);
+  if (!parsed.ok || parsed.embed.provider !== "instagram") return null;
+  const permalink = escapeAttribute(parsed.embed.url);
+  return `<div class="article-embed article-embed-social"><blockquote class="instagram-media" data-instgrm-permalink="${permalink}" data-instgrm-version="14"><a href="${permalink}">View this post on Instagram</a></blockquote></div>`;
+}
+
+/**
+ * Uploaded MP3 on our own media origin. The src is validated against
+ * MEDIA_BASE_URL so an [audio] shortcode can never point the player at a
+ * third party. The link is "Open" rather than a download attribute, which
+ * browsers ignore across origins.
+ */
+function audioEmbed(src: string, mediaBaseUrl: string): string | null {
+  const valid = parseAudioUrl(src, mediaBaseUrl);
+  if (!valid) return null;
+  const safe = escapeAttribute(valid);
+  return `<div class="article-embed article-embed-audio"><audio controls preload="metadata" src="${safe}" aria-label="Audio player"></audio><a class="article-embed-link" href="${safe}">Open MP3</a></div>`;
+}
+
+/**
+ * [quiz id="N"] becomes an empty slot rather than markup. The article page
+ * splits the body at these and renders Quiz.astro into each one, because a
+ * component rendered as a string through set:html ships no script. The id is
+ * read by the shared parser, so this site accepts exactly what the CMS writes.
+ */
+function quizSlot(id: number): string {
+  return `<div class="tr-quiz-slot" data-quiz-id="${id}"></div>`;
+}
+
+/** The new shortcodes, each matched only as the entire content of a block. */
+const BLOCK_SHORTCODE = /^\[(spotify|tiktok|instagram|audio)(?=\s)([^\]]*?)\s*\/?\]$/i;
+const URL_ATTRIBUTE = /(?:^|\s)(url|src)\s*=\s*(?:"([^"]*)"|'([^']*)')/i;
+
+/**
+ * Expand a block whose whole content is one new shortcode. Returns the
+ * replacement for the entire element (open tag included), or undefined to
+ * leave it alone. Matching the whole block is what keeps a shortcode inside a
+ * sentence, an attribute value, a <code> sample or a <script> from ever
+ * expanding: none of those is the sole content of a top-level <p> or <div>.
+ */
+function expandBlockShortcode(inner: string, mediaBaseUrl: string): string | undefined {
+  const text = inner.trim();
+  if (!text.startsWith("[")) return undefined;
+  const quizId = shortcodeToQuizId(text);
+  if (quizId !== null) return quizSlot(quizId);
+  const m = BLOCK_SHORTCODE.exec(text);
+  if (!m) return undefined;
+  const attr = URL_ATTRIBUTE.exec(m[2]);
+  if (!attr) return undefined;
+  // Decode once: a body saved by the CMS editor stores & as &amp;.
+  const value = he.decode(attr[2] ?? attr[3] ?? "");
+  const name = attr[1].toLowerCase();
+  const provider = m[1].toLowerCase();
+  // Link providers take url=, audio takes src=; any other pairing stays text.
+  if (provider === "audio") {
+    return name === "src" ? (audioEmbed(value, mediaBaseUrl) ?? undefined) : undefined;
+  }
+  if (name !== "url") return undefined;
+  switch (provider) {
+    case "spotify":
+      return spotifyEmbed(value) ?? undefined;
+    case "tiktok":
+      return tiktokEmbed(value) ?? undefined;
+    case "instagram":
+      return instagramEmbed(value) ?? undefined;
+    default:
+      return undefined;
+  }
+}
+
+function expandBlockShortcodes(content: string, mediaBaseUrl: string): string {
+  return mapTopLevel(content, ({ tag, inner }) => {
+    if (tag !== "p" && tag !== "div") return undefined;
+    return expandBlockShortcode(inner, mediaBaseUrl);
+  });
+}
+
+/**
  * Expand the shortcodes we support. Anything unrecognised is left untouched,
  * so an unknown shortcode still shows up as text rather than vanishing.
+ *
+ * Two mechanisms, deliberately: the WordPress-era shortcodes keep the regexes
+ * they have always had, so the migrated corpus renders exactly as before. The
+ * shortcodes the CMS editor writes are expanded by a block pass that only
+ * fires when a top-level <p> or <div> holds nothing but the shortcode.
  */
-export function expandShortcodes(content: string): string {
+export function expandShortcodesWith(
+  content: string,
+  options: { mediaBaseUrl: string },
+): string {
   if (!content || !content.includes("[")) return content;
 
-  return content
+  const legacy = content
     .replace(/\[puzzleme\s+([^\]]*)\]/gi, (_, raw) => puzzlemeEmbed(raw))
     // Self-closing in practice ("... /]"), so the trailing slash is consumed
     // here rather than left to land inside the attribute string.
@@ -153,6 +280,18 @@ export function expandShortcodes(content: string): string {
       soundcloudEmbed(raw),
     )
     .replace(/\[youtube\s+([^\]]+?)\s*\/?\]/gi, (_, raw) => youtubeEmbed(raw));
+
+  return expandBlockShortcodes(legacy, options.mediaBaseUrl);
+}
+
+// Inlined at build time like the proxy's copy of this variable; unset means
+// [audio] shortcodes stay as text, never that the build fails. Optional
+// chaining because tests/ run this module under plain node, where
+// import.meta.env does not exist.
+const MEDIA_BASE_URL = String(import.meta.env?.MEDIA_BASE_URL ?? "");
+
+export function expandShortcodes(content: string): string {
+  return expandShortcodesWith(content, { mediaBaseUrl: MEDIA_BASE_URL });
 }
 
 /**
@@ -163,7 +302,7 @@ export function expandShortcodes(content: string): string {
  * database/http_models.go, which keeps them out of newly derived excerpts.
  */
 const shortcodePattern =
-  /\[\/?(?:puzzleme|caption|gallery|embed|playlist|audio|video)\b[^\]]*\]|\[[a-z][a-z0-9_-]*\s+[^\]]*=[^\]]*\]/gis;
+  /\[\/?(?:puzzleme|caption|gallery|embed|playlist|audio|video|quiz)\b[^\]]*\]|\[[a-z][a-z0-9_-]*\s+[^\]]*=[^\]]*\]/gis;
 
 /**
  * Remove shortcodes rather than expand them, for the places that show article

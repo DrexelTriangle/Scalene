@@ -248,6 +248,159 @@ body {
 }
 
 /*
+ * Embeds the CMS editor writes: Spotify (audio box, sized by its own height
+ * attribute), TikTok (portrait), Instagram (sizes its own blockquote) and an
+ * uploaded MP3 in a native <audio>. Same rule as above: no inline sizes.
+ */
+#article .article-embed-social {
+  @apply my-[16px] mx-[auto] max-w-[700px];
+}
+
+#article .article-embed-social blockquote {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font-style: normal;
+}
+
+#article .article-embed-portrait {
+  position: relative;
+  width: 100%;
+  max-width: 325px;
+  aspect-ratio: 9 / 16;
+}
+
+#article .article-embed-portrait iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+#article .article-embed-audio audio {
+  display: block;
+  width: 100%;
+}
+
+#article .article-embed-link {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--color-blue);
+}
+
+/*
+ * Quiz block. The root is a top-level div that holds divs, so the prose rule
+ * above skips it; the width is set here instead. Every text, heading and list
+ * rule is written twice: bare, and under #article .tr-quiz, which outranks
+ * #article p, #article h2 and h3, #article ol and #article li. The standalone
+ * quiz page wraps the quiz in <main id="article">, so the twins apply there
+ * as well as inside an article body. Everything after
+ * .js-quiz is only applied once the player script has started, so a reader
+ * with scripts off gets the whole quiz as a readable list.
+ */
+.tr-quiz {
+  @apply font-roboto-slab max-w-[700px] mx-auto my-[24px] border-solid border-[1px] border-triangleBlue rounded-[5px] p-[16px];
+}
+.tr-quiz-cover, .tr-quiz-qimage, .tr-quiz-rimage {
+  @apply w-full h-auto rounded-[5px] mb-[12px];
+}
+.tr-quiz-title,
+#article .tr-quiz .tr-quiz-title {
+  @apply font-playfair text-[24px] font-bold leading-[normal] max-w-none mx-0 mt-0 mb-[4px];
+}
+.tr-quiz-intro, .tr-quiz-rbody,
+#article .tr-quiz .tr-quiz-intro, #article .tr-quiz .tr-quiz-rbody {
+  @apply text-[16px] max-w-none mx-0 mt-0 mb-[12px];
+}
+.tr-quiz-questions,
+#article .tr-quiz .tr-quiz-questions {
+  @apply list-none max-w-none p-0 m-0;
+}
+.tr-quiz-question,
+#article .tr-quiz .tr-quiz-question {
+  @apply mx-0 mb-0 mt-[16px];
+}
+.tr-quiz-progress,
+#article .tr-quiz .tr-quiz-progress {
+  @apply text-[12px] uppercase font-extrabold text-triangleBlue max-w-none mx-0 mt-0 mb-[4px];
+}
+.tr-quiz-qtext,
+#article .tr-quiz .tr-quiz-qtext {
+  @apply text-[18px] font-bold max-w-none mx-0 mt-0 mb-[8px];
+}
+.tr-quiz-answers {
+  @apply flex flex-col gap-y-[8px];
+}
+.tr-quiz-answer {
+  @apply w-full min-h-[44px] text-left text-[16px] px-[12px] py-[8px] border-solid border-[1px] border-triangleBlue rounded-[5px] bg-white;
+}
+.js-quiz .tr-quiz-answer:not(:disabled):hover {
+  @apply bg-triangleBlue text-white;
+}
+.tr-quiz-answer.is-right {
+  background: rgba(37, 99, 235, 0.25);
+}
+.tr-quiz-answer.is-wrong {
+  @apply border-red-700 text-red-700;
+}
+/* After an answer: the explanation sits in a tinted bubble and the readers
+   stat in an outlined pill, so neither reads as a stray line of prose. */
+.tr-quiz-explanation,
+#article .tr-quiz .tr-quiz-explanation {
+  @apply text-[14px] max-w-none mx-0 mt-[8px] mb-0 rounded-[5px] p-[12px];
+  background: rgba(37, 99, 235, 0.08);
+}
+/* Its own line, sized to its text, with the buttons' corners and type size
+   so it reads as part of the same set rather than a stray badge. */
+.tr-quiz-stat,
+#article .tr-quiz .tr-quiz-stat {
+  @apply block w-fit text-[14px] font-bold text-triangleBlue max-w-none mx-0 mt-[8px] mb-0 rounded-[5px] border-solid border-[1px] border-triangleBlue px-3 py-1 leading-[normal];
+}
+/* The display values above would otherwise beat the hidden attribute the
+   player sets until a reader answers (and keeps on personality quizzes). */
+.tr-quiz-stat[hidden], .tr-quiz-explanation[hidden],
+#article .tr-quiz .tr-quiz-stat[hidden], #article .tr-quiz .tr-quiz-explanation[hidden] {
+  display: none;
+}
+.tr-quiz-next, .tr-quiz-share, .tr-quiz-again {
+  @apply mt-[12px] bg-triangleBlue text-white rounded-[5px] px-4 py-1 border-[1px] border-triangleBlue hover:bg-white hover:text-triangleBlue;
+}
+.tr-quiz-again {
+  @apply bg-white text-triangleBlue ml-[8px];
+}
+.tr-quiz-results {
+  @apply mt-[16px];
+}
+.tr-quiz-rtitle,
+#article .tr-quiz .tr-quiz-rtitle {
+  @apply font-playfair text-[22px] font-bold leading-[normal] max-w-none mx-0 mt-0 mb-[4px];
+}
+.tr-quiz-score,
+#article .tr-quiz .tr-quiz-score {
+  @apply text-[16px] font-bold max-w-none mx-0 mt-[8px] mb-0;
+}
+.tr-quiz-stale, .tr-quiz-share-note,
+#article .tr-quiz .tr-quiz-stale, #article .tr-quiz .tr-quiz-share-note {
+  @apply text-[14px] max-w-none mx-0 mt-[8px] mb-0;
+}
+/* The unavailable box has no div inside, so the prose rule does reach it. */
+.tr-quiz-unavailable,
+#article .tr-quiz.tr-quiz-unavailable {
+  @apply text-[14px] italic max-w-[700px] mx-auto my-[24px];
+}
+.js-quiz .tr-quiz-question:not(.is-current) {
+  display: none;
+}
+.js-quiz .tr-quiz-results:not(.is-done) {
+  display: none;
+}
+.js-quiz .tr-quiz-result:not(.is-chosen) {
+  display: none;
+}
+
+/*
  * Trix's heading button emits <h1> and its quote button a bare <blockquote>.
  * Neither had any rule here, so Tailwind's preflight flattened them into
  * body text. Sized down from the article title, which is the page's real h1.
