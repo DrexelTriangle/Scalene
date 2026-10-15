@@ -169,9 +169,25 @@ const dialogClass =
     margin-bottom: 14px;
   }
 
-  /* Triangle mode: rows centre into a pyramid instead of hugging the left. */
-  .wordangle[data-layout="triangle"] .tr-board {
-    align-items: center;
+  /* Triangle mode: rows slide to the centre into a pyramid. align-items cannot
+     animate, so each row carries its own centring shift (set by the script
+     from the board and row widths) and only the transform changes. */
+  .wordangle .tr-row {
+    transition: transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .wordangle[data-layout="triangle"] .tr-row {
+    transform: translateX(var(--tr-shift, 0px));
+  }
+
+  .wordangle .tr-board.is-settling .tr-row {
+    transition: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wordangle .tr-row {
+      transition: none;
+    }
   }
 
   /* The Triangle mode switch: a 36x20 track, grey off and blue on. */

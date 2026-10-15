@@ -291,6 +291,10 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
   }
 
   function renderBoard() {
+    // Fresh rows start at zero shift and get their centring a moment later;
+    // without this the slide would replay on every re-render, such as an
+    // arrow key moving between rows. Transitions come back on the next frame.
+    els.board.classList.add("is-settling");
     els.board.replaceChildren();
     state.rows.forEach((row, index) => {
       const rowEl = document.createElement("div");
@@ -341,7 +345,20 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
       if (active) addRowNav(rowEl, index);
       els.board.appendChild(rowEl);
     });
+    setRowShifts();
+    void els.board.offsetWidth;
+    requestAnimationFrame(() => els.board.classList.remove("is-settling"));
   }
+
+  // How far each row moves to sit centred: half the free space beside it.
+  // Read after layout so Triangle mode can animate the move with a transform.
+  function setRowShifts() {
+    const width = els.board.clientWidth;
+    for (const rowEl of Array.from(els.board.children) as HTMLElement[]) {
+      rowEl.style.setProperty("--tr-shift", `${(width - rowEl.offsetWidth) / 2}px`);
+    }
+  }
+  window.addEventListener("resize", setRowShifts, { signal });
 
   // Decorative for screen readers: the rows themselves are focusable and the
   // arrow keys move between them, so these are pointer shortcuts plus a hint.
