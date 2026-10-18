@@ -95,3 +95,44 @@ jobs:
       # production -- which is exactly how it broke before.
       - name: Check service worker build output
         run: node scripts/check-service-worker.mjs
+
+  e2e:
+    name: Smoke tests (Playwright)
+    # Same rule as above: GitHub-hosted only, never the production runner.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      # CMS_API_BASE_URL / MEDIA_BASE_URL are inlined at build time, so this is a
+      # separate build pointed at e2e/stub-cms.mjs (recorded fixtures). It never
+      # talks to the real CMS.
+      - name: Build against the stub CMS
+        run: npm run test:e2e:build
+
+      - name: Run smoke tests
+        run: npm run test:e2e
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

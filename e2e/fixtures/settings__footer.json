@@ -1,0 +1,400 @@
+{
+ "columns": [
+  {
+   "entries": [
+    {
+     "kind": "heading",
+     "label": "About",
+     "href": "/about",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Contact Us",
+     "href": "/contact",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Join The Triangle",
+     "href": "https://docs.google.com/forms/d/e/1FAIpQLScra_6sUenvmpIuQ5FjmMyWO0a2sz9z36HkrqfnYQvJGH9BGQ/viewform",
+     "new_tab": true
+    },
+    {
+     "kind": "link",
+     "label": "Staff",
+     "href": "/staff",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Find-A-Triangle",
+     "href": "/find",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Photo Gallery",
+     "href": "/photo",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Print Archive",
+     "href": "https://drexel.primo.exlibrisgroup.com/discovery/collectionDiscovery?vid=01DRXU_INST:01DRXU&inst=01DRXU_INST&collectionId=81448731180004721",
+     "new_tab": true
+    },
+    {
+     "kind": "link",
+     "label": "Constitution",
+     "href": "/proxy/wp-content/uploads/2026/03/The-Triangle-Constitution-3.pdf",
+     "new_tab": false
+    }
+   ]
+  },
+  {
+   "entries": [
+    {
+     "kind": "heading",
+     "label": "News",
+     "href": "/news",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Academic Transformation",
+     "href": "/academic-transformation",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Transit",
+     "href": "/transit",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Public Safety",
+     "href": "/public-safety",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Campus",
+     "href": "/campus",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "City",
+     "href": "/city",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "National",
+     "href": "/national",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "World",
+     "href": "/world",
+     "new_tab": false
+    }
+   ]
+  },
+  {
+   "entries": [
+    {
+     "kind": "heading",
+     "label": "Sports",
+     "href": "/sports",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Men's Basketball",
+     "href": "/mens-basketball",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Women's Basketball",
+     "href": "/womens-basketball",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Big 5",
+     "href": "/big-5",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Philly Sports",
+     "href": "/philly-sports",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Field Hockey",
+     "href": "/field-hockey",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Men's Soccer",
+     "href": "/mens-soccer",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Women's Soccer",
+     "href": "/womens-soccer",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "NIL",
+     "href": "/nil",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Squash",
+     "href": "/squash",
+     "new_tab": false
+    }
+   ]
+  },
+  {
+   "entries": [
+    {
+     "kind": "heading",
+     "label": "Opinion",
+     "href": "/opinion",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Politics",
+     "href": "/politics",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Science & Tech",
+     "href": "/science-tech",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "From the Editor",
+     "href": "/from-the-editor",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Lifestyle",
+     "href": "/lifestyle",
+     "new_tab": false
+    },
+    {
+     "kind": "spacer",
+     "label": "",
+     "href": "",
+     "new_tab": false
+    },
+    {
+     "kind": "heading",
+     "label": "Columns",
+     "href": "/columns",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "The Love Triangle",
+     "href": "/the-love-triangle",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Tri This Sweet Treat",
+     "href": "/tri-this-sweet-treat",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "From the Playbook",
+     "href": "/from-the-playbook",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Jack of All Takes",
+     "href": "/jack-of-all-takes",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "The Green Angle",
+     "href": "/the-green-angle",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "The Overall Score",
+     "href": "/the-overall-score",
+     "new_tab": false
+    }
+   ]
+  },
+  {
+   "entries": [
+    {
+     "kind": "heading",
+     "label": "Entertainment",
+     "href": "/entertainment",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Movies",
+     "href": "/movies",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Music",
+     "href": "/music",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Happening in Philly",
+     "href": "/happening-in-philly",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Gaming",
+     "href": "/gaming",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Performing Arts",
+     "href": "/performing-arts",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "The Drawing Board",
+     "href": "/the-drawing-board",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "TV",
+     "href": "/tv",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Food",
+     "href": "/food",
+     "new_tab": false
+    }
+   ]
+  },
+  {
+   "entries": [
+    {
+     "kind": "heading",
+     "label": "Comics & Puzzles",
+     "href": "/comics-puzzles",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Political Cartoons",
+     "href": "/political-cartoons",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Crossword",
+     "href": "/crossword",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Sudoku",
+     "href": "/sudoku",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Comics",
+     "href": "/comics",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Puzzles",
+     "href": "/puzzles",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Satire",
+     "href": "/satire",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Horoscopes",
+     "href": "/horoscopes",
+     "new_tab": false
+    },
+    {
+     "kind": "spacer",
+     "label": "",
+     "href": "",
+     "new_tab": false
+    },
+    {
+     "kind": "heading",
+     "label": "Special Editions",
+     "href": "/",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Graduation",
+     "href": "/graduation",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "Welcome Week",
+     "href": "/welcome-week",
+     "new_tab": false
+    },
+    {
+     "kind": "link",
+     "label": "The Rectangle",
+     "href": "https://therectangle.org",
+     "new_tab": true
+    },
+    {
+     "kind": "link",
+     "label": "100 Year Anniversary",
+     "href": "/one-hundred",
+     "new_tab": false
+    }
+   ]
+  }
+ ]
+}
