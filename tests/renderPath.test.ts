@@ -127,6 +127,12 @@ function fontFaces(css: string): FontFace[] {
   });
 }
 
+// The metric-matched fallback faces at the end of fonts.css point at system
+// fonts with local() and download nothing.
+function isLocalFallback(face: FontFace): boolean {
+  return /^local\(/.test(face.src);
+}
+
 // What the three Google Fonts imports served, latin + latin-ext only: Roboto
 // Slab and Playfair Display at their default 400 upright, Libre Franklin's full
 // variable weight axis upright and italic.
@@ -142,7 +148,7 @@ const EXPECTED_FACES = [
 ];
 
 test('self-hosted @font-face rules match the Google faces and come from the pinned Fontsource packages', () => {
-  const faces = fontFaces(read('src/styles/fonts.css'));
+  const faces = fontFaces(read('src/styles/fonts.css')).filter((f) => !isLocalFallback(f));
   assert.equal(faces.length, EXPECTED_FACES.length);
 
   const pkg = JSON.parse(read('package.json'));
@@ -173,6 +179,28 @@ test('self-hosted @font-face rules match the Google faces and come from the pinn
   }
 });
 
+test('each web font is backed by metric-matched local fallbacks that download nothing', async () => {
+  const fallbacks = fontFaces(read('src/styles/fonts.css')).filter(isLocalFallback);
+  assert.ok(fallbacks.length > 0);
+  for (const face of fallbacks) {
+    // Only local() sources, so nothing new is fetched or precached.
+    assert.doesNotMatch(face.src, /url\(/, face.family);
+  }
+  const fallbackFamilies = new Set(fallbacks.map((f) => f.family));
+
+  const { default: config } = await import('../tailwind.config.mjs');
+  const families = config.theme.extend.fontFamily as Record<string, string[]>;
+  for (const family of ['Roboto Slab', 'Playfair Display', 'Libre Franklin']) {
+    const stack = Object.values(families).find((s) => s[0] === family);
+    assert.ok(stack, `no Tailwind font token leads with ${family}`);
+    const listed = stack.filter((name) => name.startsWith(`${family} Fallback`));
+    assert.ok(listed.length > 0, `${family} token lists no fallback`);
+    // Every fallback a stack names exists, or the browser skips straight to the
+    // unadjusted generic family and the swap shifts layout again.
+    for (const name of listed) assert.ok(fallbackFamilies.has(name), `${name} has no @font-face`);
+  }
+});
+
 test('a production build of global.css inlines the local faces and emits only their woff2 files, none precached', async () => {
   const outDir = mkdtempSync(join(tmpdir(), 'scalene-fonts-'));
   try {
@@ -192,7 +220,7 @@ test('a production build of global.css inlines the local faces and emits only th
     const css = files.filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')).join('\n');
     assert.doesNotMatch(css, /fonts\.googleapis\.com|fonts\.gstatic\.com/);
     assert.doesNotMatch(css, /@import/);
-    assert.equal(fontFaces(css).length, EXPECTED_FACES.length);
+    assert.equal(fontFaces(css).filter((f) => !isLocalFallback(f)).length, EXPECTED_FACES.length);
 
     const fonts = files.filter((f) => /\.(woff2?|ttf|otf|eot)$/.test(f)).map((f) => f.split('/').at(-1)!);
     assert.equal(fonts.length, EXPECTED_FACES.length, fonts.join(', '));

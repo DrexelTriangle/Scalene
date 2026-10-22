@@ -89,3 +89,90 @@
   src: url('@fontsource-variable/libre-franklin/files/libre-franklin-latin-wght-italic.woff2') format('woff2-variations');
   unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
 }
+
+/*
+ * Metric-matched fallbacks. With font-display: swap, text first paints in a
+ * system font and reflows when the web font arrives; unadjusted, that reflow
+ * was the layout shift Cloudflare's CLS picked up after the move off Google
+ * Fonts (whose render-blocking @imports hid it). These faces reshape the system
+ * font to the web font's size and line box, so the swap changes glyphs, not
+ * layout. Nothing is downloaded: src is local() only.
+ *
+ * Values are from @capsizecss/core createFontStack() with @capsizecss/metrics.
+ * Each face names one system font, because the overrides only fit that font.
+ * Roboto and Noto Serif cover Android (most of our traffic); Arial, Georgia
+ * and Times New Roman cover desktop and iOS. A face whose local() font is
+ * missing is skipped, and the stack moves on to the next one.
+ */
+
+@font-face {
+  font-family: 'Libre Franklin Fallback Roboto';
+  src: local('Roboto'), local('Roboto Regular'), local('Roboto-Regular');
+  ascent-override: 92.4086%;
+  descent-override: 23.5326%;
+  line-gap-override: 0%;
+  size-adjust: 104.5357%;
+}
+
+@font-face {
+  font-family: 'Libre Franklin Fallback Arial';
+  src: local('Arial'), local('ArialMT');
+  ascent-override: 92.6115%;
+  descent-override: 23.5843%;
+  line-gap-override: 0%;
+  size-adjust: 104.3067%;
+}
+
+@font-face {
+  font-family: 'Roboto Slab Fallback Noto Serif';
+  src: local('Noto Serif'), local('Noto Serif Regular'), local('NotoSerif-Regular');
+  ascent-override: 106.1961%;
+  descent-override: 27.4645%;
+  line-gap-override: 0%;
+  size-adjust: 98.6714%;
+}
+
+@font-face {
+  font-family: 'Roboto Slab Fallback Georgia';
+  src: local('Georgia');
+  ascent-override: 98.4247%;
+  descent-override: 25.4547%;
+  line-gap-override: 0%;
+  size-adjust: 106.4622%;
+}
+
+@font-face {
+  font-family: 'Roboto Slab Fallback Times';
+  src: local('Times New Roman'), local('TimesNewRomanPSMT');
+  ascent-override: 89.6926%;
+  descent-override: 23.1964%;
+  line-gap-override: 0%;
+  size-adjust: 116.8269%;
+}
+
+@font-face {
+  font-family: 'Playfair Display Fallback Noto Serif';
+  src: local('Noto Serif'), local('Noto Serif Regular'), local('NotoSerif-Regular');
+  ascent-override: 115.142%;
+  descent-override: 26.7104%;
+  line-gap-override: 0%;
+  size-adjust: 93.9709%;
+}
+
+@font-face {
+  font-family: 'Playfair Display Fallback Georgia';
+  src: local('Georgia');
+  ascent-override: 106.716%;
+  descent-override: 24.7558%;
+  line-gap-override: 0%;
+  size-adjust: 101.3906%;
+}
+
+@font-face {
+  font-family: 'Playfair Display Fallback Times';
+  src: local('Times New Roman'), local('TimesNewRomanPSMT');
+  ascent-override: 97.2483%;
+  descent-override: 22.5595%;
+  line-gap-override: 0%;
+  size-adjust: 111.2615%;
+}

@@ -381,7 +381,7 @@ body {
     flex-wrap: wrap;
     color: #07294D !important;
     gap: 30px;
-    font-family: Roboto Slab, Helvetica, Arial, sans-serif;
+    font-family: 'Roboto Slab', 'Roboto Slab Fallback Noto Serif', 'Roboto Slab Fallback Georgia', 'Roboto Slab Fallback Times', serif;
     justify-content: center;
 }
 .apply-btn {
@@ -390,7 +390,7 @@ body {
     border: 2px solid #07294D;
     border-radius: 5px;
     text-align: center;
-    font-family: Roboto Slab, Helvetica, Arial, sans-serif;
+    font-family: 'Roboto Slab', 'Roboto Slab Fallback Noto Serif', 'Roboto Slab Fallback Georgia', 'Roboto Slab Fallback Times', serif;
     font-size: 30px;
     text-decoration: none;
     color: #07294D;
@@ -424,7 +424,7 @@ body {
 
 .countdown {
 	width: 100%;
-	font-family: Roboto Slab, Helvetica, Arial, sans-serif;
+	font-family: 'Roboto Slab', 'Roboto Slab Fallback Noto Serif', 'Roboto Slab Fallback Georgia', 'Roboto Slab Fallback Times', serif;
 	text-align: center;
 	padding: 5px;
 	background: #07294D;
@@ -523,7 +523,7 @@ body {
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
-  font-family: 'Roboto Slab';
+  font-family: 'Roboto Slab', 'Roboto Slab Fallback Noto Serif', 'Roboto Slab Fallback Georgia', 'Roboto Slab Fallback Times', serif;
 }
 
 .ad {
