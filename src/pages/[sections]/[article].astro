@@ -14,6 +14,7 @@ import { loadArticlePage } from '../../utils/articlePage';
 import { getCategoryHref } from "../../utils/taxonomyStore";
 import { LEGACY_ARTICLE_SLUGS } from '../../utils/legacySlugs';
 import { normalizeText, imageSrcset } from "../../utils/data";
+import { imageDimensions } from "../../utils/imageSizes";
 import { isComicPost } from "../../utils/comics";
 import { expandShortcodes } from "../../utils/shortcodes";
 import { normalizeArticleHtml } from "../../utils/articleHtml";
@@ -214,9 +215,13 @@ const addBodySrcsets = (html: string) =>
     const key = src ? contentImageKey(src) : undefined;
     const srcset = key ? imageSrcset(contentVariants[key]) : undefined;
     if (!srcset) return tag;
+    // Reserve the photo's box too (see imageDimensions), unless the body
+    // already sizes it.
+    const dims = /\s(width|height)\s*=/i.test(tag) ? undefined : imageDimensions(contentVariants[key!]);
+    const dimAttrs = dims ? ` width="${dims.width}" height="${dims.height}"` : "";
     return tag.replace(
       /<img\b/i,
-      `<img srcset="${escapeAttribute(srcset)}" sizes="(min-width: 1280px) 800px, (min-width: 1024px) 750px, 90vw"`,
+      `<img srcset="${escapeAttribute(srcset)}" sizes="(min-width: 1280px) 800px, (min-width: 1024px) 750px, 90vw"${dimAttrs}`,
     );
   });
 
@@ -266,6 +271,7 @@ const featuredImage =
     ? proxyWpContent(post.featured_image)
     : undefined;
 const featuredSrcset = featuredImage ? imageSrcset(post.featured_image_variants) : undefined;
+const featuredDims = featuredImage ? imageDimensions(post.featured_image_variants) : undefined;
 
 ---
 <ArticleLayout title={normalizeText(post.title) + " - The Triangle"} article={post}>
@@ -283,7 +289,7 @@ const featuredSrcset = featuredImage ? imageSrcset(post.featured_image_variants)
             <div id="main-left" class="main-side">
                 <div id="print-wrap">
                 <section id="article" class:list={{ "uncropped-images": uncroppedImages }}>
-                    {featuredImage && <figure><img src={featuredImage} srcset={featuredSrcset} sizes={featuredSrcset && "(min-width: 1280px) 800px, (min-width: 1024px) 750px, 90vw"} alt={featuredImageAlt}/></figure>}
+                    {featuredImage && <figure><img src={featuredImage} srcset={featuredSrcset} width={featuredDims?.width} height={featuredDims?.height} sizes={featuredSrcset && "(min-width: 1280px) 800px, (min-width: 1024px) 750px, 90vw"} alt={featuredImageAlt}/></figure>}
                     <Fragment set:html={authorPrint + articleHtml} />
                 </section>
                 </div>
@@ -301,7 +307,7 @@ const featuredSrcset = featuredImage ? imageSrcset(post.featured_image_variants)
             </div>
         </div>}
         {!actualArticle && <section id="article" class:list={{ "uncropped-images": uncroppedImages }}>
-                    {featuredImage && <figure><img src={featuredImage} srcset={featuredSrcset} sizes={featuredSrcset && "(min-width: 1280px) 800px, (min-width: 1024px) 750px, 90vw"} alt={featuredImageAlt}/></figure>}
+                    {featuredImage && <figure><img src={featuredImage} srcset={featuredSrcset} width={featuredDims?.width} height={featuredDims?.height} sizes={featuredSrcset && "(min-width: 1280px) 800px, (min-width: 1024px) 750px, 90vw"} alt={featuredImageAlt}/></figure>}
                     <Fragment set:html={articleHtml} />
                 </section>}
         {!actualArticle && <Comments comments={comments} slug={post.slug ?? article} commentsClosed={commentsClosed} />}

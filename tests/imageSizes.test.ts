@@ -55,3 +55,19 @@ test('a slot never advertises less than it draws: widths round up', () => {
   // 900px * 3/8 = 337.5px; 90vw * 3/8 = 33.75vw
   assert.equal(slotSizes('full', { md: { share: 3 / 8 } }), '(min-width: 1280px) 450px, (min-width: 1024px) 338px, (min-width: 768px) 34vw, 90vw');
 });
+
+test('imageDimensions takes the widest rendition and skips unusable ones', async () => {
+  const { imageDimensions } = await import('../src/utils/imageSizes.ts');
+  assert.deepEqual(
+    imageDimensions([
+      { url: 'a', width: 480, height: 320 },
+      { url: 'b', width: 1600, height: 1067 },
+      { url: 'c', width: 960, height: 640 },
+    ]),
+    { width: 1600, height: 1067 },
+  );
+  assert.deepEqual(imageDimensions([{ width: 0, height: 10 }, { width: 800, height: 0 }, { width: 640, height: 480 }]), { width: 640, height: 480 });
+  assert.equal(imageDimensions([]), undefined);
+  assert.equal(imageDimensions(undefined), undefined);
+  assert.equal(imageDimensions([{ width: 0, height: 0 }]), undefined);
+});

@@ -39,11 +39,14 @@ const showBackground = showsAnniversaryBackground(slides);
                     : "one-hundred-slide md:aspect-[4] lg:aspect-[7.5] flex px-[16px] justify-end items-end text-wrap font-bold uppercase font-libre text-[32px] sm:text-[48px] lg:text-[48px] leading-[normal] relative",
                 ]}
               >
+                {/* aspect-[4] from the smallest screen up: on phones the slide
+                    used to wait for its image to learn its height, and the
+                    whole page below jumped down when it arrived. */}
                 {slide.image_url ? (
                   <img
                     src={slide.image_url}
                     alt={slide.title}
-                    class="w-full md:object-contain object-cover md:aspect-[4] lg:aspect-[7.5]"
+                    class="w-full md:object-contain object-cover aspect-[4] lg:aspect-[7.5]"
                   />
                 ) : (
                   <span class="z-[10] text-right">{slide.title}</span>

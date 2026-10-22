@@ -1,3 +1,5 @@
+import type { ImageVariant } from './types';
+
 /**
  * `sizes` values for card images, so the browser picks a rendition that fits
  * the slot the card is actually drawn in (a 480w one for a ~300px side card,
@@ -56,3 +58,23 @@ export function slotSizes(column: Column, slots: Partial<Record<Breakpoint, Slot
 
 /** Up, but not past float noise: 90 * (6 / 9) is 60, not 61. */
 const roundUp = (n: number) => Math.ceil(n - 1e-9);
+
+/**
+ * width/height attributes for an image the CMS has renditions of, taken from
+ * the widest one. Every rendition has the same aspect ratio, which is all the
+ * browser needs: with both attributes set (and Tailwind's `height: auto` on
+ * img), it reserves the image's box before a byte arrives instead of laying
+ * out at zero height and pushing the text down when the photo lands. Phones,
+ * where an article photo is the full screen width, shift the most without it.
+ */
+export function imageDimensions(
+  variants: readonly Partial<ImageVariant>[] | undefined,
+): { width: number; height: number } | undefined {
+  if (!Array.isArray(variants)) return undefined;
+  let widest: { width: number; height: number } | undefined;
+  for (const v of variants) {
+    if (!v || !(Number(v.width) > 0) || !(Number(v.height) > 0)) continue;
+    if (!widest || v.width! > widest.width) widest = { width: v.width!, height: v.height! };
+  }
+  return widest;
+}
