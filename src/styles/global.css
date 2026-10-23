@@ -225,8 +225,31 @@ body {
  * every pixel it can get.
  */
 #article .article-embed-video,
-#article .article-embed-audio {
-  @apply my-[16px] mx-[auto] max-w-[700px];
+#article .article-embed-audio,
+#article .article-embed-social {
+  @apply my-[24px] mx-[auto] max-w-[700px] border-solid border-[1px] border-triangleBlue rounded-[5px];
+}
+
+/*
+ * The frame matches the quiz block (.tr-quiz) so the two read as the same
+ * kind of thing inside an article. Players sized by the wrapper's own
+ * aspect ratio (YouTube, the legacy 16:9 box) get no padding, since the
+ * iframe fills the wrapper edge to edge and the corners are clipped instead.
+ */
+#article .article-embed-audio,
+#article .article-embed-social,
+#article .article-embed-portrait {
+  @apply p-[16px];
+}
+
+#article .article-embed-video {
+  overflow: hidden;
+}
+
+/* YouTube has no padding, so its edge is only the border; a touch thicker
+   than the padded frames or it reads as thinner next to them. */
+#article .article-embed-video:not(.article-embed-portrait) {
+  border-width: 2px;
 }
 
 #article .article-embed-video {
@@ -245,6 +268,313 @@ body {
   inset: 0;
   width: 100%;
   height: 100%;
+}
+
+/*
+ * Embeds the CMS editor writes: Spotify (audio box, sized by its own height
+ * attribute), TikTok (portrait), the Instagram holder and our MP3 player.
+ * Same rule as above: no inline sizes.
+ *
+ * Portrait frames (TikTok, Instagram) hug their player instead of spanning
+ * the 700px column: a 325px player in a 700px frame read as empty space.
+ */
+#article .article-embed-portrait {
+  position: static;
+  aspect-ratio: auto;
+  overflow: visible;
+}
+
+#article .article-embed-portrait,
+#article .tr-ig {
+  width: fit-content;
+  max-width: 100%;
+}
+
+#article .article-embed-portrait .article-embed-player {
+  position: relative;
+  width: 325px;
+  max-width: 100%;
+  aspect-ratio: 9 / 16;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+#article .article-embed-portrait iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+#article .article-embed-audio audio {
+  display: block;
+  width: 100%;
+}
+
+/*
+ * Provider label, the quiz's "Question 1 of 5" eyebrow at one size smaller.
+ * Written as a <p> so a reader with styles off still gets a line of text;
+ * the twin selector outranks the #article p prose rule.
+ */
+#article .article-embed-label,
+#article .article-embed p.article-embed-label {
+  @apply font-roboto-slab text-[11px] uppercase font-extrabold text-triangleBlue leading-[normal] max-w-none mx-0 mt-0 mb-[8px];
+}
+
+/*
+ * Instagram holder: the frame takes the first image's own shape. Later
+ * carousel images are hidden until the arrows swap them in.
+ */
+#article .tr-ig-frame {
+  position: relative;
+  width: 325px;
+  max-width: 100%;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+#article .tr-ig-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+}
+
+/* display: block above would otherwise beat the hidden attribute. */
+#article .tr-ig-frame img[hidden] {
+  display: none;
+}
+
+/* Chevrons drawn with borders, not a text glyph, so they sit dead centre. */
+#article .tr-ig-prev,
+#article .tr-ig-next {
+  @apply absolute top-1/2 -translate-y-1/2 w-[32px] h-[32px] rounded-full bg-white/90 border-solid border-[1px] border-triangleBlue flex items-center justify-center;
+}
+#article .tr-ig-prev { left: 8px; }
+#article .tr-ig-next { right: 8px; }
+#article .tr-ig-prev::before,
+#article .tr-ig-next::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid theme("colors.triangleBlue");
+  border-bottom: 2px solid theme("colors.triangleBlue");
+}
+#article .tr-ig-next::before { transform: translateX(-2px) rotate(-45deg); }
+#article .tr-ig-prev::before { transform: translateX(2px) rotate(135deg); }
+
+/*
+ * MP3 player. The native element is hidden; the article page script drives
+ * it from these controls. The play button is the Wordangle triangle.
+ */
+#article .tr-audio audio {
+  display: none;
+}
+
+/* Provider iframes (SoundCloud, Spotify) are the fallback player until the
+   provider's API answers; then they move off screen and our row takes over.
+   They stay in the document, not display: none, so playback keeps working. */
+#article .tr-audio.is-ready .tr-audio-host {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#article .tr-audio {
+  position: relative;
+}
+
+#article .tr-audio-host iframe {
+  display: block;
+  border: 0;
+}
+
+#article .tr-audio-row[hidden] {
+  display: none;
+}
+
+/* The track or episode name, from the provider, under the small label. */
+#article .tr-audio-title,
+#article .tr-audio p.tr-audio-title {
+  @apply font-roboto-slab text-[16px] font-bold leading-[normal] max-w-none mx-0 mt-0 mb-[10px];
+}
+
+#article .tr-audio-title[hidden] {
+  display: none;
+}
+
+#article .tr-audio-row {
+  @apply flex items-center gap-x-[12px];
+}
+
+#article .tr-audio-play {
+  @apply shrink-0 w-[44px] h-[44px] rounded-full bg-white border-solid border-[1px] border-triangleBlue flex items-center justify-center;
+}
+
+/* The Wordangle triangle, borders only, pointing right. Nudged 2px right so
+   its visual centre sits in the circle. */
+#article .tr-audio-tri {
+  display: block;
+  width: 0;
+  height: 0;
+  margin-left: 3px;
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  border-left: 15px solid theme("colors.triangleBlue");
+}
+
+#article .tr-audio.is-playing .tr-audio-tri {
+  /* A stop square replaces the triangle while playing. */
+  display: none;
+}
+
+#article .tr-audio.is-playing .tr-audio-play::after {
+  content: "";
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  background: theme("colors.triangleBlue");
+}
+
+#article .tr-audio-track {
+  @apply relative grow h-[8px] rounded-full cursor-pointer;
+  background: rgba(37, 99, 235, 0.15);
+}
+
+#article .tr-audio-track:focus-visible {
+  outline: 2px solid theme("colors.triangleBlue");
+  outline-offset: 4px;
+}
+
+#article .tr-audio-fill {
+  @apply absolute inset-y-0 left-0 rounded-full bg-triangleBlue;
+  width: 0;
+}
+
+#article .tr-audio-time {
+  @apply font-roboto-slab text-[13px] text-triangleBlue shrink-0 tabular-nums;
+}
+
+#article .article-embed-link {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--color-blue);
+}
+
+/*
+ * Quiz block. The root is a top-level div that holds divs, so the prose rule
+ * above skips it; the width is set here instead. Every text, heading and list
+ * rule is written twice: bare, and under #article .tr-quiz, which outranks
+ * #article p, #article h2 and h3, #article ol and #article li. The standalone
+ * quiz page wraps the quiz in <main id="article">, so the twins apply there
+ * as well as inside an article body. Everything after
+ * .js-quiz is only applied once the player script has started, so a reader
+ * with scripts off gets the whole quiz as a readable list.
+ */
+.tr-quiz {
+  @apply font-roboto-slab max-w-[700px] mx-auto my-[24px] border-solid border-[1px] border-triangleBlue rounded-[5px] p-[16px];
+}
+.tr-quiz-cover, .tr-quiz-qimage, .tr-quiz-rimage {
+  @apply w-full h-auto rounded-[5px] mb-[12px];
+}
+.tr-quiz-title,
+#article .tr-quiz .tr-quiz-title {
+  @apply font-playfair text-[24px] font-bold leading-[normal] max-w-none mx-0 mt-0 mb-[4px];
+}
+.tr-quiz-intro, .tr-quiz-rbody,
+#article .tr-quiz .tr-quiz-intro, #article .tr-quiz .tr-quiz-rbody {
+  @apply text-[16px] max-w-none mx-0 mt-0 mb-[12px];
+}
+.tr-quiz-questions,
+#article .tr-quiz .tr-quiz-questions {
+  @apply list-none max-w-none p-0 m-0;
+}
+.tr-quiz-question,
+#article .tr-quiz .tr-quiz-question {
+  @apply mx-0 mb-0 mt-[16px];
+}
+.tr-quiz-progress,
+#article .tr-quiz .tr-quiz-progress {
+  @apply text-[12px] uppercase font-extrabold text-triangleBlue max-w-none mx-0 mt-0 mb-[4px];
+}
+.tr-quiz-qtext,
+#article .tr-quiz .tr-quiz-qtext {
+  @apply text-[18px] font-bold max-w-none mx-0 mt-0 mb-[8px];
+}
+.tr-quiz-answers {
+  @apply flex flex-col gap-y-[8px];
+}
+.tr-quiz-answer {
+  @apply w-full min-h-[44px] text-left text-[16px] px-[12px] py-[8px] border-solid border-[1px] border-triangleBlue rounded-[5px] bg-white;
+}
+.js-quiz .tr-quiz-answer:not(:disabled):hover {
+  @apply bg-triangleBlue text-white;
+}
+.tr-quiz-answer.is-right {
+  background: rgba(37, 99, 235, 0.25);
+}
+.tr-quiz-answer.is-wrong {
+  @apply border-red-700 text-red-700;
+}
+/* After an answer: the explanation sits in a tinted bubble and the readers
+   stat in an outlined pill, so neither reads as a stray line of prose. */
+.tr-quiz-explanation,
+#article .tr-quiz .tr-quiz-explanation {
+  @apply text-[14px] max-w-none mx-0 mt-[8px] mb-0 rounded-[5px] p-[12px];
+  background: rgba(37, 99, 235, 0.08);
+}
+/* Its own line, sized to its text, with the buttons' corners and type size
+   so it reads as part of the same set rather than a stray badge. */
+.tr-quiz-stat,
+#article .tr-quiz .tr-quiz-stat {
+  @apply block w-fit text-[14px] font-bold text-triangleBlue max-w-none mx-0 mt-[8px] mb-0 rounded-[5px] border-solid border-[1px] border-triangleBlue px-3 py-1 leading-[normal];
+}
+/* The display values above would otherwise beat the hidden attribute the
+   player sets until a reader answers (and keeps on personality quizzes). */
+.tr-quiz-stat[hidden], .tr-quiz-explanation[hidden],
+#article .tr-quiz .tr-quiz-stat[hidden], #article .tr-quiz .tr-quiz-explanation[hidden] {
+  display: none;
+}
+.tr-quiz-next, .tr-quiz-share, .tr-quiz-again {
+  @apply mt-[12px] bg-triangleBlue text-white rounded-[5px] px-4 py-1 border-[1px] border-triangleBlue hover:bg-white hover:text-triangleBlue;
+}
+.tr-quiz-again {
+  @apply bg-white text-triangleBlue ml-[8px];
+}
+.tr-quiz-results {
+  @apply mt-[16px];
+}
+.tr-quiz-rtitle,
+#article .tr-quiz .tr-quiz-rtitle {
+  @apply font-playfair text-[22px] font-bold leading-[normal] max-w-none mx-0 mt-0 mb-[4px];
+}
+.tr-quiz-score,
+#article .tr-quiz .tr-quiz-score {
+  @apply text-[16px] font-bold max-w-none mx-0 mt-[8px] mb-0;
+}
+.tr-quiz-stale, .tr-quiz-share-note,
+#article .tr-quiz .tr-quiz-stale, #article .tr-quiz .tr-quiz-share-note {
+  @apply text-[14px] max-w-none mx-0 mt-[8px] mb-0;
+}
+/* The unavailable box has no div inside, so the prose rule does reach it. */
+.tr-quiz-unavailable,
+#article .tr-quiz.tr-quiz-unavailable {
+  @apply text-[14px] italic max-w-[700px] mx-auto my-[24px];
+}
+.js-quiz .tr-quiz-question:not(.is-current) {
+  display: none;
+}
+.js-quiz .tr-quiz-results:not(.is-done) {
+  display: none;
+}
+.js-quiz .tr-quiz-result:not(.is-chosen) {
+  display: none;
 }
 
 /*

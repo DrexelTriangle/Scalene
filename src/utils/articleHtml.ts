@@ -40,7 +40,7 @@ const NESTED_BLOCK = /<(?:figure|table|iframe|script|div|p|ul|ol|blockquote|h[1-
 
 const TAG = /<!--[\s\S]*?-->|<(\/?)([a-zA-Z][\w-]*)((?:"[^"]*"|'[^']*'|[^'">])*?)(\/?)>/g;
 
-interface TopLevelElement {
+export interface TopLevelElement {
   /** Lowercased tag name. */
   tag: string;
   /** The opening tag, verbatim, attributes included. */
@@ -54,7 +54,7 @@ interface TopLevelElement {
  * `visit` returns replaces that element; returning undefined leaves it as it
  * was. Text and comments between elements are passed through untouched.
  */
-function mapTopLevel(
+export function mapTopLevel(
   html: string,
   visit: (element: TopLevelElement) => string | undefined,
 ): string {
