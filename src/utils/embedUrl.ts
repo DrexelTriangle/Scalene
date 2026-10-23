@@ -169,19 +169,44 @@ export function shortcodeToEmbed(text: string): Embed | null {
   return r.ok && r.embed.provider === m[1].toLowerCase() ? r.embed : null;
 }
 
-export function audioToShortcode(src: string): string {
-  return `[audio src="${encodeShortcodeUrl(src)}" /]`;
+/** Longest "where this audio is from" line the shortcode carries. */
+export const AUDIO_SOURCE_MAX = 120;
+
+/**
+ * Free text inside a shortcode attribute uses the URL grammar above: a quote,
+ * a bracket or a space is percent-encoded, so the writer's text can never
+ * close the attribute early. decodeShortcodeText reverses it.
+ */
+export function decodeShortcodeText(value: string): string {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
+export function audioToShortcode(src: string, source = ""): string {
+  const text = source.trim().slice(0, AUDIO_SOURCE_MAX);
+  const sourceAttr = text ? ` source="${encodeShortcodeUrl(text)}"` : "";
+  return `[audio src="${encodeShortcodeUrl(src)}"${sourceAttr} /]`;
 }
 
 const AUDIO_SHORTCODE = /^\[audio(?=\s)([^\]]*?)\s*\/?\]$/i;
 const SRC_ATTR = /(?:^|\s)src\s*=\s*(?:"([^"]*)"|'([^']*)')/i;
+const SOURCE_ATTR = /(?:^|\s)source\s*=\s*(?:"([^"]*)"|'([^']*)')/i;
 
-export function shortcodeToAudio(text: string, mediaBaseUrl: string): string | null {
+export type AudioShortcode = { src: string; source: string };
+
+export function parseAudioShortcode(text: string, mediaBaseUrl: string): AudioShortcode | null {
   const m = AUDIO_SHORTCODE.exec(text.trim());
   if (!m) return null;
   const attr = SRC_ATTR.exec(m[1]);
   if (!attr) return null;
-  return parseAudioUrl(attr[1] ?? attr[2] ?? "", mediaBaseUrl);
+  const src = parseAudioUrl(attr[1] ?? attr[2] ?? "", mediaBaseUrl);
+  if (!src) return null;
+  const sourceAttr = SOURCE_ATTR.exec(m[1]);
+  const source = decodeShortcodeText(sourceAttr?.[1] ?? sourceAttr?.[2] ?? "").trim().slice(0, AUDIO_SOURCE_MAX);
+  return { src, source };
 }
 
 /** The quiz shortcode carries only a CMS id; the site fetches the rest. */
@@ -198,3 +223,25 @@ export function shortcodeToQuizId(text: string): number | null {
   const id = Number(m[1]);
   return Number.isSafeInteger(id) && id > 0 ? id : null;
 }
+
+export function shortcodeToAudio(text: string, mediaBaseUrl: string): string | null {
+  return parseAudioShortcode(text, mediaBaseUrl)?.src ?? null;
+}
+
+/**
+ * Instagram images the CMS copied into the media library: site-relative paths
+ * under the uploads prefix, comma separated. Anything else in the list drops
+ * the whole list, so a hand-edited shortcode cannot point the holder off our
+ * media tree.
+ */
+export function validMediaPaths(list: string): string[] {
+  const paths = list.split(",").map((p) => p.trim()).filter(Boolean);
+  if (paths.length === 0) return [];
+  for (const path of paths) {
+    if (!path.startsWith("/wp-content/uploads/")) return [];
+    if (path.includes("..") || path.includes("//") || /[?#\s]/.test(path)) return [];
+    if (!/\.(webp|jpe?g|png)$/i.test(path)) return [];
+  }
+  return paths;
+}
+

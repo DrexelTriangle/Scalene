@@ -16,7 +16,7 @@
 import he from "he";
 
 import { mapTopLevel } from "./articleHtml.ts";
-import { parseAudioUrl, parseEmbedUrl, shortcodeToQuizId } from "./embedUrl.ts";
+import { AUDIO_SOURCE_MAX, decodeShortcodeText, parseAudioUrl, parseEmbedUrl, shortcodeToQuizId, validMediaPaths } from "./embedUrl.ts";
 
 /** Attributes are single-quoted in practice, but accept double quotes too. */
 function parseAttributes(raw: string): Record<string, string> {
@@ -81,6 +81,23 @@ function puzzlemeEmbed(raw: string): string {
  * params as `&amp;`, and parsing that literally yields one option named
  * "amp;auto_play". On a WordPress-era body it is a no-op.
  */
+/**
+ * One player for every audio source. The row is ours: the Wordangle triangle,
+ * a seek track and the time, driven by the article page's script. What it
+ * drives differs: a native <audio> for an MP3, or the provider's own iframe
+ * kept in the host and controlled through its widget API (SoundCloud,
+ * Spotify). For those the row starts hidden and the provider's player is
+ * visible, so a reader without scripts, or whose provider script never
+ * loads, still gets a working player; the script swaps them once ready.
+ */
+const PLAYER_ROW = `<div class="tr-audio-row"><button type="button" class="tr-audio-play" aria-label="Play"><span class="tr-audio-tri" aria-hidden="true"></span></button><div class="tr-audio-track" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0"><div class="tr-audio-fill"></div></div><span class="tr-audio-time">0:00 / 0:00</span></div>`;
+
+function providerPlayer(provider: string, label: string, iframe: string, link: string, attrs = ""): string {
+  // The title line is filled by the article page script from the provider
+  // (SoundCloud's widget, Spotify's oEmbed); hidden until it has a name.
+  return `<div class="article-embed article-embed-audio tr-audio" data-provider="${provider}"${attrs}><p class="article-embed-label">${label}</p><p class="tr-audio-title" hidden></p><div class="tr-audio-host">${iframe}</div>${PLAYER_ROW.replace('<div class="tr-audio-row">', '<div class="tr-audio-row" hidden>')}${link}</div>`;
+}
+
 function soundcloudEmbed(raw: string): string {
   const attributes = parseAttributes(raw);
   const track = he.decode(attributes.url ?? "");
@@ -104,10 +121,18 @@ function soundcloudEmbed(raw: string): string {
   // page strips width and height declarations out of every inline style it
   // renders, to unpick the dimensions WordPress baked into its images. An embed
   // that sizes itself inline gets silently flattened by that pass.
-  return `
-        <div class="article-embed article-embed-audio">
-            <iframe src="${escapeAttribute(player.toString())}" width="100%" height="${height}" loading="lazy" scrolling="no" allow="autoplay" title="SoundCloud player"></iframe>
-        </div>`;
+  const iframe = `<iframe src="${escapeAttribute(player.toString())}" width="100%" height="${height}" loading="lazy" scrolling="no" allow="autoplay" title="SoundCloud player"></iframe>`;
+  // The track URL is unvalidated legacy text, so it only becomes a link when
+  // it is https on a SoundCloud host; anything else gets the player alone.
+  let linkHref = "";
+  try {
+    const u = new URL(track);
+    if (u.protocol === "https:" && /(^|\.)soundcloud\.com$/.test(u.hostname.toLowerCase())) linkHref = u.toString();
+  } catch {
+    // Not a URL at all: no link.
+  }
+  const link = linkHref ? `<a class="article-embed-link" href="${escapeAttribute(linkHref)}">Open on SoundCloud</a>` : "";
+  return providerPlayer("soundcloud", "SoundCloud", iframe, link);
 }
 
 /**
@@ -154,7 +179,10 @@ function spotifyEmbed(url: string): string | null {
   const m = /^https:\/\/open\.spotify\.com\/(\w+)\/(\w+)$/.exec(parsed.embed.url);
   if (!m) return null;
   const height = m[1] === "episode" || m[1] === "track" ? "152" : "352";
-  return `<div class="article-embed article-embed-audio"><iframe src="${escapeAttribute(`https://open.spotify.com/embed/${m[1]}/${m[2]}`)}" width="100%" height="${height}" loading="lazy" allow="encrypted-media" title="Spotify player"></iframe></div>`;
+  // data-uri is what the iFrame API loads; the iframe is the fallback player.
+  const iframe = `<iframe src="${escapeAttribute(`https://open.spotify.com/embed/${m[1]}/${m[2]}`)}" width="100%" height="${height}" loading="lazy" allow="encrypted-media" title="Spotify player"></iframe>`;
+  const link = `<a class="article-embed-link" href="${escapeAttribute(parsed.embed.url)}">Open on Spotify</a>`;
+  return providerPlayer("spotify", "Spotify", iframe, link, ` data-uri="spotify:${m[1]}:${m[2]}"`);
 }
 
 /**
@@ -169,21 +197,36 @@ function tiktokEmbed(url: string): string | null {
   if (!parsed.ok || parsed.embed.provider !== "tiktok") return null;
   const m = /\/video\/(\d+)$/.exec(parsed.embed.url);
   if (!m) return null;
-  return `<div class="article-embed article-embed-video article-embed-portrait"><iframe src="${escapeAttribute(`https://www.tiktok.com/player/v1/${m[1]}`)}" loading="lazy" allow="fullscreen" title="TikTok video"></iframe></div>`;
+  return `<div class="article-embed article-embed-video article-embed-portrait"><p class="article-embed-label">TikTok</p><div class="article-embed-player"><iframe src="${escapeAttribute(`https://www.tiktok.com/player/v1/${m[1]}`)}" loading="lazy" allow="fullscreen" title="TikTok video"></iframe></div><a class="article-embed-link" href="${escapeAttribute(parsed.embed.url)}">View on TikTok</a></div>`;
 }
 
 /**
- * Instagram has no documented script-free embed. This is the official
- * blockquote; embed.js, injected by the article page only when this markup is
- * present, upgrades it into the post. Until then, and if the script never
- * loads, the reader sees the link.
- * Source: developers.facebook.com/docs/instagram-platform/oembed
+ * Instagram renders in our own holder: the post images the CMS copied into
+ * the media library when the writer inserted the embed (the media attribute),
+ * and a link back to the post. Instagram's own embed brought its header,
+ * like bar and comment box along and could not be trimmed, so it is gone.
+ * With no usable images only the link renders. Arrows sit hidden until the
+ * article page's script shows them for a carousel.
  */
-function instagramEmbed(url: string): string | null {
+function instagramEmbed(url: string, media: string): string | null {
   const parsed = parseEmbedUrl(url);
   if (!parsed.ok || parsed.embed.provider !== "instagram") return null;
   const permalink = escapeAttribute(parsed.embed.url);
-  return `<div class="article-embed article-embed-social"><blockquote class="instagram-media" data-instgrm-permalink="${permalink}" data-instgrm-version="14"><a href="${permalink}">View this post on Instagram</a></blockquote></div>`;
+  const link = `<a class="article-embed-link" href="${permalink}">View on Instagram</a>`;
+  // Served through the site's own /proxy route like every article image, so
+  // the reader's browser never fetches from the media host directly.
+  const images = validMediaPaths(media).map((path) => `/proxy${path}`);
+  if (images.length === 0) {
+    return `<div class="article-embed article-embed-social"><p class="article-embed-label">Instagram</p>${link}</div>`;
+  }
+  const imgs = images
+    .map((src, i) => `<img src="${escapeAttribute(src)}" alt="" loading="lazy"${i > 0 ? " hidden" : ""}>`)
+    .join("");
+  const arrows =
+    images.length > 1
+      ? `<button type="button" class="tr-ig-prev" aria-label="Previous image" hidden></button><button type="button" class="tr-ig-next" aria-label="Next image" hidden></button>`
+      : "";
+  return `<div class="article-embed article-embed-social tr-ig" data-count="${images.length}"><p class="article-embed-label">Instagram</p><div class="tr-ig-frame">${imgs}${arrows}</div>${link}</div>`;
 }
 
 /**
@@ -192,11 +235,17 @@ function instagramEmbed(url: string): string | null {
  * third party. The link is "Open" rather than a download attribute, which
  * browsers ignore across origins.
  */
-function audioEmbed(src: string, mediaBaseUrl: string): string | null {
+function audioEmbed(src: string, source: string, mediaBaseUrl: string): string | null {
   const valid = parseAudioUrl(src, mediaBaseUrl);
   if (!valid) return null;
   const safe = escapeAttribute(valid);
-  return `<div class="article-embed article-embed-audio"><audio controls preload="metadata" src="${safe}" aria-label="Audio player"></audio><a class="article-embed-link" href="${safe}">Open MP3</a></div>`;
+  // The player is ours: the native element keeps the decoding and the
+  // article page's script drives it. Without scripts the link still works.
+  // The play mark is the Wordangle triangle, drawn with borders like the
+  // board's row arrows, turned to point right.
+  const from = source.trim().slice(0, AUDIO_SOURCE_MAX);
+  const label = from ? `Audio from ${escapeAttribute(from)}` : "Audio";
+  return `<div class="article-embed article-embed-audio tr-audio" data-provider="file"><p class="article-embed-label">${label}</p><audio preload="metadata" src="${safe}"></audio>${PLAYER_ROW}<a class="article-embed-link" href="${safe}">Open MP3</a></div>`;
 }
 
 /**
@@ -212,6 +261,16 @@ function quizSlot(id: number): string {
 /** The new shortcodes, each matched only as the entire content of a block. */
 const BLOCK_SHORTCODE = /^\[(spotify|tiktok|instagram|audio)(?=\s)([^\]]*?)\s*\/?\]$/i;
 const URL_ATTRIBUTE = /(?:^|\s)(url|src)\s*=\s*(?:"([^"]*)"|'([^']*)')/i;
+const TEXT_ATTRIBUTE = /(?:^|\s)(source|media)\s*=\s*(?:"([^"]*)"|'([^']*)')/gi;
+
+/** The free-text attributes (source=, media=), entity-decoded then percent-decoded. */
+function textAttributes(raw: string): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const m of raw.matchAll(TEXT_ATTRIBUTE)) {
+    out[m[1].toLowerCase()] = decodeShortcodeText(he.decode(m[2] ?? m[3] ?? ""));
+  }
+  return out;
+}
 
 /**
  * Expand a block whose whole content is one new shortcode. Returns the
@@ -233,9 +292,10 @@ function expandBlockShortcode(inner: string, mediaBaseUrl: string): string | und
   const value = he.decode(attr[2] ?? attr[3] ?? "");
   const name = attr[1].toLowerCase();
   const provider = m[1].toLowerCase();
+  const extra = textAttributes(m[2]);
   // Link providers take url=, audio takes src=; any other pairing stays text.
   if (provider === "audio") {
-    return name === "src" ? (audioEmbed(value, mediaBaseUrl) ?? undefined) : undefined;
+    return name === "src" ? (audioEmbed(value, extra.source ?? "", mediaBaseUrl) ?? undefined) : undefined;
   }
   if (name !== "url") return undefined;
   switch (provider) {
@@ -244,7 +304,7 @@ function expandBlockShortcode(inner: string, mediaBaseUrl: string): string | und
     case "tiktok":
       return tiktokEmbed(value) ?? undefined;
     case "instagram":
-      return instagramEmbed(value) ?? undefined;
+      return instagramEmbed(value, extra.media ?? "") ?? undefined;
     default:
       return undefined;
   }

@@ -6,8 +6,10 @@ import {
   audioToShortcode,
   embedToShortcode,
   encodeShortcodeUrl,
+  parseAudioShortcode,
   parseAudioUrl,
   parseEmbedUrl,
+  validMediaPaths,
   shortcodeToAudio,
   shortcodeToEmbed,
 } from "../src/utils/embedUrl.ts";
@@ -75,6 +77,23 @@ describe("shortcode round trip", () => {
     assert.equal(text, `[audio src="${src}" /]`);
     assert.equal(shortcodeToAudio(text, base), src);
   });
+  it("round-trips the audio source line, quotes and brackets included", () => {
+    const base = vectors.audio.mediaBaseUrl;
+    const src = vectors.audio.accept[0].url;
+    const text = audioToShortcode(src, ` WKDU "91.7" [FM] `);
+    assert.equal(text, `[audio src="${src}" source="WKDU%20%2291.7%22%20%5BFM%5D" /]`);
+    assert.deepEqual(parseAudioShortcode(text, base), { src, source: 'WKDU "91.7" [FM]' });
+  });
+  it("cuts the source to 120 characters on write", () => {
+    const src = vectors.audio.accept[0].url;
+    const text = audioToShortcode(src, "y".repeat(130));
+    assert.equal(text, `[audio src="${src}" source="${"y".repeat(120)}" /]`);
+  });
+  it("reads an audio shortcode without a source", () => {
+    const base = vectors.audio.mediaBaseUrl;
+    const src = vectors.audio.accept[0].url;
+    assert.deepEqual(parseAudioShortcode(`[audio src="${src}" /]`, base), { src, source: "" });
+  });
   it("tolerates surrounding whitespace", () => {
     assert.deepEqual(shortcodeToEmbed("  [youtube https://youtu.be/dQw4w9WgXcQ]\n"), {
       provider: "youtube",
@@ -90,5 +109,31 @@ describe("encodeShortcodeUrl", () => {
   it("leaves an already safe URL alone", () => {
     const url = "https://soundcloud.com/a/b?secret_token=s-1&x=%20";
     assert.equal(encodeShortcodeUrl(url), url);
+  });
+});
+
+describe("validMediaPaths", () => {
+  const one = "/wp-content/uploads/scalene/instagram/abc/1.webp";
+  it("returns the trimmed paths", () => {
+    assert.deepEqual(validMediaPaths(`${one}, /wp-content/uploads/scalene/instagram/abc/2.jpg`), [
+      one,
+      "/wp-content/uploads/scalene/instagram/abc/2.jpg",
+    ]);
+  });
+  for (const bad of [
+    "https://media.example.test/wp-content/uploads/x.webp",
+    "/other/x.webp",
+    "/wp-content/uploads/../x.webp",
+    "/wp-content/uploads//x.webp",
+    "/wp-content/uploads/x.webp?x=1",
+    "/wp-content/uploads/x.svg",
+    `${one},/wp-content/uploads/x.gif`,
+  ]) {
+    it(`rejects the whole list for ${bad}`, () => {
+      assert.deepEqual(validMediaPaths(bad), []);
+    });
+  }
+  it("returns nothing for an empty list", () => {
+    assert.deepEqual(validMediaPaths("", ), []);
   });
 });
