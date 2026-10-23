@@ -38,6 +38,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
+          # Resolve the newest 22.x instead of the runner's cached copy, so CI
+          # never builds on a Node older than the engines floor.
+          check-latest: true
           cache: npm
 
       - name: Install dependencies
