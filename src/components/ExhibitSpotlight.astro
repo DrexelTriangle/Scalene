@@ -1,0 +1,33 @@
+---
+import type { ExhibitSpotlight } from "../utils/types";
+
+interface Props {
+  spotlight: ExhibitSpotlight;
+}
+
+const { spotlight } = Astro.props;
+
+// The card is the photo and nothing else; the whole photo links to the
+// Academy. The written copy stays in the CMS entry for other uses.
+const href = spotlight.link_url || "https://ansp.org";
+---
+
+<section class="exhibit-spotlight mb-[24px] pt-[5px] pb-[16px]" aria-label="Academy exhibit of the day">
+  <h1 class="font-roboto-slab uppercase font-extrabold mb-[8px]">Academy exhibit of the day</h1>
+  <a href={href} class="block" title={`${spotlight.title}, Academy of Natural Sciences`}>
+    <img
+      src={spotlight.image_url}
+      alt={spotlight.image_alt || spotlight.title}
+      width="1600"
+      height="938"
+      class="block w-full h-auto border border-solid border-[#d9d9d9]"
+    />
+  </a>
+  {spotlight.image_credit && (
+    <div class="text-[12px] text-triangleDark mt-[4px]">
+      {spotlight.image_credit_url
+        ? <a href={spotlight.image_credit_url} class="underline">{spotlight.image_credit}</a>
+        : spotlight.image_credit}
+    </div>
+  )}
+</section>

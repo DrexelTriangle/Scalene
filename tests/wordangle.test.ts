@@ -8,6 +8,8 @@ import {
   isGameOver,
   isWin,
   dailyDate,
+  typeLetter,
+  eraseLetter,
 } from '../src/utils/wordangle/game.ts';
 
 test('short guesses compare against the full target', () => {
@@ -119,4 +121,33 @@ test("dailyDate rolls over at midnight in both EST and EDT", () => {
   // EDT (UTC-4): midnight is 04:00 UTC.
   assert.equal(dailyDate(new Date("2026-07-02T03:59:00Z")), "2026-07-01");
   assert.equal(dailyDate(new Date("2026-07-02T04:00:00Z")), "2026-07-02");
+});
+
+test('typing writes at the caret and advances it', () => {
+  assert.deepEqual(typeLetter(['s', 'h', '', '', ''], 2, 'a'), { letters: ['s', 'h', 'a', '', ''], caret: 3 });
+});
+
+test('typing over a placed letter replaces it', () => {
+  assert.deepEqual(typeLetter(['s', 'h', 'a', 'm', 'e'], 2, 'i'), { letters: ['s', 'h', 'i', 'm', 'e'], caret: 3 });
+});
+
+test('typing past the last tile changes nothing', () => {
+  assert.deepEqual(typeLetter(['s', 'h', 'a', 'm', 'e'], 5, 'x'), { letters: ['s', 'h', 'a', 'm', 'e'], caret: 5 });
+});
+
+test('backspace while typing clears the letter before the caret', () => {
+  assert.deepEqual(eraseLetter(['s', 'h', 'a', '', ''], 3, false), { letters: ['s', 'h', '', '', ''], caret: 2 });
+});
+
+test('backspace on a chosen filled tile clears that tile and stays', () => {
+  assert.deepEqual(eraseLetter(['s', 'h', 'a', 'm', 'e'], 2, true), { letters: ['s', 'h', '', 'm', 'e'], caret: 2 });
+});
+
+test('backspace at the start changes nothing', () => {
+  assert.deepEqual(eraseLetter(['', '', ''], 0, true), { letters: ['', '', ''], caret: 0 });
+});
+
+test('backspace after typing over a letter undoes the typed letter, not the next one', () => {
+  // Click tile 0 of SHAME, type B (caret lands on H), then backspace.
+  assert.deepEqual(eraseLetter(['b', 'h', 'a', 'm', 'e'], 1, false), { letters: ['', 'h', 'a', 'm', 'e'], caret: 0 });
 });

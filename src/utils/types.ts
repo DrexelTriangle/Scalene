@@ -171,6 +171,25 @@ export interface HomepageCarouselSlide {
   desktop_only: boolean;
 }
 
+/** triangle-cms: one entry in the Academy of Natural Sciences farewell series. */
+export interface ExhibitSpotlight {
+  slug: string;
+  feature_date: string;
+  enabled: boolean;
+  title: string;
+  kicker: string;
+  body: string;
+  tenure: string;
+  fun_facts: string[];
+  /** Where the picture links; empty means the Academy homepage. */
+  link_url: string;
+  image_url: string;
+  image_alt: string;
+  image_credit: string;
+  image_credit_url: string;
+  sources: string[];
+}
+
 export interface Homepage {
   news: ArticleSummary[];
   opinion: ArticleSummary[];
@@ -183,6 +202,8 @@ export interface Homepage {
   breaking_news?: BreakingNews;
   /** triangle-cms */
   carousel?: HomepageCarouselSlide[];
+  /** triangle-cms: today's exhibit, absent when nothing is scheduled. */
+  exhibit_spotlight?: ExhibitSpotlight;
 }
 
 export interface SectionInfo {
