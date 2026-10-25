@@ -42,6 +42,12 @@ import "../styles/global.css";
           />
         </label>
 
+        <!-- Honeypot: off screen, so only a bot fills it in. -->
+        <label class="absolute left-[-10000px] w-px h-px overflow-hidden" aria-hidden="true">
+          Website
+          <input type="text" name="website" tabindex="-1" autocomplete="off" />
+        </label>
+
         <div class="flex flex-col w-[100%] font-libre">
           <span class="block w-[100%]">Lists<b class="text-red-500">*</b></span>
           <label class="font-libre">
@@ -108,6 +114,11 @@ import "../styles/global.css";
         />
       </label>
 
+      <label class="absolute left-[-10000px] w-px h-px overflow-hidden" aria-hidden="true">
+        Website
+        <input type="text" name="website" tabindex="-1" autocomplete="off" />
+      </label>
+
       <div class="flex flex-col w-[100%] font-libre">
         <span class="block w-[100%]">Lists<b class="text-red-500">*</b></span>
         <label class="font-libre">
@@ -158,7 +169,7 @@ import "../styles/global.css";
     const SUCCESS_HTML =
       '<h1 class="text-[36px] font-bold font-roboto-slab mb-2 mt-[48px]"> Thank you for subscribing! </h1><a href="/" class="text-[16px] mt-4 underline font-roboto-slab hover:text-triangleBlue block"> Return to homepage. </a>';
     const FAILURE_HTML =
-      '<h1 class="text-[36px] font-bold font-roboto-slab mb-2 mt-[48px]"> Oh no! Something went wrong. </h1><a href="/" class="text-[16px] mt-4 underline font-roboto-slab hover:text-triangleBlue block"> Return to homepage. </a>';
+      '<h1 class="text-[36px] font-bold font-roboto-slab mb-2 mt-[48px]"> Oh no! Something went wrong. </h1><p class="text-[16px] font-libre" data-subscribe-error></p><a href="/" class="text-[16px] mt-4 underline font-roboto-slab hover:text-triangleBlue block"> Return to homepage. </a>';
 
     function bindNewsletterForm(formId: string, listsName: string) {
       const form = document.getElementById(formId);
@@ -167,19 +178,21 @@ import "../styles/global.css";
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const emailField = form.elements.namedItem("email");
-        if (!(emailField instanceof HTMLInputElement)) return;
+        // By type, not name: the mobile form names its field email-mobile.
+        const emailField = form.querySelector<HTMLInputElement>('input[type="email"]');
+        if (!emailField) return;
         const email = emailField.value;
+        const website = form.querySelector<HTMLInputElement>('input[name="website"]')?.value ?? "";
 
         const lists = Array.from(
-          document.querySelectorAll<HTMLInputElement>(
+          form.querySelectorAll<HTMLInputElement>(
             `input[name="${listsName}"]:checked`,
           ),
         ).map((el) => Number(el.value));
 
-        const res = await fetch(
-          "https://cms.thetriangle.org/wp-json/newsletter/v1/subscribe",
-          {
+        let data: { success?: boolean; error?: string };
+        try {
+          const res = await fetch("/api/newsletter-subscribe", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -187,14 +200,20 @@ import "../styles/global.css";
             body: JSON.stringify({
               email,
               lists,
+              website,
             }),
-          },
-        );
+          });
+          data = await res.json();
+        } catch {
+          data = {};
+        }
 
-        const data = await res.json();
         const result = document.getElementById("subscribe");
         if (result) {
           result.innerHTML = data.success ? SUCCESS_HTML : FAILURE_HTML;
+          // textContent, not innerHTML: the message comes from the server.
+          const detail = result.querySelector("[data-subscribe-error]");
+          if (detail && data.error) detail.textContent = data.error;
         }
       });
     }
