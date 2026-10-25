@@ -78,6 +78,10 @@ const renamedArticleSlug = (slug: string): string | undefined => {
   return LEGACY_ARTICLE_SLUGS[slug] ?? LEGACY_ARTICLE_SLUGS[decoded];
 };
 
+// Pages people type or see printed with a capital (/Wordangle on a flyer).
+// Routes are case-sensitive, so any casing of these folds onto the real path.
+const CASE_FOLDED_PAGES = new Set(["/wordangle"]);
+
 // Every request runs in a CMS timing scope, so the CMS calls it made -- here
 // or in the page -- come back as a Server-Timing header. See utils/cmsTiming.
 export const onRequest: MiddlewareHandler = (context, next) =>
@@ -94,6 +98,11 @@ const route = async (context: APIContext, next: MiddlewareNext): Promise<Respons
 
   if (DEAD_ASSETS.has(pathname)) {
     return new Response(null, { status: 404 });
+  }
+
+  const folded = pathname.replace(/\/+$/, "").toLowerCase();
+  if (folded !== pathname && CASE_FOLDED_PAGES.has(folded)) {
+    return context.redirect(`${folded}${context.url.search}`, 301);
   }
 
   const permalink = WORDPRESS_PERMALINK.exec(pathname);
