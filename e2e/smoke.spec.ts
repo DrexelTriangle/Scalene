@@ -108,6 +108,16 @@ test('static pages render', async ({ page }) => {
   }
 });
 
+test('wordangle shows top stories under the game', async ({ page }) => {
+  const res = await page.goto('/wordangle');
+  expect(res?.status()).toBe(200);
+  await expect(page.locator('[data-wordangle="board"]')).toBeAttached();
+  await expect(page.getByText('Top Stories')).toBeVisible();
+  expect(await page.locator('a[href^="/article/"]').count()).toBeGreaterThan(0);
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  expect(overflow).toBeLessThanOrEqual(1);
+});
+
 test('no horizontal overflow on the homepage', async ({ page }) => {
   await page.goto('/');
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);

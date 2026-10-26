@@ -37,9 +37,11 @@ interface Props {
     /** The column this section is drawn in, so its cards advertise their real
      *  image widths: "main" for the homepage's #main-left. */
     column?: Column;
+    /** The "related-row" label; the other layouts ignore it. */
+    heading?: string;
 }
 
-const {section, articles, includeName, style, slug, priority, column = "full"} = Astro.props
+const {section, articles, includeName, style, slug, priority, column = "full", heading} = Astro.props
 
 const Component = (style && styles[style]) || Section354;
 
@@ -49,6 +51,6 @@ export const prerender = true;
 
 <section class:list={["section md:mt-2 xl:max-w-[1200px] lg:max-w-[900px] xl:[:not(.main-side)>_&]:max-w-[1200px] lg:[:not(.main-side)>_&]:max-w-[900px] [:not(.main-side)>_&]:max-w-[90%] mx-[auto] mb-[8px]",  includeName && "border-t-[1px] border-solid border-triangleBlue"]}>
     {includeName && <div class="flex w-100 justify-between"><h1 class="font-roboto-slab uppercase font-extrabold"> {section} </h1> <a href={slug ?? section} class="font-roboto-slab text-[14px] underline">See More &gt;</a></div>}
-    <Component articles={articles} priority={priority} column={column}/>
+    <Component articles={articles} priority={priority} column={column} heading={heading}/>
 </section>
 

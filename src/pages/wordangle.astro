@@ -1,8 +1,42 @@
 ---
-export const prerender = true;
+// Rendered per request, not at build, so the top stories under the game stay
+// current between deploys.
+export const prerender = false;
 import Header from "../components/Header.astro";
+import Section from "../components/Sections/Section.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import "../styles/global.css";
+import { getHomepageArticles, getTopStories } from "../utils/db";
+import type { SectionCardArticle } from "../utils/types";
+
+// The most-read articles (Cloudflare analytics), in the article pages' related
+// row. Without analytics, or when it is short, the lead story of each homepage
+// section fills the row. The game must not depend on the CMS, so a failed read
+// just drops the row.
+const STORY_COUNT = 4;
+const topStories: SectionCardArticle[] = [];
+const seen = new Set<string>();
+const add = (story: SectionCardArticle | undefined) => {
+  if (story && topStories.length < STORY_COUNT && !seen.has(story.slug)) {
+    seen.add(story.slug);
+    topStories.push(story);
+  }
+};
+(await getTopStories()).forEach(add);
+if (topStories.length < STORY_COUNT) {
+  try {
+    const home = await getHomepageArticles();
+    [home.news, home.opinion, home.sports, home.entertainment].forEach((list) => add(list?.[0]));
+  } catch (err) {
+    console.error("Wordangle: homepage leads failed:", err instanceof Error ? err.message : err);
+  }
+}
+
+// Same freshness as the homepage the stories come from.
+Astro.response.headers.set(
+  "Cache-Control",
+  "public, max-age=60, s-maxage=60, stale-while-revalidate=300",
+);
 
 // Shared by the header buttons and the dialogs' buttons.
 const buttonClass =
@@ -96,6 +130,7 @@ const dialogClass =
       </form>
     </dialog>
   </section>
+  {topStories.length > 0 && <Section articles={topStories} style="related-row" heading="Top Stories" />}
 </BaseLayout>
 
 <script>
