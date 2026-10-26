@@ -1,0 +1,1153 @@
+{
+ "section": {
+  "slug": "news",
+  "name": "News",
+  "canonical_title": "News"
+ },
+ "subsections": [
+  {
+   "slug": "academic-transformation",
+   "name": "Academic Transformation",
+   "canonical_title": "Academic Transformation"
+  },
+  {
+   "slug": "transit",
+   "name": "Transit",
+   "canonical_title": "Transit"
+  },
+  {
+   "slug": "public-safety",
+   "name": "Public Safety",
+   "canonical_title": "Public Safety"
+  },
+  {
+   "slug": "campus",
+   "name": "Campus",
+   "canonical_title": "Campus"
+  },
+  {
+   "slug": "city",
+   "name": "City",
+   "canonical_title": "City"
+  },
+  {
+   "slug": "national",
+   "name": "National",
+   "canonical_title": "National"
+  },
+  {
+   "slug": "world",
+   "name": "World",
+   "canonical_title": "World"
+  }
+ ],
+ "articles": [
+  {
+   "title": "Netanyahu’s UN visit sparks NYC protests",
+   "id": 10218,
+   "authors": [
+    {
+     "id": 880,
+     "name": "Sophie Fang",
+     "slug": "sophie-fang"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "National",
+     "slug": "national"
+    }
+   ],
+   "excerpt": "As of January, the Mayor of New York City, Zohran Mamdani, has publicly demanded that the U.S. federal government honor International Criminal Court warrants and arrest Netanyahu if he enters the country. In a video that was posted on his social media accounts, he publicly condemned Netanyahu for inciting genocide",
+   "slug": "netanyahu-s-un-visit-sparks-nyc-protests",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/navneeth-nalajala.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/navneeth-nalajala.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/navneeth-nalajala.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/navneeth-nalajala.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/navneeth-nalajala.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-02T01:02:29Z"
+  },
+  {
+   "title": "‘A beacon to the world,’ faculty and students mourn Academy of Natural Sciences’ closure",
+   "id": 10214,
+   "authors": [
+    {
+     "id": 571,
+     "name": "Erik Heyman-Meltzer",
+     "slug": "erik-heyman-meltzer"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "City",
+     "slug": "city"
+    },
+    {
+     "name": "Administration",
+     "slug": "administration"
+    }
+   ],
+   "excerpt": "The Academy of Natural Sciences has officially closed, ending a chapter in both Drexel University's and Philadelphia’s history. ANS, a nonprofit with their own board of governance, became a subsidiary of Drexel after the latter's acquisition in 2011; this also spurred the creation of the Department of Biodiversity, Earth &",
+   "slug": "a-beacon-to-the-world-faculty-and-students-mourn-academy-of-natural-sciences-closure",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/rocco-fonseca-4.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-4.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-4.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-4.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/rocco-fonseca-4.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": true,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-02T00:28:54Z"
+  },
+  {
+   "title": "Lost neighborhood unearthed beneath Drexel",
+   "id": 10198,
+   "authors": [
+    {
+     "id": 575,
+     "name": "Subiksha Ganesh",
+     "slug": "subiksha-ganesh"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "Campus",
+     "slug": "campus"
+    }
+   ],
+   "excerpt": "This fall, students walking along Lancaster Walk may notice an unusual sight on campus: archaeologists digging beneath the ground in search of a neighborhood that no longer appears on Philadelphia’s maps.",
+   "slug": "lost-neighborhood-unearthed-beneath-drexel",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/lia-lora.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lia-lora.jpg.480w.webp",
+     "width": 480,
+     "height": 298
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lia-lora.jpg.960w.webp",
+     "width": 960,
+     "height": 597
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lia-lora.jpg.1600w.webp",
+     "width": 1600,
+     "height": 995
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lia-lora.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1492
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:12:59Z"
+  },
+  {
+   "title": "Temple cuts ties with 55 million dollar donor",
+   "id": 10197,
+   "authors": [
+    {
+     "id": 833,
+     "name": "Zarina Morgan",
+     "slug": "zarina-morgan"
+    }
+   ],
+   "categories": [
+    {
+     "name": "City",
+     "slug": "city"
+    },
+    {
+     "name": "News",
+     "slug": "news"
+    }
+   ],
+   "excerpt": "Temple University received a record-setting donation of $55 million last October, and just weeks ago, the historic deal was terminated after years of legal scrutiny with the donor, Christopher Barnett.",
+   "slug": "temple-cuts-ties-with-55-million-dollar-donor",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/riley-beachell-3.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-3.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-3.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-3.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-3.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:12:06Z"
+  },
+  {
+   "title": "Philly’s House of Horrors: What we know right now",
+   "id": 10196,
+   "authors": [
+    {
+     "id": 874,
+     "name": "Charlotte J. Nelson",
+     "slug": "charlotte-nelson"
+    }
+   ],
+   "categories": [
+    {
+     "name": "City",
+     "slug": "city"
+    },
+    {
+     "name": "News",
+     "slug": "news"
+    }
+   ],
+   "excerpt": "On June 19, 2026, a federal park ranger saw a black BMW parked illegally near Independence Hall. When addressing the occupants, the ranger heard a woman say to the driver, “You're going to hurt me.” Suspecting both occupants of illegal drug activity, and upon asking for identification, the driver, Eugene",
+   "slug": "philly-s-house-of-horrors-what-we-know-right-now",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/riley-beachell-2.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-2.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-2.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-2.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/riley-beachell-2.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:11:07Z"
+  },
+  {
+   "title": "One blue cart, one dream, one woman who wants to change homelessness",
+   "id": 10195,
+   "authors": [
+    {
+     "id": 863,
+     "name": "Gabby Rodriguez",
+     "slug": "gabby-rodriguez"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "City",
+     "slug": "city"
+    }
+   ],
+   "excerpt": "Some people spend their Saturday partying; some go to the movies; some hang out with friends. But every Saturday, Angela Graves spends her time prepping, cooking, and serving people experiencing homelessness in Philadelphia. Graves was born and raised in West Philadelphia. From a young age, she had what most would…",
+   "slug": "one-blue-cart-one-dream-one-woman-who-wants-to-change-homelessness",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/gabbyrodriguez.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/gabbyrodriguez.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/gabbyrodriguez.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/gabbyrodriguez.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/gabbyrodriguez.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:10:06Z"
+  },
+  {
+   "title": "Faculty and students reflect on the upcoming academic transition",
+   "id": 10194,
+   "authors": [
+    {
+     "id": 897,
+     "name": "Joshua Fendyke",
+     "slug": "joshua-fendyke"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "Academic Transformation",
+     "slug": "academic-transformation"
+    },
+    {
+     "name": "Campus",
+     "slug": "campus"
+    }
+   ],
+   "excerpt": "Drexel University’s transition from quarters to semesters is approaching, and in the summer of 2027, a renovated curriculum, longer courses, as well as a new academic/co-op calendar will arrive.",
+   "slug": "faculty-and-students-reflect-on-the-upcoming-academic-transition",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/lialora1.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lialora1.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lialora1.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lialora1.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/lialora1.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:09:11Z"
+  },
+  {
+   "title": "11th Street closure and the importance of accessibility",
+   "id": 10192,
+   "authors": [
+    {
+     "id": 897,
+     "name": "Joshua Fendyke",
+     "slug": "joshua-fendyke"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "City",
+     "slug": "city"
+    },
+    {
+     "name": "Transit",
+     "slug": "transit"
+    }
+   ],
+   "excerpt": "The year-long closure of SEPTA’s 11th Street Station will require Drexel University students traveling in Center City to adjust their commutes. However, for students with disabilities, changes to a familiar route can create additional barriers, beyond simply adding a few minutes to their journey.",
+   "slug": "11th-street-closure-and-the-importance-of-accessibility",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/nataliechinsepta7.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/nataliechinsepta7.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/nataliechinsepta7.jpg.960w.webp",
+     "width": 960,
+     "height": 720
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/nataliechinsepta7.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1200
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/nataliechinsepta7.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1800
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:08:01Z"
+  },
+  {
+   "title": "Sitting down with Dr. Eunice Santos, the new dean for Howley College",
+   "id": 10191,
+   "authors": [
+    {
+     "id": 534,
+     "name": "Sanjana Bandi",
+     "slug": "sanjana-bandi"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "Campus",
+     "slug": "campus"
+    }
+   ],
+   "excerpt": "This summer, Dr. Eunice E. Santos, Ph.D., became dean of Drexel’s newly formed College of Engineering and Computing, now the Nick Howley College of Engineering and Computing, following an unprecedented $112.6 million gift from the Howley Foundation. With three well-established schools — Engineering, Biomedical Engineering, and Computing and Informatics —…",
+   "slug": "sitting-down-with-dr-eunice-santos-the-new-dean-for-howley-college",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/10/courtesy-of-howley-college-of-engineering-and-computing.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/courtesy-of-howley-college-of-engineering-and-computing.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/courtesy-of-howley-college-of-engineering-and-computing.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/courtesy-of-howley-college-of-engineering-and-computing.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/10/courtesy-of-howley-college-of-engineering-and-computing.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-10-02T13:00:00Z",
+   "creation_date": "2026-10-01T23:06:44Z"
+  },
+  {
+   "title": "Nature spots in West Philly you can’t miss",
+   "id": 10175,
+   "authors": [
+    {
+     "id": 571,
+     "name": "Erik Heyman-Meltzer",
+     "slug": "erik-heyman-meltzer"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "Finding green spaces in an urban setting can be difficult, but by no means is it impossible. Having one nearby is beneficial in many ways. According to the Environmental Protection Agency, close proximity to green spaces can help lower depression, enhance social ties in a community, and promote physical activity.…",
+   "slug": "nature-spots-in-west-philly-you-can-t-miss",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-5-4.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-5-4.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-5-4.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-5-4.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-5-4.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-28T01:01:44Z"
+  },
+  {
+   "title": "Essentials for staying safe on campus",
+   "id": 10168,
+   "authors": [
+    {
+     "id": 885,
+     "name": "Emma Yashinsky",
+     "slug": "emma-yashinsky"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Campus",
+     "slug": "campus"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "As freshmen start their school year on campus, it is important to have tips and resources for staying safe. Whether you are new to Philadelphia or from around here, it is essential to be aware and feel safe while on campus. Therefore, Drexel offers several resources, policies, and other safety…",
+   "slug": "essentials-for-staying-safe-on-campus",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/navneeth-nalajala-3.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/navneeth-nalajala-3.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/navneeth-nalajala-3.jpg.960w.webp",
+     "width": 960,
+     "height": 720
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/navneeth-nalajala-3.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1200
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/navneeth-nalajala-3.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1800
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-28T00:31:56Z"
+  },
+  {
+   "title": "Your co-op application crash course",
+   "id": 10167,
+   "authors": [
+    {
+     "id": 897,
+     "name": "Joshua Fendyke",
+     "slug": "joshua-fendyke"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "According to U.S. News & World Report, Drexel ranks second best in co-op and internship programs. As a result, incoming first-year students are bound to hear a lot of co-op-related buzzwords thrown around: rankings, interview requests, A-round, B-round, and so on. For these freshmen, and anyone who has yet to",
+   "slug": "your-co-op-application-crash-course",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-12-1.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-12-1.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-12-1.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-12-1.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-12-1.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-28T00:30:38Z"
+  },
+  {
+   "title": "What club should I join? A quick quiz.",
+   "id": 10166,
+   "authors": [
+    {
+     "id": 874,
+     "name": "Charlotte J. Nelson",
+     "slug": "charlotte-nelson"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "What are you most excited about for college? Making new friends Exploring the campus/city Learning new things What part of high school/living at home will you miss the most? Your friends The food The schedule What is the most iconic thing about Philly? Philly cheesesteaks The Eagles The Liberty Bell…",
+   "slug": "what-club-should-i-join-a-quick-quiz",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-11-1.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-11-1.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-11-1.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-11-1.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-11-1.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-28T00:29:55Z"
+  },
+  {
+   "title": "‘We're exactly where we need to be’: President Merlo reflects on his first year",
+   "id": 10160,
+   "authors": [
+    {
+     "id": 575,
+     "name": "Subiksha Ganesh",
+     "slug": "subiksha-ganesh"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "As the fall quarter begins, so does the second year of Antonio Merlo's tenure as Drexel University's 16th president. Merlo assumed his position at a monumental time for the university, as academic transformation is fully underway while new challenges face students and faculty alike. In an exclusive interview with The…",
+   "slug": "we-re-exactly-where-we-need-to-be-president-merlo-reflects-on-his-first-year",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/kaseyshamis-2.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/kaseyshamis-2.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/kaseyshamis-2.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/kaseyshamis-2.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/kaseyshamis-2.jpg.2048w.webp",
+     "width": 2048,
+     "height": 1366
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-28T00:03:48Z"
+  },
+  {
+   "title": "Everything you need to know about public transportation in Philadelphia",
+   "id": 10158,
+   "authors": [
+    {
+     "id": 569,
+     "name": "Janine Gin",
+     "slug": "janine-gin"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Transit",
+     "slug": "transit"
+    },
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "Public transportation in Philadelphia is very comprehensive, which can also make it complicated at times. But with a little practice, you will find that it is a great way to get you anywhere you need to go in Philadelphia and beyond. The Southeastern Pennsylvania Transportation Authority is Philadelphia’s transportation authority.…",
+   "slug": "everything-you-need-to-know-about-public-transportation-in-philadelphia",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-15.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-15.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-15.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-15.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-15.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-28T00:02:20Z"
+  },
+  {
+   "title": "No SEPTA, no problem: Travel alternatives in Philly",
+   "id": 10157,
+   "authors": [
+    {
+     "id": 571,
+     "name": "Erik Heyman-Meltzer",
+     "slug": "erik-heyman-meltzer"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Transit",
+     "slug": "transit"
+    },
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "Philadelphia is known for SEPTA, but you can just as easily get around University City and the rest of the city without it. The city’s grid-style street layout makes it easy to navigate. A good rule of thumb for most locations within Philadelphia is that named streets run horizontally and…",
+   "slug": "no-septa-no-problem-travel-alternatives-in-philly",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-6-3.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-6-3.jpg.480w.webp",
+     "width": 480,
+     "height": 320
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-6-3.jpg.960w.webp",
+     "width": 960,
+     "height": 640
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-6-3.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1067
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-6-3.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1600
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-27T23:59:49Z"
+  },
+  {
+   "title": "Dining dollars: Where to eat and where to save",
+   "id": 10156,
+   "authors": [
+    {
+     "id": 575,
+     "name": "Subiksha Ganesh",
+     "slug": "subiksha-ganesh"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "Dining dollars, not to be confused with Dragon Dollars, are the funds allocated to your nourishment as part of the First-Year-All-Access Dining Plan required for all incoming freshmen. A skill I implore you to learn is maximizing this resource throughout each quarter.",
+   "slug": "dining-dollars-where-to-eat-and-where-to-save",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-3-4.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-3-4.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-3-4.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-3-4.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-3-4.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-27T23:58:19Z"
+  },
+  {
+   "title": "A transfer's manual to Drexel",
+   "id": 10155,
+   "authors": [
+    {
+     "id": 571,
+     "name": "Erik Heyman-Meltzer",
+     "slug": "erik-heyman-meltzer"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "Welcome Week",
+     "slug": "welcome-week"
+    },
+    {
+     "name": "Special Editions",
+     "slug": "special-editions"
+    }
+   ],
+   "excerpt": "Transfer students make up about 5 percent of the total student body and will have a somewhat different Drexel experience compared to other first-year students. Often, transfers may feel out of place with their fellow student body who are either first-years or have been at Drexel University for their entire…",
+   "slug": "a-transfer-s-manual-to-drexel",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/rocco-fonseca-2-3.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-2-3.jpg.480w.webp",
+     "width": 480,
+     "height": 360
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-2-3.jpg.960w.webp",
+     "width": 960,
+     "height": 721
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-2-3.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1201
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/rocco-fonseca-2-3.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1802
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-11T13:00:00Z",
+   "creation_date": "2026-08-27T23:57:14Z"
+  },
+  {
+   "title": "Academy of Natural Sciences to close September 30",
+   "id": 10189,
+   "authors": [
+    {
+     "id": 571,
+     "name": "Erik Heyman-Meltzer",
+     "slug": "erik-heyman-meltzer"
+    }
+   ],
+   "categories": [
+    {
+     "name": "News",
+     "slug": "news"
+    },
+    {
+     "name": "Administration",
+     "slug": "administration"
+    },
+    {
+     "name": "City",
+     "slug": "city"
+    }
+   ],
+   "excerpt": "Drexel University’s Academy of Natural Sciences is set to close on Wednesday, Sept. 30, according to a university-wide message sent by President Antonio Merlo. The academy’s closure comes after a significant reduction in hours in Oct. 2025 and questions over the future of the relationship between the two institutions back…",
+   "slug": "academy-of-natural-sciences-to-close-september-30",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/09/roccofonseca3.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/09/roccofonseca3.jpg.480w.webp",
+     "width": 480,
+     "height": 361
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/09/roccofonseca3.jpg.960w.webp",
+     "width": 960,
+     "height": 722
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/09/roccofonseca3.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1203
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/09/roccofonseca3.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1805
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-09-01T16:48:15Z",
+   "creation_date": "2026-09-01T16:48:15Z"
+  },
+  {
+   "title": "Students raise concerns over ChatGPT Edu",
+   "id": 10145,
+   "authors": [
+    {
+     "id": 874,
+     "name": "Charlotte J. Nelson",
+     "slug": "charlotte-nelson"
+    }
+   ],
+   "categories": [
+    {
+     "name": "Academic Transformation",
+     "slug": "academic-transformation"
+    },
+    {
+     "name": "News",
+     "slug": "news"
+    }
+   ],
+   "excerpt": "On Aug. 10, Drexel University announced access to ChatGPT Edu through a university-wide email. Originally announced back in December 2025, the university estimated students would have access in January 2026; the reason for the six-month delay was not announced.",
+   "slug": "students-raise-concerns-over-chatgpt-edu",
+   "status": "published",
+   "comment_status": "open",
+   "featured_image": "https://delta.thetriangle.org/wp-content/uploads/2026/08/navneeth-nalajala-2-1.jpg",
+   "featured_image_variants": [
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/navneeth-nalajala-2-1.jpg.480w.webp",
+     "width": 480,
+     "height": 324
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/navneeth-nalajala-2-1.jpg.960w.webp",
+     "width": 960,
+     "height": 648
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/navneeth-nalajala-2-1.jpg.1600w.webp",
+     "width": 1600,
+     "height": 1079
+    },
+    {
+     "url": "https://delta.thetriangle.org/wp-content/variants/webp-q80-v1/2026/08/navneeth-nalajala-2-1.jpg.2400w.webp",
+     "width": 2400,
+     "height": 1619
+    }
+   ],
+   "is_featured": false,
+   "breaking_news": false,
+   "published_date": "2026-08-21T13:00:00Z",
+   "creation_date": "2026-08-21T00:36:50Z"
+  }
+ ],
+ "pagination": {
+  "page": 1,
+  "limit": 20,
+  "offset": 0,
+  "has_more": true,
+  "total_count": 2490
+ }
+}

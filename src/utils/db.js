@@ -4,6 +4,7 @@
 
 import { cms } from "./cmsClient";
 import { createCmsReaders } from "./cmsReaders";
+import { createTopStoriesStore, fetchTopArticleSlugs } from "./topStories";
 
 // The public CMS reads. They live in cmsReaders.ts so tests can run them
 // against a fake CMS; this binds them to the site's configured client.
@@ -23,6 +24,27 @@ export const {
   getRecentArticles,
   getSitemapSlugs,
 } = createCmsReaders(cms);
+
+const CLOUDFLARE_TOKEN = import.meta.env.CLOUDFLARE_ANALYTICS_TOKEN;
+const CLOUDFLARE_ZONE_ID = import.meta.env.CLOUDFLARE_ZONE_ID;
+
+const topStories = createTopStoriesStore({
+  count: 4,
+  loadSlugs: () =>
+    fetchTopArticleSlugs({ fetch, token: CLOUDFLARE_TOKEN, zoneId: CLOUDFLARE_ZONE_ID }),
+  getArticle: (slug) => getArticle(slug),
+  onError: (err) => console.error("Top stories: load failed:", err instanceof Error ? err.message : err),
+});
+
+/**
+ * The most-read articles of the last few days, as cards; [] when Cloudflare
+ * analytics is not configured or cannot be read. Cached; never rejects.
+ * @returns {Promise<import('./types').SectionCardArticle[]>}
+ */
+export async function getTopStories() {
+  if (!CLOUDFLARE_TOKEN || !CLOUDFLARE_ZONE_ID) return [];
+  return topStories.get();
+}
 
 const MATOMO_URL = "https://stats.thetriangle.org/index.php";
 const MATOMO_TOKEN = import.meta.env.MATOMO;
