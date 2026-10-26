@@ -258,6 +258,14 @@ const hasPuzzleScript = content.includes("pm-embed-div");
 const hasPuzzleIframe = /<iframe\b[^>]*\bsrc="[^"]*\bamuselabs\.com\//i.test(content);
 const hasPuzzleEmbed = hasPuzzleScript || hasPuzzleIframe;
 
+// Our own players: the MP3 player and the Instagram carousel arrows need a
+// few lines of script, pulled in only when the expander emitted them. Keyed
+// on the exact opening tags, same pattern as the puzzle script above.
+const hasAudioPlayer = content.includes('<div class="article-embed article-embed-audio tr-audio" data-provider="');
+const hasSoundcloudPlayer = content.includes('data-provider="soundcloud"');
+const hasSpotifyPlayer = content.includes('data-provider="spotify"');
+const hasInstagramCarousel = content.includes('<div class="article-embed article-embed-social tr-ig" data-count="') && !content.includes('data-count="1">');
+
 // Legacy WordPress bodies carry their lead image inline as a <figure>, so only
 // posts without any inline image need the featured image rendered for them --
 // otherwise every imported article would show it twice.
@@ -312,5 +320,181 @@ const featuredSrcset = featuredImage ? imageSrcset(post.featured_image_variants)
             id="pm-script" 
             src="https://puzzleme.amuselabs.com/pmm/js/puzzleme-embed.js"
         ></script>)}
+        {hasSoundcloudPlayer && (
+        <script is:inline src="https://w.soundcloud.com/player/api.js"></script>)}
+        {hasSpotifyPlayer && (
+        <script is:inline src="https://open.spotify.com/embed/iframe-api/v1" async></script>)}
+        {hasAudioPlayer && (
+        <script is:inline>
+          // One player for every audio source. The row (play, seek track, time)
+          // is ours; what it drives is a "deck" with the same four hooks for a
+          // native <audio>, a SoundCloud widget or a Spotify embed controller.
+          // Provider decks start with the provider's own iframe visible and
+          // swap to our row only once their API has answered, so a reader
+          // without scripts, or with a blocked provider, keeps a working player.
+          (() => {
+            const clock = (ms) => {
+              if (!isFinite(ms) || ms < 0) return "0:00";
+              const s = Math.floor(ms / 1000);
+              const m = Math.floor(s / 60);
+              const r = s % 60;
+              return m + ":" + (r < 10 ? "0" : "") + r;
+            };
+
+            // The track or episode name at the top, once the provider says it.
+            const setTitle = (box, text) => {
+              const el = box.querySelector(".tr-audio-title");
+              if (!el || !text) return;
+              el.textContent = text;
+              el.hidden = false;
+            };
+
+            // Wires the row to a deck: { play(), pause(), seek(ms) }. Returns
+            // the painter the deck calls with { playing, position, duration }.
+            const wireRow = (box, deck) => {
+              const row = box.querySelector(".tr-audio-row");
+              const play = box.querySelector(".tr-audio-play");
+              const track = box.querySelector(".tr-audio-track");
+              const fill = box.querySelector(".tr-audio-fill");
+              const time = box.querySelector(".tr-audio-time");
+              if (!row || !play || !track || !fill || !time) return () => {};
+              const state = { playing: false, position: 0, duration: 0 };
+              const paint = (next) => {
+                Object.assign(state, next);
+                const pct = state.duration ? (state.position / state.duration) * 100 : 0;
+                fill.style.width = pct + "%";
+                track.setAttribute("aria-valuenow", String(Math.round(pct)));
+                time.textContent = clock(state.position) + " / " + clock(state.duration);
+                box.classList.toggle("is-playing", state.playing);
+                play.setAttribute("aria-label", state.playing ? "Pause" : "Play");
+              };
+              const seekFrac = (frac) => {
+                if (!state.duration) return;
+                deck.seek(Math.max(0, Math.min(1, frac)) * state.duration);
+              };
+              play.addEventListener("click", () => {
+                if (state.playing) deck.pause();
+                else deck.play();
+              });
+              track.addEventListener("click", (e) => {
+                const r = track.getBoundingClientRect();
+                seekFrac((e.clientX - r.left) / r.width);
+              });
+              track.addEventListener("keydown", (e) => {
+                if (e.key === "ArrowLeft") { e.preventDefault(); seekFrac((state.position - 5000) / state.duration); }
+                if (e.key === "ArrowRight") { e.preventDefault(); seekFrac((state.position + 5000) / state.duration); }
+                if (e.key === " " || e.key === "Enter") { e.preventDefault(); play.click(); }
+              });
+              row.hidden = false;
+              box.classList.add("is-ready");
+              paint({});
+              return paint;
+            };
+
+            // MP3: the native element.
+            document.querySelectorAll('.tr-audio[data-provider="file"]').forEach((box) => {
+              const audio = box.querySelector("audio");
+              if (!audio) return;
+              const paint = wireRow(box, {
+                play: () => audio.play(),
+                pause: () => audio.pause(),
+                seek: (ms) => { audio.currentTime = ms / 1000; },
+              });
+              const sync = () => paint({ playing: !audio.paused && !audio.ended, position: audio.currentTime * 1000, duration: isFinite(audio.duration) ? audio.duration * 1000 : 0 });
+              ["play", "pause", "timeupdate", "loadedmetadata", "seeked"].forEach((ev) => audio.addEventListener(ev, sync));
+              audio.addEventListener("ended", () => { audio.currentTime = 0; sync(); });
+              sync();
+            });
+
+            // SoundCloud: the widget API over the iframe already in the host.
+            // Source: developers.soundcloud.com/docs/api/html5-widget
+            document.querySelectorAll('.tr-audio[data-provider="soundcloud"]').forEach((box) => {
+              const iframe = box.querySelector(".tr-audio-host iframe");
+              if (!iframe || !window.SC || !window.SC.Widget) return;
+              const widget = window.SC.Widget(iframe);
+              const E = window.SC.Widget.Events;
+              let duration = 0;
+              let paint = null;
+              widget.bind(E.READY, () => {
+                widget.getCurrentSound((sound) => {
+                  if (!sound) return;
+                  const by = sound.user && sound.user.username ? " by " + sound.user.username : "";
+                  setTitle(box, (sound.title || "") + by);
+                });
+                widget.getDuration((ms) => { duration = ms || 0; if (paint) paint({ duration }); });
+                paint = wireRow(box, {
+                  play: () => widget.play(),
+                  pause: () => widget.pause(),
+                  seek: (ms) => widget.seekTo(ms),
+                });
+                paint({ duration });
+              });
+              widget.bind(E.PLAY, () => paint && paint({ playing: true }));
+              widget.bind(E.PAUSE, () => paint && paint({ playing: false }));
+              widget.bind(E.FINISH, () => paint && paint({ playing: false, position: 0 }));
+              widget.bind(E.PLAY_PROGRESS, (e) => paint && paint({ position: e.currentPosition || 0 }));
+            });
+
+            // Spotify: the iFrame API replaces the fallback iframe with its own
+            // controlled one. Listeners not signed in to Spotify get the same
+            // 30 second preview their player gives.
+            // Source: developer.spotify.com/documentation/embeds/references/iframe-api
+            const spotifyBoxes = document.querySelectorAll('.tr-audio[data-provider="spotify"]');
+            // Spotify's oEmbed carries the name and allows browser requests.
+            // Source: open.spotify.com/oembed, access-control-allow-origin: *
+            spotifyBoxes.forEach((box) => {
+              const link = box.querySelector(".article-embed-link");
+              if (!link) return;
+              fetch("https://open.spotify.com/oembed?url=" + encodeURIComponent(link.href))
+                .then((r) => (r.ok ? r.json() : null))
+                .then((d) => { if (d && d.title) setTitle(box, String(d.title).trim()); })
+                .catch(() => {});
+            });
+            if (spotifyBoxes.length) {
+              window.onSpotifyIframeApiReady = (api) => {
+                spotifyBoxes.forEach((box) => {
+                  const host = box.querySelector(".tr-audio-host");
+                  const iframe = host && host.querySelector("iframe");
+                  const uri = box.dataset.uri;
+                  if (!host || !iframe || !uri) return;
+                  const height = iframe.getAttribute("height") || "152";
+                  api.createController(iframe, { uri, width: "100%", height }, (controller) => {
+                    let paint = null;
+                    controller.addListener("ready", () => {
+                      paint = wireRow(box, {
+                        play: () => controller.play(),
+                        pause: () => controller.pause(),
+                        seek: (ms) => controller.seek(Math.round(ms / 1000)),
+                      });
+                    });
+                    controller.addListener("playback_update", (e) => {
+                      const d = e && e.data ? e.data : {};
+                      if (paint) paint({ playing: !d.isPaused, position: d.position || 0, duration: d.duration || 0 });
+                    });
+                  });
+                });
+              };
+            }
+          })();
+        </script>)}
+        {hasInstagramCarousel && (
+        <script is:inline>
+          // Instagram carousel: the arrows swap which image is visible.
+          document.querySelectorAll(".tr-ig").forEach((box) => {
+            const imgs = Array.from(box.querySelectorAll(".tr-ig-frame img"));
+            const prev = box.querySelector(".tr-ig-prev");
+            const next = box.querySelector(".tr-ig-next");
+            if (imgs.length < 2 || !prev || !next) return;
+            let i = 0;
+            const show = (n) => {
+              i = (n + imgs.length) % imgs.length;
+              imgs.forEach((img, k) => { img.hidden = k !== i; });
+            };
+            prev.hidden = false;
+            next.hidden = false;
+            prev.addEventListener("click", () => show(i - 1));
+            next.addEventListener("click", () => show(i + 1));
+          });
+        </script>)}
     </article>
 </ArticleLayout>

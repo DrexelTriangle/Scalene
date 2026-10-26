@@ -84,6 +84,24 @@ jobs:
         if: steps.scripts.outputs.test == 'true'
         run: npm test
 
+      # The CMS editor and this site each carry a copy of embed-vectors.json so
+      # neither can accept a URL the other rejects. The CMS copy is the source;
+      # this fails the build when the two drift. A fetch failure (including the
+      # 404 before the CMS copy exists) only warns, so an outage elsewhere can
+      # never block a Scalene deploy.
+      - name: Check embed vectors match triangle-cms
+        run: |
+          url="https://raw.githubusercontent.com/DrexelTriangle/triangle-cms/main/frontend/src/lib/embed-vectors.json"
+          if ! curl -fsSL --max-time 20 --retry 2 "$url" -o /tmp/cms-vectors.json; then
+            echo "::warning::could not fetch $url; skipping embed vector drift check"
+            exit 0
+          fi
+          if ! diff -q /tmp/cms-vectors.json src/utils/embed-vectors.json; then
+            echo "::error::src/utils/embed-vectors.json differs from the triangle-cms copy; sync both repos"
+            diff /tmp/cms-vectors.json src/utils/embed-vectors.json || true
+            exit 1
+          fi
+
       - name: Formatting check
         if: steps.scripts.outputs.format == 'true'
         run: npm run format:check
