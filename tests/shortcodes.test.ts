@@ -2,7 +2,8 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 
 import { normalizeArticleHtml } from "../src/utils/articleHtml.ts";
-import { expandShortcodes, expandShortcodesWith } from "../src/utils/shortcodes.ts";
+import vectors from "../src/utils/embed-vectors.json" with { type: "json" };
+import { expandShortcodes, expandShortcodesWith, stripShortcodes } from "../src/utils/shortcodes.ts";
 
 const includes = (haystack: string, needle: string) =>
   assert.ok(haystack.includes(needle), `expected to find ${JSON.stringify(needle)} in:\n${haystack}`);
@@ -277,5 +278,49 @@ describe("pipeline with normalizeArticleHtml", () => {
   it("passes an expanded [instagram] block through unchanged", () => {
     const expanded = expand(`<p>[instagram url="https://www.instagram.com/p/Cabc123_-x/" media="/wp-content/uploads/scalene/instagram/Cabc123_-x/1.webp" /]</p>`);
     assert.equal(normalizeArticleHtml(expanded), expanded);
+  });
+});
+
+describe("quiz shortcode becomes a slot the article page fills", () => {
+  it("replaces a <p> holding only [quiz id] with the slot div", () => {
+    assert.equal(
+      expand(`<p>Before</p><p>[quiz id="12"]</p><p>After</p>`),
+      `<p>Before</p><div class="tr-quiz-slot" data-quiz-id="12"></div><p>After</p>`,
+    );
+  });
+
+  // The shared vectors are the CMS's own accept and reject lists, so this
+  // site expands exactly the blocks the CMS editor treats as quiz cards.
+  for (const v of vectors.quiz.accept) {
+    it(`expands the shared vector ${v.input.trim()} to the slot for quiz ${v.id}`, () => {
+      assert.equal(expand(`<div>${v.input}</div>`), `<div class="tr-quiz-slot" data-quiz-id="${v.id}"></div>`);
+    });
+  }
+
+  for (const input of vectors.quiz.reject) {
+    it(`leaves the shared reject ${input} as text`, () => {
+      assert.equal(expand(`<p>${input}</p>`), `<p>${input}</p>`);
+    });
+  }
+
+  it("leaves a single-quoted id as text, as the CMS parser does", () => {
+    assert.equal(expand(`<p>[quiz id='7']</p>`), `<p>[quiz id='7']</p>`);
+  });
+
+  it("leaves an empty id as text rather than a slot with no id", () => {
+    assert.equal(expand(`<p>[quiz id=""]</p>`), `<p>[quiz id=""]</p>`);
+  });
+
+  it("leaves a quiz shortcode inside a sentence as text", () => {
+    const html = `<p>Take the quiz [quiz id="3"] now</p>`;
+    assert.equal(expand(html), html);
+  });
+
+  it("strips a bare [quiz] from excerpts", () => {
+    assert.equal(stripShortcodes("Intro [quiz] outro"), "Intro   outro");
+  });
+
+  it("strips a quiz shortcode with its id from excerpts", () => {
+    assert.equal(stripShortcodes(`Intro [quiz id="12"] outro`), "Intro   outro");
   });
 });
