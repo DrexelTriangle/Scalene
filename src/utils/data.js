@@ -67,7 +67,7 @@ export function proxyContent(html) {
  * Used consistently in article bylines and listings.
  */
 const MONTHS = ['Jan.', 'Feb.', 'March', 'April', 'May', 'June',
-                'July', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
+                'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.'];
 
 export function formatDate(dateString) {
   const d = new Date(dateString);
