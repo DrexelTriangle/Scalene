@@ -95,7 +95,7 @@ if(authorListLinks.length > 1){
 }
 
 let d = new Date(post.published_date || post.date)
-const months = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+const months = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
 const date_string = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
 
 const authorList = "By " + (authorListLinks.length > 2 ? authorListLinks.join(", ") : authorListLinks.join(""))
