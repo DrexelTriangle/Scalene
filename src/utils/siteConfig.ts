@@ -42,7 +42,7 @@ export const defaultFooterColumns: FooterColumn[] = [
       link("Find-A-Triangle", "/find"),
       link("Photo Gallery", "/photo"),
       external("Print Archive", "https://drexel.primo.exlibrisgroup.com/discovery/collectionDiscovery?vid=01DRXU_INST:01DRXU&inst=01DRXU_INST&collectionId=81448731180004721"),
-      link("Constitution", "/proxy/wp-content/uploads/2026/03/The-Triangle-Constitution-3.pdf"),
+      link("Constitution", "/proxy/wp-content/uploads/2026/10/28/The-Triangle-Constitution-2026-10-28.pdf"),
     ],
   },
   {
