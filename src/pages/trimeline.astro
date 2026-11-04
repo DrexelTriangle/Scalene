@@ -189,12 +189,17 @@ const dialogClass =
     border: 1px solid var(--tl-gray);
     border-radius: 8px;
     background: white;
-    touch-action: pan-y;
     user-select: none;
   }
 
   .trimeline .tl-row:not(.revealed) {
     cursor: grab;
+    /* The drag reorders vertically, so the browser must not claim the vertical
+       gesture for scrolling. `pan-y` here made every touch drag end in
+       pointercancel: the page scrolled and the row never moved. Vertical
+       scrolling still works everywhere outside the five rows, which is the
+       standard trade-off for a sortable list. */
+    touch-action: none;
   }
 
   .trimeline .tl-row:focus-visible {

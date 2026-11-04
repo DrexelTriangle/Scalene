@@ -198,7 +198,8 @@ export function mountTrimeline(root: HTMLElement, signal: AbortSignal) {
       row.prepend(handle);
       row.tabIndex = 0;
       // Pointer events cover mouse and touch in one path; no dragstart or
-      // scroll hijack, and touch-action keeps vertical page scrolling alive.
+      // scroll hijack. touch-action:none (set on the row in the page CSS)
+      // keeps the browser from claiming the vertical gesture for scrolling.
       row.addEventListener('pointerdown', onPointerDown);
     }
     return row;

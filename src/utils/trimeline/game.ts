@@ -127,12 +127,18 @@ export function parseSavedResult(raw: string | null): SavedResult | undefined {
   if (!raw) return undefined;
   try {
     const body = JSON.parse(raw) as { order?: unknown; score?: unknown; slotCorrect?: unknown };
+    // Shape AND semantics: a well-typed but wrong-sized or out-of-range
+    // entry (tampering, corruption, a future format change) falls back to a
+    // fresh game instead of crashing the reveal or rendering a partial one.
     if (
       !Array.isArray(body.order) ||
-      body.order.every((item) => typeof item === 'number') === false ||
+      body.order.length !== SLOT_COUNT ||
+      !body.order.every((item) => Number.isInteger(item) && item >= 0 && item < SLOT_COUNT) ||
       typeof body.score !== 'number' ||
       !Array.isArray(body.slotCorrect) ||
-      body.slotCorrect.every((item) => typeof item === 'boolean') === false
+      body.slotCorrect.length !== SLOT_COUNT ||
+      !body.slotCorrect.every((item) => typeof item === 'boolean') ||
+      body.score !== body.slotCorrect.filter(Boolean).length
     ) {
       return undefined;
     }
