@@ -80,7 +80,7 @@ const renamedArticleSlug = (slug: string): string | undefined => {
 
 // Pages people type or see printed with a capital (/Wordangle on a flyer).
 // Routes are case-sensitive, so any casing of these folds onto the real path.
-const CASE_FOLDED_PAGES = new Set(["/wordangle"]);
+const CASE_FOLDED_PAGES = new Set(["/wordangle", "/trimeline"]);
 
 // Every request runs in a CMS timing scope, so the CMS calls it made -- here
 // or in the page -- come back as a Server-Timing header. See utils/cmsTiming.

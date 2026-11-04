@@ -6,7 +6,7 @@ interface Props {
 }
 const { side = false } = Astro.props;
 ---
-<a class:list={["games-link", { side }]} href="/wordangle" aria-label="Games"><span class="games-word" aria-hidden="true"><span style="--i:0">G</span><span style="--i:1">a</span><span style="--i:2">m</span><span style="--i:3">e</span><span style="--i:4">s</span></span><span class="games-tiles" aria-hidden="true"><span style="--i:0;--c:#538d4e">G</span><span style="--i:1;--c:#c9b458">A</span><span style="--i:2;--c:#787c7e">M</span><span style="--i:3;--c:#538d4e">E</span><span style="--i:4;--c:#c9b458">S</span></span></a>
+<a class:list={["games-link", { side }]} href="/wordangle" aria-label="Games"><span class="games-word" aria-hidden="true"><span style="--i:0">G</span><span style="--i:1">a</span><span style="--i:2">m</span><span style="--i:3">e</span><span style="--i:4">s</span></span><span class="games-tiles" aria-hidden="true"><span style="--i:0;--c:#538d4e">G</span><span style="--i:1;--c:#c9b458">A</span><span style="--i:2;--c:#787c7e">M</span><span style="--i:3;--c:#538d4e">E</span><span style="--i:4;--c:#c9b458">S</span></span></a><a class:list={["trimeline-link", { side }]} href="/trimeline"><span class="trimeline-word">Tri-meline</span></a>
 
 <style>
   /*
@@ -19,6 +19,9 @@ const { side = false } = Astro.props;
    *
    * The side menu's variant has bigger tiles to suit its bigger text, and
    * anchors them to the left edge, since the menu's links are left-aligned.
+   *
+   * The component also links Tri-meline, the archive-dating game, as a plain
+   * sibling of the animated Wordangle link.
    */
   .games-link {
     position: relative;
@@ -131,5 +134,22 @@ const { side = false } = Astro.props;
       animation: none;
       transform: none;
     }
+  }
+
+  /* Tri-meline: a quiet sibling of the animated Games link, so the row keeps
+     its hover colour and spacing. In the side menu it inherits the menu's
+     text styles, matching the other links there. */
+  .trimeline-link {
+    white-space: nowrap;
+  }
+
+  .trimeline-word {
+    font-family: "Roboto Slab", serif;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .trimeline-link.side .trimeline-word {
+    font-size: 18px;
   }
 </style>

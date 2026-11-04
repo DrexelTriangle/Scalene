@@ -1,0 +1,325 @@
+---
+// Rendered per request, not at build, so the top stories under the game stay
+// current between deploys.
+export const prerender = false;
+import Header from "../components/Header.astro";
+import Section from "../components/Sections/Section.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import "../styles/global.css";
+import { getHomepageArticles, getTopStories } from "../utils/db";
+import type { SectionCardArticle } from "../utils/types";
+
+// The most-read articles (Cloudflare analytics), in the article pages' related
+// row. Without analytics, or when it is short, the lead story of each homepage
+// section fills the row. The game must not depend on the CMS, so a failed read
+// just drops the row.
+const STORY_COUNT = 4;
+const topStories: SectionCardArticle[] = [];
+const seen = new Set<string>();
+const add = (story: SectionCardArticle | undefined) => {
+  if (story && topStories.length < STORY_COUNT && !seen.has(story.slug)) {
+    seen.add(story.slug);
+    topStories.push(story);
+  }
+};
+(await getTopStories()).forEach(add);
+if (topStories.length < STORY_COUNT) {
+  try {
+    const home = await getHomepageArticles();
+    [home.news, home.opinion, home.sports, home.entertainment].forEach((list) => add(list?.[0]));
+  } catch (err) {
+    console.error("Trimeline: homepage leads failed:", err instanceof Error ? err.message : err);
+  }
+}
+
+// Same freshness as the homepage the stories come from.
+Astro.response.headers.set(
+  "Cache-Control",
+  "public, max-age=60, s-maxage=60, stale-while-revalidate=300",
+);
+
+// Shared by the header buttons and the dialogs' buttons.
+const buttonClass =
+  "font-roboto-slab text-[14px] bg-triangleBlue text-white border-[1px] border-solid border-triangleBlue rounded-[10px] px-3 py-1 hover:bg-white hover:text-triangleBlue disabled:opacity-40 disabled:pointer-events-none";
+const iconButtonClass =
+  "font-playfair font-bold text-[18px] leading-none w-[32px] h-[32px] text-triangleBlue bg-white border-[1px] border-solid border-triangleBlue rounded-[10px] hover:bg-triangleBlue hover:text-white";
+const dialogClass =
+  "trimeline-dialog w-[calc(100%-2rem)] max-w-[26rem] max-h-[calc(100vh-2rem)] overflow-auto rounded-[10px] border-[1px] border-solid border-triangleBlue bg-white px-6 pt-5 pb-4 font-roboto-slab text-[16px] text-black";
+---
+
+<BaseLayout
+  title="Tri-meline - The Triangle"
+  description="Tri-meline: a daily game from The Triangle archive. Drag five headlines into chronological order, oldest to newest."
+  canonical="https://www.thetriangle.org/trimeline"
+>
+  <Header />
+  <section data-trimeline-root class="trimeline w-[min(28rem,calc(100%-2rem))] mx-auto pb-[40px]">
+    <div class="flex items-center justify-between gap-3 border-b-[1px] border-solid border-triangleBlue pb-[12px] mb-[12px]">
+      <div>
+        <h1 class="font-playfair font-bold text-[30px] leading-none text-triangleBlue">Tri-meline</h1>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <span data-trimeline="puzzle-id" class="font-roboto-slab text-[15px] text-gray-600"></span>
+        <button data-trimeline="help" type="button" class={iconButtonClass} aria-label="How to play">?</button>
+      </div>
+    </div>
+
+    <p data-trimeline="message" class="tl-message font-roboto-slab text-[15px] mb-[12px]" role="status" aria-live="polite"></p>
+    <p data-trimeline="loading" class="font-roboto-slab text-[15px] text-gray-600 mb-[12px]">Loading today’s puzzle…</p>
+
+    <ol data-trimeline="list" class="tl-list" aria-label="Headlines, oldest first"></ol>
+
+    <p class="flex justify-end mt-[12px]">
+      <button data-trimeline="submit" type="button" class={buttonClass} hidden>Submit</button>
+    </p>
+
+    <p class="font-roboto-slab text-[12px] text-gray-500 mt-[24px]">
+      Five real headlines from The Triangle’s archive, shuffled. Put them in order and see where they came from.
+    </p>
+
+    <p class="font-roboto-slab text-[13px] text-center mt-[8px]"><a class="underline hover:text-triangleBlue" href="/wordangle">Play Wordangle</a></p>
+
+    <dialog data-trimeline="help-dialog" class={dialogClass}>
+      <form method="dialog" class="relative">
+        <button value="close" class={`${iconButtonClass} absolute top-[-6px] right-[-6px]`} aria-label="Close">×</button>
+        <h2 class="font-roboto-slab font-bold uppercase tracking-[0.04em] text-[22px] mb-[12px]">How to play</h2>
+        <p>Five headlines from The Triangle’s archive appear in random order.</p>
+        <p>Drag them into chronological order, oldest at the top, newest at the bottom. You can also use the ↑ and ↓ buttons on each headline.</p>
+        <p>Press Submit to lock in your order. Each slot turns green if the headline in it sits in the right place, purple if not, and every headline links to the article it came from with its real date.</p>
+        <p>There is one puzzle per day, so make your order count.</p>
+        <p class="flex justify-end">
+          <button value="close" class={buttonClass} autofocus>Close</button>
+        </p>
+      </form>
+    </dialog>
+
+    <dialog data-trimeline="result-dialog" class={dialogClass}>
+      <form method="dialog" class="relative">
+        <button value="close" class={`${iconButtonClass} absolute top-[-6px] right-[-6px]`} aria-label="Close">×</button>
+        <h2 data-trimeline="result-title" class="font-playfair text-[28px] mb-[12px]">Result</h2>
+        <p data-trimeline="result-summary" class="font-playfair text-[18px]"></p>
+        <p data-trimeline="result-detail" class="font-libre text-[12px] uppercase tracking-[0.06em] text-gray-500"></p>
+        <p data-trimeline="result-note" class="italic text-triangleBlue min-h-[1.4em]" role="status" aria-live="polite"></p>
+        <p class="flex justify-end gap-2">
+          <button data-trimeline="share" type="button" class={buttonClass} autofocus>Share result</button>
+          <button value="close" class={buttonClass}>Close</button>
+        </p>
+      </form>
+    </dialog>
+  </section>
+  {topStories.length > 0 && <Section articles={topStories} style="related-row" heading="Top Stories" />}
+</BaseLayout>
+
+<script>
+  import { mountTrimeline } from "../utils/trimeline/app";
+
+  // Bound on astro:page-load as well as DOM readiness, like Polls.astro: a
+  // bundled module script runs once per browser session, so a ClientRouter
+  // navigation back to this page needs the event to mount the game again.
+  let controller: AbortController | undefined;
+
+  function setupTrimeline() {
+    const root = document.querySelector<HTMLElement>("[data-trimeline-root]");
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = "1";
+    controller?.abort();
+    controller = new AbortController();
+    mountTrimeline(root, controller.signal);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupTrimeline);
+  } else {
+    setupTrimeline();
+  }
+
+  document.addEventListener("astro:page-load", setupTrimeline);
+  document.addEventListener("astro:before-swap", () => controller?.abort());
+</script>
+
+<style is:global>
+  /*
+   * Global because app.ts builds the rows at runtime, and those nodes never
+   * get Astro's scoping attribute. Everything is prefixed with .trimeline
+   * (or a tl- class) so none of it leaks into the rest of the site.
+   */
+  .trimeline {
+    --tl-blue: #2563eb;
+    --tl-gray: #e5e7eb;
+    --tl-dark: #1f2937;
+    --tl-correct: #538d4e;
+    --tl-wrong: #7c3aed;
+  }
+
+  .trimeline-dialog p {
+    margin: 0 0 12px;
+    line-height: 1.45;
+  }
+
+  .trimeline-dialog::backdrop {
+    background: rgb(37 99 235 / 0.06);
+  }
+
+  .trimeline-dialog.won h2 {
+    color: var(--tl-correct);
+  }
+
+  .trimeline-dialog.lost h2 {
+    color: var(--tl-wrong);
+  }
+
+  .trimeline .tl-message.bad {
+    color: #b4041e;
+  }
+
+  .trimeline .tl-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 0 8px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .trimeline .tl-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--tl-gray);
+    border-radius: 8px;
+    background: white;
+    touch-action: pan-y;
+    user-select: none;
+  }
+
+  .trimeline .tl-row:not(.revealed) {
+    cursor: grab;
+  }
+
+  .trimeline .tl-row:focus-visible {
+    outline: 2px solid var(--tl-blue);
+    outline-offset: 2px;
+  }
+
+  .trimeline .tl-row.dragging {
+    cursor: grabbing;
+    z-index: 1;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 0.18);
+  }
+
+  .trimeline .tl-row.revealed {
+    cursor: default;
+  }
+
+  .trimeline .tl-row.revealed.correct {
+    border-color: var(--tl-correct);
+    background: #f0f7ef;
+  }
+
+  .trimeline .tl-row.revealed.wrong {
+    border-color: var(--tl-wrong);
+    background: #f6f2fd;
+  }
+
+  .trimeline .tl-handle {
+    color: var(--tl-gray);
+    font-size: 18px;
+    cursor: grab;
+  }
+
+  .trimeline .tl-slot {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--tl-blue);
+    color: white;
+    font-family: "Roboto Slab", serif;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .trimeline .tl-row.revealed.correct .tl-slot {
+    background: var(--tl-correct);
+  }
+
+  .trimeline .tl-row.revealed.wrong .tl-slot {
+    background: var(--tl-wrong);
+  }
+
+  .trimeline .tl-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-family: "Roboto Slab", serif;
+    font-size: 15px;
+    line-height: 1.35;
+    color: var(--tl-dark);
+  }
+
+  .trimeline .tl-row.revealed .tl-text a {
+    color: var(--tl-dark);
+    text-decoration: underline;
+    text-decoration-color: var(--tl-gray);
+  }
+
+  .trimeline .tl-row.revealed .tl-text a:hover {
+    color: var(--tl-blue);
+  }
+
+  .trimeline .tl-date {
+    font-family: "Libre Franklin", sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgb(107 114 128);
+  }
+
+  .trimeline .tl-controls {
+    flex-shrink: 0;
+    display: inline-flex;
+    gap: 4px;
+  }
+
+  .trimeline .tl-move {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--tl-blue);
+    border-radius: 6px;
+    background: white;
+    color: var(--tl-blue);
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .trimeline .tl-move:hover:not(:disabled) {
+    background: var(--tl-blue);
+    color: white;
+  }
+
+  .trimeline .tl-move:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .trimeline .tl-move:focus-visible {
+    outline: 2px solid var(--tl-blue);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .trimeline .tl-row {
+      transition: none;
+    }
+  }
+</style>
