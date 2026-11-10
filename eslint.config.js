@@ -5,7 +5,8 @@ import eslintPluginAstro from "eslint-plugin-astro";
 
 export default [
   {
-    ignores: ["dist/", ".astro/", "node_modules/", "public/"],
+    // .asset-archive/: earlier builds' minified _astro/ output (scripts/asset-retention.mjs).
+    ignores: ["dist/", ".astro/", "node_modules/", "public/", ".asset-archive/"],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,

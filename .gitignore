@@ -1,5 +1,7 @@
 # build output
 dist/
+# earlier builds' _astro/ assets, restored into dist/ (scripts/asset-retention.mjs)
+.asset-archive/
 
 # generated types
 .astro/
