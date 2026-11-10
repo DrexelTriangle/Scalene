@@ -119,6 +119,65 @@ test('article page loads its changing parts as short-cached islands', async ({ p
   expect(errors).toEqual([]);
 });
 
+// The homepage is cached at the edge for a day and purged by its Cache-Tag on
+// every CMS write; what changes without a write loads as islands after it.
+test('homepage is long-cached and tagged, and loads its changing parts as islands', async ({ page }) => {
+  const islands: { name: string; status: number; cacheControl: string }[] = [];
+  page.on('response', (r) => {
+    if (r.url().includes('/_server-islands/')) {
+      islands.push({
+        name: new URL(r.url()).pathname.split('/').pop() ?? '',
+        status: r.status(),
+        cacheControl: r.headers()['cache-control'] ?? '',
+      });
+    }
+  });
+  const errors = watchErrors(page);
+
+  const res = await page.goto('/');
+  expect(res?.status()).toBe(200);
+  expect(res?.headers()['cache-control']).toBe('public, max-age=60, s-maxage=86400, stale-while-revalidate=300');
+  expect(res?.headers()['cache-tag']).toBe('homepage');
+
+  await expect(page.locator('[data-poll-root]')).toHaveAttribute('data-bound', '1');
+  const names = () => [...new Set(islands.map((i) => i.name))];
+  await expect.poll(names).toEqual(
+    expect.arrayContaining(['HomeBannerAdIsland', 'SidebarAdIsland', 'PollIsland', 'ExhibitSpotlightIsland', 'Weather']),
+  );
+  for (const island of islands) {
+    expect(island.status, island.name).toBe(200);
+    expect(island.cacheControl, island.name).toMatch(/^public, max-age=0, s-maxage=\d{2,4}$/);
+  }
+  expect(errors).toEqual([]);
+});
+
+// The date is written by the browser (a server-rendered one would be up to a
+// day old from the cache), and only the desktop layout shows it.
+test('homepage header shows today\'s date', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the date column is hidden below lg');
+  await page.goto('/');
+  const today = await page.evaluate(() =>
+    new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+  );
+  await expect(page.locator('[data-today]')).toHaveText(today);
+});
+
+// The poll is a server island, so after a ClientRouter navigation its markup
+// arrives after astro:page-load. It binds because Astro inlines the island's
+// script into the island response, which runs on every insertion; this pins
+// that, so a change that moves the script out of the island shows up here.
+test('the poll binds after a client-side navigation back to the homepage', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'section nav is hidden below the sm breakpoint');
+  await page.goto('/');
+  await expect(page.locator('[data-poll-root]')).toHaveAttribute('data-bound', '1');
+  await page.getByRole('link', { name: 'Sports', exact: true }).first().click();
+  await expect(page).toHaveURL(/\/sports\/?$/);
+  // Back is a ClientRouter navigation too: no full page load.
+  await page.goBack();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator('[data-poll-root]')).toHaveAttribute('data-bound', '1');
+});
+
 test('client-side navigation from the homepage reaches a section and back', async ({ page, isMobile }) => {
   test.skip(isMobile, 'section nav is hidden below the sm breakpoint');
   const errors = watchErrors(page);

@@ -6,7 +6,6 @@ import Section from '../components/Sections/Section.astro';
 import Header from '../components/Header.astro';
 import Column from '../components/Columns.astro';
 import Social from '../components/Social.astro';
-import Poll from '../components/Polls.astro';
 import BreakingNewsBanner from '../components/BreakingNewsBanner.astro'
 import Developing from '../components/Developing.astro'
 import '../styles/global.css';
@@ -14,8 +13,14 @@ import { getHomepageArticles } from '../utils/db';
 import SubscribeLink from "../components/SubscribeLink.astro";
 import Banner from "../components/Banner.astro";
 import HeroBackgroundPreload from "../components/HeroBackgroundPreload.astro";
-import Ad from "../components/Ad.astro";
-import ExhibitSpotlight from "../components/ExhibitSpotlight.astro";
+// What changes here without a CMS write is a server island, fetched after the
+// page: ads and the exhibit spotlight turn over by date, the poll by vote. The
+// page itself is cached for a day and purged by tag on every write (below).
+// These import names are the islands' URLs -- never rename them.
+import HomeBannerAdIsland from "../components/islands/HomeBannerAdIsland.astro";
+import SidebarAdIsland from "../components/islands/SidebarAdIsland.astro";
+import PollIsland from "../components/islands/PollIsland.astro";
+import ExhibitSpotlightIsland from "../components/islands/ExhibitSpotlightIsland.astro";
 
 const posts = await getHomepageArticles();
 
@@ -35,24 +40,29 @@ if (breakingItems.length === 0 && (breakingNews?.text?.trim() ?? "") !== "") {
 }
 const breaking = (breakingNews?.enabled ?? false) && breakingItems.length > 0;
 
-// Picture-only card at the top of the sidebar; absent when nothing is scheduled.
-const spotlight = posts.exhibit_spotlight?.image_url ? posts.exhibit_spotlight : undefined;
-
-// Far shorter than an article page's hour (see ArticleLayout): an article is
-// finished once it publishes, but the homepage is the editors' live control
-// surface -- the featured lead, the breaking banner and the carousel all change
-// on demand and are worth nothing if the edge is holding yesterday's copy.
-// Without this the page states no freshness at all and every cache in front of
-// us invents its own.
+// The homepage is the most visited page, so it is served from Cloudflare's
+// cache for up to a day: a cached copy is the fastest first load there is.
+//
+// It stays current because every CMS write that changes it -- a publish, a
+// pin, the breaking banner, the carousel, developing stories -- purges the
+// "homepage" cache tag (triangle-cms internal/cdnpurge; a URL purge of "/" does
+// not evict HTML on this zone). What changes with no write is an island (see
+// the imports), and the header's date and weather load after the page too.
+// Anything new here that changes on its own must be an island as well, or it
+// will be up to a day stale.
+//
+// Browsers keep it a minute: a purge cannot reach a reader's own cache.
+// Cloudflare strips Cache-Tag before the response leaves the edge.
 Astro.response.headers.set(
   "Cache-Control",
-  "public, max-age=60, s-maxage=60, stale-while-revalidate=300",
+  "public, max-age=60, s-maxage=86400, stale-while-revalidate=300",
 );
+Astro.response.headers.set("Cache-Tag", "homepage");
 ---
 
 <BaseLayout title="The Triangle">
     <HeroBackgroundPreload slot="head" slides={posts.carousel ?? []}/>
-    <Header home/>
+    <Header home deferWeather/>
     {breaking && <BreakingNewsBanner items={breakingItems}/> }
     <!-- {!breaking && <a id="one-hundred" href="https://therectangle.org" class="flex px-[16px] justify-end items-end w-full mt-[-24px] mb-[24px] h-[200px] md:h-[300px] bg-center text-white text-wrap font-bold uppercase font-libre text-[32px] sm:text-[48px] lg:text-[48px] leading-[normal] relative">
         <span class="z-[10] text-right">100 Years of The Triangle</span>
@@ -60,7 +70,7 @@ Astro.response.headers.set(
      <!-- Only the first block after the nav may pull up 24px to close its
           margin; when the breaking banner renders it takes that role. -->
      <Banner pullUp={!breaking} slides={posts.carousel ?? []}/>
-     <Ad placement="homepage-banner" class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] mt-[12px] mb-[8px] [&_img]:block [&_img]:mb-0 [&_img]:border [&_img]:border-solid [&_img]:border-[#d9d9d9]"/>
+     <HomeBannerAdIsland server:defer class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] mt-[12px] mb-[8px] [&_img]:block [&_img]:mb-0 [&_img]:border [&_img]:border-solid [&_img]:border-[#d9d9d9]"/>
 
     <!-- The news lead is above the fold and the measured LCP element: PageSpeed's
          desktop run on 2026-10-13 picked this lead image (575x432) even with the
@@ -78,13 +88,13 @@ Astro.response.headers.set(
         </div>
         <div id="main-right" class="hidden sm:block [&>*:not(:first-child)]:border-t-[1px] [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-triangleBlue main-side">
             <!-- <a href="https://go.gwu.edu/AIinDC"><img class="ad medium-rectangle" src="/images/ads/gwu_ad_032626_to_042226.png"/></a> -->
-            {spotlight && <ExhibitSpotlight spotlight={spotlight}/>}
-            <Ad placement="sidebar" class="pt-[5px]"/>
+            <ExhibitSpotlightIsland server:defer />
+            <SidebarAdIsland server:defer />
             <SubscribeLink/>
             {posts.developingstories?.length > 0 && <Developing stories={posts.developingstories}/>}
             <!-- <MostRead/> -->
             <Column articles={posts.columns}/>
-            <Poll />
+            <PollIsland server:defer />
             <Social />
         </div>
     </div>

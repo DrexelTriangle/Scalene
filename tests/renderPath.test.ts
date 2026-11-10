@@ -4,8 +4,8 @@ import { createHash } from 'node:crypto';
 import { mkdtempSync, readdirSync, readFileSync, rmSync, statSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
-import { extname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename, dirname, extname, join } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build, createServer, type ViteDevServer } from 'vite';
 import { getViteConfig } from 'astro/config';
 import { experimental_AstroContainer } from 'astro/container';
@@ -59,6 +59,27 @@ before(async () => {
     logLevel: 'error',
   })({ command: 'serve', mode: 'test' });
   server = await createServer(config);
+
+  // The homepage and article pages defer their changing parts to server islands
+  // (server:defer), and rendering one needs the build's island name map, which
+  // the container API never has: it throws "Could not find server component
+  // name". Give its pipeline a map that names every island after its file, as
+  // the build does for these unique import names. Islands then render as their
+  // placeholders, which is what a cached page holds anyway. The pipeline is
+  // reached by file URL because astro does not export it; it is the same module
+  // instance astro/container uses.
+  const { ContainerPipeline } = await import(
+    pathToFileURL(join(dirname(require.resolve('astro/package.json')), 'dist/container/pipeline.js')).href
+  );
+  class IslandNamesFromFiles extends Map<string, string> {
+    override get(componentPath: string) {
+      return basename(componentPath, '.astro');
+    }
+  }
+  ContainerPipeline.prototype.getServerIslands = async () => ({
+    serverIslandMap: new Map(),
+    serverIslandNameMap: new IslandNamesFromFiles(),
+  });
   container = await experimental_AstroContainer.create();
 });
 
