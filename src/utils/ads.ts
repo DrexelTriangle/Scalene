@@ -23,6 +23,13 @@ export type Ad = {
   image: string;
   href: string;
   alt: string;
+  /**
+   * The creative's pixel size. Give it for every homepage banner: the banner
+   * loads after the cached homepage (a server island), and the page reserves
+   * its space from this so the news lead below it does not jump when it lands.
+   */
+  width?: number;
+  height?: number;
 };
 
 export const ads: Ad[] = [
@@ -33,6 +40,8 @@ export const ads: Ad[] = [
     image: "/images/ads/aws_banner_092226_to_103126.png",
     href: "https://bit.ly/3TGzu3l",
     alt: "AWS Builder Center Giveaway: enter for your chance to win a voucher worth up to $1,500",
+    width: 2400,
+    height: 233,
   },
   {
     placement: "sidebar",

@@ -18,6 +18,7 @@ import HeroBackgroundPreload from "../components/HeroBackgroundPreload.astro";
 // page itself is cached for a day and purged by tag on every write (below).
 // These import names are the islands' URLs -- never rename them.
 import HomeBannerAdIsland from "../components/islands/HomeBannerAdIsland.astro";
+import { activeAds } from "../utils/ads";
 import SidebarAdIsland from "../components/islands/SidebarAdIsland.astro";
 import PollIsland from "../components/islands/PollIsland.astro";
 import ExhibitSpotlightIsland from "../components/islands/ExhibitSpotlightIsland.astro";
@@ -39,6 +40,14 @@ if (breakingItems.length === 0 && (breakingNews?.text?.trim() ?? "") !== "") {
   });
 }
 const breaking = (breakingNews?.enabled ?? false) && breakingItems.length > 0;
+
+// The banner ad is an island (it turns over by date), so it lands after the
+// page. When a banner with known dimensions is running as this page renders,
+// its space is held for it. A campaign that starts while this copy sits in the
+// cache gets no reservation and shifts the page once, until the next purge.
+const bannerClass =
+  "xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] mt-[12px] mb-[8px] [&_img]:block [&_img]:mb-0 [&_img]:border [&_img]:border-solid [&_img]:border-[#d9d9d9]";
+const bannerReserve = activeAds("homepage-banner").find((ad) => ad.width && ad.height);
 
 // The homepage is the most visited page, so it is served from Cloudflare's
 // cache for up to a day: a cached copy is the fastest first load there is.
@@ -70,7 +79,11 @@ Astro.response.headers.set("Cache-Tag", "homepage");
      <!-- Only the first block after the nav may pull up 24px to close its
           margin; when the breaking banner renders it takes that role. -->
      <Banner pullUp={!breaking} slides={posts.carousel ?? []}/>
-     <HomeBannerAdIsland server:defer class="xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-[auto] mt-[12px] mb-[8px] [&_img]:block [&_img]:mb-0 [&_img]:border [&_img]:border-solid [&_img]:border-[#d9d9d9]"/>
+     <HomeBannerAdIsland server:defer class={bannerClass}>
+       {/* Holds the banner's space until the island lands, so the news lead
+           below does not jump (layout shift on the most visited page). */}
+       {bannerReserve && <div slot="fallback" class={bannerClass} aria-hidden="true"><div style={`aspect-ratio: ${bannerReserve.width} / ${bannerReserve.height}`}></div></div>}
+     </HomeBannerAdIsland>
 
     <!-- The news lead is above the fold and the measured LCP element: PageSpeed's
          desktop run on 2026-10-13 picked this lead image (575x432) even with the
