@@ -1,0 +1,25 @@
+---
+// Server island: the "related" row under an article.
+//
+// Related stories are chosen by the CMS when it is asked, so the row changes
+// as new stories are published, without the article being saved. See
+// ArticleCommentsIsland.astro for why that keeps it out of the cached page.
+//
+// NEVER rename this file or its import name in [article].astro: the name is the
+// island's URL, and pages cached from earlier builds keep requesting it.
+import Section from "../Sections/Section.astro";
+import { getArticle } from "../../utils/db";
+
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+const post = await getArticle(slug);
+const related = Array.isArray(post?.related) ? post.related : [];
+
+// An hour: the row is a recommendation, not news.
+Astro.response.headers.set("Cache-Control", "public, max-age=0, s-maxage=3600");
+---
+
+{related.length > 0 && <Section articles={related} style="related-row" />}

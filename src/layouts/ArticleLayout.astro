@@ -133,14 +133,23 @@ const newsArticleJSON = {
   },
 };
 
-// Cloudflare may keep an article for an hour because Delta purges it from the
-// edge on every save, unpublish and refile (triangle-cms internal/cdnpurge).
+// Cloudflare may keep an article for 30 days because Delta purges it from the
+// edge on every save, unpublish and refile (triangle-cms internal/cdnpurge), and
+// on footer and site-title changes, which every article shows.
+//
+// That only holds while the page holds nothing else that changes: comments,
+// the related row, the sidebar ad, the poll and the weather are server islands
+// with their own short caches ([article].astro), and earlier builds' CSS and JS
+// stay servable after a deploy (scripts/asset-retention.mjs). Anything new on
+// this page that changes on its own must be an island too, or it will be up to
+// a month stale.
+//
 // Browsers get only a minute: a purge cannot reach a reader's own cache, so a
 // longer max-age would keep a correction or retraction on their screen for as
 // long as it says.
 Astro.response.headers.set(
   "Cache-Control",
-  "public, max-age=60, s-maxage=3600",
+  "public, max-age=60, s-maxage=2592000",
 );
 ---
 
