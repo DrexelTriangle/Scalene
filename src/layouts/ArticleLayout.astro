@@ -133,9 +133,14 @@ const newsArticleJSON = {
   },
 };
 
+// Cloudflare may keep an article for an hour because Delta purges it from the
+// edge on every save, unpublish and refile (triangle-cms internal/cdnpurge).
+// Browsers get only a minute: a purge cannot reach a reader's own cache, so a
+// longer max-age would keep a correction or retraction on their screen for as
+// long as it says.
 Astro.response.headers.set(
   "Cache-Control",
-  "public, max-age=600, s-maxage=1800",
+  "public, max-age=60, s-maxage=3600",
 );
 ---
 
