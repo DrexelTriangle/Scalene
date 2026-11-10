@@ -1,5 +1,8 @@
 ---
-  const {home} = Astro.props
+  // deferWeather: render the weather as a server island even on a
+  // server-rendered page. Article pages set it because Cloudflare caches them
+  // for up to 30 days, and an inline reading would be a month old.
+  const {home, deferWeather = false} = Astro.props
 import GamesLink from "./GamesLink.astro"
 import Icon from "./Icon.astro"
 import SideMenu from "./SideMenu.astro"
@@ -33,7 +36,7 @@ import SideMenu from "./SideMenu.astro"
   <!-- A prerendered page (about, contact, ...) is built once, so it fetches the
        weather at runtime as a server island. Server-rendered pages render it
        inline from the cache, with no extra request. -->
-  {Astro.isPrerendered ? <Weather server:defer island /> : <Weather />}
+  {(Astro.isPrerendered || deferWeather) ? <Weather server:defer island /> : <Weather />}
   </div>
   {!home && <a id="top-logo" href="/" class="absolute left-[calc(50%-100px)] md:left-[calc(50%-120px)] lg:left-[calc(50%-133px)]"><img class="w-[200px] md:w-[240px] lg:w-[266px]" src="/proxy/wp-content/uploads/2026/01/thetriangle.png"/></a>}
   <div id="header-right" class="inline-flex items-center gap-x-[10px] font-roboto-slab text-[12px] cursor-pointer">

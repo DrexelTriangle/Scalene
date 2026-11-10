@@ -8,9 +8,7 @@ import ArticleLayout from "../../layouts/ArticleLayout.astro";
 import Header from '../../components/Header.astro';
 import '../../styles/global.css';
 import Social from '../../components/Social.astro';
-import Poll from '../../components/Polls.astro';
-import { getArticle, getArticleComments } from '../../utils/db';
-import { loadArticlePage } from '../../utils/articlePage';
+import { getArticle } from '../../utils/db';
 import { getCategoryHref } from "../../utils/taxonomyStore";
 import { LEGACY_ARTICLE_SLUGS } from '../../utils/legacySlugs';
 import { normalizeText, imageSrcset } from "../../utils/data";
@@ -18,11 +16,16 @@ import { isComicPost } from "../../utils/comics";
 import { expandShortcodes } from "../../utils/shortcodes";
 import { normalizeArticleHtml } from "../../utils/articleHtml";
 import DonateBlurb from "../../components/DonateBlurb.astro";
-import Section from "../../components/Sections/Section.astro";
 import SubscribeLink from "../../components/SubscribeLink.astro";
-import Comments from "../../components/Comments.astro";
-import Ad from "../../components/Ad.astro";
 import QuizSegments from "../../components/QuizSegments.astro";
+// Everything on this page that changes without the article being saved is a
+// server island, fetched after load: Cloudflare caches the page itself for up to
+// 30 days (ArticleLayout.astro) and the CMS purges it only on a save. These
+// import names are the islands' URLs -- never rename them (see each component).
+import ArticleCommentsIsland from "../../components/islands/ArticleCommentsIsland.astro";
+import RelatedArticlesIsland from "../../components/islands/RelatedArticlesIsland.astro";
+import SidebarAdIsland from "../../components/islands/SidebarAdIsland.astro";
+import PollIsland from "../../components/islands/PollIsland.astro";
 import { fetchQuizzesByIds, splitAtQuizSlots } from "../../utils/quizzes";
 
 // Canonicalise the bare production domain to www. Deliberately scoped to that
@@ -74,10 +77,8 @@ if (sections !== "article") {
   return Astro.redirect('/article/' + article, 301);
 }
 
-// Article and comments are read together; see utils/articlePage.
-const { post, comments } = article
-  ? await loadArticlePage(article, { getArticle, getArticleComments })
-  : { post: undefined, comments: [] };
+// Comments are no longer read here: they load as an island (see the imports).
+const post = article ? await getArticle(article) : undefined;
 
 if (!post) {
   return Astro.rewrite('/404');
@@ -284,7 +285,7 @@ const featuredSrcset = featuredImage ? imageSrcset(post.featured_image_variants)
 
 ---
 <ArticleLayout title={normalizeText(post.title) + " - The Triangle"} article={post}>
-    <Header/>
+    <Header deferWeather/>
     <span class="hidden print:block text-center uppercase text-[14px] mb-[12px]"> THE TRIANGLE &nbsp; <b>{normalizeText(primaryCategory?.name ?? "")}</b> &nbsp; {date_string} </span>
     <article class="xl:max-w-[1200px] lg:max-w-[1000px] max-w-[90%] mx-[auto]">
         {/* No href when the category is not a page: Astro drops the attribute,
@@ -303,16 +304,16 @@ const featuredSrcset = featuredImage ? imageSrcset(post.featured_image_variants)
                     <QuizSegments segments={bodySegments} quizzes={quizzes} />
                 </section>
                 </div>
-                <Comments comments={comments} slug={post.slug ?? article} commentsClosed={commentsClosed} />
+                <ArticleCommentsIsland server:defer slug={post.slug ?? article} commentsClosed={commentsClosed} />
                 <DonateBlurb/>
-                <Section articles={post.related} style="related-row"/>
+                <RelatedArticlesIsland server:defer slug={post.slug ?? article} />
             </div>
             <div id="main-right" class="hidden lg:block [&>*:not(:first-child)]:border-t-[1px] [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-triangleBlue main-side">
                 {/* <a href="https://go.gwu.edu/AIinDC"><img class="ad medium-rectangle" src="/images/ads/gwu_ad_032626_to_042226.png"/></a> */}
-                <Ad placement="sidebar" class="pt-[5px]"/>
+                <SidebarAdIsland server:defer />
                 <SubscribeLink/>
                 {/* <MostRead/> */}
-                <Poll />
+                <PollIsland server:defer />
                 <Social />
             </div>
         </div>}
@@ -320,7 +321,7 @@ const featuredSrcset = featuredImage ? imageSrcset(post.featured_image_variants)
                     {featuredImage && <figure><img src={featuredImage} srcset={featuredSrcset} sizes={featuredSrcset && "(min-width: 1280px) 800px, (min-width: 1024px) 750px, 90vw"} alt={featuredImageAlt}/></figure>}
                     <QuizSegments segments={bodySegments} quizzes={quizzes} />
                 </section>}
-        {!actualArticle && <Comments comments={comments} slug={post.slug ?? article} commentsClosed={commentsClosed} />}
+        {!actualArticle && <ArticleCommentsIsland server:defer slug={post.slug ?? article} commentsClosed={commentsClosed} />}
         {!actualArticle && <DonateBlurb/>}
         {hasPuzzleScript && (
         <script 

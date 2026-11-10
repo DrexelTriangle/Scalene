@@ -15,6 +15,9 @@ const { island = false } = Astro.props;
 let temp: string;
 if (island) {
   temp = await readWeatherLabel();
+  // The island's own response: five minutes at the edge, so pages that defer
+  // the weather don't each reach the origin for it.
+  Astro.response.headers.set("Cache-Control", "public, max-age=0, s-maxage=300");
 } else {
   // Render whatever the cache holds now; a due refresh runs in the background.
   temp = peekWeatherLabel();

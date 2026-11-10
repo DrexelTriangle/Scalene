@@ -1,0 +1,29 @@
+---
+// Server island: an article's comments, fetched after the page loads.
+//
+// The article page is cached by Cloudflare for up to 30 days and purged only
+// when the article itself is saved, so nothing that changes on its own can be
+// rendered into it. Comments change on moderation, which purges nothing, so
+// they arrive here instead, with their own short cache.
+//
+// NEVER rename this file or its import name in [article].astro: the name is the
+// island's URL (/_server-islands/ArticleCommentsIsland), and pages cached from
+// earlier builds keep requesting it for 30 days. The props are part of that
+// contract too: add new ones as optional.
+import Comments from "../Comments.astro";
+import { getArticleComments } from "../../utils/db";
+
+interface Props {
+  slug: string;
+  commentsClosed?: boolean;
+}
+
+const { slug, commentsClosed = false } = Astro.props;
+const response = await getArticleComments(slug);
+const comments = Array.isArray(response?.comments) ? response.comments : [];
+
+// A minute at the edge: an approved comment shows within one.
+Astro.response.headers.set("Cache-Control", "public, max-age=0, s-maxage=60");
+---
+
+<Comments comments={comments} slug={slug} commentsClosed={commentsClosed} />

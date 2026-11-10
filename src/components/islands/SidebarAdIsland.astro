@@ -1,0 +1,16 @@
+---
+// Server island: the article sidebar ad.
+//
+// Direct-sold ads run on calendar days (utils/ads.ts), so a page cached for 30
+// days would keep showing a campaign that ended and miss one that started. See
+// ArticleCommentsIsland.astro for the wider reason.
+//
+// NEVER rename this file or its import name in [article].astro: the name is the
+// island's URL, and pages cached from earlier builds keep requesting it.
+import Ad from "../Ad.astro";
+
+// Five minutes: a campaign starts or ends within five of midnight Eastern.
+Astro.response.headers.set("Cache-Control", "public, max-age=0, s-maxage=300");
+---
+
+<Ad placement="sidebar" class="pt-[5px]" />

@@ -2,6 +2,8 @@
 import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
 import { VitePWA } from "vite-plugin-pwa";
+import { fileURLToPath } from "node:url";
+import { retainAssets, snapshotAssets } from "./scripts/asset-retention.mjs";
 
 // Exported so tests/renderPath.test.ts can run workbox's own glob over a build.
 /** @type {Partial<import('workbox-build').GenerateSWOptions>} */
@@ -95,14 +97,34 @@ const pwaPlugins = VitePWA({
 
 const pwaApi = pwaPlugins.find((plugin) => plugin.name === "vite-plugin-pwa")?.api;
 
+// Where earlier builds' _astro/ files are kept; see scripts/asset-retention.mjs.
+/** @type {{ assetsDir: string, archiveDir: string } | undefined} */
+let assetPaths;
+
 /** @type {import('astro').AstroIntegration} */
 const serviceWorkerIntegration = {
   name: "scalene:service-worker",
   hooks: {
-    "astro:build:done": async () => {
+    // Before the build empties dist/: archive the assets of the build being
+    // replaced, so the first deploy carrying retention keeps them too.
+    "astro:config:setup": async ({ command, config }) => {
+      if (command !== "build") return;
+      assetPaths = {
+        assetsDir: fileURLToPath(new URL(`${config.build.assets}/`, config.build.client)),
+        archiveDir: fileURLToPath(new URL(".asset-archive/", config.root)),
+      };
+      await snapshotAssets(assetPaths);
+    },
+    "astro:build:done": async ({ logger }) => {
       if (!pwaApi)
         throw new Error("vite-plugin-pwa did not expose its API; the service worker would be missing.");
       await pwaApi.generateSW();
+      // After the worker: its precache glob must see only this build's
+      // assets, not the earlier ones restored next.
+      if (assetPaths) {
+        const { current, restored, pruned } = await retainAssets(assetPaths);
+        logger.info(`asset retention: ${current} current, ${restored} restored from earlier builds, ${pruned} pruned`);
+      }
     },
   },
 };

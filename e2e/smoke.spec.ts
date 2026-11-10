@@ -83,6 +83,42 @@ test('article page renders title, byline and body', async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
+// Cloudflare holds an article page for 30 days, so the parts of it that change
+// on their own load as server islands after the page. This checks the long
+// header on the page, a short one on each island, that the islands' content
+// arrives, and that their scripts bind to content inserted after load.
+test('article page loads its changing parts as short-cached islands', async ({ page }) => {
+  const slug = 'netanyahu-s-un-visit-sparks-nyc-protests'; // has a comments fixture
+  const islands: { url: string; status: number; cacheControl: string }[] = [];
+  page.on('response', (r) => {
+    if (r.url().includes('/_server-islands/')) {
+      islands.push({ url: r.url(), status: r.status(), cacheControl: r.headers()['cache-control'] ?? '' });
+    }
+  });
+  const errors = watchErrors(page);
+
+  const res = await page.goto(`/article/${slug}`);
+  expect(res?.status()).toBe(200);
+  expect(res?.headers()['cache-control']).toBe('public, max-age=60, s-maxage=2592000');
+
+  // Inserted by the islands, not present in the page HTML itself.
+  await expect(page.locator('[data-comment-form]')).toHaveCount(1);
+  await expect(page.locator('[data-poll-root]')).toHaveCount(1);
+  // Polls.astro marks its root once its submit handler is bound: proof the
+  // island's script ran against content that arrived after load.
+  await expect(page.locator('[data-poll-root]')).toHaveAttribute('data-bound', '1');
+
+  const names = islands.map((i) => new URL(i.url).pathname.split('/').pop()).sort();
+  expect(names).toEqual(
+    expect.arrayContaining(['ArticleCommentsIsland', 'PollIsland', 'RelatedArticlesIsland', 'SidebarAdIsland', 'Weather']),
+  );
+  for (const island of islands) {
+    expect(island.status, island.url).toBe(200);
+    expect(island.cacheControl, island.url).toMatch(/^public, max-age=0, s-maxage=\d{2,4}$/);
+  }
+  expect(errors).toEqual([]);
+});
+
 test('client-side navigation from the homepage reaches a section and back', async ({ page, isMobile }) => {
   test.skip(isMobile, 'section nav is hidden below the sm breakpoint');
   const errors = watchErrors(page);

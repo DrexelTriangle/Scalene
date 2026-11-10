@@ -1,0 +1,16 @@
+---
+// Server island: the current poll in the article sidebar.
+//
+// Which poll runs, and its counts, change without any article being saved. See
+// ArticleCommentsIsland.astro for the wider reason.
+//
+// NEVER rename this file or its import name in [article].astro: the name is the
+// island's URL, and pages cached from earlier builds keep requesting it.
+import Poll from "../Polls.astro";
+
+// A minute: counts lag a vote by at most that, and the voter sees their own
+// result straight from /api/poll.
+Astro.response.headers.set("Cache-Control", "public, max-age=0, s-maxage=60");
+---
+
+<Poll />
