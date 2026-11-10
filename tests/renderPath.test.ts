@@ -4,8 +4,8 @@ import { createHash } from 'node:crypto';
 import { mkdtempSync, readdirSync, readFileSync, rmSync, statSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
-import { extname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename, dirname, extname, join } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build, createServer, type ViteDevServer } from 'vite';
 import { getViteConfig } from 'astro/config';
 import { experimental_AstroContainer } from 'astro/container';
@@ -59,6 +59,27 @@ before(async () => {
     logLevel: 'error',
   })({ command: 'serve', mode: 'test' });
   server = await createServer(config);
+
+  // The homepage and article pages defer their changing parts to server islands
+  // (server:defer), and rendering one needs the build's island name map, which
+  // the container API never has: it throws "Could not find server component
+  // name". Give its pipeline a map that names every island after its file, as
+  // the build does for these unique import names. Islands then render as their
+  // placeholders, which is what a cached page holds anyway. The pipeline is
+  // reached by file URL because astro does not export it; it is the same module
+  // instance astro/container uses.
+  const { ContainerPipeline } = await import(
+    pathToFileURL(join(dirname(require.resolve('astro/package.json')), 'dist/container/pipeline.js')).href
+  );
+  class IslandNamesFromFiles extends Map<string, string> {
+    override get(componentPath: string) {
+      return basename(componentPath, '.astro');
+    }
+  }
+  ContainerPipeline.prototype.getServerIslands = async () => ({
+    serverIslandMap: new Map(),
+    serverIslandNameMap: new IslandNamesFromFiles(),
+  });
   container = await experimental_AstroContainer.create();
 });
 
@@ -330,6 +351,19 @@ async function renderHomepage(carousel: unknown[]): Promise<string> {
   return render('/src/pages/index.astro');
 }
 
+// The banner ad is a server island, so it lands after the cached homepage.
+// While a campaign with known dimensions runs, the page must hold its space,
+// or the news lead jumps when the ad arrives. Dated inside the AWS run.
+test('homepage reserves the running banner ad\'s space while its island loads', async (t) => {
+  t.mock.timers.enable({ apis: ['Date'], now: new Date('2026-10-01T16:00:00Z') });
+  const during = await renderHomepage([]);
+  assert.match(during, /aspect-ratio: 2400 \/ 233/);
+
+  t.mock.timers.setTime(new Date('2026-11-10T16:00:00Z').getTime()); // no banner running
+  const after = await renderHomepage([]);
+  assert.doesNotMatch(after, /aspect-ratio: \d+ \/ \d+/);
+});
+
 test('homepage <head> carries the anniversary preload exactly when its Banner draws the background', async () => {
   const withBackground = await renderHomepage([]);
   const head = withBackground.slice(0, withBackground.indexOf('</head>'));
@@ -532,8 +566,10 @@ const adScripts = (path: string) =>
 // Pinned: a change to analytics or ad loading has to update these on purpose.
 test('Matomo and ad code are byte-for-byte unchanged', () => {
   assert.equal(sha(read('src/components/Matomo.astro')), 'be01845850efcc51ef840b8aa4e58bfa8af47bf1947c7b72b2ca9e67c5712973');
-  assert.equal(sha(read('src/components/Ad.astro')), '76a61f2b4ce5ea4bf4954489403264bb27dc5aafa78a822adadd4a43fc366a7a');
-  assert.equal(sha(read('src/utils/ads.ts')), '654ca4f667281d5450ecbd3abe8b7aeb4401b6fe19bd7b78006f0d7dbd0f67a0');
+  // Updated 2026-11-10: ads carry width/height so the homepage can hold the
+  // banner island's space (no change to which ads run or how they load).
+  assert.equal(sha(read('src/components/Ad.astro')), '60807be10b947788604712d8c29d0c3dddee72f82d3957164990a271bdfcf574');
+  assert.equal(sha(read('src/utils/ads.ts')), 'b59bf93baf4edc901a6c7e985e0eaa0b5fbd4c0cb917f31c0bca4baf2e6fe8cd');
   assert.equal(sha(adScripts('src/layouts/BaseLayout.astro')), AD_SCRIPTS_SHA.base);
   assert.equal(sha(adScripts('src/layouts/ArticleLayout.astro')), AD_SCRIPTS_SHA.article);
   assert.match(read('src/layouts/BaseLayout.astro'), /<link rel="dns-prefetch" href="https:\/\/pagead2\.googlesyndication\.com" \/>/);

@@ -858,6 +858,9 @@ body {
 
 .ad {
   width: 100%;
+  /* Ads may carry width/height attributes (utils/ads.ts) so the browser knows
+     their ratio before they load; auto keeps the height following the width. */
+  height: auto;
   margin-bottom: 5px;
 }
 

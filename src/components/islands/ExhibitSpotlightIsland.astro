@@ -1,0 +1,22 @@
+---
+// Server island: today's Academy exhibit spotlight in the homepage sidebar.
+//
+// The CMS picks the entry for the current day from a schedule, so it changes
+// at midnight without anything being saved -- unlike the rest of the homepage,
+// which the CMS purges from Cloudflare on every write. See HomeBannerAdIsland.
+//
+// NEVER rename this file or its import name in index.astro: the name is the
+// island's URL, and pages cached from earlier builds keep requesting it.
+import ExhibitSpotlight from "../ExhibitSpotlight.astro";
+import { getHomepageArticles } from "../../utils/db";
+
+// The CMS caches its homepage response for 15s, so this is the same read the
+// page made, not a second assembly.
+const posts = await getHomepageArticles();
+const spotlight = posts?.exhibit_spotlight?.image_url ? posts.exhibit_spotlight : undefined;
+
+// Five minutes: the day's entry turns over within five of midnight.
+Astro.response.headers.set("Cache-Control", "public, max-age=0, s-maxage=300");
+---
+
+{spotlight && <ExhibitSpotlight spotlight={spotlight} />}

@@ -1,25 +1,13 @@
 ---
   // deferWeather: render the weather as a server island even on a
-  // server-rendered page. Article pages set it because Cloudflare caches them
-  // for up to 30 days, and an inline reading would be a month old.
+  // server-rendered page. Article pages and the homepage set it because
+  // Cloudflare caches them (30 days and a day), and an inline reading would be
+  // that old.
   const {home, deferWeather = false} = Astro.props
 import GamesLink from "./GamesLink.astro"
 import Icon from "./Icon.astro"
 import SideMenu from "./SideMenu.astro"
   import Weather from "./Weather.astro"
-
-  const eventDate = new Date(); // Gets the current date/time
-  // const eventDate = new Date('2025-05-15T10:00:00'); // Or a specific date
-
-  const options: Intl.DateTimeFormatOptions = {
-      weekday: 'long', // Full name of the day of the week (e.g., "Monday")
-      year: 'numeric', // Full numeric year (e.g., "2024")
-      month: 'long',   // Full name of the month (e.g., "February")
-      day: 'numeric'   // Numeric day of the month (e.g., "2")
-  };
-
-  // Formats the date based on the user's browser locale (en-US by default)
-  const formattedDate = eventDate.toLocaleDateString(undefined, options);
 ---
 <header id="site-header" class="flex w-full relative p-[10px] justify-between items-center border-b-[1px] border-triangleGray border-solid">
   <div class="inline-flex items-center gap-x-[10px]" id="header-left">
@@ -57,7 +45,17 @@ import SideMenu from "./SideMenu.astro"
 {home && 
 <div class="flex justify-center lg:justify-between pt-[5px] pb-[5px] sm:pb-[0px] sm:pt-[24px] font-roboto-slab text-[13px] xl:max-w-[1200px] lg:max-w-[900px] max-w-[90%] mx-auto">
   <div class="hidden lg:flex flex-col w-[190px]">
-    <span>{formattedDate}</span>
+    {/* Written by the browser: the homepage is cached for up to a day, so a
+        date rendered on the server would be yesterday's by morning. Inline,
+        so ClientRouter re-runs it on every navigation back to the homepage. */}
+    <span data-today class="min-h-[1lh]"></span>
+    <script is:inline>
+      document.querySelectorAll("[data-today]").forEach((el) => {
+        el.textContent = new Date().toLocaleDateString(undefined, {
+          weekday: "long", year: "numeric", month: "long", day: "numeric",
+        });
+      });
+    </script>
     <a class="hover:underline font-extrabold" href="https://drexel.primo.exlibrisgroup.com/discovery/collectionDiscovery?vid=01DRXU_INST:01DRXU&inst=01DRXU_INST&collectionId=81448731180004721" target="_blank" rel="noopener noreferrer"> Print Archive </a>
   </div>
   <img id="logo" class="w-[90%] sm:w-[532px] h-[70px] sm:mb-[24px] sm:mb-[0px] z-[99]" src="/old_logos/old_logo_14.svg"/>

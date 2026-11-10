@@ -1,0 +1,23 @@
+---
+// Server island: the homepage banner ad, under the carousel.
+//
+// Cloudflare holds the homepage for up to a day (index.astro) and the CMS
+// purges it on every write that changes it, but a direct-sold ad starts and
+// ends on a calendar day with no write at all (utils/ads.ts), so it cannot be
+// rendered into the cached page.
+//
+// NEVER rename this file or its import name in index.astro: the name is the
+// island's URL, and pages cached from earlier builds keep requesting it.
+import Ad from "../Ad.astro";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+// Five minutes: a campaign starts or ends within five of midnight Eastern.
+Astro.response.headers.set("Cache-Control", "public, max-age=0, s-maxage=300");
+---
+
+<Ad placement="homepage-banner" class={className} />
