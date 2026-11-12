@@ -160,7 +160,7 @@ export interface BreakingNews {
   items?: BreakingNewsItem[];
 }
 
-/** triangle-cms: one item in the editable homepage Splide carousel. */
+/** triangle-cms: one item in the editable homepage carousel (Banner.astro). */
 export interface HomepageCarouselSlide {
   enabled: boolean;
   title: string;

@@ -60,7 +60,10 @@ const websiteJSON = {
 
     <!-- Performance: warm up the CMS, analytics and ad origins (fonts are
          self-hosted, see src/styles/fonts.css) -->
-    <link rel="dns-prefetch" href="https://cms.thetriangle.org" />
+    <!-- Card, lead and article images are CMS renditions served straight from
+         delta (featured_image_variants URLs), and one of them is the LCP on the
+         homepage, sections and most articles: open that connection early. -->
+    <link rel="preconnect" href="https://delta.thetriangle.org" />
     <link rel="dns-prefetch" href="https://stats.thetriangle.org" />
     <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
     {description && <meta name="description" content={description} />}

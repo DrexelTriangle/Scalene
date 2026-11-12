@@ -179,6 +179,38 @@ function isAttributeOnlyElement(open: string, inner: string): boolean {
   return /^<[a-zA-Z][\w-]*\s[^>]*>$/.test(open);
 }
 
+/**
+ * How much text may come before the first body image and still count it as the
+ * lead photo. A short dek or credit line can come first; an image after a few
+ * paragraphs is below the fold and should stay lazy.
+ */
+const LEAD_IMAGE_MAX_TEXT_BEFORE = 300;
+
+/**
+ * Make the article's lead photo load eagerly at high priority.
+ *
+ * Nearly every article's lead photo is the first `<img>` of the body, and the
+ * CMS (like WordPress before it) writes `loading="lazy"` on every body image.
+ * That lead photo is the page's Largest Contentful Paint, so lazy-loading it
+ * holds the request back until layout -- Lighthouse measured ~1.7s of load
+ * delay on mobile. Only the first image is touched, and only when it sits at
+ * the top of the body.
+ */
+export function prioritizeLeadImage(html: string): string {
+  if (!html) return html;
+  const match = /<img\b[^>]*>/i.exec(html);
+  if (!match) return html;
+
+  const textBefore = html.slice(0, match.index).replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+  if (textBefore.length > LEAD_IMAGE_MAX_TEXT_BEFORE) return html;
+
+  const tag = match[0]
+    .replace(/\sloading\s*=\s*(["'])[^"']*\1/i, "")
+    .replace(/\sfetchpriority\s*=\s*(["'])[^"']*\1/i, "")
+    .replace(/^<img\b/i, '<img loading="eager" fetchpriority="high"');
+  return html.slice(0, match.index) + tag + html.slice(match.index + match[0].length);
+}
+
 export function normalizeArticleHtml(html: string): string {
   if (!html) return html;
 
