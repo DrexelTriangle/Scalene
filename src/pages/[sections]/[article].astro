@@ -14,7 +14,7 @@ import { LEGACY_ARTICLE_SLUGS } from '../../utils/legacySlugs';
 import { normalizeText, imageSrcset } from "../../utils/data";
 import { isComicPost } from "../../utils/comics";
 import { expandShortcodes } from "../../utils/shortcodes";
-import { normalizeArticleHtml } from "../../utils/articleHtml";
+import { normalizeArticleHtml, prioritizeLeadImage } from "../../utils/articleHtml";
 import DonateBlurb from "../../components/DonateBlurb.astro";
 import SubscribeLink from "../../components/SubscribeLink.astro";
 import QuizSegments from "../../components/QuizSegments.astro";
@@ -223,7 +223,7 @@ const addBodySrcsets = (html: string) =>
     );
   });
 
-const articleHtml = describeLeadImage(addBodySrcsets(stripDimensions(proxyWpContent(content))));
+const articleHtml = prioritizeLeadImage(describeLeadImage(addBodySrcsets(stripDimensions(proxyWpContent(content)))));
 
 // The body is rendered in pieces so each quiz is a real component with its
 // script, not a string. Articles without a quiz get one html segment.
@@ -299,7 +299,7 @@ const featuredSrcset = featuredImage ? imageSrcset(post.featured_image_variants)
             <div id="main-left" class="main-side">
                 <div id="print-wrap">
                 <section id="article" class:list={{ "uncropped-images": uncroppedImages }}>
-                    {featuredImage && <figure><img src={featuredImage} srcset={featuredSrcset} sizes={featuredSrcset && "(min-width: 1280px) 800px, (min-width: 1024px) 750px, 90vw"} alt={featuredImageAlt}/></figure>}
+                    {featuredImage && <figure><img src={featuredImage} srcset={featuredSrcset} sizes={featuredSrcset && "(min-width: 1280px) 800px, (min-width: 1024px) 750px, 90vw"} alt={featuredImageAlt} fetchpriority="high"/></figure>}
                     <Fragment set:html={authorPrint} />
                     <QuizSegments segments={bodySegments} quizzes={quizzes} />
                 </section>
@@ -318,7 +318,7 @@ const featuredSrcset = featuredImage ? imageSrcset(post.featured_image_variants)
             </div>
         </div>}
         {!actualArticle && <section id="article" class:list={{ "uncropped-images": uncroppedImages }}>
-                    {featuredImage && <figure><img src={featuredImage} srcset={featuredSrcset} sizes={featuredSrcset && "(min-width: 1280px) 800px, (min-width: 1024px) 750px, 90vw"} alt={featuredImageAlt}/></figure>}
+                    {featuredImage && <figure><img src={featuredImage} srcset={featuredSrcset} sizes={featuredSrcset && "(min-width: 1280px) 800px, (min-width: 1024px) 750px, 90vw"} alt={featuredImageAlt} fetchpriority="high"/></figure>}
                     <QuizSegments segments={bodySegments} quizzes={quizzes} />
                 </section>}
         {!actualArticle && <ArticleCommentsIsland server:defer slug={post.slug ?? article} commentsClosed={commentsClosed} />}

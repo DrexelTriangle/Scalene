@@ -1,5 +1,4 @@
 ---
-import "@splidejs/splide/dist/css/splide.min.css";
 import type { HomepageCarouselSlide } from "../utils/types";
 import { showsAnniversaryBackground, visibleCarouselSlides } from "../utils/homeCarousel";
 
@@ -24,12 +23,23 @@ const showBackground = showsAnniversaryBackground(slides);
     )
   }
 
-  <div class="splide relative z-[2]" aria-label="My Splide" data-home-splide>
-    <div class="splide__track">
-      <ul class="splide__list">
+  {/* A hand-rolled autoplay loop (script below) rather than Splide: Splide's
+      autoplay timer runs on requestAnimationFrame every frame, which Lighthouse
+      charged ~4.5s of mobile main-thread time to, and its CSS kept the whole
+      hero visibility:hidden until the script mounted. This markup is laid out
+      and visible from the first paint.
+
+      Image slides carry width/height for the standard 1600x400 banner, so the
+      mobile hero holds a 4:1 box before the image arrives; without it the hero
+      was 0px tall, then pushed the whole page down ~100px (most of the
+      homepage's CLS). Attributes rather than a CSS aspect-ratio so an upload of
+      another shape still shows whole on phones (height:auto takes over once it
+      loads), at the cost of one shift for that odd banner. */}
+  <div class="relative z-[2] overflow-hidden" role="region" aria-roledescription="carousel" aria-label="Featured stories" data-home-carousel>
+      <ul class="flex m-0 p-0 list-none" data-carousel-list>
         {
           carouselSlides.map((slide) => (
-            <li class:list={[slide.desktop_only && "hidden md:block", "splide__slide w-[100%] mb-[12px] md:mb-[0px]"]}>
+            <li class:list={[slide.desktop_only && "hidden md:block", "shrink-0 w-[100%] mb-[12px] md:mb-[0px]"]}>
               <a
                 href={slide.link_url}
                 style={`background-color: ${slide.background_color || "transparent"}; color: ${slide.text_color || "#ffffff"};`}
@@ -43,6 +53,8 @@ const showBackground = showsAnniversaryBackground(slides);
                   <img
                     src={slide.image_url}
                     alt={slide.title}
+                    width="1600"
+                    height="400"
                     class="w-full md:object-contain object-cover md:aspect-[4] lg:aspect-[7.5]"
                   />
                 ) : (
@@ -53,33 +65,91 @@ const showBackground = showsAnniversaryBackground(slides);
           ))
         }
       </ul>
-    </div>
   </div>
 </section>
 
 <script>
-  import Splide from "@splidejs/splide";
+  // Same feel as the old Splide config: one slide at a time, sliding left in
+  // 1.2s every 5s, looping forever, no arrows/dots/drag, pausing while hovered
+  // or focused. A visitor who prefers reduced motion gets an instant cut
+  // instead of the slide: with no arrows or dots, stopping outright would
+  // leave every slide after the first unreachable.
+  //
+  // The loop needs no cloned slides: each step slides the list one slide
+  // left, then moves the slide that just left the view to the end and snaps
+  // the list back to 0 without a transition. Slides hidden at this width
+  // (desktop_only on mobile) take no space, so "one slide left" is always the
+  // next visible one.
+  const INTERVAL_MS = 5000;
+  const SPEED_MS = 1200;
 
-  function initSplides() {
-    document.querySelectorAll<HTMLElement>("[data-home-splide]").forEach((el) => {
-      if (el.dataset.splideMounted === "true") return;
+  const isVisible = (el: Element) => (el as HTMLElement).offsetParent !== null;
 
-      el.dataset.splideMounted = "true";
+  function mountCarousel(root: HTMLElement) {
+    if (root.dataset.carouselMounted === "true") return;
+    root.dataset.carouselMounted = "true";
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-      new Splide(el, {
-        type: "loop",
-        perPage: 1,
-        autoplay: true,
-        arrows: false,
-        pagination: false,
-        keyboard: false,
-        drag: false,
-        speed: 1200,
-      }).mount();
+    const list = root.querySelector<HTMLElement>("[data-carousel-list]");
+    if (!list) return;
+
+    let paused = false;
+    let moving = false;
+
+    const step = () => {
+      if (paused || moving || document.hidden || !root.isConnected) return;
+      if (Array.from(list.children).filter(isVisible).length < 2) return;
+      moving = true;
+      if (reducedMotion.matches) {
+        finish();
+        return;
+      }
+      list.style.transition = `transform ${SPEED_MS}ms ease`;
+      list.style.transform = "translateX(-100%)";
+      // transitionend can be skipped (tab hidden mid-slide, transition
+      // interrupted); finish on a timer too so the loop never sticks.
+      window.setTimeout(finish, SPEED_MS + 200);
+    };
+
+    const finish = () => {
+      if (!moving) return;
+      // Rotate every slide up to and including the one that just left the
+      // view, so hidden slides keep their place in the order.
+      let first = list.firstElementChild;
+      while (first) {
+        const wasVisible = isVisible(first);
+        list.appendChild(first);
+        if (wasVisible) break;
+        first = list.firstElementChild;
+      }
+      list.style.transition = "none";
+      list.style.transform = "none";
+      moving = false;
+    };
+
+    list.addEventListener("transitionend", (event) => {
+      if (event.target === list) finish();
     });
+
+    root.addEventListener("mouseenter", () => (paused = true));
+    root.addEventListener("mouseleave", () => (paused = false));
+    root.addEventListener("focusin", () => (paused = true));
+    root.addEventListener("focusout", () => (paused = false));
+
+    const timer = window.setInterval(() => {
+      if (!root.isConnected) {
+        window.clearInterval(timer);
+        return;
+      }
+      step();
+    }, INTERVAL_MS);
   }
 
-  initSplides();
+  function initCarousels() {
+    document.querySelectorAll<HTMLElement>("[data-home-carousel]").forEach(mountCarousel);
+  }
 
-  document.addEventListener("astro:page-load", initSplides);
+  initCarousels();
+
+  document.addEventListener("astro:page-load", initCarousels);
 </script>

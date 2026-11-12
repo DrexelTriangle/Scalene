@@ -69,7 +69,7 @@ Astro.response.headers.set(
 Astro.response.headers.set("Cache-Tag", "homepage");
 ---
 
-<BaseLayout title="The Triangle">
+<BaseLayout title="The Triangle" description="Drexel University's editorially and financially independent student newspaper: campus news, sports, arts and opinion from Philadelphia since 1926.">
     <HeroBackgroundPreload slot="head" slides={posts.carousel ?? []}/>
     <Header home deferWeather/>
     {breaking && <BreakingNewsBanner items={breakingItems}/> }
