@@ -39,6 +39,22 @@ describe("legacy shortcodes", () => {
     }
   });
 
+  it("expands a [puzzleme] shortcode written with smart quotes", () => {
+    const curly =
+      "[puzzleme basepath=‘https://puzzleme.amuselabs.com/pmm/’ set=‘6767’ id=‘934c6650’ attribution=‘Created by Photo Editor using the free <a href=“https://amuselabs.com/games/crossword/” target=“_blank” style=“color: #666666; text-decoration: underline;“>crossword creator</a> from Amuse Labs’ type=‘crossword’]";
+    for (const body of [curly, curly.replace(/‘/g, "&#8216;").replace(/’/g, "&#8217;")]) {
+      const out = expandShortcodes(`<p>${body}</p>`);
+      includes(out, 'data-id="934c6650" data-set="6767" data-puzzleType="crossword"');
+      includes(out, '<a href="https://amuselabs.com/games/crossword/" target="_blank"');
+      excludes(out, "[puzzleme");
+    }
+  });
+
+  it("keeps a typographic apostrophe inside a straight-quoted value", () => {
+    const out = expandShortcodes("[puzzleme set='1' id='2' attribution='Editor’s pick']");
+    includes(out, "Editor’s pick");
+  });
+
   it("leaves an unknown shortcode visible as text", () => {
     assert.equal(expandShortcodes("<p>[sic]</p>"), "<p>[sic]</p>");
   });

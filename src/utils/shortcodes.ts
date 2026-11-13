@@ -18,8 +18,7 @@ import he from "he";
 import { mapTopLevel } from "./articleHtml.ts";
 import { AUDIO_SOURCE_MAX, decodeShortcodeText, parseAudioUrl, parseEmbedUrl, shortcodeToQuizId, validMediaPaths } from "./embedUrl.ts";
 
-/** Attributes are single-quoted in practice, but accept double quotes too. */
-function parseAttributes(raw: string): Record<string, string> {
+function parseStraightQuoted(raw: string): Record<string, string> {
   const attributes: Record<string, string> = {};
   const pattern = /([\w-]+)\s*=\s*(?:'([^']*)'|"([^"]*)")/g;
 
@@ -28,6 +27,31 @@ function parseAttributes(raw: string): Record<string, string> {
     attributes[match[1].toLowerCase()] = match[2] ?? match[3] ?? "";
   }
   return attributes;
+}
+
+/**
+ * Curly quotes, literal or as the entities WordPress and rich-text editors
+ * write for them, mapped back to the straight quotes they stand in for.
+ */
+function straightenQuotes(raw: string): string {
+  return raw
+    .replace(/[‘’‚′]|&(?:#8216|#8217|#8218|#x201[89ab]|lsquo|rsquo|sbquo);/gi, "'")
+    .replace(/[“”„″]|&(?:#8220|#8221|#8222|#x201[cde]|ldquo|rdquo|bdquo);/gi, '"');
+}
+
+/**
+ * Attributes are single-quoted in practice, but accept double quotes too.
+ *
+ * A shortcode typed or pasted through an editor with "smart quotes" on comes
+ * out as set=‘6767’ id=‘934c6650’, which the straight-quote pattern cannot
+ * read: the puzzle then has no id or set and its shortcode printed as text.
+ * Only when straight quotes yield nothing are curly ones read as quotes, so a
+ * correctly quoted value holding a typographic apostrophe is never split.
+ */
+function parseAttributes(raw: string): Record<string, string> {
+  const attributes = parseStraightQuoted(raw);
+  if (Object.keys(attributes).length > 0) return attributes;
+  return parseStraightQuoted(straightenQuotes(raw));
 }
 
 function escapeAttribute(value: string): string {
