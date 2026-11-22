@@ -42,7 +42,9 @@ const WORDS_BASE = "/api/wordangle/lists";
 const HELP_SEEN_KEY = "wordangle-help-seen";
 // "triangle" centres the rows into a pyramid; anything else is the left-aligned board.
 const LAYOUT_KEY = "wordangle-layout";
+const CONTRAST_KEY = "wordangle-high-contrast";
 const SHARE_URL = "thetriangle.org/wordangle";
+const SVG_NS = "http://www.w3.org/2000/svg";
 
 // Module scope outlives ClientRouter navigations, so coming back to the page
 // reuses the lists already downloaded instead of fetching ~250 KB again.
@@ -151,8 +153,11 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     modeRandom: part<HTMLButtonElement>(root, "mode-random"),
     newRandom: part<HTMLButtonElement>(root, "new-random"),
     help: part<HTMLButtonElement>(root, "help"),
+    settings: part<HTMLButtonElement>(root, "settings"),
     triangleMode: part<HTMLInputElement>(root, "triangle-mode"),
+    highContrast: part<HTMLInputElement>(root, "high-contrast"),
     helpDialog: part<HTMLDialogElement>(root, "help-dialog"),
+    settingsDialog: part<HTMLDialogElement>(root, "settings-dialog"),
     resultDialog: part<HTMLDialogElement>(root, "result-dialog"),
     resultTitle: part(root, "result-title"),
     resultSummary: part(root, "result-summary"),
@@ -170,6 +175,23 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     applyLayout(els.triangleMode.checked);
     writeTriangleLayout(els.triangleMode.checked);
   });
+
+  try {
+    els.highContrast.checked = localStorage.getItem(CONTRAST_KEY) === "1";
+  } catch {
+    els.highContrast.checked = false;
+  }
+  const applyContrast = () => root.toggleAttribute("data-high-contrast", els.highContrast.checked);
+  applyContrast();
+  els.highContrast.addEventListener("change", () => {
+    applyContrast();
+    try {
+      localStorage.setItem(CONTRAST_KEY, els.highContrast.checked ? "1" : "0");
+    } catch {
+      // Blocked storage: the switch still works for this page view
+    }
+  });
+  els.settings.addEventListener("click", () => els.settingsDialog.showModal());
 
   const newRows = (): GameRow[] =>
     ROW_LENGTHS.map((length) => ({
@@ -398,8 +420,11 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     stack.className = `tr-arrows ${direction}`;
     stack.setAttribute("aria-hidden", "true");
     for (let i = 0; i < n; i += 1) {
-      const arrow = document.createElement("span");
-      arrow.className = `tr-arrow ${direction}`;
+      const arrow = document.createElementNS(SVG_NS, "svg");
+      arrow.setAttribute("class", `tr-arrow ${direction}`);
+      const shape = document.createElementNS(SVG_NS, "use");
+      shape.setAttribute("href", "#wordangle-arrow");
+      arrow.appendChild(shape);
       stack.appendChild(arrow);
     }
     tile.appendChild(stack);
@@ -440,9 +465,15 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     // open dialog (Enter on its buttons) to the dialog.
     const target = event.target as HTMLElement | null;
     if (target?.closest("input, textarea, select, [contenteditable]")) return;
-    if (els.helpDialog.open || els.resultDialog.open) return;
-
+    if (els.helpDialog.open || els.settingsDialog.open || els.resultDialog.open) return;
     const key = event.key.toLowerCase();
+    if (target === els.settings) {
+      if (key === "enter") return;
+      if (!state.gameOver && /^(arrow(up|down|left|right)|backspace|[a-z])$/.test(key)) {
+        els.board.focus({ preventScroll: true });
+      }
+    }
+
     if (key === "arrowup" || key === "arrowdown") {
       event.preventDefault();
       moveActiveRow(key === "arrowup" ? -1 : 1);
@@ -588,13 +619,12 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     if (!state.gameOver) return;
     const puzzleId = state.randomGame ? "Wordangle (random)" : `Wordangle #${state.puzzleNumber}`;
     const score = state.won ? `${state.score} letters` : "Loss";
+    const squares = els.highContrast.checked
+      ? { exact: "🟧", present: "🟦", absent: "⬜" }
+      : { exact: "🟩", present: "🟨", absent: "⬜" };
     const grid = state.rows
       .filter((row) => row.submitted)
-      .map((row) =>
-        row.evaluation
-          .map((item) => (item.status === "exact" ? "🟩" : item.status === "present" ? "🟨" : "⬜"))
-          .join(""),
-      )
+      .map((row) => row.evaluation.map((item) => squares[item.status]).join(""))
       .join("\n");
     const text = `${puzzleId}\nScore: ${score}\n\n${grid}\n\n${SHARE_URL}`;
 

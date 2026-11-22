@@ -54,12 +54,23 @@ const dialogClass =
 >
   <Header />
   <section data-wordangle-root class="wordangle w-[min(28rem,calc(100%-2rem))] mx-auto pb-[40px]">
+    <svg width="0" height="0" class="absolute" aria-hidden="true">
+      <symbol id="wordangle-arrow" viewBox="0 0 7 8">
+        <polygon points="1.25,0.9 5.9,4 1.25,7.1" />
+      </symbol>
+    </svg>
     <div class="flex items-center justify-between gap-3 border-b-[1px] border-solid border-triangleBlue pb-[12px] mb-[12px]">
       <div>
         <h1 class="leading-none"><img src="/wordangle/logo.svg" alt="Wordangle" width="270" height="30" class="block h-[30px] sm:h-[38px] w-auto" /></h1>
       </div>
       <div class="flex items-center gap-2 shrink-0">
         <button data-wordangle="help" type="button" class={iconButtonClass} aria-label="How to play">?</button>
+        <button data-wordangle="settings" type="button" class={`${iconButtonClass} inline-grid place-items-center`} aria-label="Settings" aria-haspopup="dialog">
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+            <path d="m10 3-.6 2.5-1.8 1L5.1 6l-2 3.5L5 11.2v1.6l-1.9 1.7 2 3.5 2.5-.5 1.8 1 .6 2.5h4l.6-2.5 1.8-1 2.5.5 2-3.5-1.9-1.7v-1.6l1.9-1.7-2-3.5-2.5.5-1.8-1L14 3z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+        </button>
       </div>
     </div>
 
@@ -83,7 +94,7 @@ const dialogClass =
       </div>
     </div>
 
-    <div data-wordangle="board" class="tr-board" aria-label="Guess board"></div>
+    <div data-wordangle="board" class="tr-board" aria-label="Guess board" tabindex="-1"></div>
     <p data-wordangle="message" class="tr-message" role="status" aria-live="polite"></p>
     <div data-wordangle="keyboard" class="tr-keyboard" aria-label="On-screen keyboard"></div>
     <p class="flex justify-end">
@@ -105,14 +116,30 @@ const dialogClass =
         <p>The colors of the tiles will show how close your guess was to the word.</p>
         <ul class="flex flex-col gap-[10px] mb-[12px]">
           <li class="flex items-center gap-3"><span class="tr-swatch exact">G</span> In the word once, in that spot.</li>
-          <li class="flex items-center gap-3"><span class="tr-swatch present">Y<span class="tr-arrows left"><span class="tr-arrow left" /></span></span> In the word once, but to the left of that spot.</li>
+          <li class="flex items-center gap-3"><span class="tr-swatch present">Y<span class="tr-arrows left" aria-hidden="true"><svg class="tr-arrow left"><use href="#wordangle-arrow" /></svg></span></span> In the word once, but to the left of that spot.</li>
           <li class="flex items-center gap-3"><span class="tr-swatch absent">X</span> Not in the word at all.</li>
-          <li class="flex items-center gap-3"><span class="tr-swatch exact">G<span class="tr-arrows right"><span class="tr-arrow right" /></span></span> In the word in that spot, and one more time to the right.</li>
+          <li class="flex items-center gap-3"><span class="tr-swatch exact">G<span class="tr-arrows right" aria-hidden="true"><svg class="tr-arrow right"><use href="#wordangle-arrow" /></svg></span></span> In the word in that spot, and one more time to the right.</li>
         </ul>
         <p>Click rows to choose the order of your guesses. Guessing the 6-letter row ends the game.</p>
         <p class="flex justify-end">
           <button value="close" class={buttonClass} autofocus>Close</button>
         </p>
+      </form>
+    </dialog>
+
+    <dialog data-wordangle="settings-dialog" class={dialogClass} aria-labelledby="wordangle-settings-title">
+      <form method="dialog" class="relative">
+        <button value="close" class={`${iconButtonClass} absolute top-[-6px] right-[-6px]`} aria-label="Close">×</button>
+        <h2 id="wordangle-settings-title" class="font-roboto-slab font-bold uppercase tracking-[0.04em] text-[22px] mb-[12px]">Settings</h2>
+        <label class="tr-switch tr-setting">
+          <span>
+            <span id="wordangle-contrast-label" class="block text-[16px]">High Contrast Mode</span>
+            <span id="wordangle-contrast-description" class="block text-gray-600">For improved color vision</span>
+          </span>
+          <input data-wordangle="high-contrast" type="checkbox" role="switch" class="sr-only" autofocus
+            aria-labelledby="wordangle-contrast-label" aria-describedby="wordangle-contrast-description" />
+          <span class="tr-switch-track" aria-hidden="true"></span>
+        </label>
       </form>
     </dialog>
 
@@ -179,6 +206,13 @@ const dialogClass =
     --tr-arrow: #e8c84a;
   }
 
+  .wordangle[data-high-contrast] {
+    --tr-exact: #f5793a;
+    --tr-present: #85c0f9;
+    --tr-arrow: var(--tr-present);
+    --tr-matched-text: #111;
+  }
+
   .wordangle-dialog p {
     margin: 0 0 12px;
     line-height: 1.45;
@@ -189,7 +223,7 @@ const dialogClass =
   }
 
   .wordangle-dialog.won h2 {
-    color: var(--tr-exact);
+    color: var(--tr-matched-text, var(--tr-exact));
   }
 
   .wordangle-dialog.lost h2 {
@@ -237,7 +271,16 @@ const dialogClass =
     user-select: none;
   }
 
+  .wordangle .tr-setting {
+    display: flex;
+    justify-content: space-between;
+    border-block: 1px solid var(--tr-gray);
+    padding-block: 14px;
+    color: black;
+  }
+
   .wordangle .tr-switch-track {
+    flex-shrink: 0;
     position: relative;
     width: 36px;
     height: 20px;
@@ -436,7 +479,7 @@ const dialogClass =
   .wordangle-dialog .tr-swatch.exact {
     background: var(--tr-exact);
     border-color: var(--tr-exact);
-    color: white;
+    color: var(--tr-matched-text, white);
   }
 
   .wordangle .tr-tile.present,
@@ -444,7 +487,7 @@ const dialogClass =
   .wordangle-dialog .tr-swatch.present {
     background: var(--tr-present);
     border-color: var(--tr-present);
-    color: white;
+    color: var(--tr-matched-text, white);
   }
 
   .wordangle .tr-tile.absent,
@@ -470,42 +513,29 @@ const dialogClass =
     gap: 1px;
     z-index: 1;
     pointer-events: none;
-    font-size: 11px;
   }
 
   .wordangle .tr-arrows.left {
-    left: 3px;
+    left: 2px;
   }
 
   .wordangle .tr-arrows.right {
-    right: 3px;
+    right: 2px;
   }
 
   .wordangle .tr-arrow {
     display: block;
-    width: 0;
-    height: 0;
-    border-top: 0.3em solid transparent;
-    border-bottom: 0.3em solid transparent;
+    width: 7px;
+    height: 8px;
+    fill: var(--tr-arrow);
   }
 
   .wordangle .tr-arrow.left {
-    border-right: 0.46em solid var(--tr-arrow);
+    transform: scaleX(-1);
   }
 
-  .wordangle .tr-arrow.right {
-    border-left: 0.46em solid var(--tr-arrow);
-  }
-
-  /* Yellow arrows vanish on a yellow tile. */
-  .wordangle .tr-tile.present .tr-arrow.left,
-  .wordangle-dialog .tr-swatch.present .tr-arrow.left {
-    border-right-color: #3f340c;
-  }
-
-  .wordangle .tr-tile.present .tr-arrow.right,
-  .wordangle-dialog .tr-swatch.present .tr-arrow.right {
-    border-left-color: #3f340c;
+  .wordangle :is(.tr-tile, .tr-swatch).present .tr-arrow {
+    fill: #3f340c;
   }
 
   .wordangle .tr-message {
