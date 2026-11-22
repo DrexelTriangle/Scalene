@@ -13,6 +13,7 @@ import {
   typeLetter,
   eraseLetter,
   type Dictionaries,
+  type GuessMode,
   type KeyboardStatuses,
   type Row,
   type ScheduledWord,
@@ -40,8 +41,6 @@ const KEYBOARD_ROWS = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
 // The lists live in the CMS; Scalene proxies them (src/pages/api/wordangle).
 const WORDS_BASE = "/api/wordangle/lists";
 const HELP_SEEN_KEY = "wordangle-help-seen";
-// "triangle" centres the rows into a pyramid; anything else is the left-aligned board.
-const LAYOUT_KEY = "wordangle-layout";
 const CONTRAST_KEY = "wordangle-high-contrast";
 const SHARE_URL = "thetriangle.org/wordangle";
 const SVG_NS = "http://www.w3.org/2000/svg";
@@ -115,23 +114,6 @@ function markHelpSeen() {
   }
 }
 
-function readTriangleLayout(): boolean {
-  try {
-    return localStorage.getItem(LAYOUT_KEY) === "triangle";
-  } catch {
-    return false;
-  }
-}
-
-function writeTriangleLayout(on: boolean) {
-  try {
-    if (on) localStorage.setItem(LAYOUT_KEY, "triangle");
-    else localStorage.removeItem(LAYOUT_KEY);
-  } catch {
-    // Blocked storage: the switch still works for this page view.
-  }
-}
-
 function part<T extends HTMLElement>(root: HTMLElement, name: string): T {
   const el = root.querySelector<T>(`[data-wordangle="${name}"]`);
   if (!el) throw new Error(`Wordangle markup is missing [data-wordangle="${name}"]`);
@@ -154,7 +136,7 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     newRandom: part<HTMLButtonElement>(root, "new-random"),
     help: part<HTMLButtonElement>(root, "help"),
     settings: part<HTMLButtonElement>(root, "settings"),
-    triangleMode: part<HTMLInputElement>(root, "triangle-mode"),
+    reverseMode: part<HTMLInputElement>(root, "reverse-mode"),
     highContrast: part<HTMLInputElement>(root, "high-contrast"),
     helpDialog: part<HTMLDialogElement>(root, "help-dialog"),
     settingsDialog: part<HTMLDialogElement>(root, "settings-dialog"),
@@ -164,17 +146,6 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     resultDetail: part(root, "result-detail"),
     resultNote: part(root, "result-note"),
   };
-
-  const applyLayout = (on: boolean) => {
-    els.triangleMode.checked = on;
-    if (on) root.dataset.layout = "triangle";
-    else delete root.dataset.layout;
-  };
-  applyLayout(readTriangleLayout());
-  els.triangleMode.addEventListener("change", () => {
-    applyLayout(els.triangleMode.checked);
-    writeTriangleLayout(els.triangleMode.checked);
-  });
 
   try {
     els.highContrast.checked = localStorage.getItem(CONTRAST_KEY) === "1";
@@ -208,6 +179,7 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     target: "",
     puzzleNumber: null as number | null,
     randomGame: false,
+    guessMode: "classic" as GuessMode,
     rows: newRows(),
     activeRow: 0,
     score: 0,
@@ -226,6 +198,11 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
   // The daily game, parked while the reader plays random words, so switching
   // back to Daily picks up where they left off instead of starting over.
   let parkedDaily: Game | undefined;
+
+  els.reverseMode.addEventListener("change", () => {
+    if (!els.reverseMode.disabled) state.guessMode = els.reverseMode.checked ? "reverse" : "classic";
+    renderGuessMode();
+  });
 
   els.help.addEventListener("click", () => els.helpDialog.showModal());
   if (!readHelpSeen()) {
@@ -295,10 +272,19 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
   }
 
   function render() {
+    renderGuessMode();
     renderStats();
     renderBoard();
     renderKeyboard();
     els.result.hidden = !state.gameOver;
+  }
+
+  function renderGuessMode() {
+    const reverse = state.guessMode === "reverse";
+    els.reverseMode.checked = reverse;
+    els.reverseMode.disabled = !state.target || state.rows.some((row) => row.submitted);
+    els.board.toggleAttribute("data-reverse", reverse);
+    els.board.setAttribute("aria-label", reverse ? "Guess board, aligned with the end of the answer" : "Guess board");
   }
 
   function renderStats() {
@@ -313,9 +299,7 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
   }
 
   function renderBoard() {
-    // Fresh rows start at zero shift and get their centring a moment later;
-    // without this the slide would replay on every re-render, such as an
-    // arrow key moving between rows. Transitions come back on the next frame.
+    // Suppress the slide while replacing rows and measuring their positions
     els.board.classList.add("is-settling");
     els.board.replaceChildren();
     state.rows.forEach((row, index) => {
@@ -372,12 +356,11 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     requestAnimationFrame(() => els.board.classList.remove("is-settling"));
   }
 
-  // How far each row moves to sit centred: half the free space beside it.
-  // Read after layout so Triangle mode can animate the move with a transform.
   function setRowShifts() {
-    const width = els.board.clientWidth;
-    for (const rowEl of Array.from(els.board.children) as HTMLElement[]) {
-      rowEl.style.setProperty("--tr-shift", `${(width - rowEl.offsetWidth) / 2}px`);
+    const rows = els.board.querySelectorAll<HTMLElement>(".tr-row");
+    const fullRowWidth = rows[rows.length - 1]?.offsetWidth ?? 0;
+    for (const row of rows) {
+      row.style.setProperty("--tr-shift", `${fullRowWidth - row.offsetWidth}px`);
     }
   }
   window.addEventListener("resize", setRowShifts, { signal });
@@ -464,9 +447,12 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     // Leave typing alone in the header's search box, and keys meant for an
     // open dialog (Enter on its buttons) to the dialog.
     const target = event.target as HTMLElement | null;
-    if (target?.closest("input, textarea, select, [contenteditable]")) return;
     if (els.helpDialog.open || els.settingsDialog.open || els.resultDialog.open) return;
     const key = event.key.toLowerCase();
+    if (target === els.reverseMode) {
+      if (!/^(arrow(up|down|left|right)|backspace|[a-z])$/.test(key)) return;
+      els.board.focus({ preventScroll: true });
+    } else if (target?.closest("input, textarea, select, [contenteditable]")) return;
     if (target === els.settings) {
       if (key === "enter") return;
       if (!state.gameOver && /^(arrow(up|down|left|right)|backspace|[a-z])$/.test(key)) {
@@ -547,7 +533,7 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
       return;
     }
 
-    row.evaluation = evaluateGuess(row.guess, state.target);
+    row.evaluation = evaluateGuess(row.guess, state.target, state.guessMode);
     row.submitted = true;
     state.score += row.length;
     state.keyboard = mergeKeyboardStatuses(state.keyboard, row.evaluation, row.guess);
@@ -584,7 +570,8 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     els.resultDialog.classList.toggle("lost", !state.won);
     els.resultTitle.textContent = state.won ? "You got it" : "No match";
     els.resultSummary.textContent = resultSummary();
-    els.resultDetail.textContent = state.randomGame ? "Random practice word" : `Wordangle #${state.puzzleNumber}`;
+    const puzzle = state.randomGame ? "Random practice word" : `Wordangle #${state.puzzleNumber}`;
+    els.resultDetail.textContent = puzzle + guessModeLabel();
     els.resultNote.textContent = "";
     els.resultDialog.showModal();
   }
@@ -598,13 +585,10 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
   }
 
   function shakeRow() {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // The individual translate property leaves the row's alignment transform intact
     els.board.children[state.activeRow]?.animate(
-      [
-        { transform: "translateX(0)" },
-        { transform: "translateX(-5px)" },
-        { transform: "translateX(5px)" },
-        { transform: "translateX(0)" },
-      ],
+      [{ translate: "0" }, { translate: "-5px" }, { translate: "5px" }, { translate: "0" }],
       { duration: 180 },
     );
   }
@@ -613,6 +597,10 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
     els.message.textContent = text;
     els.message.classList.toggle("bad", bad);
     els.message.classList.toggle("good", good);
+  }
+
+  function guessModeLabel() {
+    return state.guessMode === "reverse" ? " · Reverse" : "";
   }
 
   async function shareResult() {
@@ -626,7 +614,7 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
       .filter((row) => row.submitted)
       .map((row) => row.evaluation.map((item) => squares[item.status]).join(""))
       .join("\n");
-    const text = `${puzzleId}\nScore: ${score}\n\n${grid}\n\n${SHARE_URL}`;
+    const text = `${puzzleId}${guessModeLabel()}\nScore: ${score}\n\n${grid}\n\n${SHARE_URL}`;
 
     try {
       await navigator.clipboard.writeText(text);

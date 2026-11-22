@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-test('high contrast recolors played guesses and shares, and remembers the setting', async ({ page }) => {
+test.beforeEach(async ({ page }) => {
   await page.route(/^https?:\/\/(?!127\.0\.0\.1|localhost)/, (route) => route.abort());
   await page.route('**/api/wordangle/today?*', (route) => route.fulfill({
     json: { word: 'banana', number: 42 },
@@ -17,7 +17,55 @@ test('high contrast recolors played guesses and shares, and remembers the settin
     });
   });
   await page.goto('/wordangle');
+});
 
+test('reverse mode aligns rows, scores suffixes, and stays locked with the daily game', async ({ page }) => {
+  const board = page.locator('[data-wordangle="board"]');
+  const toggle = page.getByRole('switch', { name: 'Reverse Mode' });
+  const one = board.locator('.tr-row').first();
+  const six = board.locator('.tr-row').last();
+  const edges = () => Promise.all([one.boundingBox(), six.boundingBox()]);
+  await expect(six).toBeVisible();
+  await expect(toggle).toBeEnabled();
+  await expect(toggle).not.toBeChecked();
+  await expect.poll(async () => {
+    const [a, b] = await edges();
+    return Math.abs(a!.x - b!.x);
+  }).toBeLessThan(1);
+
+  await page.getByText('Reverse Mode', { exact: true }).click();
+  await expect(toggle).toBeChecked();
+  await expect.poll(async () => {
+    const [a, b] = await edges();
+    return Math.abs(a!.x + a!.width - b!.x - b!.width);
+  }).toBeLessThan(1);
+
+  await board.focus();
+  await page.keyboard.press('Enter');
+  await expect(toggle).toBeEnabled();
+  await page.keyboard.type('a');
+  await page.keyboard.press('Enter');
+  await expect(one.locator('.tr-tile')).toHaveClass(/\bexact\b/);
+  await expect(toggle).toBeDisabled();
+
+  await page.getByRole('button', { name: 'Random', exact: true }).click();
+  await expect(toggle).toBeEnabled();
+  await expect(toggle).not.toBeChecked();
+  await page.getByRole('button', { name: 'Daily #42' }).click();
+  await expect(toggle).toBeChecked();
+  await expect(toggle).toBeDisabled();
+  await expect(one.locator('.tr-tile')).toHaveClass(/\bexact\b/);
+
+  await six.click();
+  await page.keyboard.type('banana');
+  await page.keyboard.press('Enter');
+  const result = page.getByRole('dialog');
+  await expect(result.getByText('Wordangle #42 · Reverse')).toBeVisible();
+  await result.getByRole('button', { name: 'Share result' }).click();
+  expect(await page.evaluate(() => sessionStorage.getItem('shared-result'))).toContain('Wordangle #42 · Reverse');
+});
+
+test('high contrast recolors played guesses and shares, and remembers the setting', async ({ page }) => {
   const board = page.getByLabel('Guess board');
   const keyboard = page.getByLabel('On-screen keyboard');
   const settings = page.getByRole('main').getByRole('button', { name: 'Settings', exact: true });

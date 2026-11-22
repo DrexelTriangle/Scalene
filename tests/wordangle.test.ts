@@ -57,6 +57,31 @@ test('arrow stacks split across directions and ignore exact copies', () => {
   assert.equal(o[0].arrows.right, 4);
 });
 
+test('reverse guesses align with the end of the target', () => {
+  assert.deepEqual(evaluateGuess('er', 'silver', 'reverse').map((x) => x.status), ['exact', 'exact']);
+  assert.equal(evaluateGuess('r', 'silver')[0].status, 'present');
+});
+
+test('reverse arrows use the shifted positions and search the whole target', () => {
+  assert.deepEqual(evaluateGuess('re', 'silver', 'reverse'), [
+    { status: 'present', arrows: { left: 0, right: 1 } },
+    { status: 'present', arrows: { left: 1, right: 0 } },
+  ]);
+});
+
+test('reverse duplicate matches reserve exact copies first', () => {
+  assert.deepEqual(evaluateGuess('aa', 'banana', 'reverse'), [
+    { status: 'present', arrows: { left: 2, right: 0 } },
+    { status: 'exact', arrows: { left: 2, right: 0 } },
+  ]);
+});
+
+test('full-length guess evaluation is the same in both modes', () => {
+  for (const guess of ['silver', 'rivers', 'eeeeee']) {
+    assert.deepEqual(evaluateGuess(guess, 'silver', 'reverse'), evaluateGuess(guess, 'silver'));
+  }
+});
+
 test('one-letter row accepts any letter', () => {
   assert.equal(isValidGuess('z', 1, {}), true);
   assert.equal(isValidGuess('ab', 1, {}), false);

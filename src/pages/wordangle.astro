@@ -86,8 +86,8 @@ const dialogClass =
       </div>
       <div class="flex flex-col items-end gap-y-1 shrink-0 text-right">
         <label class="tr-switch">
-          <span>Triangle mode</span>
-          <input data-wordangle="triangle-mode" type="checkbox" class="sr-only" />
+          <span>Reverse Mode</span>
+          <input data-wordangle="reverse-mode" type="checkbox" role="switch" class="sr-only" disabled />
           <span class="tr-switch-track" aria-hidden="true"></span>
         </label>
         <span>Letters used <strong data-wordangle="score" class="font-playfair">0</strong></span>
@@ -113,6 +113,7 @@ const dialogClass =
         <h2 class="font-roboto-slab font-bold uppercase tracking-[0.04em] text-[22px] mb-[12px]">How to play</h2>
         <p>Guess a 6-letter word using up to one guess of each length 1 to 6, <em>in any order</em>.</p>
         <p>Each guess must be a valid word, except the first row, which can be any letter.</p>
+        <p>Guesses line up with the start of the answer. Turn on Reverse Mode before submitting your first guess to line them up with the end instead. Both modes use the same daily word.</p>
         <p>The colors of the tiles will show how close your guess was to the word.</p>
         <ul class="flex flex-col gap-[10px] mb-[12px]">
           <li class="flex items-center gap-3"><span class="tr-swatch exact">G</span> In the word once, in that spot.</li>
@@ -238,14 +239,12 @@ const dialogClass =
     margin-bottom: 14px;
   }
 
-  /* Triangle mode: rows slide to the centre into a pyramid. align-items cannot
-     animate, so each row carries its own centring shift (set by the script
-     from the board and row widths) and only the transform changes. */
+  /* Each row slides until its last tile lines up with the six-letter row */
   .wordangle .tr-row {
     transition: transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
   }
 
-  .wordangle[data-layout="triangle"] .tr-row {
+  .wordangle .tr-board[data-reverse] .tr-row {
     transform: translateX(var(--tr-shift, 0px));
   }
 
@@ -259,7 +258,6 @@ const dialogClass =
     }
   }
 
-  /* The Triangle mode switch: a 36x20 track, grey off and blue on. */
   .wordangle .tr-switch {
     display: inline-flex;
     align-items: center;
@@ -307,6 +305,11 @@ const dialogClass =
 
   .wordangle .tr-switch input:checked + .tr-switch-track::after {
     transform: translateX(16px);
+  }
+
+  .wordangle .tr-switch:has(input:disabled) {
+    cursor: default;
+    opacity: 0.65;
   }
 
   .wordangle .tr-switch input:focus-visible + .tr-switch-track {
