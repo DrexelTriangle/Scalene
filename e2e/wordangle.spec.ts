@@ -1,5 +1,8 @@
 import { expect, test } from '@playwright/test';
 
+// Keep API mocks in control of requests after a reload
+test.use({ serviceWorkers: 'block' });
+
 test.beforeEach(async ({ page }) => {
   await page.route(/^https?:\/\/(?!127\.0\.0\.1|localhost)/, (route) => route.abort());
   await page.route('**/api/wordangle/today?*', (route) => route.fulfill({
@@ -50,7 +53,8 @@ test('reverse mode aligns rows, scores suffixes, and stays locked with the daily
 
   await page.getByRole('button', { name: 'Random', exact: true }).click();
   await expect(toggle).toBeEnabled();
-  await expect(toggle).not.toBeChecked();
+  await expect(toggle).toBeChecked();
+  await page.getByText('Reverse Mode', { exact: true }).click();
   await page.getByRole('button', { name: 'Daily #42' }).click();
   await expect(toggle).toBeChecked();
   await expect(toggle).toBeDisabled();
@@ -64,6 +68,42 @@ test('reverse mode aligns rows, scores suffixes, and stays locked with the daily
   await result.getByRole('button', { name: 'Share result' }).click();
   expect(await page.evaluate(() => sessionStorage.getItem('shared-result'))).toContain('Wordangle #42 · Reverse');
 });
+
+test('reverse mode remembers the preference between games but resets on reload', async ({ page }) => {
+  const toggle = page.getByRole('switch', { name: 'Reverse Mode' });
+  await expect(toggle).toBeEnabled();
+  await page.getByText('Reverse Mode', { exact: true }).click();
+  await page.getByRole('button', { name: 'Random', exact: true }).click();
+  await expect(toggle).toBeChecked();
+  await page.getByRole('button', { name: 'New word', exact: true }).click();
+  await expect(toggle).toBeChecked();
+  expect(await page.evaluate(() => localStorage.getItem('wordangle-reverse-mode'))).toBeNull();
+  await page.reload();
+  await expect(toggle).toBeEnabled();
+  await expect(toggle).not.toBeChecked();
+  await page.getByRole('button', { name: 'Random', exact: true }).click();
+  await expect(toggle).not.toBeChecked();
+  await page.reload();
+  await expect(toggle).toBeEnabled();
+  await expect(toggle).not.toBeChecked();
+});
+
+for (const reload of [false, true]) {
+  test(`reverse mode resets the next puzzle day ${reload ? 'after reload' : 'on a new game'}`, async ({ page }) => {
+    const toggle = page.getByRole('switch', { name: 'Reverse Mode' });
+    await page.clock.install({ time: new Date('2026-06-01T16:00:00Z') });
+    await page.reload();
+    await expect(toggle).toBeEnabled();
+    await page.getByText('Reverse Mode', { exact: true }).click();
+    await page.getByRole('button', { name: 'Random', exact: true }).click();
+    await expect(toggle).toBeChecked();
+    await page.clock.setSystemTime(new Date('2026-06-02T16:00:00Z'));
+    if (reload) await page.reload();
+    else await page.getByRole('button', { name: 'New word', exact: true }).click();
+    await expect(toggle).toBeEnabled();
+    await expect(toggle).not.toBeChecked();
+  });
+}
 
 test('high contrast recolors played guesses and shares, and remembers the setting', async ({ page }) => {
   const board = page.getByLabel('Guess board');

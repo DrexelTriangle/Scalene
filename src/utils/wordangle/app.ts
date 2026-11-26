@@ -175,11 +175,12 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
       caretPlaced: false,
     }));
 
+  let guessPreference: { date: string; mode: GuessMode } = { date: dailyDate(), mode: "classic" };
   const newGame = () => ({
     target: "",
     puzzleNumber: null as number | null,
     randomGame: false,
-    guessMode: "classic" as GuessMode,
+    guessMode: guessPreference.date === dailyDate() ? guessPreference.mode : "classic" as GuessMode,
     rows: newRows(),
     activeRow: 0,
     score: 0,
@@ -200,7 +201,10 @@ export function mountWordangle(root: HTMLElement, signal: AbortSignal) {
   let parkedDaily: Game | undefined;
 
   els.reverseMode.addEventListener("change", () => {
-    if (!els.reverseMode.disabled) state.guessMode = els.reverseMode.checked ? "reverse" : "classic";
+    if (!els.reverseMode.disabled) {
+      state.guessMode = els.reverseMode.checked ? "reverse" : "classic";
+      guessPreference = { date: dailyDate(), mode: state.guessMode };
+    }
     renderGuessMode();
   });
 
