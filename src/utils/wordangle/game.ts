@@ -26,9 +26,12 @@ export function normalizeWord(value: unknown): string {
   return String(value ?? "").trim().toLowerCase();
 }
 
-export function evaluateGuess(guessInput: string, targetInput: string): TileResult[] {
+export type GuessMode = "classic" | "reverse";
+
+export function evaluateGuess(guessInput: string, targetInput: string, mode: GuessMode = "classic"): TileResult[] {
   const guess = normalizeWord(guessInput);
   const target = normalizeWord(targetInput);
+  const offset = mode === "reverse" ? target.length - guess.length : 0;
   const result: TileResult[] = Array.from({ length: guess.length }, () => ({
     status: "absent",
     arrows: { left: 0, right: 0 },
@@ -38,9 +41,10 @@ export function evaluateGuess(guessInput: string, targetInput: string): TileResu
 
   // Exact matches claim their target positions first.
   for (let i = 0; i < guess.length; i += 1) {
-    if (guess[i] === targetChars[i]) {
+    const position = offset + i;
+    if (guess[i] === targetChars[position]) {
       result[i].status = "exact";
-      exactAt[i] = true;
+      exactAt[position] = true;
     }
   }
 
@@ -60,8 +64,9 @@ export function evaluateGuess(guessInput: string, targetInput: string): TileResu
   for (let i = 0; i < result.length; i += 1) {
     if (result[i].status === "absent") continue;
     const letter = guess[i];
-    const left = targetChars.filter((char, index) => char === letter && index < i && !exactAt[index]).length;
-    const right = targetChars.filter((char, index) => char === letter && index > i && !exactAt[index]).length;
+    const position = offset + i;
+    const left = targetChars.filter((char, index) => char === letter && index < position && !exactAt[index]).length;
+    const right = targetChars.filter((char, index) => char === letter && index > position && !exactAt[index]).length;
     result[i].arrows = { left, right };
   }
 
